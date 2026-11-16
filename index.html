@@ -5,17 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <title>BrainDrop — Кейсы и Апгрейдер</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --bg: #0f172a;
-            --card: #1e293b;
-            --card-light: #334155;
-            --accent: #10b981;
-            --accent-hover: #059669;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --text: #f8fafc;
-            --muted: #94a3b8;
+            /* Палитра в стиле BrainDrop: глубокий космический синий + мягкий неоновый голубой + тёплый оранжевый */
+            --bg: #070d19;
+            --card: #0e182c;
+            --card-light: #172744;
+            --border-subtle: #1f3358;
+            
+            --blue-accent: #2589f5;
+            --blue-glow: rgba(37, 137, 245, 0.25);
+            --cyan-soft: #60b5ff;
+            
+            --orange-accent: #f97316;
+            --orange-hover: #ea580c;
+            --orange-soft: #fb923c;
+            --orange-bg: rgba(249, 115, 22, 0.14);
+            
+            --danger: #e11d48;
+            --text: #e2e8f0;
+            --muted: #7f94b5;
         }
 
         * {
@@ -28,6 +38,7 @@
 
         body {
             background-color: var(--bg);
+            background-image: radial-gradient(circle at 50% 0%, rgba(37, 137, 245, 0.12) 0%, transparent 60%);
             color: var(--text);
             padding: 12px;
             display: flex;
@@ -50,42 +61,58 @@
             justify-content: space-between;
             align-items: center;
             background: var(--card);
+            border: 1px solid var(--border-subtle);
             padding: 12px 16px;
             border-radius: 14px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+        }
+
+        .brand-block {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .brand-title {
+            font-weight: 800;
+            font-size: 15px;
+            letter-spacing: 0.4px;
+            color: var(--cyan-soft);
         }
 
         .user-name {
-            font-weight: 700;
-            font-size: 15px;
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--muted);
         }
 
         .balance-pill {
             display: flex;
             align-items: center;
             gap: 10px;
-            background: rgba(16, 185, 129, 0.15);
-            border: 1px solid rgba(16, 185, 129, 0.35);
+            background: var(--orange-bg);
+            border: 1px solid rgba(249, 115, 22, 0.35);
             padding: 6px 12px;
             border-radius: 10px;
-            color: var(--accent);
+            color: var(--orange-soft);
             font-weight: 800;
-            font-size: 15px;
+            font-size: 14px;
         }
 
         .btn-plus {
-            background: var(--accent);
+            background: var(--orange-accent);
             color: #fff;
             border: none;
-            width: 26px;
-            height: 26px;
-            border-radius: 8px;
-            font-size: 18px;
+            width: 24px;
+            height: 24px;
+            border-radius: 7px;
+            font-size: 17px;
             font-weight: bold;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: 0.15s;
         }
 
         .btn-plus:active {
@@ -104,16 +131,17 @@
         }
 
         .toast.show { display: block; }
-        .toast.error { background: rgba(239, 68, 68, 0.2); border: 1px solid var(--danger); color: #fca5a5; }
-        .toast.success { background: rgba(16, 185, 129, 0.2); border: 1px solid var(--accent); color: #6ee7b7; }
+        .toast.error { background: rgba(225, 29, 72, 0.18); border: 1px solid var(--danger); color: #fda4af; }
+        .toast.success { background: rgba(37, 137, 245, 0.18); border: 1px solid var(--blue-accent); color: #93c5fd; }
 
-        /* Вкладки */
+        /* Вкладки (без эмодзи) */
         .tabs {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 6px;
             background: var(--card);
-            padding: 6px;
+            border: 1px solid var(--border-subtle);
+            padding: 5px;
             border-radius: 12px;
         }
 
@@ -130,8 +158,9 @@
         }
 
         .tab-btn.active {
-            background: var(--card-light);
-            color: var(--text);
+            background: var(--blue-accent);
+            color: #ffffff;
+            box-shadow: 0 2px 10px var(--blue-glow);
         }
 
         .section {
@@ -144,7 +173,7 @@
             display: flex;
         }
 
-        /* Картинки и иконки-заглушки */
+        /* Картинки и иконки */
         .media-box {
             display: flex;
             align-items: center;
@@ -152,9 +181,9 @@
             overflow: hidden;
         }
 
-        .media-big { width: 84px; height: 84px; font-size: 46px; }
-        .media-med { width: 64px; height: 64px; font-size: 32px; }
-        .media-small { width: 46px; height: 46px; font-size: 24px; }
+        .media-big { width: 84px; height: 84px; font-size: 44px; }
+        .media-med { width: 64px; height: 64px; font-size: 30px; }
+        .media-small { width: 46px; height: 46px; font-size: 22px; }
 
         .media-box img {
             width: 100%;
@@ -169,6 +198,7 @@
 
         .card {
             background: var(--card);
+            border: 1px solid var(--border-subtle);
             border-radius: 14px;
             padding: 12px 10px;
             display: flex;
@@ -177,24 +207,28 @@
             justify-content: space-between;
             text-align: center;
             gap: 8px;
-            border: 2px solid transparent;
             transition: 0.15s;
         }
 
         .card.clickable { cursor: pointer; }
-        .card.selected { border-color: var(--accent); background: rgba(16, 185, 129, 0.12); }
+        .card.selected {
+            border-color: var(--orange-accent);
+            background: rgba(249, 115, 22, 0.1);
+            box-shadow: 0 0 12px rgba(249, 115, 22, 0.18);
+        }
 
         .price-tag {
             background: var(--bg);
+            border: 1px solid var(--border-subtle);
             padding: 4px 10px;
             border-radius: 8px;
             font-size: 12px;
             font-weight: 700;
-            color: var(--accent);
+            color: var(--orange-soft);
         }
 
         .btn {
-            background: var(--accent);
+            background: linear-gradient(135deg, var(--blue-accent), #1d6fd1);
             color: #fff;
             border: none;
             padding: 10px 12px;
@@ -206,16 +240,27 @@
             transition: 0.15s;
         }
 
-        .btn:active { transform: scale(0.96); }
-        .btn:disabled { background: var(--card-light); opacity: 0.6; cursor: not-allowed; transform: none; }
-        .btn-sell { background: var(--card-light); font-size: 12px; padding: 7px; }
+        .btn:active { transform: scale(0.97); }
+        .btn:disabled { background: var(--card-light); color: var(--muted); opacity: 0.65; cursor: not-allowed; transform: none; }
+        
+        .btn-orange {
+            background: linear-gradient(135deg, var(--orange-accent), var(--orange-hover));
+        }
+
+        .btn-sell {
+            background: var(--card-light);
+            border: 1px solid var(--border-subtle);
+            color: var(--text);
+            font-size: 12px;
+            padding: 7px;
+        }
 
         /* Редкость предметов */
-        .r-common { border-bottom: 3px solid #94a3b8; }
-        .r-rare { border-bottom: 3px solid #3b82f6; }
-        .r-epic { border-bottom: 3px solid #a855f7; }
-        .r-legendary { border-bottom: 3px solid #ef4444; }
-        .r-mythic { border-bottom: 3px solid #f59e0b; }
+        .r-common { border-bottom: 3px solid #64748b; }
+        .r-rare { border-bottom: 3px solid #2589f5; }
+        .r-epic { border-bottom: 3px solid #8b5cf6; }
+        .r-legendary { border-bottom: 3px solid #f97316; }
+        .r-mythic { border-bottom: 3px solid #eab308; }
 
         /* РУЛЕТКА ОТКРЫТИЯ КЕЙСА */
         .roulette-modal {
@@ -226,13 +271,11 @@
             flex-direction: column;
             align-items: center;
             gap: 12px;
-            border: 1px solid var(--card-light);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-subtle);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
         }
 
-        .roulette-modal.active {
-            display: flex;
-        }
+        .roulette-modal.active { display: flex; }
 
         .roulette-viewport {
             position: relative;
@@ -241,20 +284,19 @@
             background: var(--bg);
             border-radius: 12px;
             overflow: hidden;
-            border: 2px solid var(--card-light);
+            border: 1px solid var(--border-subtle);
         }
 
-        /* Центральная линия-указатель рулетки */
         .roulette-marker {
             position: absolute;
             top: 0;
             bottom: 0;
             left: 50%;
-            width: 3px;
-            background: var(--warning);
+            width: 2px;
+            background: var(--orange-accent);
             transform: translateX(-50%);
             z-index: 10;
-            box-shadow: 0 0 10px var(--warning);
+            box-shadow: 0 0 8px var(--orange-accent);
         }
 
         .roulette-marker::before {
@@ -265,7 +307,7 @@
             transform: translateX(-50%);
             border-left: 7px solid transparent;
             border-right: 7px solid transparent;
-            border-top: 9px solid var(--warning);
+            border-top: 9px solid var(--orange-accent);
         }
 
         .roulette-marker::after {
@@ -276,10 +318,9 @@
             transform: translateX(-50%);
             border-left: 7px solid transparent;
             border-right: 7px solid transparent;
-            border-bottom: 9px solid var(--warning);
+            border-bottom: 9px solid var(--orange-accent);
         }
 
-        /* Лента предметов */
         .roulette-track {
             display: flex;
             align-items: center;
@@ -294,6 +335,7 @@
             width: 100px;
             height: 106px;
             background: var(--card);
+            border: 1px solid var(--border-subtle);
             border-radius: 10px;
             display: flex;
             flex-direction: column;
@@ -316,6 +358,7 @@
         /* Апгрейдер */
         .wheel-box {
             background: var(--card);
+            border: 1px solid var(--border-subtle);
             padding: 20px 16px;
             border-radius: 16px;
             display: flex;
@@ -338,7 +381,7 @@
             top: -8px;
             border-left: 11px solid transparent;
             border-right: 11px solid transparent;
-            border-top: 20px solid var(--warning);
+            border-top: 20px solid var(--orange-accent);
             z-index: 10;
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
         }
@@ -349,7 +392,7 @@
             border-radius: 50%;
             transition: transform 3.2s cubic-bezier(0.15, 0.85, 0.25, 1);
             background: var(--card-light);
-            box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.6);
+            box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.65);
         }
 
         .wheel-inner {
@@ -357,6 +400,7 @@
             width: 135px;
             height: 135px;
             background: var(--bg);
+            border: 1px solid var(--border-subtle);
             border-radius: 50%;
             display: flex;
             flex-direction: column;
@@ -367,6 +411,7 @@
 
         .panel {
             background: var(--card);
+            border: 1px solid var(--border-subtle);
             padding: 14px;
             border-radius: 14px;
             display: flex;
@@ -377,16 +422,16 @@
         input[type="number"] {
             width: 100%;
             background: var(--bg);
-            border: 1px solid var(--card-light);
-            color: #fff;
+            border: 1px solid var(--border-subtle);
+            color: var(--text);
             padding: 11px 12px;
             border-radius: 10px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
             outline: none;
         }
 
-        input[type="number"]:focus { border-color: var(--accent); }
+        input[type="number"]:focus { border-color: var(--blue-accent); }
 
         .mode-switch {
             display: grid;
@@ -397,18 +442,19 @@
         .mode-btn {
             padding: 9px;
             background: var(--bg);
-            border: 1px solid var(--card-light);
+            border: 1px solid var(--border-subtle);
             color: var(--muted);
             border-radius: 8px;
             font-weight: 700;
             font-size: 13px;
             cursor: pointer;
+            transition: 0.15s;
         }
 
         .mode-btn.active {
-            border-color: var(--accent);
-            color: var(--accent);
-            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--blue-accent);
+            color: var(--cyan-soft);
+            background: rgba(37, 137, 245, 0.14);
         }
     </style>
 </head>
@@ -416,30 +462,33 @@
 
 <div class="app">
     <div class="header">
-        <div class="user-name" id="userLabel">Игрок</div>
+        <div class="brand-block">
+            <div class="brand-title">BrainDrop</div>
+            <div class="user-name" id="userLabel">Игрок</div>
+        </div>
         <div class="balance-pill">
-            <span>🪙 <span id="balanceVal">...</span></span>
+            <span><span id="balanceVal">...</span> монет</span>
             <button type="button" class="btn-plus" id="bonusBtn" title="Добавить +500 монет">+</button>
         </div>
     </div>
 
     <div class="toast" id="toastBox"></div>
 
+    <!-- Вкладки без эмодзи -->
     <div class="tabs">
-        <button type="button" class="tab-btn active" data-tab="cases">📦 Кейсы</button>
-        <button type="button" class="tab-btn" data-tab="upgrader">⚡ Апгрейд</button>
-        <button type="button" class="tab-btn" data-tab="inventory">🎒 Инвентарь (<span id="invCount">0</span>)</button>
+        <button type="button" class="tab-btn active" data-tab="cases">Кейсы</button>
+        <button type="button" class="tab-btn" data-tab="upgrader">Апгрейдер</button>
+        <button type="button" class="tab-btn" data-tab="inventory">Инвентарь (<span id="invCount">0</span>)</button>
     </div>
 
     <div id="tab-cases" class="section active">
-        <!-- Блок рулетки при открытии кейса -->
         <div class="roulette-modal" id="rouletteBox">
             <div style="font-weight:700; font-size:14px;" id="rouletteTitle">Открываем кейс...</div>
             <div class="roulette-viewport" id="rouletteViewport">
                 <div class="roulette-marker"></div>
                 <div class="roulette-track" id="rouletteTrack"></div>
             </div>
-            <div id="caseResult" style="text-align:center; font-weight:800; font-size:15px; color:var(--accent); min-height:22px;"></div>
+            <div id="caseResult" style="text-align:center; font-weight:800; font-size:15px; color:var(--orange-soft); min-height:22px;"></div>
         </div>
 
         <div class="grid-2" id="casesGrid"></div>
@@ -451,17 +500,17 @@
                 <div class="pointer"></div>
                 <div class="wheel" id="wheel"></div>
                 <div class="wheel-inner">
-                    <div id="chanceVal" style="font-size:24px; font-weight:800;">0%</div>
+                    <div id="chanceVal" style="font-size:24px; font-weight:800; color:var(--cyan-soft);">0%</div>
                     <div style="font-size:11px; color:var(--muted);">ШАНС</div>
                 </div>
             </div>
-            <div id="upgStatus" style="font-weight:700; font-size:14px; text-align:center;">Выберите ставку и цель</div>
+            <div id="upgStatus" style="font-weight:700; font-size:14px; text-align:center; color:var(--muted);">Выберите ставку и цель</div>
         </div>
 
         <div class="panel">
             <div style="display:flex; justify-content:space-between; font-size:13px;">
                 <span>1. Ваша ставка (вещи + монеты):</span>
-                <strong style="color:var(--accent);"><span id="totalBetVal">0</span> 🪙</strong>
+                <strong style="color:var(--orange-soft);"><span id="totalBetVal">0</span> монет</strong>
             </div>
             <input type="number" id="upgCoinsInput" placeholder="Добавить монеты к ставке (0)" min="0">
             <div style="font-size:12px; color:var(--muted);">Нажмите на ваши предметы, чтобы добавить в ставку:</div>
@@ -471,17 +520,17 @@
         <div class="panel">
             <div style="font-size:13px;">2. Что хотите получить:</div>
             <div class="mode-switch">
-                <button type="button" class="mode-btn active" id="modeItemBtn">Крутую вещь</button>
-                <button type="button" class="mode-btn" id="modeCoinsBtn">Больше монет</button>
+                <button type="button" class="mode-btn active" id="modeItemBtn">Предмет</button>
+                <button type="button" class="mode-btn" id="modeCoinsBtn">Монеты</button>
             </div>
 
             <div id="targetItemBox" class="grid-3" style="max-height: 175px; overflow-y: auto;"></div>
 
             <div id="targetCoinsBox" style="display:none;">
-                <input type="number" id="targetCoinsInput" placeholder="Сколько монет хотите выиграть?">
+                <input type="number" id="targetCoinsInput" placeholder="Желаемая сумма выигрыша">
             </div>
 
-            <button type="button" class="btn" id="upgSpinBtn">КРУТИТЬ АПГРЕЙД</button>
+            <button type="button" class="btn btn-orange" id="upgSpinBtn">Улучшить</button>
         </div>
     </div>
 
@@ -519,9 +568,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let isSpinning = false;
     let rotation = 0;
 
-    // Функция рендера картинки: если файл не загружен, автоматически показывает запасной эмодзи
     function renderMediaHTML(obj, sizeClass) {
-        const fallback = obj.fallback || "📦";
+        const fallback = obj.fallback || "";
         if (obj.image) {
             return `<div class="media-box ${sizeClass}"><img src="${obj.image}" alt="${obj.name}" onerror="this.parentElement.innerHTML='${fallback}'"></div>`;
         }
@@ -594,14 +642,13 @@ document.addEventListener("DOMContentLoaded", () => {
             card.innerHTML = `
                 ${renderMediaHTML(c, "media-big")}
                 <div style="font-weight:700; font-size:14px;">${c.name}</div>
-                <button type="button" class="btn" ${isSpinning ? "disabled" : ""}>Открыть за ${c.price} 🪙</button>
+                <button type="button" class="btn" ${isSpinning ? "disabled" : ""}>Открыть за ${c.price}</button>
             `;
             card.querySelector("button").addEventListener("click", () => openCaseWithRoulette(c));
             grid.appendChild(card);
         });
     }
 
-    // ОТКРЫТИЕ КЕЙСА С РУЛЕТКОЙ
     async function openCaseWithRoulette(caseObj) {
         if (isSpinning) return;
 
@@ -617,7 +664,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            // Блокируем кнопки на время прокрутки и сразу обновляем списанный баланс
             isSpinning = true;
             document.getElementById("balanceVal").innerText = data.new_balance;
             renderCases();
@@ -630,10 +676,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
             rouletteBox.classList.add("active");
             rouletteBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
-            titleEl.innerText = `Открываем: ${caseObj.name}...`;
+            titleEl.innerText = `Открываем: ${caseObj.name}`;
             resultEl.innerText = "";
 
-            // Формируем ленту из 45 карточек, где 38-я (индекс 37) — гарантированно выпавший предмет
             const totalSlots = 45;
             const winIndex = 37;
             const pool = caseObj.possible_items && caseObj.possible_items.length > 0
@@ -654,19 +699,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 slot.innerHTML = `
                     ${renderMediaHTML(item, "media-small")}
                     <div class="roulette-slot-name">${item.name}</div>
-                    <div style="font-size:10px; color:var(--accent); font-weight:700;">${item.price} 🪙</div>
+                    <div style="font-size:10px; color:var(--orange-soft); font-weight:700;">${item.price} монет</div>
                 `;
                 track.appendChild(slot);
             }
 
-            // Форсируем перерисовку DOM перед запуском анимации
             void track.offsetWidth;
 
-            // Ширина одного слота 100px + отступ 8px = 108px, начальный padding-left = 8px
             const slotStep = 108;
             const viewportCenter = viewport.offsetWidth / 2;
             const winSlotCenter = 8 + (winIndex * slotStep) + 50;
-            // Небольшое случайное смещение внутри победной карточки (-30..+30 px) для реалистичности
             const randomJitter = Math.floor(Math.random() * 60) - 30;
             const targetOffset = winSlotCenter - viewportCenter + randomJitter;
 
@@ -674,14 +716,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 try { tg.HapticFeedback.impactOccurred("medium"); } catch (e) {}
             }
 
-            // Запускаем плавную прокрутку на 4.2 секунды
             track.style.transition = "transform 4.2s cubic-bezier(0.12, 0.85, 0.22, 1)";
             track.style.transform = `translateX(-${targetOffset}px)`;
 
             setTimeout(async () => {
                 isSpinning = false;
                 titleEl.innerText = "Ваш выигрыш:";
-                resultEl.innerText = `${data.won_item.name} (${data.won_item.price} 🪙)!`;
+                resultEl.innerText = `${data.won_item.name} (${data.won_item.price} монет)`;
 
                 if (tg && tg.HapticFeedback) {
                     try { tg.HapticFeedback.notificationOccurred("success"); } catch (e) {}
@@ -710,7 +751,7 @@ document.addEventListener("DOMContentLoaded", () => {
             card.innerHTML = `
                 ${renderMediaHTML(item, "media-med")}
                 <div style="font-size:12px; font-weight:600;">${item.name}</div>
-                <div class="price-tag">${item.price} 🪙</div>
+                <div class="price-tag">${item.price} монет</div>
                 <button type="button" class="btn btn-sell">Продать</button>
             `;
             card.querySelector("button").addEventListener("click", () => sellItem(item.inv_id));
@@ -726,7 +767,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 body: JSON.stringify({ user_id: userId, inv_id: invId })
             });
             if (res.ok) {
-                showToast("Предмет продан!", "success");
+                showToast("Предмет продан", "success");
                 await loadState();
             }
         } catch (err) {
@@ -762,7 +803,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 card.innerHTML = `
                     ${renderMediaHTML(item, "media-small")}
                     <div style="font-size:11px;">${item.name}</div>
-                    <div style="font-size:11px; color:var(--accent); font-weight:700;">${item.price} 🪙</div>
+                    <div style="font-size:11px; color:var(--orange-soft); font-weight:700;">${item.price}</div>
                 `;
                 card.addEventListener("click", () => {
                     if (isSpinning) return;
@@ -784,7 +825,7 @@ document.addEventListener("DOMContentLoaded", () => {
             card.innerHTML = `
                 ${renderMediaHTML(item, "media-small")}
                 <div style="font-size:11px;">${item.name}</div>
-                <div style="font-size:11px; color:var(--accent); font-weight:700;">${item.price} 🪙</div>
+                <div style="font-size:11px; color:var(--orange-soft); font-weight:700;">${item.price}</div>
             `;
             card.addEventListener("click", () => {
                 if (isSpinning) return;
@@ -821,10 +862,11 @@ document.addEventListener("DOMContentLoaded", () => {
             chance = Math.max(1, Math.min(80, chance));
             chanceEl.innerText = chance + "%";
             const deg = (chance / 100) * 360;
-            wheel.style.background = `conic-gradient(#10b981 0deg ${deg}deg, #334155 ${deg}deg 360deg)`;
+            /* Колесо апгрейдера в фирменном голубом и оранжевом цвете */
+            wheel.style.background = `conic-gradient(#2589f5 0deg ${deg}deg, #172744 ${deg}deg 360deg)`;
         } else {
             chanceEl.innerText = "0%";
-            wheel.style.background = "#334155";
+            wheel.style.background = "#172744";
         }
     }
 
@@ -860,7 +902,7 @@ document.addEventListener("DOMContentLoaded", () => {
             isSpinning = true;
             document.getElementById("upgSpinBtn").disabled = true;
             statusEl.style.color = "var(--muted)";
-            statusEl.innerText = "Крутим...";
+            statusEl.innerText = "Выполняется улучшение...";
 
             const winDeg = (data.chance / 100) * 360;
             const targetAngle = data.win
@@ -879,11 +921,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 selectedInvIds.clear();
 
                 if (data.win) {
-                    statusEl.style.color = "var(--accent)";
-                    statusEl.innerText = "УСПЕХ! Награда добавлена!";
+                    statusEl.style.color = "var(--cyan-soft)";
+                    statusEl.innerText = "Успех! Награда получена";
                 } else {
                     statusEl.style.color = "var(--danger)";
-                    statusEl.innerText = "СГОРЕЛО! Попробуйте снова";
+                    statusEl.innerText = "Неудача! Попробуйте снова";
                 }
                 await loadState();
             }, 3250);
