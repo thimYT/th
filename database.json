@@ -8,15 +8,15 @@
       "balance": 100,
       "inventory": [
         {
-          "inv_id": 1,
-          "item_id": 1
-        },
-        {
           "inv_id": 3,
           "item_id": 3
+        },
+        {
+          "inv_id": 4,
+          "item_id": 2
         }
       ]
     }
   },
-  "next_inv_id": 4
+  "next_inv_id": 5
 }
