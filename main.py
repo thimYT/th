@@ -8,7 +8,6 @@ from typing import List, Optional
 app = FastAPI()
 DB_NAME = "game.db"
 
-# --- БАЗА ПРЕДМЕТОВ И КЕЙСОВ ---
 ITEMS_DB = {
     1: {"id": 1, "name": "Ржавый нож", "price": 50, "rarity": "common", "icon": "🗡️"},
     2: {"id": 2, "name": "Пистолет Старт", "price": 120, "rarity": "common", "icon": "🔫"},
@@ -56,7 +55,6 @@ CASES_DB = {
     }
 }
 
-# --- ИНИЦИАЛИЗАЦИЯ БАЗЫ ДАННЫХ SQLITE ---
 def init_db():
     conn = sqlite3.connect(DB_NAME)
     cur = conn.cursor()
@@ -78,7 +76,7 @@ def init_db():
 
 init_db()
 
-def get_or_create_user(user_id: str):
+def get_or_create_user(user_id: str) -> int:
     conn = sqlite3.connect(DB_NAME)
     cur = conn.cursor()
     cur.execute("SELECT balance FROM users WHERE user_id = ?", (user_id,))
@@ -92,7 +90,6 @@ def get_or_create_user(user_id: str):
     conn.close()
     return balance
 
-# --- МОДЕЛИ ЗАПРОСОВ ---
 class OpenCaseReq(BaseModel):
     user_id: str
     case_id: int
@@ -103,13 +100,12 @@ class SellItemReq(BaseModel):
 
 class UpgradeReq(BaseModel):
     user_id: str
-    inv_ids: List[int]          # Список ID предметов из инвентаря для ставки
-    coins_bet: int              # Сколько монет докинуть к ставке
-    target_type: str            # "item" или "coins"
+    inv_ids: List[int]
+    coins_bet: int
+    target_type: str
     target_item_id: Optional[int] = None
     target_coins: Optional[int] = None
 
-# --- МАРШРУТЫ API ---
 @app.get("/")
 def serve_frontend():
     return FileResponse("index.html")
@@ -125,9 +121,10 @@ def get_state(user_id: str):
 
     inv_list = []
     for inv_id, item_id in rows:
-        item_info = ITEMS_DB[item_id].copy()
-        item_info["inv_id"] = inv_id
-        inv_list.append(item_info)
+        if item_id in ITEMS_DB:
+            item_info = ITEMS_DB[item_id].copy()
+            item_info["inv_id"] = inv_id
+            inv_list.append(item_info)
 
     return {
         "balance": balance,
@@ -157,7 +154,6 @@ def open_case(req: OpenCaseReq):
     if balance < case["price"]:
         raise HTTPException(status_code=400, detail="Недостаточно монет")
 
-    # Выбор случайного предмета по весам
     population = [d["item_id"] for d in case["drops"]]
     weights = [d["weight"] for d in case["drops"]]
     won_item_id = random.choices(population, weights=weights, k=1)[0]
@@ -200,7 +196,6 @@ def do_upgrade(req: UpgradeReq):
     conn = sqlite3.connect(DB_NAME)
     cur = conn.cursor()
 
-    # Проверяем, что все выбранные предметы действительно есть у игрока
     items_total_value = 0
     if req.inv_ids:
         placeholders = ",".join("?" for _ in req.inv_ids)
@@ -217,7 +212,6 @@ def do_upgrade(req: UpgradeReq):
         conn.close()
         raise HTTPException(status_code=400, detail="Выберите вещи или введите монеты")
 
-    # Определяем стоимость цели
     if req.target_type == "item":
         if req.target_item_id not in ITEMS_DB:
             conn.close()
@@ -233,18 +227,15 @@ def do_upgrade(req: UpgradeReq):
         conn.close()
         raise HTTPException(status_code=400, detail="Цель должна быть дороже вашей ставки")
 
-    # Расчет шанса (92% RTP, максимум 80%)
     chance = round((total_bet / target_value) * 92, 2)
     chance = max(1.0, min(80.0, chance))
 
-    # Списываем ставку (монеты и предметы)
     if req.coins_bet > 0:
         cur.execute("UPDATE users SET balance = balance - ? WHERE user_id = ?", (req.coins_bet, req.user_id))
     if req.inv_ids:
         placeholders = ",".join("?" for _ in req.inv_ids)
         cur.execute(f"DELETE FROM inventory WHERE inv_id IN ({placeholders})", req.inv_ids)
 
-    # Бросок кубика на сервере
     roll = random.uniform(0, 100)
     is_win = roll <= chance
 
