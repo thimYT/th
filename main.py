@@ -1,6 +1,9 @@
 import os
-import sqlite3
+import json
+import base64
 import random
+import urllib.request
+import urllib.error
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -8,14 +11,16 @@ from pydantic import BaseModel
 from typing import List, Optional
 
 app = FastAPI()
-DB_NAME = "game.db"
 
-# Создаем папку images, если её еще нет, и подключаем раздачу картинок
 os.makedirs("images", exist_ok=True)
 app.mount("/images", StaticFiles(directory="images"), name="images")
 
-# В поле "image" можно указывать как локальный файл ("/images/knife.png"),
-# так и прямую ссылку из интернета ("https://...")
+# Настройки GitHub для сохранения базы данных
+GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN", "").strip()
+GITHUB_REPO = os.environ.get("GITHUB_REPO", "thimYT/th").strip()
+GITHUB_DB_PATH = "database.json"
+LOCAL_FALLBACK_FILE = "database.json"
+
 ITEMS_DB = {
     1: {
         "id": 1,
@@ -108,40 +113,96 @@ CASES_DB = {
     }
 }
 
-def init_db():
-    conn = sqlite3.connect(DB_NAME)
-    cur = conn.cursor()
-    cur.execute('''
-        CREATE TABLE IF NOT EXISTS users (
-            user_id TEXT PRIMARY KEY,
-            balance INTEGER DEFAULT 1000
-        )
-    ''')
-    cur.execute('''
-        CREATE TABLE IF NOT EXISTS inventory (
-            inv_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id TEXT,
-            item_id INTEGER
-        )
-    ''')
-    conn.commit()
-    conn.close()
+# --- РАБОТА С БАЗОЙ ДАННЫХ ЧЕРЕЗ GITHUB API ---
+def github_load_db():
+    if not GITHUB_TOKEN or not GITHUB_REPO:
+        if os.path.exists(LOCAL_FALLBACK_FILE):
+            with open(LOCAL_FALLBACK_FILE, "r", encoding="utf-8") as f:
+                return json.load(f), None
+        return {"users": {}, "next_inv_id": 1}, None
 
-init_db()
+    url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_DB_PATH}"
+    req = urllib.request.Request(url, headers={
+        "Authorization": f"Bearer {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github+json",
+        "User-Agent": "FastAPI-Game-Server"
+    })
+    try:
+        with urllib.request.urlopen(req, timeout=8) as resp:
+            payload = json.loads(resp.read().decode("utf-8"))
+            sha = payload.get("sha")
+            raw_content = base64.b64decode(payload["content"]).decode("utf-8")
+            data = json.loads(raw_content)
+            return data, sha
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            return {"users": {}, "next_inv_id": 1}, None
+        raise
+    except Exception:
+        return {"users": {}, "next_inv_id": 1}, None
 
-def get_or_create_user(user_id: str) -> int:
-    conn = sqlite3.connect(DB_NAME)
-    cur = conn.cursor()
-    cur.execute("SELECT balance FROM users WHERE user_id = ?", (user_id,))
-    row = cur.fetchone()
-    if not row:
-        cur.execute("INSERT INTO users (user_id, balance) VALUES (?, ?)", (user_id, 1000))
-        conn.commit()
-        balance = 1000
-    else:
-        balance = int(row[0])
-    conn.close()
-    return balance
+def github_save_db(data, sha=None):
+    with open(LOCAL_FALLBACK_FILE, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+    if not GITHUB_TOKEN or not GITHUB_REPO:
+        return
+
+    url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_DB_PATH}"
+    encoded_content = base64.b64encode(
+        json.dumps(data, ensure_ascii=False, indent=2).encode("utf-8")
+    ).decode("utf-8")
+
+    body = {
+        "message": "Update player save data",
+        "content": encoded_content
+    }
+    if sha:
+        body["sha"] = sha
+
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(body).encode("utf-8"),
+        method="PUT",
+        headers={
+            "Authorization": f"Bearer {GITHUB_TOKEN}",
+            "Accept": "application/vnd.github+json",
+            "Content-Type": "application/json",
+            "User-Agent": "FastAPI-Game-Server"
+        }
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=8) as resp:
+            resp.read()
+    except urllib.error.HTTPError as e:
+        # Если sha устарел из-за параллельного запроса, пробуем перечитать sha и сохранить еще раз
+        if e.code in (409, 422):
+            _, fresh_sha = github_load_db()
+            if fresh_sha:
+                body["sha"] = fresh_sha
+                retry_req = urllib.request.Request(
+                    url,
+                    data=json.dumps(body).encode("utf-8"),
+                    method="PUT",
+                    headers={
+                        "Authorization": f"Bearer {GITHUB_TOKEN}",
+                        "Accept": "application/vnd.github+json",
+                        "Content-Type": "application/json",
+                        "User-Agent": "FastAPI-Game-Server"
+                    }
+                )
+                with urllib.request.urlopen(retry_req, timeout=8) as resp2:
+                    resp2.read()
+
+def get_user_record(db, user_id: str):
+    users = db.setdefault("users", {})
+    if user_id not in users:
+        users[user_id] = {
+            "balance": 1000,
+            "inventory": []
+        }
+        return users[user_id], True
+    return users[user_id], False
 
 class OpenCaseReq(BaseModel):
     user_id: str
@@ -165,21 +226,19 @@ def serve_frontend():
 
 @app.get("/api/state/{user_id}")
 def get_state(user_id: str):
-    balance = get_or_create_user(user_id)
-    conn = sqlite3.connect(DB_NAME)
-    cur = conn.cursor()
-    cur.execute("SELECT inv_id, item_id FROM inventory WHERE user_id = ? ORDER BY inv_id DESC", (user_id,))
-    rows = cur.fetchall()
-    conn.close()
+    db, sha = github_load_db()
+    user_data, created = get_user_record(db, user_id)
+    if created:
+        github_save_db(db, sha)
 
     inv_list = []
-    for inv_id, item_id in rows:
+    for entry in reversed(user_data.get("inventory", [])):
+        item_id = entry.get("item_id")
         if item_id in ITEMS_DB:
             item_info = ITEMS_DB[item_id].copy()
-            item_info["inv_id"] = inv_id
+            item_info["inv_id"] = entry["inv_id"]
             inv_list.append(item_info)
 
-    # Передаем кейсы вместе со списком возможных предметов для анимации рулетки
     cases_with_items = []
     for c in CASES_DB.values():
         c_copy = c.copy()
@@ -187,64 +246,68 @@ def get_state(user_id: str):
         cases_with_items.append(c_copy)
 
     return {
-        "balance": balance,
+        "balance": user_data["balance"],
         "inventory": inv_list,
         "cases": cases_with_items,
-        "all_items": list(ITEMS_DB.values())
+        "all_items": list(ITEMS_DB.values()),
+        "github_sync": bool(GITHUB_TOKEN)
     }
 
 @app.post("/api/bonus/{user_id}")
 def add_bonus(user_id: str):
-    balance = get_or_create_user(user_id)
-    conn = sqlite3.connect(DB_NAME)
-    cur = conn.cursor()
-    cur.execute("UPDATE users SET balance = balance + 500 WHERE user_id = ?", (user_id,))
-    conn.commit()
-    conn.close()
-    return {"balance": balance + 500}
+    db, sha = github_load_db()
+    user_data, _ = get_user_record(db, user_id)
+    user_data["balance"] += 500
+    github_save_db(db, sha)
+    return {"balance": user_data["balance"]}
 
 @app.post("/api/open_case")
 def open_case(req: OpenCaseReq):
     if req.case_id not in CASES_DB:
         raise HTTPException(status_code=400, detail="Кейс не найден")
-    
-    case = CASES_DB[req.case_id]
-    balance = get_or_create_user(req.user_id)
 
-    if balance < case["price"]:
+    case = CASES_DB[req.case_id]
+    db, sha = github_load_db()
+    user_data, _ = get_user_record(db, req.user_id)
+
+    if user_data["balance"] < case["price"]:
         raise HTTPException(status_code=400, detail="Недостаточно монет")
 
     population = [d["item_id"] for d in case["drops"]]
     weights = [d["weight"] for d in case["drops"]]
     won_item_id = random.choices(population, weights=weights, k=1)[0]
 
-    conn = sqlite3.connect(DB_NAME)
-    cur = conn.cursor()
-    cur.execute("UPDATE users SET balance = balance - ? WHERE user_id = ?", (case["price"], req.user_id))
-    cur.execute("INSERT INTO inventory (user_id, item_id) VALUES (?, ?)", (req.user_id, won_item_id))
-    conn.commit()
-    conn.close()
+    next_id = db.get("next_inv_id", 1)
+    db["next_inv_id"] = next_id + 1
+
+    user_data["balance"] -= case["price"]
+    user_data["inventory"].append({
+        "inv_id": next_id,
+        "item_id": won_item_id
+    })
+
+    github_save_db(db, sha)
 
     return {
         "won_item": ITEMS_DB[won_item_id],
-        "new_balance": balance - case["price"]
+        "new_balance": user_data["balance"]
     }
 
 @app.post("/api/sell_item")
 def sell_item(req: SellItemReq):
-    conn = sqlite3.connect(DB_NAME)
-    cur = conn.cursor()
-    cur.execute("SELECT item_id FROM inventory WHERE inv_id = ? AND user_id = ?", (req.inv_id, req.user_id))
-    row = cur.fetchone()
-    if not row:
-        conn.close()
+    db, sha = github_load_db()
+    user_data, _ = get_user_record(db, req.user_id)
+
+    inv = user_data.get("inventory", [])
+    target_entry = next((x for x in inv if x["inv_id"] == req.inv_id), None)
+    if not target_entry:
         raise HTTPException(status_code=400, detail="Предмет не найден")
 
-    price = ITEMS_DB[int(row[0])]["price"]
-    cur.execute("DELETE FROM inventory WHERE inv_id = ?", (req.inv_id,))
-    cur.execute("UPDATE users SET balance = balance + ? WHERE user_id = ?", (price, req.user_id))
-    conn.commit()
-    conn.close()
+    price = ITEMS_DB[target_entry["item_id"]]["price"]
+    user_data["inventory"] = [x for x in inv if x["inv_id"] != req.inv_id]
+    user_data["balance"] += price
+
+    github_save_db(db, sha)
     return {"sold_for": price}
 
 @app.post("/api/upgrade")
@@ -252,64 +315,60 @@ def do_upgrade(req: UpgradeReq):
     if req.coins_bet < 0:
         raise HTTPException(status_code=400, detail="Некорректная ставка монет")
 
-    balance = get_or_create_user(req.user_id)
-    if req.coins_bet > balance:
+    db, sha = github_load_db()
+    user_data, _ = get_user_record(db, req.user_id)
+
+    if req.coins_bet > user_data["balance"]:
         raise HTTPException(status_code=400, detail="Недостаточно монет")
 
-    conn = sqlite3.connect(DB_NAME)
-    cur = conn.cursor()
+    inv = user_data.get("inventory", [])
+    selected_set = set(req.inv_ids)
+    found_items = [x for x in inv if x["inv_id"] in selected_set]
 
-    items_total_value = 0
-    if req.inv_ids:
-        placeholders = ",".join("?" for _ in req.inv_ids)
-        cur.execute(f"SELECT inv_id, item_id FROM inventory WHERE user_id = ? AND inv_id IN ({placeholders})", [req.user_id] + req.inv_ids)
-        found_rows = cur.fetchall()
-        if len(found_rows) != len(req.inv_ids):
-            conn.close()
-            raise HTTPException(status_code=400, detail="Ошибка проверки предметов инвентаря")
-        for _, item_id in found_rows:
-            items_total_value += ITEMS_DB[item_id]["price"]
+    if len(found_items) != len(selected_set):
+        raise HTTPException(status_code=400, detail="Ошибка проверки предметов инвентаря")
 
+    items_total_value = sum(ITEMS_DB[x["item_id"]]["price"] for x in found_items)
     total_bet = items_total_value + req.coins_bet
+
     if total_bet <= 0:
-        conn.close()
         raise HTTPException(status_code=400, detail="Выберите вещи или введите монеты")
 
     if req.target_type == "item":
         if req.target_item_id not in ITEMS_DB:
-            conn.close()
             raise HTTPException(status_code=400, detail="Целевой предмет не найден")
         target_value = ITEMS_DB[req.target_item_id]["price"]
     else:
         if not req.target_coins or req.target_coins <= total_bet:
-            conn.close()
             raise HTTPException(status_code=400, detail="Желаемая сумма должна быть больше ставки")
         target_value = req.target_coins
 
     if target_value <= total_bet:
-        conn.close()
         raise HTTPException(status_code=400, detail="Цель должна быть дороже вашей ставки")
 
     chance = round((total_bet / target_value) * 92, 2)
     chance = max(1.0, min(80.0, chance))
 
-    if req.coins_bet > 0:
-        cur.execute("UPDATE users SET balance = balance - ? WHERE user_id = ?", (req.coins_bet, req.user_id))
-    if req.inv_ids:
-        placeholders = ",".join("?" for _ in req.inv_ids)
-        cur.execute(f"DELETE FROM inventory WHERE inv_id IN ({placeholders})", req.inv_ids)
+    # Списываем ставку
+    user_data["balance"] -= req.coins_bet
+    if selected_set:
+        user_data["inventory"] = [x for x in inv if x["inv_id"] not in selected_set]
 
     roll = random.uniform(0, 100)
     is_win = roll <= chance
 
     if is_win:
         if req.target_type == "item":
-            cur.execute("INSERT INTO inventory (user_id, item_id) VALUES (?, ?)", (req.user_id, req.target_item_id))
+            next_id = db.get("next_inv_id", 1)
+            db["next_inv_id"] = next_id + 1
+            user_data["inventory"].append({
+                "inv_id": next_id,
+                "item_id": req.target_item_id
+            })
         else:
-            cur.execute("UPDATE users SET balance = balance + ? WHERE user_id = ?", (target_value, req.user_id))
+            user_data["balance"] += target_value
 
-    conn.commit()
-    conn.close()
+    github_save_db(db, sha)
 
     return {
         "win": is_win,
