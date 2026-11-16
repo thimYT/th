@@ -58,19 +58,19 @@ CASES_DB = {
 def init_db():
     conn = sqlite3.connect(DB_NAME)
     cur = conn.cursor()
-    cur.execute("""
+    cur.execute('''
         CREATE TABLE IF NOT EXISTS users (
             user_id TEXT PRIMARY KEY,
             balance INTEGER DEFAULT 1000
         )
-    """)
-    cur.execute("""
+    ''')
+    cur.execute('''
         CREATE TABLE IF NOT EXISTS inventory (
             inv_id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id TEXT,
             item_id INTEGER
         )
-    """)
+    ''')
     conn.commit()
     conn.close()
 
