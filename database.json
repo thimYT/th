@@ -3,6 +3,10 @@
     "player_654541": {
       "balance": 1670,
       "inventory": []
+    },
+    "player_715825": {
+      "balance": 1000,
+      "inventory": []
     }
   },
   "next_inv_id": 1
