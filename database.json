@@ -10,7 +10,7 @@
       ]
     },
     "player_715825": {
-      "balance": 220,
+      "balance": 120,
       "inventory": [
         {
           "inv_id": 9,
@@ -19,9 +19,13 @@
         {
           "inv_id": 10,
           "item_id": 3
+        },
+        {
+          "inv_id": 12,
+          "item_id": 3
         }
       ]
     }
   },
-  "next_inv_id": 12
+  "next_inv_id": 13
 }
