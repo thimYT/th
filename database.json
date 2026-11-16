@@ -1,0 +1,9 @@
+{
+  "users": {
+    "player_654541": {
+      "balance": 1000,
+      "inventory": []
+    }
+  },
+  "next_inv_id": 1
+}
