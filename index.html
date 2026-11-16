@@ -8,7 +8,6 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            /* Палитра в стиле BrainDrop: глубокий космический синий + мягкий неоновый голубой + тёплый оранжевый */
             --bg: #070d19;
             --card: #0e182c;
             --card-light: #172744;
@@ -21,7 +20,7 @@
             --orange-accent: #f97316;
             --orange-hover: #ea580c;
             --orange-soft: #fb923c;
-            --orange-bg: rgba(249, 115, 22, 0.14);
+            --orange-bg: rgba(249, 115, 22, 0.15);
             
             --danger: #e11d48;
             --text: #e2e8f0;
@@ -36,11 +35,17 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        body {
+        html, body {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
             background-color: var(--bg);
-            background-image: radial-gradient(circle at 50% 0%, rgba(37, 137, 245, 0.12) 0%, transparent 60%);
             color: var(--text);
-            padding: 12px;
+        }
+
+        body {
+            background-image: radial-gradient(circle at 50% 0%, rgba(37, 137, 245, 0.12) 0%, transparent 60%);
+            padding: 10px;
             display: flex;
             justify-content: center;
             min-height: 100vh;
@@ -48,55 +53,109 @@
 
         .app {
             width: 100%;
-            max-width: 460px;
+            max-width: 440px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            padding-bottom: 50px;
+            gap: 10px;
+            padding-bottom: 40px;
         }
 
-        /* Шапка */
+        /* Закрепленная компактная шапка: аватарка + ник слева, баланс справа */
         .header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: var(--card);
+            gap: 8px;
+            background: rgba(14, 24, 44, 0.94);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border: 1px solid var(--border-subtle);
-            padding: 12px 16px;
+            padding: 8px 12px;
             border-radius: 14px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
         }
 
-        .brand-block {
+        .profile-block {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .avatar-wrap {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-accent), var(--orange-accent));
+            padding: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .avatar-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+            color: var(--cyan-soft);
+            overflow: hidden;
+        }
+
+        .avatar-inner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .user-meta {
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            min-width: 0;
         }
 
-        .brand-title {
+        .brand-tag {
+            font-size: 10px;
             font-weight: 800;
-            font-size: 15px;
-            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
             color: var(--cyan-soft);
         }
 
         .user-name {
-            font-weight: 600;
-            font-size: 12px;
-            color: var(--muted);
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .balance-pill {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            flex-shrink: 0;
             background: var(--orange-bg);
-            border: 1px solid rgba(249, 115, 22, 0.35);
-            padding: 6px 12px;
+            border: 1px solid rgba(249, 115, 22, 0.4);
+            padding: 5px 8px 5px 10px;
             border-radius: 10px;
             color: var(--orange-soft);
             font-weight: 800;
-            font-size: 14px;
+            font-size: 13px;
+            white-space: nowrap;
         }
 
         .btn-plus {
@@ -105,9 +164,10 @@
             border: none;
             width: 24px;
             height: 24px;
+            min-width: 24px;
             border-radius: 7px;
-            font-size: 17px;
-            font-weight: bold;
+            font-size: 16px;
+            font-weight: 800;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -122,9 +182,9 @@
         .toast {
             background: var(--card-light);
             color: var(--text);
-            padding: 10px 14px;
+            padding: 9px 12px;
             border-radius: 10px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             text-align: center;
             display: none;
@@ -138,10 +198,10 @@
         .tabs {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
+            gap: 5px;
             background: var(--card);
             border: 1px solid var(--border-subtle);
-            padding: 5px;
+            padding: 4px;
             border-radius: 12px;
         }
 
@@ -149,12 +209,13 @@
             background: transparent;
             border: none;
             color: var(--muted);
-            padding: 10px 6px;
+            padding: 9px 4px;
             border-radius: 8px;
             font-weight: 700;
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
             transition: 0.2s;
+            white-space: nowrap;
         }
 
         .tab-btn.active {
@@ -166,14 +227,14 @@
         .section {
             display: none;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .section.active {
             display: flex;
         }
 
-        /* Картинки и иконки */
+        /* Картинки */
         .media-box {
             display: flex;
             align-items: center;
@@ -181,9 +242,9 @@
             overflow: hidden;
         }
 
-        .media-big { width: 84px; height: 84px; font-size: 44px; }
-        .media-med { width: 64px; height: 64px; font-size: 30px; }
-        .media-small { width: 46px; height: 46px; font-size: 22px; }
+        .media-big { width: 76px; height: 76px; font-size: 38px; }
+        .media-med { width: 58px; height: 58px; font-size: 28px; }
+        .media-small { width: 42px; height: 42px; font-size: 20px; }
 
         .media-box img {
             width: 100%;
@@ -193,20 +254,21 @@
         }
 
         /* Сетки и карточки */
-        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
 
         .card {
             background: var(--card);
             border: 1px solid var(--border-subtle);
-            border-radius: 14px;
-            padding: 12px 10px;
+            border-radius: 12px;
+            padding: 10px 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
             text-align: center;
-            gap: 8px;
+            gap: 6px;
+            min-width: 0;
             transition: 0.15s;
         }
 
@@ -220,9 +282,9 @@
         .price-tag {
             background: var(--bg);
             border: 1px solid var(--border-subtle);
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 7px;
+            font-size: 11px;
             font-weight: 700;
             color: var(--orange-soft);
         }
@@ -231,10 +293,10 @@
             background: linear-gradient(135deg, var(--blue-accent), #1d6fd1);
             color: #fff;
             border: none;
-            padding: 10px 12px;
-            border-radius: 10px;
+            padding: 9px 10px;
+            border-radius: 9px;
             font-weight: 700;
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
             width: 100%;
             transition: 0.15s;
@@ -251,11 +313,11 @@
             background: var(--card-light);
             border: 1px solid var(--border-subtle);
             color: var(--text);
-            font-size: 12px;
-            padding: 7px;
+            font-size: 11px;
+            padding: 6px;
         }
 
-        /* Редкость предметов */
+        /* Редкость */
         .r-common { border-bottom: 3px solid #64748b; }
         .r-rare { border-bottom: 3px solid #2589f5; }
         .r-epic { border-bottom: 3px solid #8b5cf6; }
@@ -265,12 +327,12 @@
         /* РУЛЕТКА ОТКРЫТИЯ КЕЙСА */
         .roulette-modal {
             background: var(--card);
-            border-radius: 16px;
-            padding: 16px 12px;
+            border-radius: 14px;
+            padding: 14px 10px;
             display: none;
             flex-direction: column;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             border: 1px solid var(--border-subtle);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
         }
@@ -280,9 +342,9 @@
         .roulette-viewport {
             position: relative;
             width: 100%;
-            height: 124px;
+            height: 116px;
             background: var(--bg);
-            border-radius: 12px;
+            border-radius: 10px;
             overflow: hidden;
             border: 1px solid var(--border-subtle);
         }
@@ -305,9 +367,9 @@
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            border-left: 7px solid transparent;
-            border-right: 7px solid transparent;
-            border-top: 9px solid var(--orange-accent);
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 8px solid var(--orange-accent);
         }
 
         .roulette-marker::after {
@@ -316,9 +378,9 @@
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            border-left: 7px solid transparent;
-            border-right: 7px solid transparent;
-            border-bottom: 9px solid var(--orange-accent);
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 8px solid var(--orange-accent);
         }
 
         .roulette-track {
@@ -331,9 +393,9 @@
         }
 
         .roulette-slot {
-            flex: 0 0 100px;
-            width: 100px;
-            height: 106px;
+            flex: 0 0 96px;
+            width: 96px;
+            height: 100px;
             background: var(--card);
             border: 1px solid var(--border-subtle);
             border-radius: 10px;
@@ -341,13 +403,13 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 6px;
+            padding: 5px;
             gap: 4px;
             text-align: center;
         }
 
         .roulette-slot-name {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
             white-space: nowrap;
             overflow: hidden;
@@ -359,18 +421,18 @@
         .wheel-box {
             background: var(--card);
             border: 1px solid var(--border-subtle);
-            padding: 20px 16px;
-            border-radius: 16px;
+            padding: 16px 12px;
+            border-radius: 14px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         .wheel-wrap {
             position: relative;
-            width: 190px;
-            height: 190px;
+            width: 176px;
+            height: 176px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -379,9 +441,9 @@
         .pointer {
             position: absolute;
             top: -8px;
-            border-left: 11px solid transparent;
-            border-right: 11px solid transparent;
-            border-top: 20px solid var(--orange-accent);
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 18px solid var(--orange-accent);
             z-index: 10;
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
         }
@@ -397,8 +459,8 @@
 
         .wheel-inner {
             position: absolute;
-            width: 135px;
-            height: 135px;
+            width: 124px;
+            height: 124px;
             background: var(--bg);
             border: 1px solid var(--border-subtle);
             border-radius: 50%;
@@ -412,11 +474,11 @@
         .panel {
             background: var(--card);
             border: 1px solid var(--border-subtle);
-            padding: 14px;
+            padding: 12px;
             border-radius: 14px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
         input[type="number"] {
@@ -424,9 +486,9 @@
             background: var(--bg);
             border: 1px solid var(--border-subtle);
             color: var(--text);
-            padding: 11px 12px;
-            border-radius: 10px;
-            font-size: 14px;
+            padding: 10px;
+            border-radius: 9px;
+            font-size: 13px;
             font-weight: 700;
             outline: none;
         }
@@ -436,17 +498,17 @@
         .mode-switch {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
+            gap: 6px;
         }
 
         .mode-btn {
-            padding: 9px;
+            padding: 8px;
             background: var(--bg);
             border: 1px solid var(--border-subtle);
             color: var(--muted);
             border-radius: 8px;
             font-weight: 700;
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
             transition: 0.15s;
         }
@@ -461,10 +523,16 @@
 <body>
 
 <div class="app">
+    <!-- Закрепленная шапка с аватаркой Telegram и балансом без горизонтальной прокрутки -->
     <div class="header">
-        <div class="brand-block">
-            <div class="brand-title">BrainDrop</div>
-            <div class="user-name" id="userLabel">Игрок</div>
+        <div class="profile-block">
+            <div class="avatar-wrap">
+                <div class="avatar-inner" id="avatarBox">BD</div>
+            </div>
+            <div class="user-meta">
+                <div class="brand-tag">BrainDrop</div>
+                <div class="user-name" id="userLabel">Игрок</div>
+            </div>
         </div>
         <div class="balance-pill">
             <span><span id="balanceVal">...</span> монет</span>
@@ -483,12 +551,12 @@
 
     <div id="tab-cases" class="section active">
         <div class="roulette-modal" id="rouletteBox">
-            <div style="font-weight:700; font-size:14px;" id="rouletteTitle">Открываем кейс...</div>
+            <div style="font-weight:700; font-size:13px;" id="rouletteTitle">Открываем кейс...</div>
             <div class="roulette-viewport" id="rouletteViewport">
                 <div class="roulette-marker"></div>
                 <div class="roulette-track" id="rouletteTrack"></div>
             </div>
-            <div id="caseResult" style="text-align:center; font-weight:800; font-size:15px; color:var(--orange-soft); min-height:22px;"></div>
+            <div id="caseResult" style="text-align:center; font-weight:800; font-size:14px; color:var(--orange-soft); min-height:20px;"></div>
         </div>
 
         <div class="grid-2" id="casesGrid"></div>
@@ -500,31 +568,31 @@
                 <div class="pointer"></div>
                 <div class="wheel" id="wheel"></div>
                 <div class="wheel-inner">
-                    <div id="chanceVal" style="font-size:24px; font-weight:800; color:var(--cyan-soft);">0%</div>
-                    <div style="font-size:11px; color:var(--muted);">ШАНС</div>
+                    <div id="chanceVal" style="font-size:22px; font-weight:800; color:var(--cyan-soft);">0%</div>
+                    <div style="font-size:10px; color:var(--muted);">ШАНС</div>
                 </div>
             </div>
-            <div id="upgStatus" style="font-weight:700; font-size:14px; text-align:center; color:var(--muted);">Выберите ставку и цель</div>
+            <div id="upgStatus" style="font-weight:700; font-size:13px; text-align:center; color:var(--muted);">Выберите ставку и цель</div>
         </div>
 
         <div class="panel">
-            <div style="display:flex; justify-content:space-between; font-size:13px;">
+            <div style="display:flex; justify-content:space-between; font-size:12px;">
                 <span>1. Ваша ставка (вещи + монеты):</span>
                 <strong style="color:var(--orange-soft);"><span id="totalBetVal">0</span> монет</strong>
             </div>
             <input type="number" id="upgCoinsInput" placeholder="Добавить монеты к ставке (0)" min="0">
-            <div style="font-size:12px; color:var(--muted);">Нажмите на ваши предметы, чтобы добавить в ставку:</div>
-            <div class="grid-3" id="upgMyItems" style="max-height: 165px; overflow-y: auto;"></div>
+            <div style="font-size:11px; color:var(--muted);">Нажмите на ваши предметы, чтобы добавить в ставку:</div>
+            <div class="grid-3" id="upgMyItems" style="max-height: 160px; overflow-y: auto;"></div>
         </div>
 
         <div class="panel">
-            <div style="font-size:13px;">2. Что хотите получить:</div>
+            <div style="font-size:12px;">2. Что хотите получить:</div>
             <div class="mode-switch">
                 <button type="button" class="mode-btn active" id="modeItemBtn">Предмет</button>
                 <button type="button" class="mode-btn" id="modeCoinsBtn">Монеты</button>
             </div>
 
-            <div id="targetItemBox" class="grid-3" style="max-height: 175px; overflow-y: auto;"></div>
+            <div id="targetItemBox" class="grid-3" style="max-height: 170px; overflow-y: auto;"></div>
 
             <div id="targetCoinsBox" style="display:none;">
                 <input type="number" id="targetCoinsInput" placeholder="Желаемая сумма выигрыша">
@@ -550,15 +618,35 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     let userId = null;
+    const avatarBox = document.getElementById("avatarBox");
+    const userLabel = document.getElementById("userLabel");
+
     if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id) {
-        userId = String(tg.initDataUnsafe.user.id);
-        document.getElementById("userLabel").innerText = tg.initDataUnsafe.user.first_name || "Игрок";
+        const u = tg.initDataUnsafe.user;
+        userId = String(u.id);
+        const displayName = u.first_name || u.username || "Игрок";
+        userLabel.innerText = displayName;
+
+        // Подгружаем аватарку профиля из Telegram WebApp
+        if (u.photo_url) {
+            const img = document.createElement("img");
+            img.src = u.photo_url;
+            img.alt = displayName;
+            img.onerror = () => {
+                avatarBox.innerText = displayName.charAt(0).toUpperCase();
+            };
+            avatarBox.innerHTML = "";
+            avatarBox.appendChild(img);
+        } else {
+            avatarBox.innerText = displayName.charAt(0).toUpperCase();
+        }
     } else {
         userId = localStorage.getItem("bd_uid");
         if (!userId) {
             userId = "player_" + Math.floor(100000 + Math.random() * 900000);
             localStorage.setItem("bd_uid", userId);
         }
+        avatarBox.innerText = "BD";
     }
 
     let state = { balance: 0, inventory: [], cases: [], all_items: [] };
@@ -626,7 +714,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const res = await fetch(`/api/bonus/${encodeURIComponent(userId)}`, { method: "POST" });
             if (!res.ok) throw new Error("Не удалось начислить бонус");
-            showToast("+500 бонусных монет!", "success");
+            showToast("+500 монет начислено", "success");
             await loadState();
         } catch (err) {
             showToast(err.message, "error");
@@ -641,7 +729,7 @@ document.addEventListener("DOMContentLoaded", () => {
             card.className = "card";
             card.innerHTML = `
                 ${renderMediaHTML(c, "media-big")}
-                <div style="font-weight:700; font-size:14px;">${c.name}</div>
+                <div style="font-weight:700; font-size:13px;">${c.name}</div>
                 <button type="button" class="btn" ${isSpinning ? "disabled" : ""}>Открыть за ${c.price}</button>
             `;
             card.querySelector("button").addEventListener("click", () => openCaseWithRoulette(c));
@@ -706,10 +794,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             void track.offsetWidth;
 
-            const slotStep = 108;
+            const slotStep = 104;
             const viewportCenter = viewport.offsetWidth / 2;
-            const winSlotCenter = 8 + (winIndex * slotStep) + 50;
-            const randomJitter = Math.floor(Math.random() * 60) - 30;
+            const winSlotCenter = 8 + (winIndex * slotStep) + 48;
+            const randomJitter = Math.floor(Math.random() * 56) - 28;
             const targetOffset = winSlotCenter - viewportCenter + randomJitter;
 
             if (tg && tg.HapticFeedback) {
@@ -742,7 +830,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const grid = document.getElementById("invGrid");
         grid.innerHTML = "";
         if (state.inventory.length === 0) {
-            grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:var(--muted); padding:24px;">Инвентарь пуст. Откройте кейсы!</div>';
+            grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:var(--muted); padding:24px; font-size:13px;">Инвентарь пуст. Откройте кейсы!</div>';
             return;
         }
         state.inventory.forEach(item => {
@@ -750,7 +838,7 @@ document.addEventListener("DOMContentLoaded", () => {
             card.className = `card r-${item.rarity}`;
             card.innerHTML = `
                 ${renderMediaHTML(item, "media-med")}
-                <div style="font-size:12px; font-weight:600;">${item.name}</div>
+                <div style="font-size:11px; font-weight:600; width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${item.name}</div>
                 <div class="price-tag">${item.price} монет</div>
                 <button type="button" class="btn btn-sell">Продать</button>
             `;
@@ -794,16 +882,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const myBox = document.getElementById("upgMyItems");
         myBox.innerHTML = "";
         if (state.inventory.length === 0) {
-            myBox.innerHTML = '<div style="grid-column:1/-1; font-size:12px; color:var(--muted);">Нет предметов в инвентаре</div>';
+            myBox.innerHTML = '<div style="grid-column:1/-1; font-size:11px; color:var(--muted);">Нет предметов в инвентаре</div>';
         } else {
             state.inventory.forEach(item => {
                 const card = document.createElement("div");
                 card.className = `card clickable r-${item.rarity} ${selectedInvIds.has(item.inv_id) ? "selected" : ""}`;
-                card.style.padding = "8px";
+                card.style.padding = "7px 5px";
                 card.innerHTML = `
                     ${renderMediaHTML(item, "media-small")}
-                    <div style="font-size:11px;">${item.name}</div>
-                    <div style="font-size:11px; color:var(--orange-soft); font-weight:700;">${item.price}</div>
+                    <div style="font-size:10px; width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${item.name}</div>
+                    <div style="font-size:10px; color:var(--orange-soft); font-weight:700;">${item.price}</div>
                 `;
                 card.addEventListener("click", () => {
                     if (isSpinning) return;
@@ -821,11 +909,11 @@ document.addEventListener("DOMContentLoaded", () => {
         state.all_items.forEach(item => {
             const card = document.createElement("div");
             card.className = `card clickable r-${item.rarity} ${selectedTargetItemId === item.id ? "selected" : ""}`;
-            card.style.padding = "8px";
+            card.style.padding = "7px 5px";
             card.innerHTML = `
                 ${renderMediaHTML(item, "media-small")}
-                <div style="font-size:11px;">${item.name}</div>
-                <div style="font-size:11px; color:var(--orange-soft); font-weight:700;">${item.price}</div>
+                <div style="font-size:10px; width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${item.name}</div>
+                <div style="font-size:10px; color:var(--orange-soft); font-weight:700;">${item.price}</div>
             `;
             card.addEventListener("click", () => {
                 if (isSpinning) return;
@@ -862,7 +950,6 @@ document.addEventListener("DOMContentLoaded", () => {
             chance = Math.max(1, Math.min(80, chance));
             chanceEl.innerText = chance + "%";
             const deg = (chance / 100) * 360;
-            /* Колесо апгрейдера в фирменном голубом и оранжевом цвете */
             wheel.style.background = `conic-gradient(#2589f5 0deg ${deg}deg, #172744 ${deg}deg 360deg)`;
         } else {
             chanceEl.innerText = "0%";

@@ -24,65 +24,116 @@ LOCAL_FALLBACK_FILE = "database.json"
 ITEMS_DB = {
     1: {
         "id": 1,
-        "name": "Ржавый нож",
-        "price": 50,
+        "name": "Gub",
+        "price": 5,
         "rarity": "common",
         "image": "/images/item1.png",
         "fallback": "🗡️"
     },
     2: {
         "id": 2,
-        "name": "Пистолет Старт",
-        "price": 120,
+        "name": "Sir Mangus",
+        "price": 7,
         "rarity": "common",
         "image": "/images/item2.png",
         "fallback": "🔫"
     },
     3: {
         "id": 3,
-        "name": "Автомат Вектор",
-        "price": 300,
-        "rarity": "rare",
+        "name": "Los Mobilis",
+        "price": 9,
+        "rarity": "common",
         "image": "/images/item3.png",
         "fallback": "🪖"
     },
     4: {
         "id": 4,
-        "name": "Снайперка Азимов",
-        "price": 750,
-        "rarity": "epic",
+        "name": "La Grande",
+        "price": 12,
+        "rarity": "common",
         "image": "/images/item4.png",
         "fallback": "🎯"
     },
     5: {
         "id": 5,
-        "name": "Нож Керамбит",
-        "price": 1800,
-        "rarity": "legendary",
+        "name": "Los 67",
+        "price": 14,
+        "rarity": "common",
         "image": "/images/item5.png",
         "fallback": "⚔️"
     },
     6: {
         "id": 6,
-        "name": "Золотой Дракон",
-        "price": 5000,
-        "rarity": "mythic",
+        "name": "Bacuru",
+        "price": 16,
+        "rarity": "common",
         "image": "/images/item6.png",
         "fallback": "🐉"
     },
+    7: {
+            "id": 7,
+            "name": "Bananito",
+            "price": 18,
+            "rarity": "common",
+            "image": "/images/item7.png",
+            "fallback": "🐉"
+        },
+    8: {
+            "id": 8,
+            "name": "Money Cat",
+            "price": 19,
+            "rarity": "common",
+            "image": "/images/item8.png",
+            "fallback": "🐉"
+        },
+    9: {
+            "id": 9,
+            "name": "Mariachi",
+            "price": 20,
+            "rarity": "rare",
+            "image": "/images/item9.png",
+            "fallback": "🐉"
+        },
+    10: {
+            "id": 10,
+            "name": "Nuclearo",
+            "price": 23,
+            "rarity": "rare",
+            "image": "/images/item10.png",
+            "fallback": "🐉"
+        },
+    11: {
+            "id": 11,
+            "name": "Gulini",
+            "price": 25,
+            "rarity": "rare",
+            "image": "/images/item11.png",
+            "fallback": "🐉"
+        },
+    12: {
+            "id": 12,
+            "name": "Dj Panda",
+            "price": 27,
+            "rarity": "rare",
+            "image": "/images/item12.png",
+            "fallback": "🐉"
+        },
 }
 
 CASES_DB = {
     1: {
-        "id": 1,
-        "name": "Бомж-кейс",
-        "price": 100,
+         "id": 1,
+        "name": "Бомжак",
+        "price": 10,
         "image": "/images/case1.png",
         "fallback": "📦",
         "drops": [
-            {"item_id": 1, "weight": 60},
-            {"item_id": 2, "weight": 30},
-            {"item_id": 3, "weight": 10},
+            {"item_id": 1, "weight": 30},
+            {"item_id": 2, "weight": 25},
+            {"item_id": 3, "weight": 15},
+            {"item_id": 4, "weight": 11.5},
+            {"item_id": 5, "weight": 10},
+            {"item_id": 6, "weight": 8.5},
         ]
     },
     2: {
