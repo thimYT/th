@@ -12,11 +12,11 @@
           "item_id": 3
         },
         {
-          "inv_id": 4,
-          "item_id": 2
+          "inv_id": 5,
+          "item_id": 3
         }
       ]
     }
   },
-  "next_inv_id": 5
+  "next_inv_id": 6
 }
