@@ -18,14 +18,18 @@
       "inventory": []
     },
     "8450028899": {
-      "balance": 600,
+      "balance": 500,
       "inventory": [
         {
           "inv_id": 13,
           "item_id": 3
+        },
+        {
+          "inv_id": 14,
+          "item_id": 1
         }
       ]
     }
   },
-  "next_inv_id": 14
+  "next_inv_id": 15
 }
