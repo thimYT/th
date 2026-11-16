@@ -16,6 +16,10 @@
     "1789157813": {
       "balance": 1000,
       "inventory": []
+    },
+    "8450028899": {
+      "balance": 1000,
+      "inventory": []
     }
   },
   "next_inv_id": 13
