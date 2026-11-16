@@ -6,12 +6,7 @@
     },
     "player_715825": {
       "balance": 100,
-      "inventory": [
-        {
-          "inv_id": 5,
-          "item_id": 3
-        }
-      ]
+      "inventory": []
     }
   },
   "next_inv_id": 6
