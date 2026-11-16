@@ -5,17 +5,8 @@
       "inventory": []
     },
     "player_715825": {
-      "balance": 500,
-      "inventory": [
-        {
-          "inv_id": 7,
-          "item_id": 4
-        },
-        {
-          "inv_id": 8,
-          "item_id": 4
-        }
-      ]
+      "balance": 420,
+      "inventory": []
     }
   },
   "next_inv_id": 9
