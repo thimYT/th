@@ -25,6 +25,10 @@
     "8450028899": {
       "balance": 5000,
       "inventory": []
+    },
+    "player_355713": {
+      "balance": 1000,
+      "inventory": []
     }
   },
   "next_inv_id": 23
