@@ -3,91 +3,371 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Cases & Upgrader</title>
-    <script src="https://telegram.org"></script>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <title>BrainDrop — Кейсы и Апгрейдер</title>
     <style>
         :root {
             --bg: #0f172a;
             --card: #1e293b;
             --card-light: #334155;
             --accent: #10b981;
+            --accent-hover: #059669;
             --danger: #ef4444;
+            --warning: #f59e0b;
             --text: #f8fafc;
             --muted: #94a3b8;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; user-select: none; }
-        body { background: var(--bg); color: var(--text); padding: 12px; display: flex; justify-content: center; }
-        .app { width: 100%; max-width: 460px; display: flex; flex-direction: column; gap: 12px; padding-bottom: 60px; }
 
-        /* Шапка */
-        .header { display: flex; justify-content: space-between; align-items: center; background: var(--card); padding: 12px 16px; border-radius: 14px; }
-        .balance-pill { display: flex; align-items: center; gap: 8px; background: rgba(16,185,129,0.15); padding: 6px 12px; border-radius: 10px; color: var(--accent); font-weight: 700; }
-        .btn-plus { background: var(--accent); color: #fff; border: none; width: 22px; height: 22px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-        /* Вкладки навигации */
-        .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: var(--card); padding: 6px; border-radius: 12px; }
-        .tab-btn { background: transparent; border: none; color: var(--muted); padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; }
-        .tab-btn.active { background: var(--card-light); color: var(--text); }
-        .section { display: none; flex-direction: column; gap: 12px; }
-        .section.active { display: flex; }
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 12px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
 
-        /* Карточки предметов и кейсов */
-        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-        .card { background: var(--card); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; border: 2px solid transparent; transition: 0.2s; }
-        .card.selected { border-color: var(--accent); background: rgba(16,185,129,0.1); }
-        .icon-big { font-size: 40px; }
-        .price-tag { background: var(--bg); padding: 4px 10px; border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--accent); }
-        .btn { background: var(--accent); color: #fff; border: none; padding: 10px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; width: 100%; }
-        .btn:disabled { background: var(--card-light); opacity: 0.6; cursor: not-allowed; }
-        .btn-sell { background: #334155; font-size: 12px; padding: 6px; }
+        .app {
+            width: 100%;
+            max-width: 460px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-bottom: 50px;
+        }
 
-        /* Редкость рамки */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card);
+            padding: 12px 16px;
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        }
+
+        .user-name {
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .balance-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            padding: 6px 12px;
+            border-radius: 10px;
+            color: var(--accent);
+            font-weight: 800;
+            font-size: 15px;
+        }
+
+        .btn-plus {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            width: 26px;
+            height: 26px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-plus:active {
+            transform: scale(0.92);
+        }
+
+        .toast {
+            background: var(--card-light);
+            color: var(--text);
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            display: none;
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        .toast.error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid var(--danger);
+            color: #fca5a5;
+        }
+
+        .toast.success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid var(--accent);
+            color: #6ee7b7;
+        }
+
+        .tabs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            background: var(--card);
+            padding: 6px;
+            border-radius: 12px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            padding: 10px 6px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--card-light);
+            color: var(--text);
+        }
+
+        .section {
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .section.active {
+            display: flex;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 14px;
+            padding: 14px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            text-align: center;
+            gap: 8px;
+            border: 2px solid transparent;
+            transition: 0.15s;
+        }
+
+        .card.clickable {
+            cursor: pointer;
+        }
+
+        .card.selected {
+            border-color: var(--accent);
+            background: rgba(16, 185, 129, 0.12);
+        }
+
+        .icon-big {
+            font-size: 42px;
+            line-height: 1;
+        }
+
+        .icon-med {
+            font-size: 28px;
+            line-height: 1;
+        }
+
+        .price-tag {
+            background: var(--bg);
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .btn {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.15s;
+        }
+
+        .btn:active {
+            transform: scale(0.96);
+        }
+
+        .btn:disabled {
+            background: var(--card-light);
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-sell {
+            background: var(--card-light);
+            font-size: 12px;
+            padding: 7px;
+        }
+
         .r-common { border-bottom: 3px solid #94a3b8; }
         .r-rare { border-bottom: 3px solid #3b82f6; }
         .r-epic { border-bottom: 3px solid #a855f7; }
         .r-legendary { border-bottom: 3px solid #ef4444; }
         .r-mythic { border-bottom: 3px solid #f59e0b; }
 
-        /* Апгрейдер */
-        .wheel-box { background: var(--card); padding: 20px; border-radius: 16px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-        .wheel-wrap { position: relative; width: 190px; height: 190px; display: flex; justify-content: center; align-items: center; }
-        .pointer { position: absolute; top: -8px; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 18px solid #f59e0b; z-index: 10; }
-        .wheel { width: 100%; height: 100%; border-radius: 50%; transition: transform 3.2s cubic-bezier(0.15, 0.85, 0.25, 1); background: #334155; }
-        .wheel-inner { position: absolute; width: 135px; height: 135px; background: var(--bg); border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5; }
-        .panel { background: var(--card); padding: 14px; border-radius: 14px; display: flex; flex-direction: column; gap: 10px; }
-        input[type="number"] { width: 100%; background: var(--bg); border: 1px solid var(--card-light); color: #fff; padding: 10px; border-radius: 8px; font-weight: 700; }
-        .mode-switch { display: flex; gap: 6px; }
-        .mode-btn { flex: 1; padding: 8px; background: var(--bg); border: 1px solid var(--card-light); color: var(--muted); border-radius: 8px; font-weight: 600; cursor: pointer; }
-        .mode-btn.active { border-color: var(--accent); color: var(--accent); }
+        .wheel-box {
+            background: var(--card);
+            padding: 20px 16px;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .wheel-wrap {
+            position: relative;
+            width: 190px;
+            height: 190px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .pointer {
+            position: absolute;
+            top: -8px;
+            border-left: 11px solid transparent;
+            border-right: 11px solid transparent;
+            border-top: 20px solid var(--warning);
+            z-index: 10;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            transition: transform 3.2s cubic-bezier(0.15, 0.85, 0.25, 1);
+            background: var(--card-light);
+            box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.6);
+        }
+
+        .wheel-inner {
+            position: absolute;
+            width: 135px;
+            height: 135px;
+            background: var(--bg);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 5;
+        }
+
+        .panel {
+            background: var(--card);
+            padding: 14px;
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--card-light);
+            color: #fff;
+            padding: 11px 12px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            outline: none;
+        }
+
+        input[type="number"]:focus {
+            border-color: var(--accent);
+        }
+
+        .mode-switch {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .mode-btn {
+            padding: 9px;
+            background: var(--bg);
+            border: 1px solid var(--card-light);
+            color: var(--muted);
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .mode-btn.active {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(16, 185, 129, 0.1);
+        }
     </style>
 </head>
 <body>
 
 <div class="app">
-    <!-- Шапка -->
     <div class="header">
-        <div id="userLabel" style="font-weight: 700;">Игрок</div>
+        <div class="user-name" id="userLabel">Игрок</div>
         <div class="balance-pill">
-            <span>🪙 <span id="balanceVal">0</span></span>
-            <button class="btn-plus" onclick="getBonus()" title="+500 монет">+</button>
+            <span>🪙 <span id="balanceVal">...</span></span>
+            <button type="button" class="btn-plus" id="bonusBtn" title="Добавить +500 монет">+</button>
         </div>
     </div>
 
-    <!-- Навигация -->
+    <div class="toast" id="toastBox"></div>
+
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('cases', this)">📦 Кейсы</button>
-        <button class="tab-btn" onclick="switchTab('upgrader', this)">⚡ Апгрейд</button>
-        <button class="tab-btn" onclick="switchTab('inventory', this)">🎒 Инвентарь (<span id="invCount">0</span>)</button>
+        <button type="button" class="tab-btn active" data-tab="cases">📦 Кейсы</button>
+        <button type="button" class="tab-btn" data-tab="upgrader">⚡ Апгрейд</button>
+        <button type="button" class="tab-btn" data-tab="inventory">🎒 Инвентарь (<span id="invCount">0</span>)</button>
     </div>
 
-    <!-- ВКЛАДКА 1: КЕЙСЫ -->
     <div id="tab-cases" class="section active">
-        <div id="caseResult" style="text-align:center; font-weight:700; min-height:24px; color:var(--accent);"></div>
+        <div id="caseResult" style="text-align:center; font-weight:700; font-size:14px; min-height:20px; color:var(--accent);"></div>
         <div class="grid-2" id="casesGrid"></div>
     </div>
 
-    <!-- ВКЛАДКА 2: АПГРЕЙДЕР -->
     <div id="tab-upgrader" class="section">
         <div class="wheel-box">
             <div class="wheel-wrap">
@@ -101,243 +381,360 @@
             <div id="upgStatus" style="font-weight:700; font-size:14px; text-align:center;">Выберите ставку и цель</div>
         </div>
 
-        <!-- Левая сторона: что ставим -->
         <div class="panel">
             <div style="display:flex; justify-content:space-between; font-size:13px;">
                 <span>1. Ваша ставка (вещи + монеты):</span>
                 <strong style="color:var(--accent);"><span id="totalBetVal">0</span> 🪙</strong>
             </div>
-            <input type="number" id="upgCoinsInput" placeholder="Добавить монеты к ставке (0)" min="0" oninput="recalcUpgrade()">
-            <div style="font-size:12px; color:var(--muted);">Нажмите на ваши предметы ниже, чтобы добавить их в апгрейд:</div>
-            <div class="grid-3" id="upgMyItems" style="max-height: 160px; overflow-y: auto;"></div>
+            <input type="number" id="upgCoinsInput" placeholder="Добавить монеты к ставке (0)" min="0">
+            <div style="font-size:12px; color:var(--muted);">Нажмите на ваши предметы, чтобы добавить в ставку:</div>
+            <div class="grid-3" id="upgMyItems" style="max-height: 165px; overflow-y: auto;"></div>
         </div>
 
-        <!-- Правая сторона: что хотим получить -->
         <div class="panel">
             <div style="font-size:13px;">2. Что хотите получить:</div>
             <div class="mode-switch">
-                <button class="mode-btn active" id="modeItemBtn" onclick="setTargetMode('item')">Крутую вещь</button>
-                <button class="mode-btn" id="modeCoinsBtn" onclick="setTargetMode('coins')">Больше монет</button>
+                <button type="button" class="mode-btn active" id="modeItemBtn">Крутую вещь</button>
+                <button type="button" class="mode-btn" id="modeCoinsBtn">Больше монет</button>
             </div>
 
-            <div id="targetItemBox" class="grid-3" style="max-height: 170px; overflow-y: auto;"></div>
-            
+            <div id="targetItemBox" class="grid-3" style="max-height: 175px; overflow-y: auto;"></div>
+
             <div id="targetCoinsBox" style="display:none;">
-                <input type="number" id="targetCoinsInput" placeholder="Сколько монет хотите выиграть?" oninput="recalcUpgrade()">
+                <input type="number" id="targetCoinsInput" placeholder="Сколько монет хотите выиграть?">
             </div>
 
-            <button class="btn" id="upgSpinBtn" onclick="runUpgrade()">КРУТИТЬ АПГРЕЙД</button>
+            <button type="button" class="btn" id="upgSpinBtn">КРУТИТЬ АПГРЕЙД</button>
         </div>
     </div>
 
-    <!-- ВКЛАДКА 3: ИНВЕНТАРЬ -->
     <div id="tab-inventory" class="section">
         <div class="grid-3" id="invGrid"></div>
     </div>
 </div>
 
 <script>
-    const tg = window.Telegram?.WebApp;
-    if (tg) tg.expand();
-
-    // Определяем уникальный ID игрока (из Telegram или генерируем локальный)
-    let userId = tg?.initDataUnsafe?.user?.id?.toString() || localStorage.getItem('demo_uid');
-    if (!userId) {
-        userId = 'user_' + Math.floor(Math.random() * 1000000);
-        localStorage.setItem('demo_uid', userId);
+document.addEventListener("DOMContentLoaded", () => {
+    const tg = window.Telegram && window.Telegram.WebApp;
+    if (tg) {
+        try {
+            tg.ready();
+            tg.expand();
+        } catch (e) {}
     }
-    if (tg?.initDataUnsafe?.user?.first_name) {
-        document.getElementById('userLabel').innerText = tg.initDataUnsafe.user.first_name;
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id) {
+        userId = String(tg.initDataUnsafe.user.id);
+        document.getElementById("userLabel").innerText = tg.initDataUnsafe.user.first_name || "Игрок";
+    } else {
+        userId = localStorage.getItem("bd_uid");
+        if (!userId) {
+            userId = "player_" + Math.floor(100000 + Math.random() * 900000);
+            localStorage.setItem("bd_uid", userId);
+        }
     }
 
     let state = { balance: 0, inventory: [], cases: [], all_items: [] };
     let selectedInvIds = new Set();
-    let targetMode = 'item'; // 'item' или 'coins'
+    let targetMode = "item";
     let selectedTargetItemId = null;
     let isSpinning = false;
     let rotation = 0;
 
-    async function loadState() {
-        const res = await fetch(`/api/state/${userId}`);
-        state = await res.json();
-        document.getElementById('balanceVal').innerText = state.balance;
-        document.getElementById('invCount').innerText = state.inventory.length;
-        
-        // Убираем из выбранных предметов те, которых больше нет
-        const existingIds = new Set(state.inventory.map(i => i.inv_id));
-        selectedInvIds.forEach(id => { if (!existingIds.has(id)) selectedInvIds.delete(id); });
+    const toastBox = document.getElementById("toastBox");
+    function showToast(msg, type = "") {
+        toastBox.innerText = msg;
+        toastBox.className = "toast show " + type;
+        clearTimeout(toastBox._timer);
+        toastBox._timer = setTimeout(() => {
+            toastBox.className = "toast";
+        }, 3500);
+    }
 
-        renderCases();
-        renderInventory();
-        renderUpgraderLists();
+    async function loadState() {
+        try {
+            const res = await fetch(`/api/state/${encodeURIComponent(userId)}`);
+            if (!res.ok) {
+                throw new Error(`Ошибка сервера (${res.status}). Проверьте код main.py`);
+            }
+            state = await res.json();
+            document.getElementById("balanceVal").innerText = state.balance;
+            document.getElementById("invCount").innerText = state.inventory.length;
+
+            const existingIds = new Set(state.inventory.map(i => i.inv_id));
+            selectedInvIds.forEach(id => {
+                if (!existingIds.has(id)) selectedInvIds.delete(id);
+            });
+
+            renderCases();
+            renderInventory();
+            renderUpgraderLists();
+            recalcUpgrade();
+        } catch (err) {
+            showToast(err.message || "Нет связи с сервером", "error");
+        }
+    }
+
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            if (isSpinning) return;
+            const tabName = btn.getAttribute("data-tab");
+            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+            document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+            btn.classList.add("active");
+            document.getElementById("tab-" + tabName).classList.add("active");
+        });
+    });
+
+    document.getElementById("bonusBtn").addEventListener("click", async () => {
+        if (isSpinning) return;
+        try {
+            const res = await fetch(`/api/bonus/${encodeURIComponent(userId)}`, { method: "POST" });
+            if (!res.ok) throw new Error("Не удалось начислить бонус");
+            showToast("+500 бонусных монет!", "success");
+            await loadState();
+        } catch (err) {
+            showToast(err.message, "error");
+        }
+    });
+
+    function renderCases() {
+        const grid = document.getElementById("casesGrid");
+        grid.innerHTML = "";
+        state.cases.forEach(c => {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.innerHTML = `
+                <div class="icon-big">${c.icon}</div>
+                <div style="font-weight:700; font-size:14px;">${c.name}</div>
+                <button type="button" class="btn">Открыть за ${c.price} 🪙</button>
+            `;
+            card.querySelector("button").addEventListener("click", () => openCase(c.id));
+            grid.appendChild(card);
+        });
+    }
+
+    async function openCase(caseId) {
+        if (isSpinning) return;
+        const banner = document.getElementById("caseResult");
+        try {
+            const res = await fetch("/api/open_case", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ user_id: userId, case_id: caseId })
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                banner.style.color = "var(--danger)";
+                banner.innerText = data.detail || "Ошибка открытия кейса";
+                return;
+            }
+            banner.style.color = "var(--accent)";
+            banner.innerText = `Выпало: ${data.won_item.icon} ${data.won_item.name} (${data.won_item.price} 🪙)!`;
+            await loadState();
+        } catch (err) {
+            showToast("Ошибка соединения с сервером", "error");
+        }
+    }
+
+    function renderInventory() {
+        const grid = document.getElementById("invGrid");
+        grid.innerHTML = "";
+        if (state.inventory.length === 0) {
+            grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:var(--muted); padding:24px;">Инвентарь пуст. Откройте кейсы!</div>';
+            return;
+        }
+        state.inventory.forEach(item => {
+            const card = document.createElement("div");
+            card.className = `card r-${item.rarity}`;
+            card.innerHTML = `
+                <div class="icon-med">${item.icon}</div>
+                <div style="font-size:12px; font-weight:600;">${item.name}</div>
+                <div class="price-tag">${item.price} 🪙</div>
+                <button type="button" class="btn btn-sell">Продать</button>
+            `;
+            card.querySelector("button").addEventListener("click", () => sellItem(item.inv_id));
+            grid.appendChild(card);
+        });
+    }
+
+    async function sellItem(invId) {
+        try {
+            const res = await fetch("/api/sell_item", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ user_id: userId, inv_id: invId })
+            });
+            if (res.ok) {
+                showToast("Предмет продан!", "success");
+                await loadState();
+            }
+        } catch (err) {
+            showToast("Ошибка продажи", "error");
+        }
+    }
+
+    document.getElementById("modeItemBtn").addEventListener("click", () => setTargetMode("item"));
+    document.getElementById("modeCoinsBtn").addEventListener("click", () => setTargetMode("coins"));
+    document.getElementById("upgCoinsInput").addEventListener("input", recalcUpgrade);
+    document.getElementById("targetCoinsInput").addEventListener("input", recalcUpgrade);
+
+    function setTargetMode(mode) {
+        if (isSpinning) return;
+        targetMode = mode;
+        document.getElementById("modeItemBtn").classList.toggle("active", mode === "item");
+        document.getElementById("modeCoinsBtn").classList.toggle("active", mode === "coins");
+        document.getElementById("targetItemBox").style.display = mode === "item" ? "grid" : "none";
+        document.getElementById("targetCoinsBox").style.display = mode === "coins" ? "block" : "none";
         recalcUpgrade();
     }
 
-    function switchTab(tabName, btn) {
-        if (isSpinning) return;
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById('tab-' + tabName).classList.add('active');
+    function renderUpgraderLists() {
+        const myBox = document.getElementById("upgMyItems");
+        myBox.innerHTML = "";
+        if (state.inventory.length === 0) {
+            myBox.innerHTML = '<div style="grid-column:1/-1; font-size:12px; color:var(--muted);">Нет предметов в инвентаре</div>';
+        } else {
+            state.inventory.forEach(item => {
+                const card = document.createElement("div");
+                card.className = `card clickable r-${item.rarity} ${selectedInvIds.has(item.inv_id) ? "selected" : ""}`;
+                card.style.padding = "8px";
+                card.innerHTML = `
+                    <div style="font-size:22px;">${item.icon}</div>
+                    <div style="font-size:11px;">${item.name}</div>
+                    <div style="font-size:11px; color:var(--accent); font-weight:700;">${item.price} 🪙</div>
+                `;
+                card.addEventListener("click", () => {
+                    if (isSpinning) return;
+                    if (selectedInvIds.has(item.inv_id)) selectedInvIds.delete(item.inv_id);
+                    else selectedInvIds.add(item.inv_id);
+                    renderUpgraderLists();
+                    recalcUpgrade();
+                });
+                myBox.appendChild(card);
+            });
+        }
+
+        const targetBox = document.getElementById("targetItemBox");
+        targetBox.innerHTML = "";
+        state.all_items.forEach(item => {
+            const card = document.createElement("div");
+            card.className = `card clickable r-${item.rarity} ${selectedTargetItemId === item.id ? "selected" : ""}`;
+            card.style.padding = "8px";
+            card.innerHTML = `
+                <div style="font-size:22px;">${item.icon}</div>
+                <div style="font-size:11px;">${item.name}</div>
+                <div style="font-size:11px; color:var(--accent); font-weight:700;">${item.price} 🪙</div>
+            `;
+            card.addEventListener("click", () => {
+                if (isSpinning) return;
+                selectedTargetItemId = item.id;
+                renderUpgraderLists();
+                recalcUpgrade();
+            });
+            targetBox.appendChild(card);
+        });
     }
 
-    async function getBonus() {
+    function recalcUpgrade() {
+        let itemsSum = 0;
+        state.inventory.forEach(item => {
+            if (selectedInvIds.has(item.inv_id)) itemsSum += item.price;
+        });
+        const coinsBet = parseInt(document.getElementById("upgCoinsInput").value) || 0;
+        const totalBet = itemsSum + coinsBet;
+        document.getElementById("totalBetVal").innerText = totalBet;
+
+        let targetVal = 0;
+        if (targetMode === "item" && selectedTargetItemId) {
+            const tItem = state.all_items.find(i => i.id === selectedTargetItemId);
+            if (tItem) targetVal = tItem.price;
+        } else if (targetMode === "coins") {
+            targetVal = parseInt(document.getElementById("targetCoinsInput").value) || 0;
+        }
+
+        const wheel = document.getElementById("wheel");
+        const chanceEl = document.getElementById("chanceVal");
+
+        if (totalBet > 0 && targetVal > totalBet) {
+            let chance = parseFloat(((totalBet / targetVal) * 92).toFixed(2));
+            chance = Math.max(1, Math.min(80, chance));
+            chanceEl.innerText = chance + "%";
+            const deg = (chance / 100) * 360;
+            wheel.style.background = `conic-gradient(#10b981 0deg ${deg}deg, #334155 ${deg}deg 360deg)`;
+        } else {
+            chanceEl.innerText = "0%";
+            wheel.style.background = "#334155";
+        }
+    }
+
+    document.getElementById("upgSpinBtn").addEventListener("click", async () => {
         if (isSpinning) return;
-await fetch(/api/bonus/${userId}, { method: 'POST' });
-loadState();
-}
-// --- ОТРИСОВКА КЕЙСОВ ---
-function renderCases() {
-const grid = document.getElementById('casesGrid');
-grid.innerHTML = state.cases.map(c => <div class="card"> <div class="icon-big">${c.icon}</div> <div style="font-weight:700; font-size:14px;">${c.name}</div> <button class="btn" onclick="openCase(${c.id})">Открыть за ${c.price} 🪙</button> </div>).join('');
-}
-async function openCase(caseId) {
-const res = await fetch('/api/open_case', {
-method: 'POST',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify({ user_id: userId, case_id: caseId })
+        const coinsBet = parseInt(document.getElementById("upgCoinsInput").value) || 0;
+        const targetCoins = parseInt(document.getElementById("targetCoinsInput").value) || 0;
+        const statusEl = document.getElementById("upgStatus");
+
+        const payload = {
+            user_id: userId,
+            inv_ids: Array.from(selectedInvIds),
+            coins_bet: coinsBet,
+            target_type: targetMode,
+            target_item_id: selectedTargetItemId,
+            target_coins: targetCoins
+        };
+
+        try {
+            const res = await fetch("/api/upgrade", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+
+            if (!res.ok) {
+                statusEl.style.color = "var(--danger)";
+                statusEl.innerText = data.detail || "Ошибка апгрейда";
+                return;
+            }
+
+            isSpinning = true;
+            document.getElementById("upgSpinBtn").disabled = true;
+            statusEl.style.color = "var(--muted)";
+            statusEl.innerText = "Крутим...";
+
+            const winDeg = (data.chance / 100) * 360;
+            const targetAngle = data.win
+                ? 2 + Math.random() * Math.max(1, winDeg - 4)
+                : winDeg + 2 + Math.random() * (360 - winDeg - 4);
+
+            const stopPos = (360 - targetAngle) % 360;
+            const delta = (stopPos - (rotation % 360) + 360) % 360;
+            rotation += 360 * 5 + delta;
+            document.getElementById("wheel").style.transform = `rotate(${rotation}deg)`;
+
+            setTimeout(async () => {
+                isSpinning = false;
+                document.getElementById("upgSpinBtn").disabled = false;
+                document.getElementById("upgCoinsInput").value = "";
+                selectedInvIds.clear();
+
+                if (data.win) {
+                    statusEl.style.color = "var(--accent)";
+                    statusEl.innerText = "УСПЕХ! Награда добавлена!";
+                } else {
+                    statusEl.style.color = "var(--danger)";
+                    statusEl.innerText = "СГОРЕЛО! Попробуйте снова";
+                }
+                await loadState();
+            }, 3250);
+        } catch (err) {
+            showToast("Ошибка соединения с сервером", "error");
+        }
+    });
+
+    loadState();
 });
-const data = await res.json();
-const banner = document.getElementById('caseResult');
-if (!res.ok) {
-banner.style.color = 'var(--danger)';
-banner.innerText = data.detail;
-return;
-}
-banner.style.color = 'var(--accent)';
-banner.innerText = Выпало: ${data.won_item.icon} ${data.won_item.name} (${data.won_item.price} 🪙)!;
-loadState();
-}
-// --- ОТРИСОВКА ИНВЕНТАРЯ ---
-function renderInventory() {
-const grid = document.getElementById('invGrid');
-if (state.inventory.length === 0) {
-grid.innerHTML = 'Инвентарь пуст. Откройте кейсы!';
-return;
-}
-grid.innerHTML = state.inventory.map(item => <div class="card r-${item.rarity}"> <div style="font-size:28px;">${item.icon}</div> <div style="font-size:12px; font-weight:600;">${item.name}</div> <div class="price-tag">${item.price} 🪙</div> <button class="btn btn-sell" onclick="sellItem(${item.inv_id})">Продать</button> </div>).join('');
-}
-async function sellItem(invId) {
-await fetch('/api/sell_item', {
-method: 'POST',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify({ user_id: userId, inv_id: invId })
-});
-loadState();
-}
-// --- ЛОГИКА АПГРЕЙДЕРА ---
-function setTargetMode(mode) {
-if (isSpinning) return;
-targetMode = mode;
-document.getElementById('modeItemBtn').classList.toggle('active', mode === 'item');
-document.getElementById('modeCoinsBtn').classList.toggle('active', mode === 'coins');
-document.getElementById('targetItemBox').style.display = mode === 'item' ? 'grid' : 'none';
-document.getElementById('targetCoinsBox').style.display = mode === 'coins' ? 'block' : 'none';
-recalcUpgrade();
-}
-function toggleMyItem(invId) {
-if (isSpinning) return;
-if (selectedInvIds.has(invId)) selectedInvIds.delete(invId);
-else selectedInvIds.add(invId);
-renderUpgraderLists();
-recalcUpgrade();
-}
-function selectTargetItem(itemId) {
-if (isSpinning) return;
-selectedTargetItemId = itemId;
-renderUpgraderLists();
-recalcUpgrade();
-}
-function renderUpgraderLists() {
-// Мои вещи для ставки
-const myBox = document.getElementById('upgMyItems');
-if (state.inventory.length === 0) {
-myBox.innerHTML = 'Нет предметов';
-} else {
-myBox.innerHTML = state.inventory.map(item => <div class="card r-${item.rarity} ${selectedInvIds.has(item.inv_id) ? 'selected' : ''}" style="padding:8px; cursor:pointer;" onclick="toggleMyItem(${item.inv_id})"> <div style="font-size:22px;">${item.icon}</div> <div style="font-size:11px;">${item.name}</div> <div style="font-size:11px; color:var(--accent); font-weight:700;">${item.price} 🪙</div> </div>).join('');
-}
-// Целевые вещи для выигрыша
-const targetBox = document.getElementById('targetItemBox');
-targetBox.innerHTML = state.all_items.map(item => <div class="card r-${item.rarity} ${selectedTargetItemId === item.id ? 'selected' : ''}" style="padding:8px; cursor:pointer;" onclick="selectTargetItem(${item.id})"> <div style="font-size:22px;">${item.icon}</div> <div style="font-size:11px;">${item.name}</div> <div style="font-size:11px; color:var(--accent); font-weight:700;">${item.price} 🪙</div> </div>).join('');
-}
-function recalcUpgrade() {
-let itemsSum = 0;
-state.inventory.forEach(item => {
-if (selectedInvIds.has(item.inv_id)) itemsSum += item.price;
-});
-const coinsBet = parseInt(document.getElementById('upgCoinsInput').value) || 0;
-const totalBet = itemsSum + coinsBet;
-document.getElementById('totalBetVal').innerText = totalBet;
-let targetVal = 0;
-if (targetMode === 'item' && selectedTargetItemId) {
-const tItem = state.all_items.find(i => i.id === selectedTargetItemId);
-if (tItem) targetVal = tItem.price;
-} else if (targetMode === 'coins') {
-targetVal = parseInt(document.getElementById('targetCoinsInput').value) || 0;
-}
-const wheel = document.getElementById('wheel');
-const chanceEl = document.getElementById('chanceVal');
-if (totalBet > 0 && targetVal > totalBet) {
-let chance = parseFloat(((totalBet / targetVal) * 92).toFixed(2));
-chance = Math.max(1, Math.min(80, chance));
-chanceEl.innerText = chance + '%';
-const deg = (chance / 100) * 360;
-wheel.style.background = conic-gradient(#10b981 0deg ${deg}deg, #334155 ${deg}deg 360deg);
-} else {
-chanceEl.innerText = '0%';
-wheel.style.background = '#334155';
-}
-}
-async function runUpgrade() {
-if (isSpinning) return;
-const coinsBet = parseInt(document.getElementById('upgCoinsInput').value) || 0;
-const targetCoins = parseInt(document.getElementById('targetCoinsInput').value) || 0;
-const statusEl = document.getElementById('upgStatus');
-const payload = {
-user_id: userId,
-inv_ids: Array.from(selectedInvIds),
-coins_bet: coinsBet,
-target_type: targetMode,
-target_item_id: selectedTargetItemId,
-target_coins: targetCoins
-};
-const res = await fetch('/api/upgrade', {
-method: 'POST',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify(payload)
-});
-const data = await res.json();
-if (!res.ok) {
-statusEl.style.color = 'var(--danger)';
-statusEl.innerText = data.detail;
-return;
-}
-// Запускаем анимацию колеса по результату с сервера
-isSpinning = true;
-document.getElementById('upgSpinBtn').disabled = true;
-statusEl.style.color = 'var(--muted)';
-statusEl.innerText = 'Крутим...';
-const winDeg = (data.chance / 100) * 360;
-const targetAngle = data.win
-? 2 + Math.random() * Math.max(1, winDeg - 4)
-: winDeg + 2 + Math.random() * (360 - winDeg - 4);
-const stopPos = (360 - targetAngle) % 360;
-const delta = (stopPos - (rotation % 360) + 360) % 360;
-rotation += 360 * 5 + delta;
-document.getElementById('wheel').style.transform = rotate(${rotation}deg);
-setTimeout(() => {
-isSpinning = false;
-document.getElementById('upgSpinBtn').disabled = false;
-document.getElementById('upgCoinsInput').value = '';
-selectedInvIds.clear();
-if (data.win) {
-statusEl.style.color = 'var(--accent)';
-statusEl.innerText = 'УСПЕХ! Награда добавлена!';
-} else {
-statusEl.style.color = 'var(--danger)';
-statusEl.innerText = 'СГОРЕЛО! Попробуйте снова';
-}
-loadState();
-}, 3250);
-}
-loadState();
+</script>
+</body>
+</html>
