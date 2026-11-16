@@ -86,7 +86,7 @@ def get_or_create_user(user_id: str) -> int:
         conn.commit()
         balance = 1000
     else:
-        balance = row[0]
+        balance = int(row[0])
     conn.close()
     return balance
 
@@ -177,7 +177,7 @@ def sell_item(req: SellItemReq):
         conn.close()
         raise HTTPException(status_code=400, detail="Предмет не найден")
 
-    price = ITEMS_DB[row[0]]["price"]
+    price = ITEMS_DB[int(row[0])]["price"]
     cur.execute("DELETE FROM inventory WHERE inv_id = ?", (req.inv_id,))
     cur.execute("UPDATE users SET balance = balance + ? WHERE user_id = ?", (price, req.user_id))
     conn.commit()
