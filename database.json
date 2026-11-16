@@ -1,8 +1,13 @@
 {
   "users": {
     "player_654541": {
-      "balance": 3000,
-      "inventory": []
+      "balance": 0,
+      "inventory": [
+        {
+          "inv_id": 11,
+          "item_id": 6
+        }
+      ]
     },
     "player_715825": {
       "balance": 220,
@@ -18,5 +23,5 @@
       ]
     }
   },
-  "next_inv_id": 11
+  "next_inv_id": 12
 }
