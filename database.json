@@ -21,10 +21,6 @@
       "balance": 0,
       "inventory": [
         {
-          "inv_id": 14,
-          "item_id": 1
-        },
-        {
           "inv_id": 17,
           "item_id": 5
         }
