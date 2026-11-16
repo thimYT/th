@@ -1,20 +1,70 @@
+import os
 import sqlite3
 import random
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import List, Optional
 
 app = FastAPI()
 DB_NAME = "game.db"
 
+# Создаем папку images, если её еще нет, и подключаем раздачу картинок
+os.makedirs("images", exist_ok=True)
+app.mount("/images", StaticFiles(directory="images"), name="images")
+
+# В поле "image" можно указывать как локальный файл ("/images/knife.png"),
+# так и прямую ссылку из интернета ("https://...")
 ITEMS_DB = {
-    1: {"id": 1, "name": "Ржавый нож", "price": 50, "rarity": "common", "icon": "🗡️"},
-    2: {"id": 2, "name": "Пистолет Старт", "price": 120, "rarity": "common", "icon": "🔫"},
-    3: {"id": 3, "name": "Автомат Вектор", "price": 300, "rarity": "rare", "icon": "🪖"},
-    4: {"id": 4, "name": "Снайперка Азимов", "price": 750, "rarity": "epic", "icon": "🎯"},
-    5: {"id": 5, "name": "Нож Керамбит", "price": 1800, "rarity": "legendary", "icon": "⚔️"},
-    6: {"id": 6, "name": "Золотой Дракон", "price": 5000, "rarity": "mythic", "icon": "🐉"},
+    1: {
+        "id": 1,
+        "name": "Ржавый нож",
+        "price": 50,
+        "rarity": "common",
+        "image": "/images/item1.png",
+        "fallback": "🗡️"
+    },
+    2: {
+        "id": 2,
+        "name": "Пистолет Старт",
+        "price": 120,
+        "rarity": "common",
+        "image": "/images/item2.png",
+        "fallback": "🔫"
+    },
+    3: {
+        "id": 3,
+        "name": "Автомат Вектор",
+        "price": 300,
+        "rarity": "rare",
+        "image": "/images/item3.png",
+        "fallback": "🪖"
+    },
+    4: {
+        "id": 4,
+        "name": "Снайперка Азимов",
+        "price": 750,
+        "rarity": "epic",
+        "image": "/images/item4.png",
+        "fallback": "🎯"
+    },
+    5: {
+        "id": 5,
+        "name": "Нож Керамбит",
+        "price": 1800,
+        "rarity": "legendary",
+        "image": "/images/item5.png",
+        "fallback": "⚔️"
+    },
+    6: {
+        "id": 6,
+        "name": "Золотой Дракон",
+        "price": 5000,
+        "rarity": "mythic",
+        "image": "/images/item6.png",
+        "fallback": "🐉"
+    },
 }
 
 CASES_DB = {
@@ -22,7 +72,8 @@ CASES_DB = {
         "id": 1,
         "name": "Бомж-кейс",
         "price": 100,
-        "icon": "📦",
+        "image": "/images/case1.png",
+        "fallback": "📦",
         "drops": [
             {"item_id": 1, "weight": 60},
             {"item_id": 2, "weight": 30},
@@ -33,7 +84,8 @@ CASES_DB = {
         "id": 2,
         "name": "Оружейный ящик",
         "price": 400,
-        "icon": "🧰",
+        "image": "/images/case2.png",
+        "fallback": "🧰",
         "drops": [
             {"item_id": 2, "weight": 45},
             {"item_id": 3, "weight": 35},
@@ -45,7 +97,8 @@ CASES_DB = {
         "id": 3,
         "name": "Элитный сейф",
         "price": 1500,
-        "icon": "💎",
+        "image": "/images/case3.png",
+        "fallback": "💎",
         "drops": [
             {"item_id": 3, "weight": 40},
             {"item_id": 4, "weight": 35},
@@ -126,10 +179,17 @@ def get_state(user_id: str):
             item_info["inv_id"] = inv_id
             inv_list.append(item_info)
 
+    # Передаем кейсы вместе со списком возможных предметов для анимации рулетки
+    cases_with_items = []
+    for c in CASES_DB.values():
+        c_copy = c.copy()
+        c_copy["possible_items"] = [ITEMS_DB[d["item_id"]] for d in c["drops"] if d["item_id"] in ITEMS_DB]
+        cases_with_items.append(c_copy)
+
     return {
         "balance": balance,
         "inventory": inv_list,
-        "cases": list(CASES_DB.values()),
+        "cases": cases_with_items,
         "all_items": list(ITEMS_DB.values())
     }
 
@@ -165,7 +225,10 @@ def open_case(req: OpenCaseReq):
     conn.commit()
     conn.close()
 
-    return {"won_item": ITEMS_DB[won_item_id]}
+    return {
+        "won_item": ITEMS_DB[won_item_id],
+        "new_balance": balance - case["price"]
+    }
 
 @app.post("/api/sell_item")
 def sell_item(req: SellItemReq):

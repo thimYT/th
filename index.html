@@ -44,6 +44,7 @@
             padding-bottom: 50px;
         }
 
+        /* Шапка */
         .header {
             display: flex;
             justify-content: space-between;
@@ -102,22 +103,11 @@
             display: none;
         }
 
-        .toast.show {
-            display: block;
-        }
+        .toast.show { display: block; }
+        .toast.error { background: rgba(239, 68, 68, 0.2); border: 1px solid var(--danger); color: #fca5a5; }
+        .toast.success { background: rgba(16, 185, 129, 0.2); border: 1px solid var(--accent); color: #6ee7b7; }
 
-        .toast.error {
-            background: rgba(239, 68, 68, 0.2);
-            border: 1px solid var(--danger);
-            color: #fca5a5;
-        }
-
-        .toast.success {
-            background: rgba(16, 185, 129, 0.2);
-            border: 1px solid var(--accent);
-            color: #6ee7b7;
-        }
-
+        /* Вкладки */
         .tabs {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -154,22 +144,33 @@
             display: flex;
         }
 
-        .grid-2 {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+        /* Картинки и иконки-заглушки */
+        .media-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
 
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
+        .media-big { width: 84px; height: 84px; font-size: 46px; }
+        .media-med { width: 64px; height: 64px; font-size: 32px; }
+        .media-small { width: 46px; height: 46px; font-size: 24px; }
+
+        .media-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            pointer-events: none;
         }
+
+        /* Сетки и карточки */
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 
         .card {
             background: var(--card);
             border-radius: 14px;
-            padding: 14px 10px;
+            padding: 12px 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -180,24 +181,8 @@
             transition: 0.15s;
         }
 
-        .card.clickable {
-            cursor: pointer;
-        }
-
-        .card.selected {
-            border-color: var(--accent);
-            background: rgba(16, 185, 129, 0.12);
-        }
-
-        .icon-big {
-            font-size: 42px;
-            line-height: 1;
-        }
-
-        .icon-med {
-            font-size: 28px;
-            line-height: 1;
-        }
+        .card.clickable { cursor: pointer; }
+        .card.selected { border-color: var(--accent); background: rgba(16, 185, 129, 0.12); }
 
         .price-tag {
             background: var(--bg);
@@ -221,29 +206,114 @@
             transition: 0.15s;
         }
 
-        .btn:active {
-            transform: scale(0.96);
-        }
+        .btn:active { transform: scale(0.96); }
+        .btn:disabled { background: var(--card-light); opacity: 0.6; cursor: not-allowed; transform: none; }
+        .btn-sell { background: var(--card-light); font-size: 12px; padding: 7px; }
 
-        .btn:disabled {
-            background: var(--card-light);
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-sell {
-            background: var(--card-light);
-            font-size: 12px;
-            padding: 7px;
-        }
-
+        /* Редкость предметов */
         .r-common { border-bottom: 3px solid #94a3b8; }
         .r-rare { border-bottom: 3px solid #3b82f6; }
         .r-epic { border-bottom: 3px solid #a855f7; }
         .r-legendary { border-bottom: 3px solid #ef4444; }
         .r-mythic { border-bottom: 3px solid #f59e0b; }
 
+        /* РУЛЕТКА ОТКРЫТИЯ КЕЙСА */
+        .roulette-modal {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 16px 12px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid var(--card-light);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .roulette-modal.active {
+            display: flex;
+        }
+
+        .roulette-viewport {
+            position: relative;
+            width: 100%;
+            height: 124px;
+            background: var(--bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid var(--card-light);
+        }
+
+        /* Центральная линия-указатель рулетки */
+        .roulette-marker {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 3px;
+            background: var(--warning);
+            transform: translateX(-50%);
+            z-index: 10;
+            box-shadow: 0 0 10px var(--warning);
+        }
+
+        .roulette-marker::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 7px solid transparent;
+            border-right: 7px solid transparent;
+            border-top: 9px solid var(--warning);
+        }
+
+        .roulette-marker::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 7px solid transparent;
+            border-right: 7px solid transparent;
+            border-bottom: 9px solid var(--warning);
+        }
+
+        /* Лента предметов */
+        .roulette-track {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            gap: 8px;
+            padding-left: 8px;
+            will-change: transform;
+        }
+
+        .roulette-slot {
+            flex: 0 0 100px;
+            width: 100px;
+            height: 106px;
+            background: var(--card);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 6px;
+            gap: 4px;
+            text-align: center;
+        }
+
+        .roulette-slot-name {
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+
+        /* Апгрейдер */
         .wheel-box {
             background: var(--card);
             padding: 20px 16px;
@@ -316,9 +386,7 @@
             outline: none;
         }
 
-        input[type="number"]:focus {
-            border-color: var(--accent);
-        }
+        input[type="number"]:focus { border-color: var(--accent); }
 
         .mode-switch {
             display: grid;
@@ -364,7 +432,16 @@
     </div>
 
     <div id="tab-cases" class="section active">
-        <div id="caseResult" style="text-align:center; font-weight:700; font-size:14px; min-height:20px; color:var(--accent);"></div>
+        <!-- Блок рулетки при открытии кейса -->
+        <div class="roulette-modal" id="rouletteBox">
+            <div style="font-weight:700; font-size:14px;" id="rouletteTitle">Открываем кейс...</div>
+            <div class="roulette-viewport" id="rouletteViewport">
+                <div class="roulette-marker"></div>
+                <div class="roulette-track" id="rouletteTrack"></div>
+            </div>
+            <div id="caseResult" style="text-align:center; font-weight:800; font-size:15px; color:var(--accent); min-height:22px;"></div>
+        </div>
+
         <div class="grid-2" id="casesGrid"></div>
     </div>
 
@@ -442,6 +519,15 @@ document.addEventListener("DOMContentLoaded", () => {
     let isSpinning = false;
     let rotation = 0;
 
+    // Функция рендера картинки: если файл не загружен, автоматически показывает запасной эмодзи
+    function renderMediaHTML(obj, sizeClass) {
+        const fallback = obj.fallback || "📦";
+        if (obj.image) {
+            return `<div class="media-box ${sizeClass}"><img src="${obj.image}" alt="${obj.name}" onerror="this.parentElement.innerHTML='${fallback}'"></div>`;
+        }
+        return `<div class="media-box ${sizeClass}">${fallback}</div>`;
+    }
+
     const toastBox = document.getElementById("toastBox");
     function showToast(msg, type = "") {
         toastBox.innerText = msg;
@@ -456,7 +542,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const res = await fetch(`/api/state/${encodeURIComponent(userId)}`);
             if (!res.ok) {
-                throw new Error(`Ошибка сервера (${res.status}). Проверьте код main.py`);
+                throw new Error(`Ошибка сервера (${res.status})`);
             }
             state = await res.json();
             document.getElementById("balanceVal").innerText = state.balance;
@@ -506,34 +592,107 @@ document.addEventListener("DOMContentLoaded", () => {
             const card = document.createElement("div");
             card.className = "card";
             card.innerHTML = `
-                <div class="icon-big">${c.icon}</div>
+                ${renderMediaHTML(c, "media-big")}
                 <div style="font-weight:700; font-size:14px;">${c.name}</div>
-                <button type="button" class="btn">Открыть за ${c.price} 🪙</button>
+                <button type="button" class="btn" ${isSpinning ? "disabled" : ""}>Открыть за ${c.price} 🪙</button>
             `;
-            card.querySelector("button").addEventListener("click", () => openCase(c.id));
+            card.querySelector("button").addEventListener("click", () => openCaseWithRoulette(c));
             grid.appendChild(card);
         });
     }
 
-    async function openCase(caseId) {
+    // ОТКРЫТИЕ КЕЙСА С РУЛЕТКОЙ
+    async function openCaseWithRoulette(caseObj) {
         if (isSpinning) return;
-        const banner = document.getElementById("caseResult");
+
         try {
             const res = await fetch("/api/open_case", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ user_id: userId, case_id: caseId })
+                body: JSON.stringify({ user_id: userId, case_id: caseObj.id })
             });
             const data = await res.json();
             if (!res.ok) {
-                banner.style.color = "var(--danger)";
-                banner.innerText = data.detail || "Ошибка открытия кейса";
+                showToast(data.detail || "Ошибка открытия кейса", "error");
                 return;
             }
-            banner.style.color = "var(--accent)";
-            banner.innerText = `Выпало: ${data.won_item.icon} ${data.won_item.name} (${data.won_item.price} 🪙)!`;
-            await loadState();
+
+            // Блокируем кнопки на время прокрутки и сразу обновляем списанный баланс
+            isSpinning = true;
+            document.getElementById("balanceVal").innerText = data.new_balance;
+            renderCases();
+
+            const rouletteBox = document.getElementById("rouletteBox");
+            const track = document.getElementById("rouletteTrack");
+            const viewport = document.getElementById("rouletteViewport");
+            const resultEl = document.getElementById("caseResult");
+            const titleEl = document.getElementById("rouletteTitle");
+
+            rouletteBox.classList.add("active");
+            rouletteBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            titleEl.innerText = `Открываем: ${caseObj.name}...`;
+            resultEl.innerText = "";
+
+            // Формируем ленту из 45 карточек, где 38-я (индекс 37) — гарантированно выпавший предмет
+            const totalSlots = 45;
+            const winIndex = 37;
+            const pool = caseObj.possible_items && caseObj.possible_items.length > 0
+                ? caseObj.possible_items
+                : state.all_items;
+
+            track.style.transition = "none";
+            track.style.transform = "translateX(0px)";
+            track.innerHTML = "";
+
+            for (let i = 0; i < totalSlots; i++) {
+                const item = (i === winIndex)
+                    ? data.won_item
+                    : pool[Math.floor(Math.random() * pool.length)];
+
+                const slot = document.createElement("div");
+                slot.className = `roulette-slot r-${item.rarity}`;
+                slot.innerHTML = `
+                    ${renderMediaHTML(item, "media-small")}
+                    <div class="roulette-slot-name">${item.name}</div>
+                    <div style="font-size:10px; color:var(--accent); font-weight:700;">${item.price} 🪙</div>
+                `;
+                track.appendChild(slot);
+            }
+
+            // Форсируем перерисовку DOM перед запуском анимации
+            void track.offsetWidth;
+
+            // Ширина одного слота 100px + отступ 8px = 108px, начальный padding-left = 8px
+            const slotStep = 108;
+            const viewportCenter = viewport.offsetWidth / 2;
+            const winSlotCenter = 8 + (winIndex * slotStep) + 50;
+            // Небольшое случайное смещение внутри победной карточки (-30..+30 px) для реалистичности
+            const randomJitter = Math.floor(Math.random() * 60) - 30;
+            const targetOffset = winSlotCenter - viewportCenter + randomJitter;
+
+            if (tg && tg.HapticFeedback) {
+                try { tg.HapticFeedback.impactOccurred("medium"); } catch (e) {}
+            }
+
+            // Запускаем плавную прокрутку на 4.2 секунды
+            track.style.transition = "transform 4.2s cubic-bezier(0.12, 0.85, 0.22, 1)";
+            track.style.transform = `translateX(-${targetOffset}px)`;
+
+            setTimeout(async () => {
+                isSpinning = false;
+                titleEl.innerText = "Ваш выигрыш:";
+                resultEl.innerText = `${data.won_item.name} (${data.won_item.price} 🪙)!`;
+
+                if (tg && tg.HapticFeedback) {
+                    try { tg.HapticFeedback.notificationOccurred("success"); } catch (e) {}
+                }
+
+                await loadState();
+            }, 4300);
+
         } catch (err) {
+            isSpinning = false;
+            renderCases();
             showToast("Ошибка соединения с сервером", "error");
         }
     }
@@ -549,7 +708,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const card = document.createElement("div");
             card.className = `card r-${item.rarity}`;
             card.innerHTML = `
-                <div class="icon-med">${item.icon}</div>
+                ${renderMediaHTML(item, "media-med")}
                 <div style="font-size:12px; font-weight:600;">${item.name}</div>
                 <div class="price-tag">${item.price} 🪙</div>
                 <button type="button" class="btn btn-sell">Продать</button>
@@ -601,7 +760,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 card.className = `card clickable r-${item.rarity} ${selectedInvIds.has(item.inv_id) ? "selected" : ""}`;
                 card.style.padding = "8px";
                 card.innerHTML = `
-                    <div style="font-size:22px;">${item.icon}</div>
+                    ${renderMediaHTML(item, "media-small")}
                     <div style="font-size:11px;">${item.name}</div>
                     <div style="font-size:11px; color:var(--accent); font-weight:700;">${item.price} 🪙</div>
                 `;
@@ -623,7 +782,7 @@ document.addEventListener("DOMContentLoaded", () => {
             card.className = `card clickable r-${item.rarity} ${selectedTargetItemId === item.id ? "selected" : ""}`;
             card.style.padding = "8px";
             card.innerHTML = `
-                <div style="font-size:22px;">${item.icon}</div>
+                ${renderMediaHTML(item, "media-small")}
                 <div style="font-size:11px;">${item.name}</div>
                 <div style="font-size:11px; color:var(--accent); font-weight:700;">${item.price} 🪙</div>
             `;
