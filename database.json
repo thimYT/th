@@ -12,6 +12,10 @@
           "item_id": 6
         }
       ]
+    },
+    "1789157813": {
+      "balance": 1000,
+      "inventory": []
     }
   },
   "next_inv_id": 13
