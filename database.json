@@ -136,11 +136,11 @@
       ]
     },
     "WELCOME": {
-      "stock": 0,
+      "stock": 1,
       "type": "coins",
       "amount": 500,
       "used_by": [
-        "1789157813"
+        
       ]
     }
   }
