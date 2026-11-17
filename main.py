@@ -6,10 +6,12 @@ import urllib.request
 import urllib.error
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import List, Optional
 
 app = FastAPI()
+app.mount("/images", StaticFiles(directory="images"), name="images")  # <-- И ЭТУ СТРОКУ
 
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", "").strip()
 GITHUB_REPO = os.getenv("GITHUB_REPO", "").strip()
