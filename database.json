@@ -210,16 +210,7 @@
     },
     "8007781318": {
       "balance": 998.8,
-      "inventory": [
-        {
-          "inv_id": 484,
-          "item_id": 43
-        },
-        {
-          "inv_id": 493,
-          "item_id": 43
-        }
-      ],
+      "inventory": [],
       "last_free_case": 0
     }
   },
