@@ -17,10 +17,6 @@
       "balance": 463.43,
       "inventory": [
         {
-          "inv_id": 474,
-          "item_id": 6
-        },
-        {
           "inv_id": 481,
           "item_id": 43
         }
