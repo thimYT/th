@@ -34,8 +34,8 @@
           "item_id": 3
         },
         {
-          "inv_id": 25,
-          "item_id": 5
+          "inv_id": 26,
+          "item_id": 7
         }
       ]
     },
@@ -44,5 +44,5 @@
       "inventory": []
     }
   },
-  "next_inv_id": 26
+  "next_inv_id": 27
 }
