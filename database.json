@@ -107,12 +107,7 @@
     },
     "1741462977": {
       "balance": 990,
-      "inventory": [
-        {
-          "inv_id": 110,
-          "item_id": 14
-        }
-      ],
+      "inventory": [],
       "last_free_case": 1794919280
     }
   },
