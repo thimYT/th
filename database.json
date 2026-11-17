@@ -14,10 +14,14 @@
       ]
     },
     "1789157813": {
-      "balance": 446.43,
+      "balance": 421.43,
       "inventory": [
         {
           "inv_id": 462,
+          "item_id": 15
+        },
+        {
+          "inv_id": 463,
           "item_id": 15
         }
       ],
@@ -170,7 +174,7 @@
       "last_free_case": 0
     }
   },
-  "next_inv_id": 463,
+  "next_inv_id": 464,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
