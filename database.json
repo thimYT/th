@@ -26,8 +26,8 @@
       "balance": 4970,
       "inventory": [
         {
-          "inv_id": 28,
-          "item_id": 9
+          "inv_id": 29,
+          "item_id": 10
         }
       ]
     },
@@ -36,5 +36,5 @@
       "inventory": []
     }
   },
-  "next_inv_id": 29
+  "next_inv_id": 30
 }
