@@ -92,6 +92,11 @@
           "item_id": 20
         }
       ]
+    },
+    "1741462977": {
+      "balance": 1000,
+      "inventory": [],
+      "last_free_case": 0
     }
   },
   "next_inv_id": 99,
