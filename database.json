@@ -66,19 +66,19 @@
       "balance": 27,
       "inventory": [
         {
-          "inv_id": 88,
-          "item_id": 18
-        },
-        {
           "inv_id": 89,
           "item_id": 18
         },
         {
           "inv_id": 90,
           "item_id": 18
+        },
+        {
+          "inv_id": 91,
+          "item_id": 20
         }
       ]
     }
   },
-  "next_inv_id": 91
+  "next_inv_id": 92
 }
