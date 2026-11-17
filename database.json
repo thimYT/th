@@ -80,17 +80,12 @@
           "inv_id": 198,
           "item_id": 34
         }
-        
       ],
       "last_free_case": 1794919147
     },
     "8450028899": {
       "balance": 19954,
       "inventory": [
-        {
-          "inv_id": 37,
-          "item_id": 12
-        },
         {
           "inv_id": 46,
           "item_id": 11
@@ -119,7 +114,8 @@
           "inv_id": 84,
           "item_id": 8
         }
-      ]
+      ],
+      "last_free_case": 0
     },
     "player_355713": {
       "balance": 1000,
