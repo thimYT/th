@@ -43,7 +43,7 @@
       "inventory": []
     },
     "8771878427": {
-      "balance": 480,
+      "balance": 470,
       "inventory": [
         {
           "inv_id": 56,
@@ -56,9 +56,13 @@
         {
           "inv_id": 68,
           "item_id": 12
+        },
+        {
+          "inv_id": 69,
+          "item_id": 2
         }
       ]
     }
   },
-  "next_inv_id": 69
+  "next_inv_id": 70
 }
