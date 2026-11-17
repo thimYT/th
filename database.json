@@ -99,10 +99,6 @@
         {
           "inv_id": 99,
           "item_id": 5
-        },
-        {
-          "inv_id": 100,
-          "item_id": 1
         }
       ],
       "last_free_case": 1794919280
