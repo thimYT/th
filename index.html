@@ -60,7 +60,6 @@
             padding-bottom: 40px;
         }
 
-        /* Закрепленная компактная шапка: аватарка + ник слева, баланс справа */
         .header {
             position: sticky;
             top: 0;
@@ -179,6 +178,11 @@
             transform: scale(0.92);
         }
 
+        .btn-plus:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .toast {
             background: var(--card-light);
             color: var(--text);
@@ -194,7 +198,6 @@
         .toast.error { background: rgba(225, 29, 72, 0.18); border: 1px solid var(--danger); color: #fda4af; }
         .toast.success { background: rgba(37, 137, 245, 0.18); border: 1px solid var(--blue-accent); color: #93c5fd; }
 
-        /* Вкладки (без эмодзи) */
         .tabs {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -234,7 +237,6 @@
             display: flex;
         }
 
-        /* Картинки */
         .media-box {
             display: flex;
             align-items: center;
@@ -253,7 +255,6 @@
             pointer-events: none;
         }
 
-        /* Сетки и карточки */
         .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
 
@@ -303,7 +304,7 @@
         }
 
         .btn:active { transform: scale(0.97); }
-        .btn:disabled { background: var(--card-light); color: var(--muted); opacity: 0.65; cursor: not-allowed; transform: none; }
+        .btn:disabled { background: var(--card-light); color: var(--muted); opacity: 0.65; cursor: not-allowed; transform: none; pointer-events: none; }
         
         .btn-orange {
             background: linear-gradient(135deg, var(--orange-accent), var(--orange-hover));
@@ -317,14 +318,12 @@
             padding: 6px;
         }
 
-        /* Редкость */
         .r-common { border-bottom: 3px solid #64748b; }
         .r-rare { border-bottom: 3px solid #2589f5; }
         .r-epic { border-bottom: 3px solid #8b5cf6; }
         .r-legendary { border-bottom: 3px solid #f97316; }
         .r-mythic { border-bottom: 3px solid #eab308; }
 
-        /* РУЛЕТКА ОТКРЫТИЯ КЕЙСА */
         .roulette-modal {
             background: var(--card);
             border-radius: 14px;
@@ -417,7 +416,6 @@
             width: 100%;
         }
 
-        /* Апгрейдер */
         .wheel-box {
             background: var(--card);
             border: 1px solid var(--border-subtle);
@@ -523,7 +521,6 @@
 <body>
 
 <div class="app">
-    <!-- Закрепленная шапка с аватаркой Telegram и балансом без горизонтальной прокрутки -->
     <div class="header">
         <div class="profile-block">
             <div class="avatar-wrap">
@@ -536,13 +533,12 @@
         </div>
         <div class="balance-pill">
             <span><span id="balanceVal">...</span> монет</span>
-            <button type="button" class="btn-plus" id="bonusBtn" title="Добавить +500 монет">+</button>
+            <button type="button" class="btn-plus" id="topupBtn" title="Запросить пополнение">+</button>
         </div>
     </div>
 
     <div class="toast" id="toastBox"></div>
 
-    <!-- Вкладки без эмодзи -->
     <div class="tabs">
         <button type="button" class="tab-btn active" data-tab="cases">Кейсы</button>
         <button type="button" class="tab-btn" data-tab="upgrader">Апгрейдер</button>
@@ -618,16 +614,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     let userId = null;
+    let tgUsername = "";
+    let tgFirstName = "";
     const avatarBox = document.getElementById("avatarBox");
     const userLabel = document.getElementById("userLabel");
 
     if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id) {
         const u = tg.initDataUnsafe.user;
         userId = String(u.id);
-        const displayName = u.first_name || u.username || "Игрок";
+        tgUsername = u.username || "";
+        tgFirstName = u.first_name || "";
+        const displayName = tgFirstName || tgUsername || "Игрок";
         userLabel.innerText = displayName;
 
-        // Подгружаем аватарку профиля из Telegram WebApp
         if (u.photo_url) {
             const img = document.createElement("img");
             img.src = u.photo_url;
@@ -654,6 +653,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let targetMode = "item";
     let selectedTargetItemId = null;
     let isSpinning = false;
+    let isRequesting = false; // Жёсткая блокировка на время сетевого запроса
     let rotation = 0;
 
     function renderMediaHTML(obj, sizeClass) {
@@ -671,7 +671,7 @@ document.addEventListener("DOMContentLoaded", () => {
         clearTimeout(toastBox._timer);
         toastBox._timer = setTimeout(() => {
             toastBox.className = "toast";
-        }, 3500);
+        }, 4000);
     }
 
     async function loadState() {
@@ -700,7 +700,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.querySelectorAll(".tab-btn").forEach(btn => {
         btn.addEventListener("click", () => {
-            if (isSpinning) return;
+            if (isSpinning || isRequesting) return;
             const tabName = btn.getAttribute("data-tab");
             document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
             document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
@@ -709,36 +709,59 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    document.getElementById("bonusBtn").addEventListener("click", async () => {
-        if (isSpinning) return;
+    const topupBtn = document.getElementById("topupBtn");
+    topupBtn.addEventListener("click", async () => {
+        if (isSpinning || isRequesting || topupBtn.disabled) return;
+        topupBtn.disabled = true;
         try {
-            const res = await fetch(`/api/bonus/${encodeURIComponent(userId)}`, { method: "POST" });
-            if (!res.ok) throw new Error("Не удалось начислить бонус");
-            showToast("+500 монет начислено", "success");
-            await loadState();
+            const res = await fetch("/api/request_topup", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    user_id: userId,
+                    username: tgUsername,
+                    first_name: tgFirstName
+                })
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.detail || "Ошибка отправки заявки");
+            }
+            showToast("Заявка отправлена! Проверьте личку бота", "success");
+            if (tg && tg.HapticFeedback) {
+                try { tg.HapticFeedback.notificationOccurred("success"); } catch (e) {}
+            }
         } catch (err) {
             showToast(err.message, "error");
+        } finally {
+            setTimeout(() => { topupBtn.disabled = false; }, 5000);
         }
     });
 
     function renderCases() {
         const grid = document.getElementById("casesGrid");
         grid.innerHTML = "";
+        const locked = isSpinning || isRequesting;
         state.cases.forEach(c => {
             const card = document.createElement("div");
             card.className = "card";
             card.innerHTML = `
                 ${renderMediaHTML(c, "media-big")}
                 <div style="font-weight:700; font-size:13px;">${c.name}</div>
-                <button type="button" class="btn" ${isSpinning ? "disabled" : ""}>Открыть за ${c.price}</button>
+                <button type="button" class="btn" ${locked ? "disabled" : ""}>Открыть за ${c.price}</button>
             `;
-            card.querySelector("button").addEventListener("click", () => openCaseWithRoulette(c));
+            const btn = card.querySelector("button");
+            btn.addEventListener("click", () => openCaseWithRoulette(c, btn));
             grid.appendChild(card);
         });
     }
 
-    async function openCaseWithRoulette(caseObj) {
-        if (isSpinning) return;
+    async function openCaseWithRoulette(caseObj, clickedBtn) {
+        // Мгновенная блокировка до начала fetch-запроса
+        if (isSpinning || isRequesting) return;
+        isRequesting = true;
+        if (clickedBtn) clickedBtn.disabled = true;
+        renderCases();
 
         try {
             const res = await fetch("/api/open_case", {
@@ -748,11 +771,14 @@ document.addEventListener("DOMContentLoaded", () => {
             });
             const data = await res.json();
             if (!res.ok) {
+                isRequesting = false;
+                renderCases();
                 showToast(data.detail || "Ошибка открытия кейса", "error");
                 return;
             }
 
             isSpinning = true;
+            isRequesting = false;
             document.getElementById("balanceVal").innerText = data.new_balance;
             renderCases();
 
@@ -820,6 +846,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }, 4300);
 
         } catch (err) {
+            isRequesting = false;
             isSpinning = false;
             renderCases();
             showToast("Ошибка соединения с сервером", "error");
@@ -842,12 +869,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="price-tag">${item.price} монет</div>
                 <button type="button" class="btn btn-sell">Продать</button>
             `;
-            card.querySelector("button").addEventListener("click", () => sellItem(item.inv_id));
+            const btn = card.querySelector("button");
+            btn.addEventListener("click", () => sellItem(item.inv_id, btn));
             grid.appendChild(card);
         });
     }
 
-    async function sellItem(invId) {
+    async function sellItem(invId, btn) {
+        if (isRequesting || isSpinning) return;
+        isRequesting = true;
+        if (btn) btn.disabled = true;
         try {
             const res = await fetch("/api/sell_item", {
                 method: "POST",
@@ -860,6 +891,8 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         } catch (err) {
             showToast("Ошибка продажи", "error");
+        } finally {
+            isRequesting = false;
         }
     }
 
@@ -869,7 +902,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("targetCoinsInput").addEventListener("input", recalcUpgrade);
 
     function setTargetMode(mode) {
-        if (isSpinning) return;
+        if (isSpinning || isRequesting) return;
         targetMode = mode;
         document.getElementById("modeItemBtn").classList.toggle("active", mode === "item");
         document.getElementById("modeCoinsBtn").classList.toggle("active", mode === "coins");
@@ -894,7 +927,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div style="font-size:10px; color:var(--orange-soft); font-weight:700;">${item.price}</div>
                 `;
                 card.addEventListener("click", () => {
-                    if (isSpinning) return;
+                    if (isSpinning || isRequesting) return;
                     if (selectedInvIds.has(item.inv_id)) selectedInvIds.delete(item.inv_id);
                     else selectedInvIds.add(item.inv_id);
                     renderUpgraderLists();
@@ -916,7 +949,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div style="font-size:10px; color:var(--orange-soft); font-weight:700;">${item.price}</div>
             `;
             card.addEventListener("click", () => {
-                if (isSpinning) return;
+                if (isSpinning || isRequesting) return;
                 selectedTargetItemId = item.id;
                 renderUpgraderLists();
                 recalcUpgrade();
@@ -957,8 +990,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    document.getElementById("upgSpinBtn").addEventListener("click", async () => {
-        if (isSpinning) return;
+    const upgSpinBtn = document.getElementById("upgSpinBtn");
+    upgSpinBtn.addEventListener("click", async () => {
+        // Мгновенная блокировка кнопки до начала fetch-запроса
+        if (isSpinning || isRequesting) return;
+        isRequesting = true;
+        upgSpinBtn.disabled = true;
+
         const coinsBet = parseInt(document.getElementById("upgCoinsInput").value) || 0;
         const targetCoins = parseInt(document.getElementById("targetCoinsInput").value) || 0;
         const statusEl = document.getElementById("upgStatus");
@@ -981,13 +1019,15 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await res.json();
 
             if (!res.ok) {
+                isRequesting = false;
+                upgSpinBtn.disabled = false;
                 statusEl.style.color = "var(--danger)";
                 statusEl.innerText = data.detail || "Ошибка апгрейда";
                 return;
             }
 
             isSpinning = true;
-            document.getElementById("upgSpinBtn").disabled = true;
+            isRequesting = false;
             statusEl.style.color = "var(--muted)";
             statusEl.innerText = "Выполняется улучшение...";
 
@@ -1003,7 +1043,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             setTimeout(async () => {
                 isSpinning = false;
-                document.getElementById("upgSpinBtn").disabled = false;
+                upgSpinBtn.disabled = false;
                 document.getElementById("upgCoinsInput").value = "";
                 selectedInvIds.clear();
 
@@ -1017,6 +1057,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 await loadState();
             }, 3250);
         } catch (err) {
+            isRequesting = false;
+            isSpinning = false;
+            upgSpinBtn.disabled = false;
             showToast("Ошибка соединения с сервером", "error");
         }
     });
