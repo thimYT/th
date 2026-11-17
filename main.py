@@ -59,12 +59,21 @@ ITEMS_DB = {
     34: {"id": 34, "name": "Gold Gold Gold", "price": 52, "rarity": "epic", "image": "/images/item34.png", "fallback": "🐉"},
     35: {"id": 35, "name": "Rosetti", "price": 53, "rarity": "epic", "image": "/images/item35.png", "fallback": "🐉"},
     36: {"id": 36, "name": "Garama", "price": 55, "rarity": "legendary", "image": "/images/item36.png", "fallback": "🐉"},
+    37: {"id": 37, "name": "Los Tic-Tacs", "price": 57, "rarity": "legendary", "image": "/images/item37.png", "fallback": "🐉"},
+    38: {"id": 38, "name": "Cash Or Card", "price": 60, "rarity": "legendary", "image": "/images/item38.png", "fallback": "🐉"},
+    39: {"id": 39, "name": "Ventoliero", "price": 63, "rarity": "legendary", "image": "/images/item39.png", "fallback": "🐉"},
+    40: {"id": 40, "name": "Orbi Mochi", "price": 66, "rarity": "legendary", "image": "/images/item40.png", "fallback": "🐉"},
+    41: {"id": 41, "name": "Pretzo Robo", "price": 70, "rarity": "mythic", "image": "/images/item41.png", "fallback": "🐉"},
+    42: {"id": 42, "name": "Los Spagettis", "price": 75, "rarity": "legendary", "image": "/images/item42.png", "fallback": "🐉"},
+    43: {"id": 43, "name": "Cloverat Clapat", "price": 80, "rarity": "legendary", "image": "/images/item43.png", "fallback": "🐉"},
 }
+
 
 CASES_DB = {
     1: {
         "id": 1,
         "name": "Бомжак",
+        "category": "regular", # Разные
         "price": 10,
         "image": "/images/case1.png",
         "fallback": "📦",
@@ -78,29 +87,76 @@ CASES_DB = {
         ]
     },
     2: {
-        "id": 2,
-        "name": "Money$",
-        "price": 25,
-        "image": "/images/case2.png",
-        "fallback": "🧰",
-        "drops": [
-            {"item_id": 8, "weight": 52.5},
-            {"item_id": 15, "weight": 47.5}
-        ]
-    },
+            "id": 2,
+            "name": "Money$",
+            "category": "regular", # Партнёрские
+              # Процент партнёру от цены кейса
+            "price": 25,
+            "image": "/images/case2.png",
+            "fallback": "🧰",
+            "drops": [
+                {"item_id": 8, "weight": 52.5},
+                {"item_id": 15, "weight": 47.5}
+            ]
+        },
     3: {
-        "id": 3,
-        "name": "Элитный сейф",
-        "price": 1500,
-        "image": "/images/case3.png",
+            "id": 3,
+            "name": "paslkek",
+            "price": 20,
+            "partner_id": "1741462977",       # Впишите сюда Telegram ID партнёра в кавычках, например "123456789"
+            "partner_percent": 10,
+            "image": "/images/case3.png",
+            "fallback": "💎",
+            "drops": [
+                {"item_id": 3, "weight": 40},
+                {"item_id": 5, "weight": 25},
+                {"item_id": 9, "weight": 20},
+                {"item_id": 10, "weight": 10},
+                {"item_id": 18, "weight": 5},
+            ]
+        },
+    
+    4: {
+        "id": 4,
+        "name": "Pretzo all-in",
+        "category": "all_in",  # All-In кейсы
+        "price": 10,
+        "image": "/images/case4.png",
         "fallback": "💎",
         "drops": [
-            {"item_id": 3, "weight": 40},
-            {"item_id": 4, "weight": 35},
-            {"item_id": 5, "weight": 20},
-            {"item_id": 6, "weight": 5},
+            {"item_id": 1, "weight": 99},
+            {"item_id": 41, "weight": 1},
         ]
-    }
+    },
+    5: {
+        "id": 5,
+        "name": "we got buffed",
+        "category": "limited", # Ограниченное время
+        "expires_at": 1795629600, # Доступен 24 часа с момента запуска сервера (или укажите точный Unix timestamp)
+        "price": 68,
+        "image": "/images/case5.png",
+        "fallback": "⏳",
+        "drops": [
+            {"item_id": 40, "weight": 52.5},
+            {"item_id": 41, "weight": 47.5},
+        ]
+    },
+    6: {
+                "id": 6,
+                "name": "zahar_99d",
+                "price": 20,
+                "partner_id": "8450028899",       # Впишите сюда Telegram ID партнёра в кавычках, например "123456789"
+                "partner_percent": 10,
+                "image": "/images/case6.png",
+                "fallback": "💎",
+                "drops": [
+                    {"item_id": 6, "weight": 40},
+                    {"item_id": 9, "weight": 25},
+                    {"item_id": 14, "weight": 20},
+                    {"item_id": 19, "weight": 10},
+                    {"item_id": 35, "weight": 5},
+                ]
+            },
 }
 
 FREE_CASE_DROPS = [
@@ -262,7 +318,7 @@ def get_state(user_id: str):
     return {
         "balance": round(user["balance"], 2),
         "inventory": inv_list,
-        "cases": list(CASES_DB.values()),
+        "cases": [c for c in CASES_DB.values() if not c.get("expires_at") or c["expires_at"] > now],
         "all_items": list(ITEMS_DB.values()),
         "free_seconds_left": free_seconds_left,
         "free_case_items": free_case_items
@@ -288,6 +344,9 @@ def open_case(req: OpenCaseReq):
     user = ensure_user(db, req.user_id)
     case = CASES_DB[req.case_id]
 
+    if case.get("expires_at") and int(time.time()) > case["expires_at"]:
+        raise HTTPException(status_code=400, detail="Время действия этого кейса истекло")
+
     if user["balance"] < case["price"]:
         raise HTTPException(status_code=400, detail="Недостаточно монет")
 
@@ -296,6 +355,13 @@ def open_case(req: OpenCaseReq):
     won_item_id = random.choices(population, weights=weights, k=1)[0]
 
     user["balance"] = round(user["balance"] - case["price"], 2)
+
+    partner_id = str(case.get("partner_id", "")).strip()
+    partner_percent = float(case.get("partner_percent", 0))
+    if partner_id and partner_percent > 0 and partner_id != req.user_id:
+        partner_user = ensure_user(db, partner_id)
+        partner_reward = round(case["price"] * (partner_percent / 100.0), 2)
+        partner_user["balance"] = round(partner_user["balance"] + partner_reward, 2)
     inv_id = db["next_inv_id"]
     db["next_inv_id"] += 1
     user["inventory"].append({"inv_id": inv_id, "item_id": won_item_id})

@@ -178,6 +178,30 @@
         .case-win-card .fallback-icon { font-size: 54px; height: 84px; }
         .case-win-actions { display: flex; gap: 10px; width: 100%; }
 
+        
+        .case-cats {
+            display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 14px;
+        }
+        .case-cat-btn {
+            background: rgba(44, 30, 24, 0.85); border: 1px solid var(--card-border);
+            color: var(--muted); padding: 8px 14px; border-radius: 10px;
+            font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: 0.2s;
+        }
+        .case-cat-btn.active {
+            background: linear-gradient(135deg, var(--orange), #e65100);
+            color: #fff; border-color: #ffab40; box-shadow: 0 2px 10px var(--orange-glow);
+        }
+        .case-timer-badge {
+            background: rgba(255, 61, 0, 0.2); border: 1px solid var(--red);
+            color: #ff8a65; font-size: 11px; font-weight: 800;
+            padding: 3px 6px; border-radius: 6px; margin-bottom: 6px; display: inline-block;
+        }
+        .case-partner-badge {
+            background: rgba(41, 121, 255, 0.2); border: 1px solid var(--blue);
+            color: #82b1ff; font-size: 11px; font-weight: 800;
+            padding: 3px 6px; border-radius: 6px; margin-bottom: 6px; display: inline-block;
+        }
+
         /* РУЛЕТКА АПГРЕЙДЕРА */
         .roulette-wrapper {
             background: rgba(34, 23, 18, 0.92);
@@ -353,7 +377,14 @@
 
     <!-- ВКЛАДКА: КЕЙСЫ -->
     <section id="tab-cases" class="tab-section active">
-        <h2 style="margin-bottom: 14px;">Кейсы</h2>
+        <h2 style="margin-bottom: 12px;">Кейсы</h2>
+        <div class="case-cats" id="case-cats-bar">
+            <button class="case-cat-btn active" onclick="setCaseCategory('all', this)">🔥 Все</button>
+            <button class="case-cat-btn" onclick="setCaseCategory('regular', this)">📦 Разные</button>
+            <button class="case-cat-btn" onclick="setCaseCategory('all_in', this)">💎 All-In</button>
+            <button class="case-cat-btn" onclick="setCaseCategory('partner', this)">🤝 Партнёрские</button>
+            <button class="case-cat-btn" onclick="setCaseCategory('limited', this)">⏳ Ограниченное время</button>
+        </div>
         <div class="grid" id="cases-grid"></div>
     </section>
 
@@ -526,17 +557,66 @@
         updateFreeTimer();
     }
 
+    let currentCaseCategory = "all";
+
+    function setCaseCategory(cat, btnEl) {
+        currentCaseCategory = cat;
+        document.querySelectorAll(".case-cat-btn").forEach(b => b.classList.remove("active"));
+        if (btnEl) btnEl.classList.add("active");
+        renderCases();
+    }
+
+    function formatTimeLeft(expiresAt) {
+        const diff = expiresAt - Math.floor(Date.now() / 1000);
+        if (diff <= 0) return "Истёк";
+        const h = Math.floor(diff / 3600);
+        const m = Math.floor((diff % 3600) / 60);
+        const s = diff % 60;
+        return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
     function renderCases() {
         const grid = document.getElementById("cases-grid");
-        grid.innerHTML = state.cases.map(c => `
+        const nowSec = Math.floor(Date.now() / 1000);
+
+        const filtered = state.cases.filter(c => {
+            if (c.expires_at && c.expires_at <= nowSec) return false;
+            if (currentCaseCategory === "all") return true;
+            return (c.category || "regular") === currentCaseCategory;
+        });
+
+        if (!filtered.length) {
+            grid.innerHTML = `<p style="color:var(--muted); grid-column: 1/-1;">В этой категории пока нет доступных кейсов</p>`;
+            return;
+        }
+
+        grid.innerHTML = filtered.map(c => {
+            let badgeHtml = "";
+            if (c.expires_at) {
+                badgeHtml = `<div class="case-timer-badge" data-expires="${c.expires_at}">⏳ ${formatTimeLeft(c.expires_at)}</div>`;
+            } else if (c.category === "partner") {
+                badgeHtml = `<div class="case-partner-badge">🤝 Партнёрский</div>`;
+            } else if (c.category === "all_in") {
+                badgeHtml = `<div class="case-partner-badge" style="border-color:var(--orange); color:#ffcc80;">💎 ALL-IN</div>`;
+            }
+
+            return `
             <div class="card">
+                ${badgeHtml}
                 ${renderItemImg(c)}
                 <div class="card-title">${c.name}</div>
                 <div class="card-price">${c.price} 💰</div>
                 <button class="btn" onclick="openCase(${c.id})">Открыть</button>
-            </div>
-        `).join("");
+            </div>`;
+        }).join("");
     }
+
+    setInterval(() => {
+        document.querySelectorAll(".case-timer-badge").forEach(el => {
+            const exp = parseInt(el.getAttribute("data-expires"), 10);
+            if (exp) el.textContent = "⏳ " + formatTimeLeft(exp);
+        });
+    }, 1000);
 
     function renderInventories() {
         const mainGrid = document.getElementById("main-inv-grid");
