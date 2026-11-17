@@ -14,13 +14,8 @@
       ]
     },
     "1789157813": {
-      "balance": 0,
-      "inventory": [
-        {
-          "inv_id": 22,
-          "item_id": 12
-        }
-      ]
+      "balance": 100,
+      "inventory": []
     },
     "8450028899": {
       "balance": 20049,
