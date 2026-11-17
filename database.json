@@ -46,10 +46,6 @@
       "balance": 490,
       "inventory": [
         {
-          "inv_id": 55,
-          "item_id": 3
-        },
-        {
           "inv_id": 56,
           "item_id": 2
         },
@@ -74,19 +70,19 @@
           "item_id": 2
         },
         {
-          "inv_id": 62,
-          "item_id": 5
-        },
-        {
           "inv_id": 63,
           "item_id": 3
         },
         {
           "inv_id": 64,
           "item_id": 5
+        },
+        {
+          "inv_id": 65,
+          "item_id": 11
         }
       ]
     }
   },
-  "next_inv_id": 65
+  "next_inv_id": 66
 }
