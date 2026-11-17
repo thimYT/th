@@ -133,6 +133,51 @@
         .btn-blue { background: linear-gradient(135deg, var(--blue), #1565c0); box-shadow: 0 3px 10px var(--blue-glow); }
         .btn-red { background: linear-gradient(135deg, #ff3d00, #b71c1c); }
 
+        
+        .case-modal-overlay {
+            position: fixed; inset: 0; background: rgba(10, 7, 5, 0.85);
+            backdrop-filter: blur(6px); z-index: 300; display: none;
+            align-items: center; justify-content: center; padding: 16px;
+        }
+        .case-modal-overlay.open { display: flex; }
+        .case-modal-box {
+            background: linear-gradient(180deg, #281b15 0%, #171d2c 100%);
+            border: 1px solid var(--orange); border-radius: 20px;
+            width: 100%; max-width: 540px; padding: 20px 16px; text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 25px var(--orange-glow);
+        }
+        .case-modal-title { font-size: 18px; font-weight: 900; margin-bottom: 16px; }
+        .case-roulette-viewport {
+            position: relative; width: 100%; height: 142px; background: #130d0a;
+            border: 2px solid var(--card-border); border-radius: 14px;
+            overflow: hidden; margin-bottom: 16px;
+        }
+        .case-roulette-line {
+            position: absolute; top: 0; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 3px; background: var(--orange); box-shadow: 0 0 12px var(--orange); z-index: 6;
+        }
+        .case-roulette-track {
+            display: flex; align-items: center; height: 100%; gap: 8px;
+            padding-left: 8px; will-change: transform;
+        }
+        .roulette-slot {
+            flex: 0 0 112px; width: 112px; height: 118px; background: rgba(44, 30, 24, 0.95);
+            border: 1px solid var(--card-border); border-radius: 12px; padding: 8px 6px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .roulette-slot img { width: 54px; height: 54px; object-fit: contain; margin-bottom: 4px; }
+        .roulette-slot .fallback-icon { font-size: 36px; height: 54px; margin-bottom: 4px; }
+        .roulette-slot-name { font-size: 11px; font-weight: 700; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .roulette-slot-price { font-size: 11px; color: #ffcc80; font-weight: 700; }
+        .case-win-result { display: none; flex-direction: column; align-items: center; }
+        .case-win-card {
+            background: rgba(44, 30, 24, 0.95); border: 2px solid var(--orange);
+            border-radius: 16px; padding: 14px 24px; margin-bottom: 14px;
+        }
+        .case-win-card img { width: 84px; height: 84px; object-fit: contain; }
+        .case-win-card .fallback-icon { font-size: 54px; height: 84px; }
+        .case-win-actions { display: flex; gap: 10px; width: 100%; }
+
         /* РУЛЕТКА АПГРЕЙДЕРА */
         .roulette-wrapper {
             background: rgba(34, 23, 18, 0.92);
@@ -287,6 +332,23 @@
     </button>
 </aside>
 
+<div class="case-modal-overlay" id="case-modal">
+    <div class="case-modal-box">
+        <div class="case-modal-title" id="case-modal-title">Открываем кейс...</div>
+        <div class="case-roulette-viewport" id="case-roulette-viewport">
+            <div class="case-roulette-line"></div>
+            <div class="case-roulette-track" id="case-roulette-track"></div>
+        </div>
+        <div class="case-win-result" id="case-win-result">
+            <div class="case-win-card" id="case-win-card"></div>
+            <div class="case-win-actions">
+                <button class="btn" onclick="closeCaseModal()">Забрать в инвентарь</button>
+                <button class="btn btn-blue" id="case-quick-sell-btn">Продать</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container">
 
     <!-- ВКЛАДКА: КЕЙСЫ -->
@@ -405,7 +467,8 @@
     if (tg) tg.expand();
 
     const userId = tg?.initDataUnsafe?.user?.id ? String(tg.initDataUnsafe.user.id) : "demo_user_1";
-    let state = { balance: 0, inventory: [], cases: [], all_items: [], free_seconds_left: 0 };
+    let state = { balance: 0, inventory: [], cases: [], all_items: [], free_seconds_left: 0, free_case_items: [] };
+    let isCaseOpening = false;
 
     let upgSelectedInv = new Set();
     let upgTargetMode = "item";
@@ -647,15 +710,83 @@
     }
 
     /* --- КЕЙСЫ И ПРОДАЖА --- */
+    function playCaseRoulette(caseName, poolItems, wonItem) {
+        isCaseOpening = true;
+        const modal = document.getElementById("case-modal");
+        const title = document.getElementById("case-modal-title");
+        const viewport = document.getElementById("case-roulette-viewport");
+        const track = document.getElementById("case-roulette-track");
+        const winResult = document.getElementById("case-win-result");
+
+        title.textContent = `Открываем: ${caseName}`;
+        viewport.style.display = "block";
+        winResult.style.display = "none";
+
+        const totalSlots = 45;
+        const winIndex = 36;
+        const itemsPool = (poolItems && poolItems.length) ? poolItems : state.all_items;
+
+        let slotsHtml = "";
+        for (let i = 0; i < totalSlots; i++) {
+            const item = (i === winIndex) ? wonItem : itemsPool[Math.floor(Math.random() * itemsPool.length)];
+            slotsHtml += `
+                <div class="roulette-slot rarity-${item.rarity}">
+                    ${renderItemImg(item)}
+                    <div class="roulette-slot-name">${item.name}</div>
+                    <div class="roulette-slot-price">${item.price} 💰</div>
+                </div>`;
+        }
+
+        track.style.transition = "none";
+        track.style.transform = "translateX(0px)";
+        track.innerHTML = slotsHtml;
+        modal.classList.add("open");
+        void track.offsetWidth;
+
+        const targetX = (8 + winIndex * 120 + 56) - (viewport.clientWidth / 2) + (Math.floor(Math.random() * 64) - 32);
+        track.style.transition = "transform 4.2s cubic-bezier(0.12, 0.85, 0.2, 1)";
+        track.style.transform = `translateX(-${targetX}px)`;
+
+        setTimeout(async () => {
+            await loadState();
+            isCaseOpening = false;
+            title.textContent = "🎉 Ваш выигрыш!";
+            viewport.style.display = "none";
+
+            const winCard = document.getElementById("case-win-card");
+            winCard.className = `case-win-card rarity-${wonItem.rarity}`;
+            winCard.innerHTML = `${renderItemImg(wonItem)}<div style="font-size:17px;font-weight:800;margin-top:6px;">${wonItem.name}</div><div style="font-size:15px;color:#ffcc80;font-weight:700;margin-top:4px;">${wonItem.price} 💰</div>`;
+
+            const sellBtn = document.getElementById("case-quick-sell-btn");
+            sellBtn.textContent = `Продать за ${wonItem.price} 💰`;
+            sellBtn.onclick = async () => {
+                const newestItem = state.inventory.find(i => i.id === wonItem.id);
+                if (newestItem) await sellItem(newestItem.inv_id);
+                closeCaseModal();
+            };
+            winResult.style.display = "flex";
+        }, 4350);
+    }
+
+    function closeCaseModal() {
+        if (!isCaseOpening) document.getElementById("case-modal").classList.remove("open");
+    }
+
     async function openCase(caseId) {
+        if (isCaseOpening) return;
+        const targetCase = state.cases.find(c => c.id === caseId);
+        if (!targetCase) return;
+
         const res = await fetch("/api/open_case", {
             method: "POST", headers: {"Content-Type": "application/json"},
             body: JSON.stringify({ user_id: userId, case_id: caseId })
         });
         const data = await res.json();
         if (!res.ok) return showToast(data.detail);
-        showToast(`Выпал предмет: ${data.won_item.name} (${data.won_item.price} 💰)`);
-        await loadState();
+
+        document.getElementById("balance-val").textContent = (state.balance - targetCase.price).toFixed(2);
+        const poolItems = targetCase.drops.map(d => state.all_items.find(item => item.id === d.item_id)).filter(Boolean);
+        playCaseRoulette(targetCase.name, poolItems, data.won_item);
     }
 
     async function sellItem(invId) {
@@ -685,14 +816,15 @@
     }
 
     async function openFreeCase() {
+        if (isCaseOpening) return;
         const res = await fetch("/api/open_free_case", {
             method: "POST", headers: {"Content-Type": "application/json"},
             body: JSON.stringify({ user_id: userId })
         });
         const data = await res.json();
         if (!res.ok) return showToast(data.detail);
-        showToast(`Из бесплатного кейса выпал: ${data.won_item.name}!`);
-        await loadState();
+
+        playCaseRoulette("Бесплатный кейс", state.free_case_items, data.won_item);
     }
 
     async function redeemPromo() {
