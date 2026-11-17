@@ -50,19 +50,15 @@
           "item_id": 2
         },
         {
-          "inv_id": 59,
-          "item_id": 3
-        },
-        {
-          "inv_id": 64,
-          "item_id": 5
-        },
-        {
           "inv_id": 67,
+          "item_id": 12
+        },
+        {
+          "inv_id": 68,
           "item_id": 12
         }
       ]
     }
   },
-  "next_inv_id": 68
+  "next_inv_id": 69
 }
