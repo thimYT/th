@@ -70,15 +70,15 @@
           "item_id": 18
         },
         {
-          "inv_id": 90,
-          "item_id": 18
+          "inv_id": 91,
+          "item_id": 20
         },
         {
-          "inv_id": 91,
+          "inv_id": 92,
           "item_id": 20
         }
       ]
     }
   },
-  "next_inv_id": 92
+  "next_inv_id": 93
 }
