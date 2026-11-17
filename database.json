@@ -14,7 +14,7 @@
       ]
     },
     "1789157813": {
-      "balance": 0,
+      "balance": 500,
       "inventory": [
         {
           "inv_id": 97,
@@ -99,10 +99,12 @@
       "used_by": []
     },
     "WELCOME": {
-      "stock": 1,
+      "stock": 0,
       "type": "coins",
       "amount": 500,
-      "used_by": []
+      "used_by": [
+        "1789157813"
+      ]
     }
   }
 }
