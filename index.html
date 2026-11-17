@@ -4,27 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <title>BrainDrop — Кейсы и Апгрейдер</title>
+    <title>BrainDrop</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
             --bg: #070d19;
             --card: #0e182c;
-            --card-light: #172744;
-            --border-subtle: #1f3358;
-            
-            --blue-accent: #2589f5;
+            --card-light: #172542;
+            --blue: #2589f5;
             --blue-glow: rgba(37, 137, 245, 0.25);
-            --cyan-soft: #60b5ff;
-            
-            --orange-accent: #f97316;
-            --orange-hover: #ea580c;
-            --orange-soft: #fb923c;
-            --orange-bg: rgba(249, 115, 22, 0.15);
-            
-            --danger: #e11d48;
-            --text: #e2e8f0;
-            --muted: #7f94b5;
+            --orange: #f97316;
+            --orange-glow: rgba(249, 115, 22, 0.2);
+            --danger: #ef4444;
+            --success: #10b981;
+            --text: #f1f5f9;
+            --muted: #7c90b2;
         }
 
         * {
@@ -44,7 +38,6 @@
         }
 
         body {
-            background-image: radial-gradient(circle at 50% 0%, rgba(37, 137, 245, 0.12) 0%, transparent 60%);
             padding: 10px;
             display: flex;
             justify-content: center;
@@ -68,47 +61,41 @@
             justify-content: space-between;
             align-items: center;
             gap: 8px;
-            background: rgba(14, 24, 44, 0.94);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid var(--border-subtle);
-            padding: 8px 12px;
+            background: rgba(14, 24, 44, 0.96);
+            backdrop-filter: blur(8px);
+            border: 1px solid #1d2f52;
+            padding: 8px 10px;
             border-radius: 14px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
         }
 
-        .profile-block {
+        .profile-box {
             display: flex;
             align-items: center;
-            gap: 9px;
+            gap: 8px;
             min-width: 0;
             flex: 1;
         }
 
         .avatar-wrap {
-            width: 36px;
-            height: 36px;
-            min-width: 36px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--blue-accent), var(--orange-accent));
+            background: linear-gradient(135deg, var(--blue), var(--orange));
             padding: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
+            flex-shrink: 0;
         }
 
         .avatar-inner {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            background: var(--card);
+            background: var(--bg);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
             font-size: 14px;
-            color: var(--cyan-soft);
+            color: var(--blue);
             overflow: hidden;
         }
 
@@ -128,15 +115,14 @@
         .brand-tag {
             font-size: 10px;
             font-weight: 800;
+            letter-spacing: 0.8px;
+            color: var(--blue);
             text-transform: uppercase;
-            letter-spacing: 0.6px;
-            color: var(--cyan-soft);
         }
 
         .user-name {
             font-weight: 700;
             font-size: 13px;
-            color: var(--text);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -145,25 +131,23 @@
         .balance-pill {
             display: flex;
             align-items: center;
-            gap: 8px;
-            flex-shrink: 0;
-            background: var(--orange-bg);
-            border: 1px solid rgba(249, 115, 22, 0.4);
-            padding: 5px 8px 5px 10px;
+            gap: 6px;
+            background: var(--orange-glow);
+            border: 1px solid rgba(249, 115, 22, 0.45);
+            padding: 5px 8px;
             border-radius: 10px;
-            color: var(--orange-soft);
+            color: #fdba74;
             font-weight: 800;
             font-size: 13px;
-            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .btn-plus {
-            background: var(--orange-accent);
+            background: var(--orange);
             color: #fff;
             border: none;
             width: 24px;
             height: 24px;
-            min-width: 24px;
             border-radius: 7px;
             font-size: 16px;
             font-weight: 800;
@@ -171,15 +155,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: 0.15s;
-        }
-
-        .btn-plus:active {
-            transform: scale(0.92);
+            flex-shrink: 0;
         }
 
         .btn-plus:disabled {
-            opacity: 0.6;
+            opacity: 0.5;
             cursor: not-allowed;
         }
 
@@ -192,18 +172,19 @@
             font-weight: 600;
             text-align: center;
             display: none;
+            border: 1px solid #253b66;
         }
 
         .toast.show { display: block; }
-        .toast.error { background: rgba(225, 29, 72, 0.18); border: 1px solid var(--danger); color: #fda4af; }
-        .toast.success { background: rgba(37, 137, 245, 0.18); border: 1px solid var(--blue-accent); color: #93c5fd; }
+        .toast.error { background: rgba(239, 68, 68, 0.18); border-color: var(--danger); color: #fca5a5; }
+        .toast.success { background: rgba(37, 137, 245, 0.18); border-color: var(--blue); color: #93c5fd; }
 
         .tabs {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 5px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
             background: var(--card);
-            border: 1px solid var(--border-subtle);
+            border: 1px solid #16243f;
             padding: 4px;
             border-radius: 12px;
         }
@@ -212,47 +193,68 @@
             background: transparent;
             border: none;
             color: var(--muted);
-            padding: 9px 4px;
+            padding: 9px 2px;
             border-radius: 8px;
             font-weight: 700;
-            font-size: 12px;
+            font-size: 11px;
             cursor: pointer;
             transition: 0.2s;
             white-space: nowrap;
         }
 
         .tab-btn.active {
-            background: var(--blue-accent);
-            color: #ffffff;
+            background: var(--blue);
+            color: #fff;
             box-shadow: 0 2px 10px var(--blue-glow);
         }
 
-        .section {
+        .section { display: none; flex-direction: column; gap: 10px; }
+        .section.active { display: flex; }
+
+        .roulette-container {
+            background: var(--card);
+            border: 1px solid #1d2f52;
+            border-radius: 14px;
+            padding: 12px 0;
+            position: relative;
+            overflow: hidden;
             display: none;
+        }
+
+        .roulette-container.active { display: block; }
+
+        .roulette-marker {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 3px;
+            background: var(--orange);
+            transform: translateX(-50%);
+            z-index: 10;
+            box-shadow: 0 0 8px var(--orange);
+        }
+
+        .roulette-track {
+            display: flex;
+            gap: 8px;
+            padding-left: 50%;
+            will-change: transform;
+        }
+
+        .roulette-card {
+            width: 84px;
+            height: 94px;
+            flex-shrink: 0;
+            background: var(--bg);
+            border: 1px solid #1d2f52;
+            border-radius: 10px;
+            display: flex;
             flex-direction: column;
-            gap: 10px;
-        }
-
-        .section.active {
-            display: flex;
-        }
-
-        .media-box {
-            display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
-        }
-
-        .media-big { width: 76px; height: 76px; font-size: 38px; }
-        .media-med { width: 58px; height: 58px; font-size: 28px; }
-        .media-small { width: 42px; height: 42px; font-size: 20px; }
-
-        .media-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            pointer-events: none;
+            gap: 4px;
+            padding: 6px;
         }
 
         .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
@@ -260,9 +262,9 @@
 
         .card {
             background: var(--card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 12px;
-            padding: 10px 8px;
+            border: 1px solid #16243f;
+            border-radius: 14px;
+            padding: 12px 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -270,28 +272,53 @@
             text-align: center;
             gap: 6px;
             min-width: 0;
-            transition: 0.15s;
         }
 
         .card.clickable { cursor: pointer; }
-        .card.selected {
-            border-color: var(--orange-accent);
-            background: rgba(249, 115, 22, 0.1);
-            box-shadow: 0 0 12px rgba(249, 115, 22, 0.18);
+        .card.selected { border-color: var(--orange); background: rgba(249, 115, 22, 0.12); }
+
+        .item-media {
+            width: 54px;
+            height: 54px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+        }
+
+        .item-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .item-media-sm {
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .item-media-sm img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         .price-tag {
             background: var(--bg);
-            border: 1px solid var(--border-subtle);
+            border: 1px solid #1d2f52;
             padding: 3px 8px;
             border-radius: 7px;
             font-size: 11px;
             font-weight: 700;
-            color: var(--orange-soft);
+            color: #fdba74;
         }
 
         .btn {
-            background: linear-gradient(135deg, var(--blue-accent), #1d6fd1);
+            background: var(--blue);
             color: #fff;
             border: none;
             padding: 9px 10px;
@@ -300,125 +327,21 @@
             font-size: 12px;
             cursor: pointer;
             width: 100%;
-            transition: 0.15s;
         }
 
-        .btn:active { transform: scale(0.97); }
-        .btn:disabled { background: var(--card-light); color: var(--muted); opacity: 0.65; cursor: not-allowed; transform: none; pointer-events: none; }
-        
-        .btn-orange {
-            background: linear-gradient(135deg, var(--orange-accent), var(--orange-hover));
-        }
-
-        .btn-sell {
-            background: var(--card-light);
-            border: 1px solid var(--border-subtle);
-            color: var(--text);
-            font-size: 11px;
-            padding: 6px;
-        }
+        .btn-orange { background: var(--orange); }
+        .btn:disabled { background: var(--card-light); color: var(--muted); cursor: not-allowed; }
+        .btn-sell { background: var(--card-light); color: #cbd5e1; font-size: 11px; padding: 6px; }
 
         .r-common { border-bottom: 3px solid #64748b; }
         .r-rare { border-bottom: 3px solid #2589f5; }
-        .r-epic { border-bottom: 3px solid #8b5cf6; }
+        .r-epic { border-bottom: 3px solid #a855f7; }
         .r-legendary { border-bottom: 3px solid #f97316; }
         .r-mythic { border-bottom: 3px solid #eab308; }
 
-        .roulette-modal {
-            background: var(--card);
-            border-radius: 14px;
-            padding: 14px 10px;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            border: 1px solid var(--border-subtle);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
-        }
-
-        .roulette-modal.active { display: flex; }
-
-        .roulette-viewport {
-            position: relative;
-            width: 100%;
-            height: 116px;
-            background: var(--bg);
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid var(--border-subtle);
-        }
-
-        .roulette-marker {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            width: 2px;
-            background: var(--orange-accent);
-            transform: translateX(-50%);
-            z-index: 10;
-            box-shadow: 0 0 8px var(--orange-accent);
-        }
-
-        .roulette-marker::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            border-top: 8px solid var(--orange-accent);
-        }
-
-        .roulette-marker::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            border-bottom: 8px solid var(--orange-accent);
-        }
-
-        .roulette-track {
-            display: flex;
-            align-items: center;
-            height: 100%;
-            gap: 8px;
-            padding-left: 8px;
-            will-change: transform;
-        }
-
-        .roulette-slot {
-            flex: 0 0 96px;
-            width: 96px;
-            height: 100px;
-            background: var(--card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 5px;
-            gap: 4px;
-            text-align: center;
-        }
-
-        .roulette-slot-name {
-            font-size: 10px;
-            font-weight: 600;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            width: 100%;
-        }
-
         .wheel-box {
             background: var(--card);
-            border: 1px solid var(--border-subtle);
+            border: 1px solid #16243f;
             padding: 16px 12px;
             border-radius: 14px;
             display: flex;
@@ -441,9 +364,8 @@
             top: -8px;
             border-left: 10px solid transparent;
             border-right: 10px solid transparent;
-            border-top: 18px solid var(--orange-accent);
+            border-top: 18px solid var(--orange);
             z-index: 10;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
         }
 
         .wheel {
@@ -452,7 +374,6 @@
             border-radius: 50%;
             transition: transform 3.2s cubic-bezier(0.15, 0.85, 0.25, 1);
             background: var(--card-light);
-            box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.65);
         }
 
         .wheel-inner {
@@ -460,7 +381,7 @@
             width: 124px;
             height: 124px;
             background: var(--bg);
-            border: 1px solid var(--border-subtle);
+            border: 2px solid #1d2f52;
             border-radius: 50%;
             display: flex;
             flex-direction: column;
@@ -471,7 +392,7 @@
 
         .panel {
             background: var(--card);
-            border: 1px solid var(--border-subtle);
+            border: 1px solid #16243f;
             padding: 12px;
             border-radius: 14px;
             display: flex;
@@ -479,42 +400,57 @@
             gap: 8px;
         }
 
-        input[type="number"] {
+        input[type="number"], input[type="text"] {
             width: 100%;
             background: var(--bg);
-            border: 1px solid var(--border-subtle);
-            color: var(--text);
+            border: 1px solid #1d2f52;
+            color: #fff;
             padding: 10px;
             border-radius: 9px;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 700;
             outline: none;
         }
 
-        input[type="number"]:focus { border-color: var(--blue-accent); }
+        input[type="text"] { text-transform: uppercase; }
+        input:focus { border-color: var(--blue); }
 
-        .mode-switch {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6px;
-        }
+        .mode-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 
         .mode-btn {
             padding: 8px;
             background: var(--bg);
-            border: 1px solid var(--border-subtle);
+            border: 1px solid #1d2f52;
             color: var(--muted);
             border-radius: 8px;
             font-weight: 700;
             font-size: 12px;
             cursor: pointer;
-            transition: 0.15s;
         }
 
-        .mode-btn.active {
-            border-color: var(--blue-accent);
-            color: var(--cyan-soft);
-            background: rgba(37, 137, 245, 0.14);
+        .mode-btn.active { border-color: var(--blue); color: var(--blue); background: var(--blue-glow); }
+
+        .bonus-banner {
+            background: linear-gradient(135deg, #0e182c 0%, #152647 100%);
+            border: 1px solid #253b66;
+            border-radius: 14px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 10px;
+        }
+
+        .timer-badge {
+            background: var(--bg);
+            border: 1px solid #1d2f52;
+            padding: 6px 14px;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--blue);
+            font-variant-numeric: tabular-nums;
         }
     </style>
 </head>
@@ -522,18 +458,18 @@
 
 <div class="app">
     <div class="header">
-        <div class="profile-block">
+        <div class="profile-box">
             <div class="avatar-wrap">
-                <div class="avatar-inner" id="avatarBox">BD</div>
+                <div class="avatar-inner" id="avatarBox">B</div>
             </div>
             <div class="user-meta">
-                <div class="brand-tag">BrainDrop</div>
-                <div class="user-name" id="userLabel">Игрок</div>
+                <span class="brand-tag">BrainDrop</span>
+                <span class="user-name" id="userLabel">Игрок</span>
             </div>
         </div>
         <div class="balance-pill">
-            <span><span id="balanceVal">...</span> монет</span>
-            <button type="button" class="btn-plus" id="topupBtn" title="Запросить пополнение">+</button>
+            <span><span id="balanceVal">0</span> монет</span>
+            <button type="button" class="btn-plus" id="bonusBtn">+</button>
         </div>
     </div>
 
@@ -542,19 +478,17 @@
     <div class="tabs">
         <button type="button" class="tab-btn active" data-tab="cases">Кейсы</button>
         <button type="button" class="tab-btn" data-tab="upgrader">Апгрейдер</button>
+        <button type="button" class="tab-btn" data-tab="bonuses">Бонусы</button>
         <button type="button" class="tab-btn" data-tab="inventory">Инвентарь (<span id="invCount">0</span>)</button>
     </div>
 
-    <div id="tab-cases" class="section active">
-        <div class="roulette-modal" id="rouletteBox">
-            <div style="font-weight:700; font-size:13px;" id="rouletteTitle">Открываем кейс...</div>
-            <div class="roulette-viewport" id="rouletteViewport">
-                <div class="roulette-marker"></div>
-                <div class="roulette-track" id="rouletteTrack"></div>
-            </div>
-            <div id="caseResult" style="text-align:center; font-weight:800; font-size:14px; color:var(--orange-soft); min-height:20px;"></div>
-        </div>
+    <div class="roulette-container" id="rouletteBox">
+        <div class="roulette-marker"></div>
+        <div class="roulette-track" id="rouletteTrack"></div>
+    </div>
+    <div id="caseResult" style="text-align:center; font-weight:700; font-size:13px; min-height:18px; color:var(--orange);"></div>
 
+    <div id="tab-cases" class="section active">
         <div class="grid-2" id="casesGrid"></div>
     </div>
 
@@ -564,37 +498,49 @@
                 <div class="pointer"></div>
                 <div class="wheel" id="wheel"></div>
                 <div class="wheel-inner">
-                    <div id="chanceVal" style="font-size:22px; font-weight:800; color:var(--cyan-soft);">0%</div>
+                    <div id="chanceVal" style="font-size:22px; font-weight:800;">0%</div>
                     <div style="font-size:10px; color:var(--muted);">ШАНС</div>
                 </div>
             </div>
-            <div id="upgStatus" style="font-weight:700; font-size:13px; text-align:center; color:var(--muted);">Выберите ставку и цель</div>
+            <div id="upgStatus" style="font-weight:700; font-size:13px; text-align:center;">Выберите ставку и цель</div>
         </div>
 
         <div class="panel">
             <div style="display:flex; justify-content:space-between; font-size:12px;">
-                <span>1. Ваша ставка (вещи + монеты):</span>
-                <strong style="color:var(--orange-soft);"><span id="totalBetVal">0</span> монет</strong>
+                <span>Ваша ставка:</span>
+                <strong style="color:#fdba74;"><span id="totalBetVal">0</span> монет</strong>
             </div>
-            <input type="number" id="upgCoinsInput" placeholder="Добавить монеты к ставке (0)" min="0">
-            <div style="font-size:11px; color:var(--muted);">Нажмите на ваши предметы, чтобы добавить в ставку:</div>
-            <div class="grid-3" id="upgMyItems" style="max-height: 160px; overflow-y: auto;"></div>
+            <input type="number" id="upgCoinsInput" placeholder="Добавить монеты к ставке" min="0">
+            <div style="font-size:11px; color:var(--muted);">Нажмите на предметы из инвентаря:</div>
+            <div class="grid-3" id="upgMyItems" style="max-height: 150px; overflow-y: auto;"></div>
         </div>
 
         <div class="panel">
-            <div style="font-size:12px;">2. Что хотите получить:</div>
+            <div style="font-size:12px;">Выберите награду:</div>
             <div class="mode-switch">
                 <button type="button" class="mode-btn active" id="modeItemBtn">Предмет</button>
                 <button type="button" class="mode-btn" id="modeCoinsBtn">Монеты</button>
             </div>
-
-            <div id="targetItemBox" class="grid-3" style="max-height: 170px; overflow-y: auto;"></div>
-
+            <div id="targetItemBox" class="grid-3" style="max-height: 160px; overflow-y: auto;"></div>
             <div id="targetCoinsBox" style="display:none;">
-                <input type="number" id="targetCoinsInput" placeholder="Желаемая сумма выигрыша">
+                <input type="number" id="targetCoinsInput" placeholder="Желаемая сумма монет">
             </div>
-
             <button type="button" class="btn btn-orange" id="upgSpinBtn">Улучшить</button>
+        </div>
+    </div>
+
+    <div id="tab-bonuses" class="section">
+        <div class="bonus-banner">
+            <div style="font-size:11px; font-weight:800; color:var(--orange); text-transform:uppercase; letter-spacing:0.8px;">Ежедневная награда</div>
+            <div style="font-size:17px; font-weight:800;">Бесплатный кейс раз в 12 часов</div>
+            <div class="timer-badge" id="freeCaseTimer">Доступен сейчас</div>
+            <button type="button" class="btn btn-orange" id="openFreeCaseBtn">Открыть бесплатный кейс</button>
+        </div>
+
+        <div class="panel">
+            <div style="font-size:13px; font-weight:700;">Активация промокода</div>
+            <input type="text" id="promoInput" placeholder="Введите промокод">
+            <button type="button" class="btn" id="redeemPromoBtn">Активировать</button>
         </div>
     </div>
 
@@ -606,38 +552,29 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const tg = window.Telegram && window.Telegram.WebApp;
+    let tgUser = null;
+
     if (tg) {
         try {
             tg.ready();
             tg.expand();
+            tgUser = tg.initDataUnsafe && tg.initDataUnsafe.user;
         } catch (e) {}
     }
 
     let userId = null;
-    let tgUsername = "";
-    let tgFirstName = "";
     const avatarBox = document.getElementById("avatarBox");
     const userLabel = document.getElementById("userLabel");
 
-    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id) {
-        const u = tg.initDataUnsafe.user;
-        userId = String(u.id);
-        tgUsername = u.username || "";
-        tgFirstName = u.first_name || "";
-        const displayName = tgFirstName || tgUsername || "Игрок";
-        userLabel.innerText = displayName;
+    if (tgUser && tgUser.id) {
+        userId = String(tgUser.id);
+        const fullName = [tgUser.first_name, tgUser.last_name].filter(Boolean).join(" ") || "Игрок";
+        userLabel.innerText = tgUser.username ? `${fullName} (@${tgUser.username})` : fullName;
 
-        if (u.photo_url) {
-            const img = document.createElement("img");
-            img.src = u.photo_url;
-            img.alt = displayName;
-            img.onerror = () => {
-                avatarBox.innerText = displayName.charAt(0).toUpperCase();
-            };
-            avatarBox.innerHTML = "";
-            avatarBox.appendChild(img);
+        if (tgUser.photo_url) {
+            avatarBox.innerHTML = `<img src="${tgUser.photo_url}" alt="ava" onerror="this.remove()">`;
         } else {
-            avatarBox.innerText = displayName.charAt(0).toUpperCase();
+            avatarBox.innerText = (tgUser.first_name || "B").charAt(0).toUpperCase();
         }
     } else {
         userId = localStorage.getItem("bd_uid");
@@ -645,54 +582,85 @@ document.addEventListener("DOMContentLoaded", () => {
             userId = "player_" + Math.floor(100000 + Math.random() * 900000);
             localStorage.setItem("bd_uid", userId);
         }
-        avatarBox.innerText = "BD";
+        avatarBox.innerText = "B";
     }
 
-    let state = { balance: 0, inventory: [], cases: [], all_items: [] };
+    let state = { balance: 0, inventory: [], cases: [], all_items: [], free_seconds_left: 0, free_case_items: [] };
     let selectedInvIds = new Set();
     let targetMode = "item";
     let selectedTargetItemId = null;
-    let isSpinning = false;
-    let isRequesting = false; // Жёсткая блокировка на время сетевого запроса
+    let isBusy = false;
     let rotation = 0;
-
-    function renderMediaHTML(obj, sizeClass) {
-        const fallback = obj.fallback || "";
-        if (obj.image) {
-            return `<div class="media-box ${sizeClass}"><img src="${obj.image}" alt="${obj.name}" onerror="this.parentElement.innerHTML='${fallback}'"></div>`;
-        }
-        return `<div class="media-box ${sizeClass}">${fallback}</div>`;
-    }
+    let timerInterval = null;
 
     const toastBox = document.getElementById("toastBox");
     function showToast(msg, type = "") {
         toastBox.innerText = msg;
         toastBox.className = "toast show " + type;
         clearTimeout(toastBox._timer);
-        toastBox._timer = setTimeout(() => {
-            toastBox.className = "toast";
-        }, 4000);
+        toastBox._timer = setTimeout(() => { toastBox.className = "toast"; }, 3500);
+    }
+
+    function setBusy(flag) {
+        isBusy = flag;
+        document.querySelectorAll(".tab-btn, #openFreeCaseBtn, #redeemPromoBtn, #upgSpinBtn").forEach(el => {
+            if (el.id === "openFreeCaseBtn" && state.free_seconds_left > 0) return;
+            el.disabled = flag;
+        });
+        document.querySelectorAll("#casesGrid button").forEach(btn => btn.disabled = flag);
+    }
+
+    function renderMedia(obj, small = false) {
+        const cls = small ? "item-media-sm" : "item-media";
+        if (obj.image) {
+            return `<div class="${cls}"><img src="${obj.image}" alt="" onerror="this.parentElement.innerText='${obj.icon || ''}'"></div>`;
+        }
+        return `<div class="${cls}">${obj.icon || ""}</div>`;
+    }
+
+    function startFreeTimer() {
+        clearInterval(timerInterval);
+        const timerEl = document.getElementById("freeCaseTimer");
+        const btnEl = document.getElementById("openFreeCaseBtn");
+
+        function tick() {
+            if (state.free_seconds_left <= 0) {
+                timerEl.innerText = "Бесплатный кейс готов!";
+                timerEl.style.color = "var(--success)";
+                btnEl.disabled = isBusy;
+                btnEl.innerText = "Открыть бесплатный кейс";
+                clearInterval(timerInterval);
+                return;
+            }
+            const h = String(Math.floor(state.free_seconds_left / 3600)).padStart(2, "0");
+            const m = String(Math.floor((state.free_seconds_left % 3600) / 60)).padStart(2, "0");
+            const s = String(state.free_seconds_left % 60).padStart(2, "0");
+            timerEl.innerText = `Следующий через ${h}:${m}:${s}`;
+            timerEl.style.color = "var(--blue)";
+            btnEl.disabled = true;
+            btnEl.innerText = "Ожидание таймера";
+            state.free_seconds_left -= 1;
+        }
+        tick();
+        timerInterval = setInterval(tick, 1000);
     }
 
     async function loadState() {
         try {
             const res = await fetch(`/api/state/${encodeURIComponent(userId)}`);
-            if (!res.ok) {
-                throw new Error(`Ошибка сервера (${res.status})`);
-            }
+            if (!res.ok) throw new Error(`Ошибка сервера (${res.status})`);
             state = await res.json();
             document.getElementById("balanceVal").innerText = state.balance;
             document.getElementById("invCount").innerText = state.inventory.length;
 
             const existingIds = new Set(state.inventory.map(i => i.inv_id));
-            selectedInvIds.forEach(id => {
-                if (!existingIds.has(id)) selectedInvIds.delete(id);
-            });
+            selectedInvIds.forEach(id => { if (!existingIds.has(id)) selectedInvIds.delete(id); });
 
             renderCases();
             renderInventory();
             renderUpgraderLists();
             recalcUpgrade();
+            startFreeTimer();
         } catch (err) {
             showToast(err.message || "Нет связи с сервером", "error");
         }
@@ -700,69 +668,107 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.querySelectorAll(".tab-btn").forEach(btn => {
         btn.addEventListener("click", () => {
-            if (isSpinning || isRequesting) return;
+            if (isBusy) return;
             const tabName = btn.getAttribute("data-tab");
             document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
             document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
             btn.classList.add("active");
             document.getElementById("tab-" + tabName).classList.add("active");
+            document.getElementById("rouletteBox").classList.remove("active");
+            document.getElementById("caseResult").innerText = "";
         });
     });
 
-    const topupBtn = document.getElementById("topupBtn");
-    topupBtn.addEventListener("click", async () => {
-        if (isSpinning || isRequesting || topupBtn.disabled) return;
-        topupBtn.disabled = true;
+    const bonusBtn = document.getElementById("bonusBtn");
+    bonusBtn.addEventListener("click", async () => {
+        if (bonusBtn.disabled) return;
+        bonusBtn.disabled = true;
         try {
-            const res = await fetch("/api/request_topup", {
+            const res = await fetch("/api/topup_request", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     user_id: userId,
-                    username: tgUsername,
-                    first_name: tgFirstName
+                    username: (tgUser && tgUser.username) || "",
+                    first_name: (tgUser && tgUser.first_name) || "Игрок"
                 })
             });
             const data = await res.json();
-            if (!res.ok) {
-                throw new Error(data.detail || "Ошибка отправки заявки");
-            }
-            showToast("Заявка отправлена! Проверьте личку бота", "success");
-            if (tg && tg.HapticFeedback) {
-                try { tg.HapticFeedback.notificationOccurred("success"); } catch (e) {}
-            }
+            if (!res.ok) throw new Error(data.detail || "Ошибка отправки запроса");
+            showToast("Запрос отправлен! Проверьте личные сообщения бота.", "success");
         } catch (err) {
             showToast(err.message, "error");
         } finally {
-            setTimeout(() => { topupBtn.disabled = false; }, 5000);
+            setTimeout(() => { bonusBtn.disabled = false; }, 5000);
         }
     });
+
+    function playRouletteAnimation(pool, wonItem) {
+        const rouletteBox = document.getElementById("rouletteBox");
+        const track = document.getElementById("rouletteTrack");
+        const banner = document.getElementById("caseResult");
+
+        rouletteBox.classList.add("active");
+        banner.style.color = "var(--muted)";
+        banner.innerText = "Открываем кейс...";
+
+        const totalCards = 45;
+        const winIndex = 36;
+        track.style.transition = "none";
+        track.style.transform = "translateX(0px)";
+        track.innerHTML = "";
+
+        const safePool = pool.length > 0 ? pool : [wonItem];
+        for (let i = 0; i < totalCards; i++) {
+            const itemObj = (i === winIndex) ? wonItem : safePool[Math.floor(Math.random() * safePool.length)];
+            const el = document.createElement("div");
+            el.className = `roulette-card r-${itemObj.rarity}`;
+            el.innerHTML = `
+                ${renderMedia(itemObj, true)}
+                <div style="font-size:10px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:74px;">${itemObj.name}</div>
+            `;
+            track.appendChild(el);
+        }
+
+        const cardStep = 92;
+        const randomOffset = Math.floor(Math.random() * 50) - 25;
+        const targetX = -(winIndex * cardStep + 42 + randomOffset);
+
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                track.style.transition = "transform 3.6s cubic-bezier(0.12, 0.85, 0.22, 1)";
+                track.style.transform = `translateX(${targetX}px)`;
+            });
+        });
+
+        setTimeout(async () => {
+            banner.style.color = "var(--orange)";
+            banner.innerText = `Выпало: ${wonItem.name} (${wonItem.price} монет)`;
+            await loadState();
+            setBusy(false);
+        }, 3700);
+    }
 
     function renderCases() {
         const grid = document.getElementById("casesGrid");
         grid.innerHTML = "";
-        const locked = isSpinning || isRequesting;
         state.cases.forEach(c => {
             const card = document.createElement("div");
             card.className = "card";
             card.innerHTML = `
-                ${renderMediaHTML(c, "media-big")}
+                ${renderMedia(c, false)}
                 <div style="font-weight:700; font-size:13px;">${c.name}</div>
-                <button type="button" class="btn" ${locked ? "disabled" : ""}>Открыть за ${c.price}</button>
+                <button type="button" class="btn">Открыть за ${c.price}</button>
             `;
-            const btn = card.querySelector("button");
-            btn.addEventListener("click", () => openCaseWithRoulette(c, btn));
+            card.querySelector("button").addEventListener("click", () => openCase(c));
             grid.appendChild(card);
         });
     }
 
-    async function openCaseWithRoulette(caseObj, clickedBtn) {
-        // Мгновенная блокировка до начала fetch-запроса
-        if (isSpinning || isRequesting) return;
-        isRequesting = true;
-        if (clickedBtn) clickedBtn.disabled = true;
-        renderCases();
-
+    async function openCase(caseObj) {
+        if (isBusy) return;
+        setBusy(true);
+        const banner = document.getElementById("caseResult");
         try {
             const res = await fetch("/api/open_case", {
                 method: "POST",
@@ -771,129 +777,107 @@ document.addEventListener("DOMContentLoaded", () => {
             });
             const data = await res.json();
             if (!res.ok) {
-                isRequesting = false;
-                renderCases();
-                showToast(data.detail || "Ошибка открытия кейса", "error");
+                banner.style.color = "var(--danger)";
+                banner.innerText = data.detail || "Ошибка открытия";
+                setBusy(false);
                 return;
             }
-
-            isSpinning = true;
-            isRequesting = false;
-            document.getElementById("balanceVal").innerText = data.new_balance;
-            renderCases();
-
-            const rouletteBox = document.getElementById("rouletteBox");
-            const track = document.getElementById("rouletteTrack");
-            const viewport = document.getElementById("rouletteViewport");
-            const resultEl = document.getElementById("caseResult");
-            const titleEl = document.getElementById("rouletteTitle");
-
-            rouletteBox.classList.add("active");
-            rouletteBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
-            titleEl.innerText = `Открываем: ${caseObj.name}`;
-            resultEl.innerText = "";
-
-            const totalSlots = 45;
-            const winIndex = 37;
-            const pool = caseObj.possible_items && caseObj.possible_items.length > 0
-                ? caseObj.possible_items
-                : state.all_items;
-
-            track.style.transition = "none";
-            track.style.transform = "translateX(0px)";
-            track.innerHTML = "";
-
-            for (let i = 0; i < totalSlots; i++) {
-                const item = (i === winIndex)
-                    ? data.won_item
-                    : pool[Math.floor(Math.random() * pool.length)];
-
-                const slot = document.createElement("div");
-                slot.className = `roulette-slot r-${item.rarity}`;
-                slot.innerHTML = `
-                    ${renderMediaHTML(item, "media-small")}
-                    <div class="roulette-slot-name">${item.name}</div>
-                    <div style="font-size:10px; color:var(--orange-soft); font-weight:700;">${item.price} монет</div>
-                `;
-                track.appendChild(slot);
-            }
-
-            void track.offsetWidth;
-
-            const slotStep = 104;
-            const viewportCenter = viewport.offsetWidth / 2;
-            const winSlotCenter = 8 + (winIndex * slotStep) + 48;
-            const randomJitter = Math.floor(Math.random() * 56) - 28;
-            const targetOffset = winSlotCenter - viewportCenter + randomJitter;
-
-            if (tg && tg.HapticFeedback) {
-                try { tg.HapticFeedback.impactOccurred("medium"); } catch (e) {}
-            }
-
-            track.style.transition = "transform 4.2s cubic-bezier(0.12, 0.85, 0.22, 1)";
-            track.style.transform = `translateX(-${targetOffset}px)`;
-
-            setTimeout(async () => {
-                isSpinning = false;
-                titleEl.innerText = "Ваш выигрыш:";
-                resultEl.innerText = `${data.won_item.name} (${data.won_item.price} монет)`;
-
-                if (tg && tg.HapticFeedback) {
-                    try { tg.HapticFeedback.notificationOccurred("success"); } catch (e) {}
-                }
-
-                await loadState();
-            }, 4300);
-
+            const pool = caseObj.drops.map(d => state.all_items.find(i => i.id === d.item_id)).filter(Boolean);
+            playRouletteAnimation(pool, data.won_item);
         } catch (err) {
-            isRequesting = false;
-            isSpinning = false;
-            renderCases();
             showToast("Ошибка соединения с сервером", "error");
+            setBusy(false);
         }
     }
+
+    document.getElementById("openFreeCaseBtn").addEventListener("click", async () => {
+        if (isBusy || state.free_seconds_left > 0) return;
+        setBusy(true);
+        try {
+            const res = await fetch("/api/open_free_case", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ user_id: userId })
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                showToast(data.detail || "Кейс пока недоступен", "error");
+                setBusy(false);
+                return;
+            }
+            playRouletteAnimation(state.free_case_items, data.won_item);
+        } catch (err) {
+            showToast("Ошибка соединения с сервером", "error");
+            setBusy(false);
+        }
+    });
+
+    document.getElementById("redeemPromoBtn").addEventListener("click", async () => {
+        if (isBusy) return;
+        const input = document.getElementById("promoInput");
+        const code = input.value.trim();
+        if (!code) {
+            showToast("Введите промокод", "error");
+            return;
+        }
+        setBusy(true);
+        try {
+            const res = await fetch("/api/redeem_promo", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ user_id: userId, code: code })
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                showToast(data.detail || "Не удалось активировать промокод", "error");
+            } else {
+                input.value = "";
+                showToast(data.message, "success");
+                await loadState();
+            }
+        } catch (err) {
+            showToast("Ошибка соединения с сервером", "error");
+        } finally {
+            setBusy(false);
+        }
+    });
 
     function renderInventory() {
         const grid = document.getElementById("invGrid");
         grid.innerHTML = "";
         if (state.inventory.length === 0) {
-            grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:var(--muted); padding:24px; font-size:13px;">Инвентарь пуст. Откройте кейсы!</div>';
+            grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:var(--muted); padding:20px; font-size:13px;">Инвентарь пуст</div>';
             return;
         }
         state.inventory.forEach(item => {
             const card = document.createElement("div");
             card.className = `card r-${item.rarity}`;
             card.innerHTML = `
-                ${renderMediaHTML(item, "media-med")}
-                <div style="font-size:11px; font-weight:600; width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${item.name}</div>
-                <div class="price-tag">${item.price} монет</div>
+                ${renderMedia(item, true)}
+                <div style="font-size:11px; font-weight:600; word-break:break-word;">${item.name}</div>
+                <div class="price-tag">${item.price}</div>
                 <button type="button" class="btn btn-sell">Продать</button>
             `;
-            const btn = card.querySelector("button");
-            btn.addEventListener("click", () => sellItem(item.inv_id, btn));
+            const sellBtn = card.querySelector("button");
+            sellBtn.addEventListener("click", async () => {
+                if (sellBtn.disabled || isBusy) return;
+                sellBtn.disabled = true;
+                try {
+                    const res = await fetch("/api/sell_item", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ user_id: userId, inv_id: item.inv_id })
+                    });
+                    if (res.ok) {
+                        showToast(`Продано за ${item.price} монет`, "success");
+                        await loadState();
+                    }
+                } catch (err) {
+                    sellBtn.disabled = false;
+                }
+            });
             grid.appendChild(card);
         });
-    }
-
-    async function sellItem(invId, btn) {
-        if (isRequesting || isSpinning) return;
-        isRequesting = true;
-        if (btn) btn.disabled = true;
-        try {
-            const res = await fetch("/api/sell_item", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ user_id: userId, inv_id: invId })
-            });
-            if (res.ok) {
-                showToast("Предмет продан", "success");
-                await loadState();
-            }
-        } catch (err) {
-            showToast("Ошибка продажи", "error");
-        } finally {
-            isRequesting = false;
-        }
     }
 
     document.getElementById("modeItemBtn").addEventListener("click", () => setTargetMode("item"));
@@ -902,7 +886,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("targetCoinsInput").addEventListener("input", recalcUpgrade);
 
     function setTargetMode(mode) {
-        if (isSpinning || isRequesting) return;
+        if (isBusy) return;
         targetMode = mode;
         document.getElementById("modeItemBtn").classList.toggle("active", mode === "item");
         document.getElementById("modeCoinsBtn").classList.toggle("active", mode === "coins");
@@ -915,19 +899,19 @@ document.addEventListener("DOMContentLoaded", () => {
         const myBox = document.getElementById("upgMyItems");
         myBox.innerHTML = "";
         if (state.inventory.length === 0) {
-            myBox.innerHTML = '<div style="grid-column:1/-1; font-size:11px; color:var(--muted);">Нет предметов в инвентаре</div>';
+            myBox.innerHTML = '<div style="grid-column:1/-1; font-size:11px; color:var(--muted);">Нет предметов</div>';
         } else {
             state.inventory.forEach(item => {
                 const card = document.createElement("div");
                 card.className = `card clickable r-${item.rarity} ${selectedInvIds.has(item.inv_id) ? "selected" : ""}`;
-                card.style.padding = "7px 5px";
+                card.style.padding = "6px";
                 card.innerHTML = `
-                    ${renderMediaHTML(item, "media-small")}
-                    <div style="font-size:10px; width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${item.name}</div>
-                    <div style="font-size:10px; color:var(--orange-soft); font-weight:700;">${item.price}</div>
+                    ${renderMedia(item, true)}
+                    <div style="font-size:10px; word-break:break-word;">${item.name}</div>
+                    <div style="font-size:10px; color:#fdba74; font-weight:700;">${item.price}</div>
                 `;
                 card.addEventListener("click", () => {
-                    if (isSpinning || isRequesting) return;
+                    if (isBusy) return;
                     if (selectedInvIds.has(item.inv_id)) selectedInvIds.delete(item.inv_id);
                     else selectedInvIds.add(item.inv_id);
                     renderUpgraderLists();
@@ -942,14 +926,14 @@ document.addEventListener("DOMContentLoaded", () => {
         state.all_items.forEach(item => {
             const card = document.createElement("div");
             card.className = `card clickable r-${item.rarity} ${selectedTargetItemId === item.id ? "selected" : ""}`;
-            card.style.padding = "7px 5px";
+            card.style.padding = "6px";
             card.innerHTML = `
-                ${renderMediaHTML(item, "media-small")}
-                <div style="font-size:10px; width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${item.name}</div>
-                <div style="font-size:10px; color:var(--orange-soft); font-weight:700;">${item.price}</div>
+                ${renderMedia(item, true)}
+                <div style="font-size:10px; word-break:break-word;">${item.name}</div>
+                <div style="font-size:10px; color:#fdba74; font-weight:700;">${item.price}</div>
             `;
             card.addEventListener("click", () => {
-                if (isSpinning || isRequesting) return;
+                if (isBusy) return;
                 selectedTargetItemId = item.id;
                 renderUpgraderLists();
                 recalcUpgrade();
@@ -983,19 +967,16 @@ document.addEventListener("DOMContentLoaded", () => {
             chance = Math.max(1, Math.min(80, chance));
             chanceEl.innerText = chance + "%";
             const deg = (chance / 100) * 360;
-            wheel.style.background = `conic-gradient(#2589f5 0deg ${deg}deg, #172744 ${deg}deg 360deg)`;
+            wheel.style.background = `conic-gradient(#2589f5 0deg ${deg}deg, #172542 ${deg}deg 360deg)`;
         } else {
             chanceEl.innerText = "0%";
-            wheel.style.background = "#172744";
+            wheel.style.background = "#172542";
         }
     }
 
-    const upgSpinBtn = document.getElementById("upgSpinBtn");
-    upgSpinBtn.addEventListener("click", async () => {
-        // Мгновенная блокировка кнопки до начала fetch-запроса
-        if (isSpinning || isRequesting) return;
-        isRequesting = true;
-        upgSpinBtn.disabled = true;
+    document.getElementById("upgSpinBtn").addEventListener("click", async () => {
+        if (isBusy) return;
+        setBusy(true);
 
         const coinsBet = parseInt(document.getElementById("upgCoinsInput").value) || 0;
         const targetCoins = parseInt(document.getElementById("targetCoinsInput").value) || 0;
@@ -1019,17 +1000,14 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await res.json();
 
             if (!res.ok) {
-                isRequesting = false;
-                upgSpinBtn.disabled = false;
                 statusEl.style.color = "var(--danger)";
                 statusEl.innerText = data.detail || "Ошибка апгрейда";
+                setBusy(false);
                 return;
             }
 
-            isSpinning = true;
-            isRequesting = false;
             statusEl.style.color = "var(--muted)";
-            statusEl.innerText = "Выполняется улучшение...";
+            statusEl.innerText = "Крутим...";
 
             const winDeg = (data.chance / 100) * 360;
             const targetAngle = data.win
@@ -1042,25 +1020,22 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("wheel").style.transform = `rotate(${rotation}deg)`;
 
             setTimeout(async () => {
-                isSpinning = false;
-                upgSpinBtn.disabled = false;
                 document.getElementById("upgCoinsInput").value = "";
                 selectedInvIds.clear();
 
                 if (data.win) {
-                    statusEl.style.color = "var(--cyan-soft)";
+                    statusEl.style.color = "var(--blue)";
                     statusEl.innerText = "Успех! Награда получена";
                 } else {
                     statusEl.style.color = "var(--danger)";
-                    statusEl.innerText = "Неудача! Попробуйте снова";
+                    statusEl.innerText = "Неудача! Ставка сгорела";
                 }
                 await loadState();
+                setBusy(false);
             }, 3250);
         } catch (err) {
-            isRequesting = false;
-            isSpinning = false;
-            upgSpinBtn.disabled = false;
             showToast("Ошибка соединения с сервером", "error");
+            setBusy(false);
         }
     });
 
