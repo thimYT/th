@@ -185,13 +185,133 @@ ITEMS_DB = {
             "fallback": "🐉"
         },
     21: {
-                "id": 21,
-                "name": "Buffalino",
-                "price": 37,
-                "rarity": "rare",
-                "image": "/images/item21.png",
-                "fallback": "🐉"
-            },
+            "id": 21,
+            "name": "Buffalino",
+            "price": 37,
+            "rarity": "rare",
+            "image": "/images/item21.png",
+            "fallback": "🐉"
+        },
+    22: {
+            "id": 22,
+            "name": "Honey Bear",
+            "price": 39,
+            "rarity": "rare",
+            "image": "/images/item22.png",
+            "fallback": "🐉"
+        },
+    23: {
+            "id": 23,
+            "name": "Tang Tang",
+            "price": 40,
+            "rarity": "epic",
+            "image": "/images/item23.png",
+            "fallback": "🐉"
+        },
+    24: {
+            "id": 24,
+            "name": "Coco And Mango",
+            "price": 41,
+            "rarity": "epic",
+            "image": "/images/item24.png",
+            "fallback": "🐉"
+        },
+    25: {
+            "id": 25,
+            "name": "Ketupat Kepat",
+            "price": 43,
+            "rarity": "epic",
+            "image": "/images/item25.png",
+            "fallback": "🐉"
+        },
+    26: {
+            "id": 26,
+            "name": "La Taco",
+            "price": 44,
+            "rarity": "epic",
+            "image": "/images/item26.png",
+            "fallback": "🐉"
+        },
+    27: {
+            "id": 27,
+            "name": "Tic Tac Sahur",
+            "price": 45,
+            "rarity": "epic",
+            "image": "/images/item27.png",
+            "fallback": "🐉"
+        },
+    28: {
+            "id": 28,
+            "name": "Los Puggies",
+            "price": 46,
+            "rarity": "epic",
+            "image": "/images/item28.png",
+            "fallback": "🐉"
+        },
+    29: {
+            "id": 29,
+            "name": "Orcaledon",
+            "price": 47,
+            "rarity": "epic",
+            "image": "/images/item29.png",
+            "fallback": "🐉"
+        },
+    30: {
+            "id": 30,
+            "name": "Ketchuru",
+            "price": 48,
+            "rarity": "epic",
+            "image": "/images/item30.png",
+            "fallback": "🐉"
+        },
+    31: {
+            "id": 31,
+            "name": "Los Tangsitos",
+            "price": 49,
+            "rarity": "epic",
+            "image": "/images/item31.png",
+            "fallback": "🐉"
+        },
+    32: {
+            "id": 32,
+            "name": "Chicli Chicla",
+            "price": 50,
+            "rarity": "epic",
+            "image": "/images/item32.png",
+            "fallback": "🐉"
+        },
+    33: {
+            "id": 33,
+            "name": "Lavadorito",
+            "price": 51,
+            "rarity": "epic",
+            "image": "/images/item33.png",
+            "fallback": "🐉"
+        },
+    34: {
+            "id": 34,
+            "name": "Gold Gold Gold",
+            "price": 52,
+            "rarity": "epic",
+            "image": "/images/item34.png",
+            "fallback": "🐉"
+        },
+    35: {
+            "id": 35,
+            "name": "Rosetti",
+            "price": 53,
+            "rarity": "epic",
+            "image": "/images/item35.png",
+            "fallback": "🐉"
+        },
+    36: {
+            "id": 36,
+            "name": "Garama",
+            "price": 55,
+            "rarity": "legendary",
+            "image": "/images/item36.png",
+            "fallback": "🐉"
+        },
 }
 
 CASES_DB = {
@@ -218,7 +338,7 @@ CASES_DB = {
         "fallback": "🧰",
         "drops": [
             {"item_id": 8, "weight": 52.5},
-            {"item_id": 14, "weight": 47.5}
+            {"item_id": 15, "weight": 47.5}
         ]
     },
     3: {
