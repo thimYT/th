@@ -23,300 +23,47 @@ ADMIN_CHAT_ID = os.getenv("ADMIN_CHAT_ID", "").strip()
 DB_FILE_PATH = "database.json"
 
 ITEMS_DB = {
-    1: {
-        "id": 1,
-        "name": "Gub",
-        "price": 5,
-        "rarity": "common",
-        "image": "/images/item1.png",
-        "fallback": "🗡️"
-    },
-    2: {
-        "id": 2,
-        "name": "Sir Mangus",
-        "price": 7,
-        "rarity": "common",
-        "image": "/images/item2.png",
-        "fallback": "🔫"
-    },
-    3: {
-        "id": 3,
-        "name": "Los Mobilis",
-        "price": 9,
-        "rarity": "common",
-        "image": "/images/item3.png",
-        "fallback": "🪖"
-    },
-    4: {
-        "id": 4,
-        "name": "La Grande",
-        "price": 12,
-        "rarity": "common",
-        "image": "/images/item4.png",
-        "fallback": "🎯"
-    },
-    5: {
-        "id": 5,
-        "name": "Los 67",
-        "price": 14,
-        "rarity": "common",
-        "image": "/images/item5.png",
-        "fallback": "⚔️"
-    },
-    6: {
-        "id": 6,
-        "name": "Bacuru",
-        "price": 16,
-        "rarity": "common",
-        "image": "/images/item6.png",
-        "fallback": "🐉"
-    },
-    7: {
-            "id": 7,
-            "name": "Bananito",
-            "price": 18,
-            "rarity": "common",
-            "image": "/images/item7.png",
-            "fallback": "🐉"
-        },
-    8: {
-            "id": 8,
-            "name": "Money Cat",
-            "price": 19,
-            "rarity": "common",
-            "image": "/images/item8.png",
-            "fallback": "🐉"
-        },
-    9: {
-            "id": 9,
-            "name": "Mariachi",
-            "price": 20,
-            "rarity": "rare",
-            "image": "/images/item9.png",
-            "fallback": "🐉"
-        },
-    10: {
-            "id": 10,
-            "name": "Nuclearo",
-            "price": 23,
-            "rarity": "rare",
-            "image": "/images/item10.png",
-            "fallback": "🐉"
-        },
-    11: {
-            "id": 11,
-            "name": "Gulini",
-            "price": 25,
-            "rarity": "rare",
-            "image": "/images/item11.png",
-            "fallback": "🐉"
-        },
-    12: {
-            "id": 12,
-            "name": "Dj Panda",
-            "price": 27,
-            "rarity": "rare",
-            "image": "/images/item12.png",
-            "fallback": "🐉"
-        },
-    13: {
-            "id": 13,
-            "name": "Los Candies",
-            "price": 28,
-            "rarity": "rare",
-            "image": "/images/item13.png",
-            "fallback": "🐉"
-        },
-    14: {
-            "id": 14,
-            "name": "Mieteteira",
-            "price": 29,
-            "rarity": "rare",
-            "image": "/images/item14.png",
-            "fallback": "🐉"
-        },
-    15: {
-            "id": 15,
-            "name": "Money Puggy",
-            "price": 30,
-            "rarity": "rare",
-            "image": "/images/item15.png",
-            "fallback": "🐉"
-        },
-    16: {
-            "id": 16,
-            "name": "Noodle Poodle",
-            "price": 31,
-            "rarity": "rare",
-            "image": "/images/item16.png",
-            "fallback": "🐉"
-
-    },
-    17: {
-            "id": 17,
-            "name": "Oni Panda",
-            "price": 32,
-            "rarity": "rare",
-            "image": "/images/item17.png",
-            "fallback": "🐉"
-        },
-    18: {
-            "id": 18,
-            "name": "Balloon Baboon",
-            "price": 34,
-            "rarity": "rare",
-            "image": "/images/item18.png",
-            "fallback": "🐉"
-        },
-    19: {
-            "id": 19,
-            "name": "Bat-In-The-Box",
-            "price": 35,
-            "rarity": "rare",
-            "image": "/images/item19.png",
-            "fallback": "🐉"
-        },
-    20: {
-            "id": 20,
-            "name": "Esok Sekolah",
-            "price": 36,
-            "rarity": "rare",
-            "image": "/images/item20.png",
-            "fallback": "🐉"
-        },
-    21: {
-            "id": 21,
-            "name": "Buffalino",
-            "price": 37,
-            "rarity": "rare",
-            "image": "/images/item21.png",
-            "fallback": "🐉"
-        },
-    22: {
-            "id": 22,
-            "name": "Honey Bear",
-            "price": 39,
-            "rarity": "rare",
-            "image": "/images/item22.png",
-            "fallback": "🐉"
-        },
-    23: {
-            "id": 23,
-            "name": "Tang Tang",
-            "price": 40,
-            "rarity": "epic",
-            "image": "/images/item23.png",
-            "fallback": "🐉"
-        },
-    24: {
-            "id": 24,
-            "name": "Coco And Mango",
-            "price": 41,
-            "rarity": "epic",
-            "image": "/images/item24.png",
-            "fallback": "🐉"
-        },
-    25: {
-            "id": 25,
-            "name": "Ketupat Kepat",
-            "price": 43,
-            "rarity": "epic",
-            "image": "/images/item25.png",
-            "fallback": "🐉"
-        },
-    26: {
-            "id": 26,
-            "name": "La Taco",
-            "price": 44,
-            "rarity": "epic",
-            "image": "/images/item26.png",
-            "fallback": "🐉"
-        },
-    27: {
-            "id": 27,
-            "name": "Tic Tac Sahur",
-            "price": 45,
-            "rarity": "epic",
-            "image": "/images/item27.png",
-            "fallback": "🐉"
-        },
-    28: {
-            "id": 28,
-            "name": "Los Puggies",
-            "price": 46,
-            "rarity": "epic",
-            "image": "/images/item28.png",
-            "fallback": "🐉"
-        },
-    29: {
-            "id": 29,
-            "name": "Orcaledon",
-            "price": 47,
-            "rarity": "epic",
-            "image": "/images/item29.png",
-            "fallback": "🐉"
-        },
-    30: {
-            "id": 30,
-            "name": "Ketchuru",
-            "price": 48,
-            "rarity": "epic",
-            "image": "/images/item30.png",
-            "fallback": "🐉"
-        },
-    31: {
-            "id": 31,
-            "name": "Los Tangsitos",
-            "price": 49,
-            "rarity": "epic",
-            "image": "/images/item31.png",
-            "fallback": "🐉"
-        },
-    32: {
-            "id": 32,
-            "name": "Chicli Chicla",
-            "price": 50,
-            "rarity": "epic",
-            "image": "/images/item32.png",
-            "fallback": "🐉"
-        },
-    33: {
-            "id": 33,
-            "name": "Lavadorito",
-            "price": 51,
-            "rarity": "epic",
-            "image": "/images/item33.png",
-            "fallback": "🐉"
-        },
-    34: {
-            "id": 34,
-            "name": "Gold Gold Gold",
-            "price": 52,
-            "rarity": "epic",
-            "image": "/images/item34.png",
-            "fallback": "🐉"
-        },
-    35: {
-            "id": 35,
-            "name": "Rosetti",
-            "price": 53,
-            "rarity": "epic",
-            "image": "/images/item35.png",
-            "fallback": "🐉"
-        },
-    36: {
-            "id": 36,
-            "name": "Garama",
-            "price": 55,
-            "rarity": "legendary",
-            "image": "/images/item36.png",
-            "fallback": "🐉"
-        },
+    1: {"id": 1, "name": "Gub", "price": 5, "rarity": "common", "image": "/images/item1.png", "fallback": "🗡️"},
+    2: {"id": 2, "name": "Sir Mangus", "price": 7, "rarity": "common", "image": "/images/item2.png", "fallback": "🔫"},
+    3: {"id": 3, "name": "Los Mobilis", "price": 9, "rarity": "common", "image": "/images/item3.png", "fallback": "🪖"},
+    4: {"id": 4, "name": "La Grande", "price": 12, "rarity": "common", "image": "/images/item4.png", "fallback": "🎯"},
+    5: {"id": 5, "name": "Los 67", "price": 14, "rarity": "common", "image": "/images/item5.png", "fallback": "⚔️"},
+    6: {"id": 6, "name": "Bacuru", "price": 16, "rarity": "common", "image": "/images/item6.png", "fallback": "🐉"},
+    7: {"id": 7, "name": "Bananito", "price": 18, "rarity": "common", "image": "/images/item7.png", "fallback": "🐉"},
+    8: {"id": 8, "name": "Money Cat", "price": 19, "rarity": "common", "image": "/images/item8.png", "fallback": "🐉"},
+    9: {"id": 9, "name": "Mariachi", "price": 20, "rarity": "rare", "image": "/images/item9.png", "fallback": "🐉"},
+    10: {"id": 10, "name": "Nuclearo", "price": 23, "rarity": "rare", "image": "/images/item10.png", "fallback": "🐉"},
+    11: {"id": 11, "name": "Gulini", "price": 25, "rarity": "rare", "image": "/images/item11.png", "fallback": "🐉"},
+    12: {"id": 12, "name": "Dj Panda", "price": 27, "rarity": "rare", "image": "/images/item12.png", "fallback": "🐉"},
+    13: {"id": 13, "name": "Los Candies", "price": 28, "rarity": "rare", "image": "/images/item13.png", "fallback": "🐉"},
+    14: {"id": 14, "name": "Mieteteira", "price": 29, "rarity": "rare", "image": "/images/item14.png", "fallback": "🐉"},
+    15: {"id": 15, "name": "Money Puggy", "price": 30, "rarity": "rare", "image": "/images/item15.png", "fallback": "🐉"},
+    16: {"id": 16, "name": "Noodle Poodle", "price": 31, "rarity": "rare", "image": "/images/item16.png", "fallback": "🐉"},
+    17: {"id": 17, "name": "Oni Panda", "price": 32, "rarity": "rare", "image": "/images/item17.png", "fallback": "🐉"},
+    18: {"id": 18, "name": "Balloon Baboon", "price": 34, "rarity": "rare", "image": "/images/item18.png", "fallback": "🐉"},
+    19: {"id": 19, "name": "Bat-In-The-Box", "price": 35, "rarity": "rare", "image": "/images/item19.png", "fallback": "🐉"},
+    20: {"id": 20, "name": "Esok Sekolah", "price": 36, "rarity": "rare", "image": "/images/item20.png", "fallback": "🐉"},
+    21: {"id": 21, "name": "Buffalino", "price": 37, "rarity": "rare", "image": "/images/item21.png", "fallback": "🐉"},
+    22: {"id": 22, "name": "Honey Bear", "price": 39, "rarity": "rare", "image": "/images/item22.png", "fallback": "🐉"},
+    23: {"id": 23, "name": "Tang Tang", "price": 40, "rarity": "epic", "image": "/images/item23.png", "fallback": "🐉"},
+    24: {"id": 24, "name": "Coco And Mango", "price": 41, "rarity": "epic", "image": "/images/item24.png", "fallback": "🐉"},
+    25: {"id": 25, "name": "Ketupat Kepat", "price": 43, "rarity": "epic", "image": "/images/item25.png", "fallback": "🐉"},
+    26: {"id": 26, "name": "La Taco", "price": 44, "rarity": "epic", "image": "/images/item26.png", "fallback": "🐉"},
+    27: {"id": 27, "name": "Tic Tac Sahur", "price": 45, "rarity": "epic", "image": "/images/item27.png", "fallback": "🐉"},
+    28: {"id": 28, "name": "Los Puggies", "price": 46, "rarity": "epic", "image": "/images/item28.png", "fallback": "🐉"},
+    29: {"id": 29, "name": "Orcaledon", "price": 47, "rarity": "epic", "image": "/images/item29.png", "fallback": "🐉"},
+    30: {"id": 30, "name": "Ketchuru", "price": 48, "rarity": "epic", "image": "/images/item30.png", "fallback": "🐉"},
+    31: {"id": 31, "name": "Los Tangsitos", "price": 49, "rarity": "epic", "image": "/images/item31.png", "fallback": "🐉"},
+    32: {"id": 32, "name": "Chicli Chicla", "price": 50, "rarity": "epic", "image": "/images/item32.png", "fallback": "🐉"},
+    33: {"id": 33, "name": "Lavadorito", "price": 51, "rarity": "epic", "image": "/images/item33.png", "fallback": "🐉"},
+    34: {"id": 34, "name": "Gold Gold Gold", "price": 52, "rarity": "epic", "image": "/images/item34.png", "fallback": "🐉"},
+    35: {"id": 35, "name": "Rosetti", "price": 53, "rarity": "epic", "image": "/images/item35.png", "fallback": "🐉"},
+    36: {"id": 36, "name": "Garama", "price": 55, "rarity": "legendary", "image": "/images/item36.png", "fallback": "🐉"},
 }
 
 CASES_DB = {
     1: {
-         "id": 1,
+        "id": 1,
         "name": "Бомжак",
         "price": 10,
         "image": "/images/case1.png",
@@ -355,6 +102,7 @@ CASES_DB = {
         ]
     }
 }
+
 FREE_CASE_DROPS = [
     {"item_id": 1, "weight": 65},
     {"item_id": 2, "weight": 25},
@@ -363,23 +111,15 @@ FREE_CASE_DROPS = [
 ]
 FREE_CASE_COOLDOWN = 12 * 3600
 
+ACTIVE_CRASH_GAMES = {}
+
 def get_default_db():
     return {
         "users": {},
         "next_inv_id": 1,
         "promocodes": {
-            "WELCOME500": {
-                "stock": 100,
-                "type": "coins",
-                "amount": 500,
-                "used_by": []
-            },
-            "GIFTKNIFE": {
-                "stock": 10,
-                "type": "item",
-                "item_id": 1,
-                "used_by": []
-            }
+            "WELCOME500": {"stock": 100, "type": "coins", "amount": 500, "used_by": []},
+            "GIFTKNIFE": {"stock": 10, "type": "item", "item_id": 1, "used_by": []}
         }
     }
 
@@ -418,10 +158,7 @@ def github_save_db(db_data, sha):
 
     url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{DB_FILE_PATH}"
     encoded = base64.b64encode(json.dumps(db_data, ensure_ascii=False, indent=2).encode("utf-8")).decode("utf-8")
-    payload = {
-        "message": "Update game database",
-        "content": encoded
-    }
+    payload = {"message": "Update game database", "content": encoded}
     if sha:
         payload["sha"] = sha
 
@@ -483,10 +220,19 @@ class TopupReq(BaseModel):
 class UpgradeReq(BaseModel):
     user_id: str
     inv_ids: List[int]
-    coins_bet: int
+    coins_bet: float
     target_type: str
     target_item_id: Optional[int] = None
-    target_coins: Optional[int] = None
+    target_coins: Optional[float] = None
+
+class CrashStartReq(BaseModel):
+    user_id: str
+    inv_ids: List[int]
+    coins_bet: float
+
+class CrashCashoutReq(BaseModel):
+    user_id: str
+    multiplier: float
 
 @app.get("/")
 def serve_frontend():
@@ -511,11 +257,10 @@ def get_state(user_id: str):
     now = int(time.time())
     next_free_at = user.get("last_free_case", 0) + FREE_CASE_COOLDOWN
     free_seconds_left = max(0, next_free_at - now)
-
     free_case_items = [ITEMS_DB[d["item_id"]] for d in FREE_CASE_DROPS if d["item_id"] in ITEMS_DB]
 
     return {
-        "balance": user["balance"],
+        "balance": round(user["balance"], 2),
         "inventory": inv_list,
         "cases": list(CASES_DB.values()),
         "all_items": list(ITEMS_DB.values()),
@@ -529,11 +274,9 @@ def topup_request(req: TopupReq):
         raise HTTPException(status_code=400, detail="Токен бота не настроен на сервере")
 
     send_tg_message(req.user_id, "Для пополнения с вами свяжется первый освободившийся модератор.")
-
     user_tag = f"@{req.username}" if req.username else f"{req.first_name} (ID: {req.user_id})"
     if ADMIN_CHAT_ID:
         send_tg_message(ADMIN_CHAT_ID, f"Пользователь {user_tag} хочет пополнить баланс. Направьте к нему модератора.")
-
     return {"ok": True}
 
 @app.post("/api/open_case")
@@ -552,7 +295,7 @@ def open_case(req: OpenCaseReq):
     weights = [d["weight"] for d in case["drops"]]
     won_item_id = random.choices(population, weights=weights, k=1)[0]
 
-    user["balance"] -= case["price"]
+    user["balance"] = round(user["balance"] - case["price"], 2)
     inv_id = db["next_inv_id"]
     db["next_inv_id"] += 1
     user["inventory"].append({"inv_id": inv_id, "item_id": won_item_id})
@@ -610,8 +353,8 @@ def redeem_promo(req: PromoReq):
     reward_text = ""
 
     if promo_type == "coins":
-        amount = int(promo.get("amount", 0))
-        user["balance"] += amount
+        amount = float(promo.get("amount", 0))
+        user["balance"] = round(user["balance"] + amount, 2)
         reward_text = f"+{amount} монет"
     elif promo_type == "item":
         item_id = int(promo.get("item_id", 0))
@@ -648,7 +391,7 @@ def sell_item(req: SellItemReq):
 
     price = ITEMS_DB[item_id]["price"]
     user["inventory"].pop(target_idx)
-    user["balance"] += price
+    user["balance"] = round(user["balance"] + price, 2)
 
     github_save_db(db, sha)
     return {"sold_for": price}
@@ -690,7 +433,7 @@ def do_upgrade(req: UpgradeReq):
     chance = round((total_bet / target_value) * 92, 2)
     chance = max(1.0, min(80.0, chance))
 
-    user["balance"] -= req.coins_bet
+    user["balance"] = round(user["balance"] - req.coins_bet, 2)
     selected_set = set(req.inv_ids)
     user["inventory"] = [e for e in user["inventory"] if e["inv_id"] not in selected_set]
 
@@ -703,7 +446,107 @@ def do_upgrade(req: UpgradeReq):
             db["next_inv_id"] += 1
             user["inventory"].append({"inv_id": inv_id, "item_id": req.target_item_id})
         else:
-            user["balance"] += target_value
+            user["balance"] = round(user["balance"] + target_value, 2)
 
     github_save_db(db, sha)
     return {"win": is_win, "chance": chance}
+
+def generate_crash_point():
+    r = random.random()
+    if r < 0.04:
+        return 1.00
+    crash = 0.96 / (1.0 - r)
+    return round(min(crash, 100.0), 2)
+
+@app.post("/api/crash/start")
+def crash_start(req: CrashStartReq):
+    if req.coins_bet < 0:
+        raise HTTPException(status_code=400, detail="Некорректная ставка монет")
+
+    db, sha = github_load_db()
+    user = ensure_user(db, req.user_id)
+
+    if req.coins_bet > user["balance"]:
+        raise HTTPException(status_code=400, detail="Недостаточно монет")
+
+    inv_map = {entry["inv_id"]: entry["item_id"] for entry in user["inventory"]}
+    bet_items = []
+    items_total_value = 0
+
+    for inv_id in req.inv_ids:
+        if inv_id not in inv_map or inv_map[inv_id] not in ITEMS_DB:
+            raise HTTPException(status_code=400, detail="Ошибка проверки предметов инвентаря")
+        item_id = inv_map[inv_id]
+        items_total_value += ITEMS_DB[item_id]["price"]
+        bet_items.append({"inv_id": inv_id, "item_id": item_id})
+
+    total_bet = round(items_total_value + req.coins_bet, 2)
+    if total_bet <= 0:
+        raise HTTPException(status_code=400, detail="Сделайте ставку монетами или вещами")
+
+    user["balance"] = round(user["balance"] - req.coins_bet, 2)
+    selected_set = set(req.inv_ids)
+    user["inventory"] = [e for e in user["inventory"] if e["inv_id"] not in selected_set]
+    github_save_db(db, sha)
+
+    crash_point = generate_crash_point()
+    ACTIVE_CRASH_GAMES[req.user_id] = {
+        "crash_point": crash_point,
+        "bet_items": bet_items,
+        "items_value": items_total_value,
+        "coins_bet": req.coins_bet,
+        "total_bet": total_bet
+    }
+
+    return {"crash_point": crash_point, "total_bet": total_bet}
+
+@app.post("/api/crash/cashout")
+def crash_cashout(req: CrashCashoutReq):
+    game = ACTIVE_CRASH_GAMES.pop(req.user_id, None)
+    if not game:
+        raise HTTPException(status_code=400, detail="Активная игра не найдена или ракета уже взорвалась")
+
+    if req.multiplier < 1.0 or req.multiplier > game["crash_point"]:
+        raise HTTPException(status_code=400, detail="Ракета уже взорвалась!")
+
+    db, sha = github_load_db()
+    user = ensure_user(db, req.user_id)
+
+    total_win_value = round(game["total_bet"] * req.multiplier, 2)
+    max_item_price = max(item["price"] for item in ITEMS_DB.values())
+
+    won_item = None
+    returned_items = []
+    coins_added = 0.0
+
+    if total_win_value > max_item_price:
+        for item_entry in game["bet_items"]:
+            user["inventory"].append(item_entry)
+            returned_items.append(ITEMS_DB[item_entry["item_id"]])
+
+        diff = round(total_win_value - game["items_value"], 2)
+        user["balance"] = round(user["balance"] + diff, 2)
+        coins_added = diff
+    else:
+        affordable_items = [item for item in ITEMS_DB.values() if item["price"] <= total_win_value]
+        if affordable_items:
+            best_item = max(affordable_items, key=lambda x: x["price"])
+            inv_id = db["next_inv_id"]
+            db["next_inv_id"] += 1
+            user["inventory"].append({"inv_id": inv_id, "item_id": best_item["id"]})
+            won_item = best_item
+
+            remainder = round(total_win_value - best_item["price"], 2)
+            user["balance"] = round(user["balance"] + remainder, 2)
+            coins_added = remainder
+        else:
+            user["balance"] = round(user["balance"] + total_win_value, 2)
+            coins_added = total_win_value
+
+    github_save_db(db, sha)
+    return {
+        "total_win": total_win_value,
+        "won_item": won_item,
+        "returned_items": returned_items,
+        "coins_added": coins_added
+    }
