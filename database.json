@@ -18,7 +18,7 @@
       "inventory": []
     },
     "8450028899": {
-      "balance": 20039,
+      "balance": 20029,
       "inventory": [
         {
           "inv_id": 37,
@@ -35,6 +35,10 @@
         {
           "inv_id": 80,
           "item_id": 4
+        },
+        {
+          "inv_id": 81,
+          "item_id": 5
         }
       ]
     },
@@ -68,5 +72,5 @@
       ]
     }
   },
-  "next_inv_id": 81
+  "next_inv_id": 82
 }
