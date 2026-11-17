@@ -84,5 +84,19 @@
       ]
     }
   },
-  "next_inv_id": 97
+  "next_inv_id": 97,
+  "promocodes": {
+    "BRAINDROP": {
+      "stock": 3,
+      "type": "item",
+      "item_id": 5,
+      "used_by": []
+    },
+     "WELCOME": {
+      "stock": 1,
+      "type": "coins",
+      "amount": 500,
+      "used_by": []
+    }
+  }
 }
