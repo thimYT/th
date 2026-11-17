@@ -14,7 +14,7 @@
       ]
     },
     "1789157813": {
-      "balance": 0,
+      "balance": 500.0,
       "inventory": [],
       "last_free_case": 1794919147
     },
@@ -136,11 +136,11 @@
       ]
     },
     "WELCOME": {
-      "stock": 1,
+      "stock": 0,
       "type": "coins",
       "amount": 500,
       "used_by": [
-        
+        "1789157813"
       ]
     }
   }
