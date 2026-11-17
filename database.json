@@ -221,11 +221,16 @@
     },
     "8007781318": {
       "balance": 1105.2,
-      "inventory": [],
+      "inventory": [
+        {
+          "inv_id": 508,
+          "item_id": 43
+        }
+      ],
       "last_free_case": 0
     }
   },
-  "next_inv_id": 508,
+  "next_inv_id": 509,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
