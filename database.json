@@ -67,10 +67,6 @@
       "balance": 2,
       "inventory": [
         {
-          "inv_id": 91,
-          "item_id": 20
-        },
-        {
           "inv_id": 180,
           "item_id": 21
         },
