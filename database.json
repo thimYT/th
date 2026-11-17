@@ -19,7 +19,7 @@
       "last_free_case": 1794919147
     },
     "8450028899": {
-      "balance": 14829,
+      "balance": 14859,
       "inventory": [
         {
           "inv_id": 199,
@@ -88,10 +88,6 @@
         {
           "inv_id": 270,
           "item_id": 36
-        },
-        {
-          "inv_id": 271,
-          "item_id": 15
         }
       ],
       "last_free_case": 1794927273
