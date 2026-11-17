@@ -23,13 +23,18 @@
       ]
     },
     "8450028899": {
-      "balance": 5470,
-      "inventory": []
+      "balance": 3970,
+      "inventory": [
+        {
+          "inv_id": 31,
+          "item_id": 3
+        }
+      ]
     },
     "player_355713": {
       "balance": 1000,
       "inventory": []
     }
   },
-  "next_inv_id": 31
+  "next_inv_id": 32
 }
