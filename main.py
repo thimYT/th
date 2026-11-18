@@ -616,3 +616,83 @@ def crash_cashout(req: CrashCashoutReq):
         "returned_items": returned_items,
         "coins_added": coins_added
     }
+
+
+DICE_COLORS = ["red", "orange", "yellow", "green", "blue", "purple"]
+
+class ColorDiceReq(BaseModel):
+    user_id: str
+    inv_ids: List[int]
+    coins_bet: float
+    chosen_color: str
+    dice_count: int = 4
+
+def get_color_dice_multiplier(dice_count: int, matches: int) -> float:
+    # 0 или чётное число совпадений (2, 4, 6, 8, 10, 12) = проигрыш
+    if matches <= 0 or matches % 2 == 0:
+        return 0.0
+    # Нечётное число совпадений (1, 3, 5, 7, 9, 11) = победа!
+    # Чем больше совпадений, тем выше множитель
+    multipliers_table = {
+        1: 1.85,
+        3: 5.5,
+        5: 18.0,
+        7: 60.0,
+        9: 200.0,
+        11: 750.0
+    }
+    return multipliers_table.get(matches, 1.85)
+
+@app.post("/api/colordice/roll")
+def play_color_dice(req: ColorDiceReq):
+    color = req.chosen_color.strip().lower()
+    if color not in DICE_COLORS:
+        raise HTTPException(status_code=400, detail="Выберите один из 6 цветов")
+    if req.dice_count < 3 or req.dice_count > 12:
+        raise HTTPException(status_code=400, detail="Выберите от 3 до 12 кубиков")
+    if req.coins_bet < 0:
+        raise HTTPException(status_code=400, detail="Некорректная ставка монет")
+
+    db, sha = github_load_db()
+    user = ensure_user(db, req.user_id)
+
+    if req.coins_bet > user["balance"]:
+        raise HTTPException(status_code=400, detail="Недостаточно монет")
+
+    inv_map = {entry["inv_id"]: entry["item_id"] for entry in user["inventory"]}
+    items_total_value = 0
+    for inv_id in req.inv_ids:
+        if inv_id not in inv_map or inv_map[inv_id] not in ITEMS_DB:
+            raise HTTPException(status_code=400, detail="Ошибка проверки предметов инвентаря")
+        items_total_value += ITEMS_DB[inv_map[inv_id]]["price"]
+
+    total_bet = round(items_total_value + req.coins_bet, 2)
+    if total_bet <= 0:
+        raise HTTPException(status_code=400, detail="Сделайте ставку монетами или вещами")
+
+    user["balance"] = round(user["balance"] - req.coins_bet, 2)
+    selected_set = set(req.inv_ids)
+    user["inventory"] = [e for e in user["inventory"] if e["inv_id"] not in selected_set]
+
+    # Бросаем N кубиков, каждый показывает случайный из 6 цветов
+    rolled_colors = [random.choice(DICE_COLORS) for _ in range(req.dice_count)]
+    matches = sum(1 for c in rolled_colors if c == color)
+    multiplier = get_color_dice_multiplier(req.dice_count, matches)
+
+    is_win = multiplier > 0
+    win_amount = 0.0
+    if is_win:
+        win_amount = round(total_bet * multiplier, 2)
+        user["balance"] = round(user["balance"] + win_amount, 2)
+
+    github_save_db(db, sha)
+    return {
+        "win": is_win,
+        "rolled_colors": rolled_colors,
+        "chosen_color": color,
+        "matches": matches,
+        "dice_count": req.dice_count,
+        "multiplier": multiplier,
+        "win_amount": win_amount,
+        "total_bet": total_bet
+    }
