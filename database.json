@@ -137,7 +137,7 @@
       "inventory": []
     },
     "8980661701": {
-      "balance": 9,
+      "balance": 9.0,
       "inventory": [
         {
           "inv_id": 553,
@@ -146,14 +146,6 @@
         {
           "inv_id": 554,
           "item_id": 40
-        },
-        {
-          "inv_id": 555,
-          "item_id": 3
-        },
-        {
-          "inv_id": 556,
-          "item_id": 8
         }
       ],
       "last_free_case": 0
