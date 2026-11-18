@@ -161,6 +161,11 @@
         }
       ],
       "last_free_case": 0
+    },
+    "457827976": {
+      "balance": 1000,
+      "inventory": [],
+      "last_free_case": 0
     }
   },
   "next_inv_id": 572,
