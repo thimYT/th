@@ -202,7 +202,26 @@
             padding: 3px 6px; border-radius: 6px; margin-bottom: 6px; display: inline-block;
         }
 
-        /* РУЛЕТКА АПГРЕЙДЕРА */
+        /* COLOR DICE BY COLOR MATCHES */
+.dice-arena{background:radial-gradient(circle at center,rgba(41,121,255,.18) 0%,rgba(20,15,12,.95) 100%);border:1px solid var(--card-border);border-radius:18px;padding:18px 12px;display:flex;flex-direction:column;align-items:center;margin-bottom:16px}
+.dice-board{display:grid;grid-template-columns:repeat(auto-fit,minmax(64px,1fr));gap:10px;width:100%;max-width:460px;margin-bottom:14px}
+.mini-dice{aspect-ratio:1/1;border-radius:14px;border:2px solid rgba(255,255,255,.2);display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:900;font-size:11px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.85);background:rgba(44,30,24,.9);transition:transform .3s ease,box-shadow .3s ease}
+.mini-dice.rolling{animation:diceShake .22s infinite alternate ease-in-out}
+@keyframes diceShake{0%{transform:rotate(-10deg) scale(.95)}100%{transform:rotate(10deg) scale(1.05)}}
+.mini-dice.is-match{border:3px solid #fff;transform:scale(1.07);box-shadow:0 0 18px rgba(255,255,255,.85);z-index:2}
+.mini-dice.not-match{opacity:.42}
+.bg-c-red{background:linear-gradient(135deg,#ff5252,#c62828)}.bg-c-orange{background:linear-gradient(135deg,#ff9100,#ef6c00)}.bg-c-yellow{background:linear-gradient(135deg,#fbc02d,#f57f17)}.bg-c-green{background:linear-gradient(135deg,#00c853,#2e7d32)}.bg-c-blue{background:linear-gradient(135deg,#2979ff,#1565c0)}.bg-c-purple{background:linear-gradient(135deg,#d500f9,#6a1b9a)}
+.dice-colors-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.color-pick-btn{padding:10px 6px;border-radius:12px;border:2px solid transparent;color:#fff;font-weight:800;font-size:13px;cursor:pointer;text-shadow:0 1px 3px rgba(0,0,0,.7);opacity:.72;transition:.15s}
+.color-pick-btn.active{opacity:1;transform:scale(1.04);border-color:#fff;box-shadow:0 0 14px rgba(255,255,255,.5)}
+.dice-count-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:14px}
+.count-btn{padding:8px 4px;border-radius:10px;border:1px solid var(--card-border);background:#1c130f;color:var(--muted);font-weight:800;font-size:13px;cursor:pointer}
+.count-btn.active{background:linear-gradient(135deg,var(--orange),#e65100);color:#fff;border-color:#ffab40}
+.outcomes-strip{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px;width:100%;justify-content:center;flex-wrap:wrap}
+.outcome-pill{padding:5px 8px;border-radius:8px;font-size:11px;font-weight:800;border:1px solid var(--card-border);background:#1a120e;text-align:center;min-width:58px;transition:.2s}
+.outcome-pill.win-pill{border-color:rgba(0,230,118,.45);color:#00e676}.outcome-pill.lose-pill{border-color:rgba(255,61,0,.35);color:#ff8a65}
+.outcome-pill.hit-now{transform:scale(1.12);box-shadow:0 0 12px #fff;border-color:#fff;background:#2e2019}
+/* РУЛЕТКА АПГРЕЙДЕРА */
         .roulette-wrapper {
             background: rgba(34, 23, 18, 0.92);
             border: 1px solid var(--card-border);
@@ -349,6 +368,7 @@
     <button class="nav-btn active" data-tab="cases" onclick="switchTab('cases')">📦 Кейсы</button>
     <button class="nav-btn" data-tab="upgrade" onclick="switchTab('upgrade')">⚡ Апгрейдер</button>
     <button class="nav-btn" data-tab="crash" onclick="switchTab('crash')">🚀 Краш (Ракета)</button>
+<button class="nav-btn" data-tab="colordice" onclick="switchTab('colordice')">🎲 Color Dice</button>
     <button class="nav-btn" data-tab="bonuses" onclick="switchTab('bonuses')">🎁 Бонусы</button>
     <button class="nav-btn" data-tab="inventory" onclick="switchTab('inventory')">
         <span>🎒 Инвентарь</span>
@@ -466,7 +486,36 @@
         </div>
     </section>
 
-    <!-- ВКЛАДКА: БОНУСЫ -->
+    <!-- ВКЛАДКА: COLOR DICE -->
+<section id="tab-colordice" class="tab-section">
+<h2 style="margin-bottom:14px;">Color Dice</h2>
+<div class="dice-arena">
+<div class="dice-board" id="dice-board"></div>
+<div class="outcomes-strip" id="dice-outcomes-strip"></div>
+<div style="font-size:14px;font-weight:700;text-align:center;" id="dice-status-text">1 выпавший цвет = Победа, 2 = Луз, 3 = Победа, 4 = Луз...</div>
+</div>
+<div class="panel-box">
+<div style="margin-bottom:8px;font-size:13px;color:var(--muted);">1. Выберите целевой цвет:</div>
+<div class="dice-colors-grid">
+<button class="color-pick-btn bg-c-red active" onclick="selectDiceColor('red',this)">Красный</button>
+<button class="color-pick-btn bg-c-orange" onclick="selectDiceColor('orange',this)">Оранжевый</button>
+<button class="color-pick-btn bg-c-yellow" onclick="selectDiceColor('yellow',this)">Жёлтый</button>
+<button class="color-pick-btn bg-c-green" onclick="selectDiceColor('green',this)">Зелёный</button>
+<button class="color-pick-btn bg-c-blue" onclick="selectDiceColor('blue',this)">Синий</button>
+<button class="color-pick-btn bg-c-purple" onclick="selectDiceColor('purple',this)">Фиолетовый</button>
+</div>
+<div style="margin-bottom:8px;font-size:13px;color:var(--muted);">2. Количество кубиков: <strong style="color:var(--orange);" id="dice-count-label">4</strong> шт.</div>
+<div class="dice-count-grid">
+<button class="count-btn" onclick="setDiceCount(3,this)">3 🎲</button><button class="count-btn active" onclick="setDiceCount(4,this)">4 🎲</button><button class="count-btn" onclick="setDiceCount(5,this)">5 🎲</button><button class="count-btn" onclick="setDiceCount(6,this)">6 🎲</button><button class="count-btn" onclick="setDiceCount(7,this)">7 🎲</button>
+<button class="count-btn" onclick="setDiceCount(8,this)">8 🎲</button><button class="count-btn" onclick="setDiceCount(9,this)">9 🎲</button><button class="count-btn" onclick="setDiceCount(10,this)">10 🎲</button><button class="count-btn" onclick="setDiceCount(11,this)">11 🎲</button><button class="count-btn" onclick="setDiceCount(12,this)">12 🎲</button>
+</div>
+<div style="margin-bottom:10px;font-size:14px;color:var(--muted);">Общая ставка: <strong style="color:var(--orange);" id="dice-total-bet">0</strong> 💰</div>
+<div class="input-group"><input type="number" id="dice-coins-input" min="0" step="1" placeholder="Ставка монетами..." oninput="updateDiceTotal()"><button class="btn btn-blue" style="width:auto;" onclick="setMaxDiceCoins()">Макс</button></div>
+<button class="btn" id="dice-roll-btn" onclick="rollColorDice()">🎲 Бросить кубики</button>
+</div>
+<div class="panel-box"><h3 style="margin-bottom:10px;font-size:15px;color:var(--orange);">Добавить вещи из инвентаря в ставку:</h3><div class="grid" id="dice-inv-grid"></div></div>
+</section>
+<!-- ВКЛАДКА: БОНУСЫ -->
     <section id="tab-bonuses" class="tab-section">
         <h2 style="margin-bottom: 14px;">Бонусы</h2>
         <div class="panel-box">
@@ -548,12 +597,14 @@
         const validIds = new Set(state.inventory.map(i => i.inv_id));
         upgSelectedInv = new Set([...upgSelectedInv].filter(id => validIds.has(id)));
         crashSelectedInv = new Set([...crashSelectedInv].filter(id => validIds.has(id)));
+diceSelectedInv = new Set([...diceSelectedInv].filter(id => validIds.has(id)));
 
         renderCases();
         renderInventories();
         renderUpgradeTargets();
         calcUpgrade();
         updateCrashTotal();
+updateDiceTotal();
         updateFreeTimer();
     }
 
@@ -647,7 +698,8 @@
             `).join("");
         }
 
-        const crashGrid = document.getElementById("crash-inv-grid");
+        const diceGrid=document.getElementById("dice-inv-grid");if(diceGrid){diceGrid.innerHTML=!state.inventory.length?`<p style="color:var(--muted);font-size:13px;">Нет предметов</p>`:state.inventory.map(item=>`<div class="card rarity-${item.rarity} ${diceSelectedInv.has(item.inv_id)?'selected':''}" style="cursor:pointer;" onclick="toggleDiceItem(${item.inv_id})">${renderItemImg(item)}<div class="card-title">${item.name}</div><div class="card-price">${item.price} 💰</div></div>`).join("");}
+const crashGrid = document.getElementById("crash-inv-grid");
         if (!state.inventory.length) {
             crashGrid.innerHTML = `<p style="color:var(--muted); font-size:13px;">Нет предметов</p>`;
         } else {
@@ -785,7 +837,38 @@
             showToast(data.win ? "🎉 ПОБЕДА! Награда получена!" : "💥 Неудача! Ставка сгорела.");
             upgSelectedInv.clear();
             document.getElementById("upg-coins-bet").value = "";
-            await loadState();
+            await /* --- COLOR DICE --- */
+let diceSelectedInv=new Set(),diceChosenColor="red",diceCount=4,isDiceRolling=false;
+const DICE_NAMES_RU={red:"Красный",orange:"Оранжевый",yellow:"Жёлтый",green:"Зелёный",blue:"Синий",purple:"Фиолетовый"};
+const MULT_TABLE={1:1.85,3:5.5,5:18.0,7:60.0,9:200.0,11:750.0};
+function renderOutcomesStrip(h=null){const s=document.getElementById("dice-outcomes-strip");if(!s)return;let p="";for(let m=0;m<=diceCount;m++){const w=(m>0&&m%2===1);p+=`<div class="outcome-pill ${w?'win-pill':'lose-pill'} ${h===m?'hit-now':''}"><div>${m} шт.</div><div>${w?'x'+MULT_TABLE[m]:'ЛУЗ'}</div></div>`;}s.innerHTML=p;}
+function renderInitialDiceBoard(){const b=document.getElementById("dice-board");if(!b)return;let h="";for(let i=0;i<diceCount;i++)h+=`<div class="mini-dice bg-c-${diceChosenColor}"><span style="font-size:22px;">🎲</span><span>#${i+1}</span></div>`;b.innerHTML=h;renderOutcomesStrip();}
+function selectDiceColor(c,el){if(isDiceRolling)return;diceChosenColor=c;document.querySelectorAll(".color-pick-btn").forEach(b=>b.classList.remove("active"));if(el)el.classList.add("active");renderInitialDiceBoard();}
+function setDiceCount(c,el){if(isDiceRolling)return;diceCount=c;document.querySelectorAll(".count-btn").forEach(b=>b.classList.remove("active"));if(el)el.classList.add("active");document.getElementById("dice-count-label").textContent=c;renderInitialDiceBoard();}
+function toggleDiceItem(id){if(isDiceRolling)return;diceSelectedInv.has(id)?diceSelectedInv.delete(id):diceSelectedInv.add(id);renderInventories();updateDiceTotal();}
+function setMaxDiceCoins(){if(isDiceRolling)return;document.getElementById("dice-coins-input").value=state.balance;updateDiceTotal();}
+function updateDiceTotal(){const el=document.getElementById("dice-coins-input");if(!el)return;let s=parseFloat(el.value)||0;state.inventory.forEach(i=>{if(diceSelectedInv.has(i.inv_id))s+=i.price;});document.getElementById("dice-total-bet").textContent=s.toFixed(2);}
+async function rollColorDice(){
+if(isDiceRolling)return;
+Используйте код с осторожностью.
+const coins=parseFloat(document.getElementById("dice-coins-input").value)||0;
+const res=await fetch("/api/colordice/roll",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({user_id:userId,inv_ids:[...diceSelectedInv],coins_bet:coins,chosen_color:diceChosenColor,dice_count:diceCount})});
+const data=await res.json();if(!res.ok)return showToast(data.detail);
+isDiceRolling=true;const btn=document.getElementById("dice-roll-btn");btn.disabled=true;btn.textContent="Кубики крутятся...";
+document.getElementById("dice-status-text").textContent=Ищем цвет: ${DICE_NAMES_RU[diceChosenColor]}...;
+const board=document.getElementById("dice-board"),pool=["red","orange","yellow","green","blue","purple"];
+const anim=setInterval(()=>{let t="";for(let i=0;i<diceCount;i++)t+=<div class="mini-dice rolling bg-c-${pool[Math.floor(Math.random()*6)]}"><span style="font-size:20px;">🎲</span></div>;board.innerHTML=t;},105);
+setTimeout(async()=>{
+clearInterval(anim);isDiceRolling=false;btn.disabled=false;btn.textContent="🎲 Бросить кубики";
+board.innerHTML=data.rolled_colors.map(c=><div class="mini-dice bg-c-${c} ${c===data.chosen_color?'is-match':'not-match'}"><span>${DICE_NAMES_RU[c]}</span>${c===data.chosen_color?'<span style="font-size:13px;margin-top:2px;">⭐</span>':''}</div>).join("");
+renderOutcomesStrip(data.matches);
+const st=document.getElementById("dice-status-text"),cn=DICE_NAMES_RU[data.chosen_color];
+if(data.win){st.innerHTML=<span style="color:#00e676;">Выпало ${data.matches} шт. (${cn}) — Победа x${data.multiplier} (+${data.win_amount} 💰)!</span>;showToast(🎉 Выпало ${data.matches} (${cn})! Выигрыш: +${data.win_amount} 💰);}
+else{st.innerHTML=<span style="color:#ff8a65;">Выпало ${data.matches} шт. (${cn}) — Луз!</span>;showToast(Выпало ${data.matches} (${cn}) — проигрыш!);}
+diceSelectedInv.clear();document.getElementById("dice-coins-input").value="";await loadState();
+},1450);}
+renderInitialDiceBoard();
+loadState();
         }, 3300);
     }
 
