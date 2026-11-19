@@ -3,6 +3,7 @@ import json
 import time
 import base64
 import random
+import threading
 import urllib.request
 import urllib.error
 from fastapi import FastAPI, HTTPException
@@ -20,6 +21,11 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", "").strip()
 GITHUB_REPO = os.getenv("GITHUB_REPO", "").strip()
 BOT_TOKEN = os.getenv("BOT_TOKEN", "").strip()
 ADMIN_CHAT_ID = os.getenv("ADMIN_CHAT_ID", "").strip()
+# Список Telegram ID модераторов через запятую, например: "123456,789012"
+# Если пусто — заявки уходят только ADMIN_CHAT_ID.
+MODERATOR_IDS = [m.strip() for m in os.getenv("MODERATOR_IDS", "").split(",") if m.strip()]
+if not MODERATOR_IDS and ADMIN_CHAT_ID:
+    MODERATOR_IDS = [ADMIN_CHAT_ID]
 DB_FILE_PATH = "database.json"
 
 ITEMS_DB = {
@@ -89,8 +95,7 @@ CASES_DB = {
     2: {
             "id": 2,
             "name": "Money$",
-            "category": "regular", # Партнёрские
-              # Процент партнёру от цены кейса
+            "category": "regular",
             "price": 25,
             "image": "/images/case2.png",
             "fallback": "🧰",
@@ -102,9 +107,9 @@ CASES_DB = {
     3: {
             "id": 3,
             "name": "paslkek",
-            "category": "partner",             # Партнёрские кейсы (добавлено: без этого поля кейс не попадал в категорию "Партнёрские" на фронте)
+            "category": "partner",
             "price": 20,
-            "partner_id": "1741462977",       # Впишите сюда Telegram ID партнёра в кавычках, например "123456789"
+            "partner_id": "1741462977",
             "partner_percent": 10,
             "image": "/images/case3.png",
             "fallback": "💎",
@@ -116,11 +121,10 @@ CASES_DB = {
                 {"item_id": 18, "weight": 5},
             ]
         },
-    
     4: {
         "id": 4,
         "name": "Pretzo all-in",
-        "category": "all_in",  # All-In кейсы
+        "category": "all_in",
         "price": 10,
         "image": "/images/case4.png",
         "fallback": "💎",
@@ -132,8 +136,8 @@ CASES_DB = {
     5: {
         "id": 5,
         "name": "we got buffed",
-        "category": "limited", # Ограниченное время
-        "expires_at": 1795629600, # Доступен 24 часа с момента запуска сервера (или укажите точный Unix timestamp)
+        "category": "limited",
+        "expires_at": 1795629600,
         "price": 68,
         "image": "/images/case5.png",
         "fallback": "⏳",
@@ -145,9 +149,9 @@ CASES_DB = {
     6: {
                 "id": 6,
                 "name": "zahar_99d",
-                "category": "partner",         # Партнёрские кейсы (добавлено)
+                "category": "partner",
                 "price": 20,
-                "partner_id": "8450028899",       # Впишите сюда Telegram ID партнёра в кавычках, например "123456789"
+                "partner_id": "8450028899",
                 "partner_percent": 10,
                 "image": "/images/case6.png",
                 "fallback": "💎",
@@ -170,11 +174,16 @@ FREE_CASE_DROPS = [
 FREE_CASE_COOLDOWN = 12 * 3600
 
 ACTIVE_CRASH_GAMES = {}
+# moder_chat_id -> topup request id, пока модератор вводит сумму пополнения
+WAITING_TOPUP_AMOUNT = {}
 
 def get_default_db():
     return {
         "users": {},
         "next_inv_id": 1,
+        "next_req_id": 1,
+        "withdraw_requests": {},
+        "topup_requests": {},
         "promocodes": {
             "WELCOME500": {"stock": 100, "type": "coins", "amount": 500, "used_by": []},
             "GIFTKNIFE": {"stock": 10, "type": "item", "item_id": 1, "used_by": []}
@@ -186,7 +195,7 @@ def github_load_db():
         if os.path.exists(DB_FILE_PATH):
             with open(DB_FILE_PATH, "r", encoding="utf-8") as f:
                 data = json.load(f)
-                return data, None
+                return normalize_db(data), None
         return get_default_db(), None
 
     url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{DB_FILE_PATH}"
@@ -200,13 +209,23 @@ def github_load_db():
             res_data = json.loads(resp.read().decode("utf-8"))
             content = base64.b64decode(res_data["content"]).decode("utf-8")
             db = json.loads(content)
-            if "promocodes" not in db:
-                db["promocodes"] = get_default_db()["promocodes"]
-            return db, res_data["sha"]
+            return normalize_db(db), res_data["sha"]
     except urllib.error.HTTPError as e:
         if e.code == 404:
             return get_default_db(), None
         raise HTTPException(status_code=500, detail=f"Ошибка GitHub DB: {e.code}")
+
+def normalize_db(db):
+    """Добавляет новые поля в старую базу, чтобы ничего не сломалось."""
+    default = get_default_db()
+    for key in ("users", "promocodes", "withdraw_requests", "topup_requests"):
+        if key not in db:
+            db[key] = default[key]
+    if "next_inv_id" not in db:
+        db["next_inv_id"] = 1
+    if "next_req_id" not in db:
+        db["next_req_id"] = 1
+    return db
 
 def github_save_db(db_data, sha):
     if not GITHUB_TOKEN or not GITHUB_REPO:
@@ -235,7 +254,7 @@ def github_save_db(db_data, sha):
 def ensure_user(db, user_id: str):
     if user_id not in db["users"]:
         db["users"][user_id] = {
-            "balance": 1000,
+            "balance": 0,          # ИЗМЕНЕНО: стартовые 1000 монет убраны
             "inventory": [],
             "last_free_case": 0
         }
@@ -243,21 +262,237 @@ def ensure_user(db, user_id: str):
         db["users"][user_id]["last_free_case"] = 0
     return db["users"][user_id]
 
+# ---------- Telegram Bot API ----------
+
+def bot_api(method, payload):
+    if not BOT_TOKEN:
+        return None
+    url = f"https://api.telegram.org/bot{BOT_TOKEN}/{method}"
+    req = urllib.request.Request(url, data=json.dumps(payload).encode("utf-8"), method="POST",
+                                 headers={"Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            return json.loads(resp.read().decode("utf-8"))
+    except Exception:
+        return None
+
 def send_tg_message(chat_id: str, text: str):
     if not BOT_TOKEN or not chat_id:
         return
-    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-    payload = json.dumps({"chat_id": chat_id, "text": text}).encode("utf-8")
-    req = urllib.request.Request(url, data=payload, method="POST", headers={"Content-Type": "application/json"})
-    try:
-        with urllib.request.urlopen(req, timeout=5) as resp:
-            resp.read()
-    except Exception:
-        pass
+    bot_api("sendMessage", {"chat_id": chat_id, "text": text})
+
+def bot_send_with_keyboard(chat_id: str, text: str, keyboard):
+    if not BOT_TOKEN or not chat_id:
+        return
+    bot_api("sendMessage", {"chat_id": chat_id, "text": text,
+                            "reply_markup": {"inline_keyboard": keyboard}})
+
+def notify_moderators(text: str, keyboard=None):
+    for m in MODERATOR_IDS:
+        if keyboard:
+            bot_send_with_keyboard(m, text, keyboard)
+        else:
+            send_tg_message(m, text)
+
+def answer_cb(cb_id, text=None, alert=False):
+    payload = {"callback_query_id": cb_id}
+    if text:
+        payload["text"] = text
+        payload["show_alert"] = alert
+    bot_api("answerCallbackQuery", payload)
+
+def mod_name(cb_from):
+    return cb_from.get("username") or cb_from.get("first_name") or str(cb_from.get("id"))
+
+def handle_callback(cb):
+    cb_id = cb["id"]
+    mod_id = str(cb["from"]["id"])
+    data = cb.get("data", "") or ""
+    if mod_id not in MODERATOR_IDS:
+        answer_cb(cb_id, "Вы не модератор.", True)
+        return
+    parts = data.split(":")
+    if len(parts) != 2:
+        return
+    action, rid = parts[0], parts[1]
+
+    db, sha = github_load_db()
+    db = normalize_db(db)
+
+    # ---------- ЗАЯВКИ НА ВЫВОД ----------
+    if action in ("wd_take", "wd_done", "wd_fail"):
+        reqs = db.setdefault("withdraw_requests", {})
+        r = reqs.get(rid)
+        if not r:
+            answer_cb(cb_id, "Заявка не найдена.", True)
+            return
+        item = ITEMS_DB.get(r["item_id"], {})
+        user = ensure_user(db, r["user_id"])
+
+        if action == "wd_take":
+            if r["status"] != "open":
+                answer_cb(cb_id, "Заявку уже взял другой модератор.", True)
+                return
+            r["status"] = "taken"
+            r["moderator"] = mod_id
+            github_save_db(db, sha)
+            name = mod_name(cb["from"])
+            answer_cb(cb_id, "Заявка ваша! Свяжитесь с игроком.")
+            send_tg_message(r["user_id"],
+                f"🤝 Модератор @{name} взял вашу заявку на вывод «{item.get('name', '?')}». Он свяжется с вами для передачи.")
+            bot_send_with_keyboard(mod_id,
+                f"Вы взяли заявку #{rid} на вывод «{item.get('name', '?')}» ({item.get('price', 0)} 💰) от игрока ID {r['user_id']}.\n"
+                f"Свяжитесь с ним и получите предмет. После завершения нажмите кнопку ниже.",
+                [[{"text": "✅ Сделка прошла", "callback_data": f"wd_done:{rid}"}],
+                 [{"text": "❌ Сделка не прошла", "callback_data": f"wd_fail:{rid}"}]])
+            for m in MODERATOR_IDS:
+                if m != mod_id:
+                    send_tg_message(m, f"Заявка #{rid} на вывод взята модератором @{name}.")
+            return
+
+        if action == "wd_done":
+            if r["status"] != "taken":
+                answer_cb(cb_id, "Заявка не в работе.", True)
+                return
+            user["inventory"] = [e for e in user["inventory"] if e["inv_id"] != r["inv_id"]]
+            r["status"] = "done"
+            github_save_db(db, sha)
+            answer_cb(cb_id, "Готово! Предмет удалён из инвентаря игрока.")
+            send_tg_message(r["user_id"], f"✅ Вывод «{item.get('name', '?')}» завершён. Спасибо, что пользуетесь BrainDrop!")
+            return
+
+        if action == "wd_fail":
+            if r["status"] != "taken":
+                answer_cb(cb_id, "Заявка не в работе.", True)
+                return
+            for e in user["inventory"]:
+                if e["inv_id"] == r["inv_id"]:
+                    e["locked"] = False
+            r["status"] = "cancelled"
+            github_save_db(db, sha)
+            answer_cb(cb_id, "Предмет разблокирован, заявка отменена.")
+            send_tg_message(r["user_id"], f"❌ Заявка на вывод «{item.get('name', '?')}» отменена. Предмет возвращён в инвентарь.")
+            return
+
+    # ---------- ЗАЯВКИ НА ПОПОЛНЕНИЕ ----------
+    if action in ("tp_take", "tp_cancel"):
+        reqs = db.setdefault("topup_requests", {})
+        r = reqs.get(rid)
+        if not r:
+            answer_cb(cb_id, "Заявка не найдена.", True)
+            return
+
+        if action == "tp_take":
+            if r["status"] != "open":
+                answer_cb(cb_id, "Заявку уже взял другой модератор.", True)
+                return
+            r["status"] = "taken"
+            r["moderator"] = mod_id
+            github_save_db(db, sha)
+            name = mod_name(cb["from"])
+            WAITING_TOPUP_AMOUNT[mod_id] = rid
+            answer_cb(cb_id, "Заявка ваша! Теперь отправьте боту сумму пополнения числом.")
+            send_tg_message(r["user_id"],
+                f"🤝 Модератор @{name} взял вашу заявку на пополнение. Следуйте его инструкциям для перевода.")
+            bot_send_with_keyboard(mod_id,
+                f"Вы взяли заявку #{rid} на пополнение от игрока ID {r['user_id']}.\n"
+                f"1. Свяжитесь с игроком и получите перевод.\n"
+                f"2. Отправьте этому боту сумму пополнения ЧИСЛОМ (например: 500) — деньги сразу упадут игроку на баланс.",
+                [[{"text": "❌ Отменить заявку", "callback_data": f"tp_cancel:{rid}"}]])
+            for m in MODERATOR_IDS:
+                if m != mod_id:
+                    send_tg_message(m, f"Заявка #{rid} на пополнение взята модератором @{name}.")
+            return
+
+        if action == "tp_cancel":
+            if r["status"] not in ("open", "taken"):
+                answer_cb(cb_id, "Заявка уже закрыта.", True)
+                return
+            r["status"] = "cancelled"
+            github_save_db(db, sha)
+            if WAITING_TOPUP_AMOUNT.get(mod_id) == rid:
+                WAITING_TOPUP_AMOUNT.pop(mod_id, None)
+            answer_cb(cb_id, "Заявка отменена.")
+            send_tg_message(r["user_id"], "❌ Ваша заявка на пополнение отменена. Вы можете создать новую.")
+            return
+
+def handle_message(msg):
+    chat_id = str(msg["chat"]["id"])
+    from_id = str(msg["from"]["id"])
+    text = (msg.get("text") or "").strip()
+
+    # Модератор вводит сумму пополнения
+    if from_id in MODERATOR_IDS and from_id in WAITING_TOPUP_AMOUNT:
+        rid = WAITING_TOPUP_AMOUNT[from_id]
+        try:
+            amount = round(float(text.replace(",", ".")), 2)
+            if amount <= 0:
+                raise ValueError
+        except ValueError:
+            send_tg_message(chat_id, "Введите сумму числом, например: 500")
+            return
+        db, sha = github_load_db()
+        db = normalize_db(db)
+        r = db.setdefault("topup_requests", {}).get(rid)
+        if not r or r["status"] != "taken":
+            WAITING_TOPUP_AMOUNT.pop(from_id, None)
+            send_tg_message(chat_id, "Эта заявка уже закрыта.")
+            return
+        user = ensure_user(db, r["user_id"])
+        user["balance"] = round(user["balance"] + amount, 2)
+        r["status"] = "done"
+        r["amount"] = amount
+        github_save_db(db, sha)
+        WAITING_TOPUP_AMOUNT.pop(from_id, None)
+        send_tg_message(chat_id, f"✅ Игроку {r['user_id']} зачислено {amount} монет.")
+        send_tg_message(r["user_id"], f"💰 Ваш баланс пополнен на {amount} монет!")
+        for m in MODERATOR_IDS:
+            if m != from_id:
+                send_tg_message(m, f"Заявка #{rid} на пополнение закрыта: +{amount} монет игроку {r['user_id']}.")
+        return
+
+    if text.startswith("/start"):
+        if from_id in MODERATOR_IDS:
+            send_tg_message(chat_id,
+                "🛠 Бот BrainDrop для модераторов.\n"
+                "• Заявки на вывод/пополнение приходят с кнопками — кто первый нажал, тот ведёт сделку.\n"
+                "• По пополнению: после получения перевода отправьте боту сумму числом.")
+        else:
+            send_tg_message(chat_id, "👋 Это бот проекта BrainDrop. Заявки на пополнение и вывод создаются внутри игры.")
+
+def handle_update(upd):
+    if "callback_query" in upd:
+        try:
+            handle_callback(upd["callback_query"])
+        except Exception:
+            pass
+    elif "message" in upd:
+        try:
+            handle_message(upd["message"])
+        except Exception:
+            pass
+
+def bot_loop():
+    offset = 0
+    while True:
+        try:
+            data = bot_api("getUpdates", {"offset": offset, "timeout": 30})
+            if data and data.get("ok"):
+                for upd in data.get("result", []):
+                    offset = upd["update_id"] + 1
+                    handle_update(upd)
+        except Exception:
+            time.sleep(2)
+
+if BOT_TOKEN:
+    threading.Thread(target=bot_loop, daemon=True).start()
+
+# ---------- Модели запросов ----------
 
 class OpenCaseReq(BaseModel):
     user_id: str
     case_id: int
+    count: int = 1
 
 class FreeCaseReq(BaseModel):
     user_id: str
@@ -267,6 +502,10 @@ class PromoReq(BaseModel):
     code: str
 
 class SellItemReq(BaseModel):
+    user_id: str
+    inv_id: int
+
+class WithdrawReq(BaseModel):
     user_id: str
     inv_id: int
 
@@ -292,6 +531,13 @@ class CrashCashoutReq(BaseModel):
     user_id: str
     multiplier: float
 
+class ColorDiceReq(BaseModel):
+    user_id: str
+    inv_ids: List[int]
+    coins_bet: float
+    chosen_color: str
+    dice_count: int = 4
+
 @app.get("/")
 def serve_frontend():
     return FileResponse("index.html")
@@ -310,6 +556,7 @@ def get_state(user_id: str):
         if item_id in ITEMS_DB:
             item_info = ITEMS_DB[item_id].copy()
             item_info["inv_id"] = entry["inv_id"]
+            item_info["locked"] = entry.get("locked", False)
             inv_list.append(item_info)
 
     now = int(time.time())
@@ -331,11 +578,70 @@ def topup_request(req: TopupReq):
     if not BOT_TOKEN:
         raise HTTPException(status_code=400, detail="Токен бота не настроен на сервере")
 
-    send_tg_message(req.user_id, "Для пополнения с вами свяжется первый освободившийся модератор.")
-    user_tag = f"@{req.username}" if req.username else f"{req.first_name} (ID: {req.user_id})"
-    if ADMIN_CHAT_ID:
-        send_tg_message(ADMIN_CHAT_ID, f"Пользователь {user_tag} хочет пополнить баланс. Направьте к нему модератора.")
-    return {"ok": True}
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    ensure_user(db, req.user_id)
+    reqs = db.setdefault("topup_requests", {})
+    for r in reqs.values():
+        if r["user_id"] == req.user_id and r["status"] in ("open", "taken"):
+            raise HTTPException(status_code=400, detail="У вас уже есть активная заявка на пополнение")
+
+    rid = db.get("next_req_id", 1)
+    db["next_req_id"] = rid + 1
+    reqs[str(rid)] = {
+        "user_id": req.user_id,
+        "username": req.username or "",
+        "first_name": req.first_name or "",
+        "status": "open",
+        "moderator": "",
+        "amount": None,
+        "created_at": int(time.time())
+    }
+    github_save_db(db, sha)
+
+    user_tag = f"@{req.username}" if req.username else f"{req.first_name or 'игрок'} (ID: {req.user_id})"
+    notify_moderators(
+        f"💰 Заявка #{rid} на пополнение от {user_tag}.\nКто первый нажмёт — тот ведёт сделку.",
+        [[{"text": "🤝 Взять заявку", "callback_data": f"tp_take:{rid}"}]])
+    send_tg_message(req.user_id, "💰 Заявка на пополнение создана. Модератор свяжется с вами.")
+    return {"ok": True, "req_id": rid}
+
+@app.post("/api/withdraw_request")
+def create_withdraw_request(req: WithdrawReq):
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    user = ensure_user(db, req.user_id)
+
+    target = None
+    for e in user["inventory"]:
+        if e["inv_id"] == req.inv_id:
+            target = e
+            break
+    if not target or target["item_id"] not in ITEMS_DB:
+        raise HTTPException(status_code=400, detail="Предмет не найден")
+    if target.get("locked"):
+        raise HTTPException(status_code=400, detail="Этот предмет уже в заявке на вывод")
+
+    target["locked"] = True
+    rid = db.get("next_req_id", 1)
+    db["next_req_id"] = rid + 1
+    item = ITEMS_DB[target["item_id"]]
+    db.setdefault("withdraw_requests", {})[str(rid)] = {
+        "user_id": req.user_id,
+        "inv_id": req.inv_id,
+        "item_id": target["item_id"],
+        "status": "open",
+        "moderator": "",
+        "created_at": int(time.time())
+    }
+    github_save_db(db, sha)
+
+    notify_moderators(
+        f"📤 Заявка #{rid} на вывод «{item['name']}» ({item['price']} 💰) от ID {req.user_id}.\nКто первый нажмёт — тот ведёт сделку.",
+        [[{"text": "🤝 Взять заявку", "callback_data": f"wd_take:{rid}"}]])
+    send_tg_message(req.user_id,
+        f"📤 Заявка на вывод «{item['name']}» создана. Предмет заблокирован до завершения сделки. Модератор скоро свяжется с вами.")
+    return {"ok": True, "req_id": rid}
 
 @app.post("/api/open_case")
 def open_case(req: OpenCaseReq):
@@ -343,37 +649,46 @@ def open_case(req: OpenCaseReq):
         raise HTTPException(status_code=400, detail="Кейс не найден")
 
     db, sha = github_load_db()
+    db = normalize_db(db)
     user = ensure_user(db, req.user_id)
     case = CASES_DB[req.case_id]
 
     if case.get("expires_at") and int(time.time()) > case["expires_at"]:
         raise HTTPException(status_code=400, detail="Время действия этого кейса истекло")
 
-    if user["balance"] < case["price"]:
+    count = max(1, min(int(req.count or 1), 10))  # 1x / 3x / 5x
+    total_price = round(case["price"] * count, 2)
+
+    if user["balance"] < total_price:
         raise HTTPException(status_code=400, detail="Недостаточно монет")
 
     population = [d["item_id"] for d in case["drops"]]
     weights = [d["weight"] for d in case["drops"]]
-    won_item_id = random.choices(population, weights=weights, k=1)[0]
+    won_ids = random.choices(population, weights=weights, k=count)
 
-    user["balance"] = round(user["balance"] - case["price"], 2)
+    user["balance"] = round(user["balance"] - total_price, 2)
 
     partner_id = str(case.get("partner_id", "")).strip()
     partner_percent = float(case.get("partner_percent", 0))
     if partner_id and partner_percent > 0 and partner_id != req.user_id:
         partner_user = ensure_user(db, partner_id)
-        partner_reward = round(case["price"] * (partner_percent / 100.0), 2)
+        partner_reward = round(total_price * (partner_percent / 100.0), 2)
         partner_user["balance"] = round(partner_user["balance"] + partner_reward, 2)
-    inv_id = db["next_inv_id"]
-    db["next_inv_id"] += 1
-    user["inventory"].append({"inv_id": inv_id, "item_id": won_item_id})
+
+    won_inv_ids = []
+    for wid in won_ids:
+        inv_id = db["next_inv_id"]
+        db["next_inv_id"] += 1
+        user["inventory"].append({"inv_id": inv_id, "item_id": wid})
+        won_inv_ids.append(inv_id)
 
     github_save_db(db, sha)
-    return {"won_item": ITEMS_DB[won_item_id]}
+    return {"won_items": [ITEMS_DB[i] for i in won_ids], "won_inv_ids": won_inv_ids}
 
 @app.post("/api/open_free_case")
 def open_free_case(req: FreeCaseReq):
     db, sha = github_load_db()
+    db = normalize_db(db)
     user = ensure_user(db, req.user_id)
 
     now = int(time.time())
@@ -394,7 +709,7 @@ def open_free_case(req: FreeCaseReq):
     user["inventory"].append({"inv_id": inv_id, "item_id": won_item_id})
 
     github_save_db(db, sha)
-    return {"won_item": ITEMS_DB[won_item_id]}
+    return {"won_items": [ITEMS_DB[won_item_id]], "won_inv_ids": [inv_id]}
 
 @app.post("/api/redeem_promo")
 def redeem_promo(req: PromoReq):
@@ -403,6 +718,7 @@ def redeem_promo(req: PromoReq):
         raise HTTPException(status_code=400, detail="Введите промокод")
 
     db, sha = github_load_db()
+    db = normalize_db(db)
     user = ensure_user(db, req.user_id)
     promos = db.get("promocodes", {})
 
@@ -444,6 +760,7 @@ def redeem_promo(req: PromoReq):
 @app.post("/api/sell_item")
 def sell_item(req: SellItemReq):
     db, sha = github_load_db()
+    db = normalize_db(db)
     user = ensure_user(db, req.user_id)
 
     target_idx = None
@@ -456,6 +773,9 @@ def sell_item(req: SellItemReq):
 
     if target_idx is None or item_id not in ITEMS_DB:
         raise HTTPException(status_code=400, detail="Предмет не найден")
+
+    if user["inventory"][target_idx].get("locked"):
+        raise HTTPException(status_code=400, detail="Предмет заблокирован заявкой на вывод")
 
     price = ITEMS_DB[item_id]["price"]
     user["inventory"].pop(target_idx)
@@ -470,12 +790,13 @@ def do_upgrade(req: UpgradeReq):
         raise HTTPException(status_code=400, detail="Некорректная ставка монет")
 
     db, sha = github_load_db()
+    db = normalize_db(db)
     user = ensure_user(db, req.user_id)
 
     if req.coins_bet > user["balance"]:
         raise HTTPException(status_code=400, detail="Недостаточно монет")
 
-    inv_map = {entry["inv_id"]: entry["item_id"] for entry in user["inventory"]}
+    inv_map = {entry["inv_id"]: entry["item_id"] for entry in user["inventory"] if not entry.get("locked")}
     items_total_value = 0
     for inv_id in req.inv_ids:
         if inv_id not in inv_map or inv_map[inv_id] not in ITEMS_DB:
@@ -532,12 +853,13 @@ def crash_start(req: CrashStartReq):
         raise HTTPException(status_code=400, detail="Некорректная ставка монет")
 
     db, sha = github_load_db()
+    db = normalize_db(db)
     user = ensure_user(db, req.user_id)
 
     if req.coins_bet > user["balance"]:
         raise HTTPException(status_code=400, detail="Недостаточно монет")
 
-    inv_map = {entry["inv_id"]: entry["item_id"] for entry in user["inventory"]}
+    inv_map = {entry["inv_id"]: entry["item_id"] for entry in user["inventory"] if not entry.get("locked")}
     bet_items = []
     items_total_value = 0
 
@@ -578,6 +900,7 @@ def crash_cashout(req: CrashCashoutReq):
         raise HTTPException(status_code=400, detail="Ракета уже взорвалась!")
 
     db, sha = github_load_db()
+    db = normalize_db(db)
     user = ensure_user(db, req.user_id)
 
     total_win_value = round(game["total_bet"] * req.multiplier, 2)
@@ -622,19 +945,9 @@ def crash_cashout(req: CrashCashoutReq):
 
 DICE_COLORS = ["red", "orange", "yellow", "green", "blue", "purple"]
 
-class ColorDiceReq(BaseModel):
-    user_id: str
-    inv_ids: List[int]
-    coins_bet: float
-    chosen_color: str
-    dice_count: int = 4
-
 def get_color_dice_multiplier(dice_count: int, matches: int) -> float:
-    # 0 или чётное число совпадений (2, 4, 6, 8, 10, 12) = проигрыш
     if matches <= 0 or matches % 2 == 0:
         return 0.0
-    # Нечётное число совпадений (1, 3, 5, 7, 9, 11) = победа!
-    # Чем больше совпадений, тем выше множитель
     multipliers_table = {
         1: 1.85,
         3: 5.5,
@@ -656,12 +969,13 @@ def play_color_dice(req: ColorDiceReq):
         raise HTTPException(status_code=400, detail="Некорректная ставка монет")
 
     db, sha = github_load_db()
+    db = normalize_db(db)
     user = ensure_user(db, req.user_id)
 
     if req.coins_bet > user["balance"]:
         raise HTTPException(status_code=400, detail="Недостаточно монет")
 
-    inv_map = {entry["inv_id"]: entry["item_id"] for entry in user["inventory"]}
+    inv_map = {entry["inv_id"]: entry["item_id"] for entry in user["inventory"] if not entry.get("locked")}
     items_total_value = 0
     for inv_id in req.inv_ids:
         if inv_id not in inv_map or inv_map[inv_id] not in ITEMS_DB:
@@ -676,7 +990,6 @@ def play_color_dice(req: ColorDiceReq):
     selected_set = set(req.inv_ids)
     user["inventory"] = [e for e in user["inventory"] if e["inv_id"] not in selected_set]
 
-    # Бросаем N кубиков, каждый показывает случайный из 6 цветов
     rolled_colors = [random.choice(DICE_COLORS) for _ in range(req.dice_count)]
     matches = sum(1 for c in rolled_colors if c == color)
     multiplier = get_color_dice_multiplier(req.dice_count, matches)

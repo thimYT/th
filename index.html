@@ -404,6 +404,25 @@
     </div>
 </div>
 
+<!-- МЕНЮ КЕЙСА: дроп, шансы, выбор количества -->
+<div class="case-modal-overlay" id="case-info-modal">
+    <div class="case-modal-box">
+        <div class="case-modal-title" id="ci-title">Кейс</div>
+        <div id="ci-img" style="margin-bottom:10px;"></div>
+        <div id="ci-drops" class="scroll-grid" style="max-height:200px;text-align:left;border:1px solid var(--card-border);border-radius:10px;margin-bottom:12px;background:#130d0a;"></div>
+        <div class="dice-count-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:10px;">
+            <button class="count-btn active" onclick="setOpenCount(1,this)">1x</button>
+            <button class="count-btn" onclick="setOpenCount(3,this)">3x</button>
+            <button class="count-btn" onclick="setOpenCount(5,this)">5x</button>
+        </div>
+        <div style="font-size:14px;margin-bottom:12px;">К оплате: <strong style="color:var(--orange);" id="ci-total">0</strong> 💰</div>
+        <div class="case-win-actions">
+            <button class="btn" id="ci-open-btn" onclick="confirmOpenCase()">Открыть</button>
+            <button class="btn btn-blue" onclick="closeCaseInfo()">Закрыть</button>
+        </div>
+    </div>
+</div>
+
 <div class="container">
 
     <!-- ВКЛАДКА: КЕЙСЫ -->
@@ -681,7 +700,7 @@
                 ${renderItemImg(c)}
                 <div class="card-title">${c.name}</div>
                 <div class="card-price">${c.price} 💰</div>
-                <button class="btn" onclick="openCase(${c.id})">Открыть</button>
+                <button class="btn" onclick="openCaseMenu(${c.id})">Открыть</button>
             </div>`;
         }).join("");
     }
@@ -703,16 +722,23 @@
                     ${renderItemImg(item)}
                     <div class="card-title">${item.name}</div>
                     <div class="card-price">${item.price} 💰</div>
-                    <button class="btn btn-blue" onclick="sellItem(${item.inv_id})">Продать</button>
+                    ${item.locked
+                        ? `<div class="case-timer-badge" style="width:100%;box-sizing:border-box;">🔒 В обработке вывода</div>`
+                        : `<div style="display:flex;gap:6px;">
+                               <button class="btn btn-blue" style="padding:8px 4px;font-size:12px;" onclick="sellItem(${item.inv_id})">Продать</button>
+                               <button class="btn" style="padding:8px 4px;font-size:12px;" onclick="withdrawItem(${item.inv_id})">Вывести</button>
+                           </div>`}
                 </div>
             `).join("");
         }
 
+        const bettable = state.inventory.filter(i => !i.locked);
+
         const upgGrid = document.getElementById("upg-inv-grid");
-        if (!state.inventory.length) {
+        if (!bettable.length) {
             upgGrid.innerHTML = `<p style="color:var(--muted); font-size:13px;">Нет предметов</p>`;
         } else {
-            upgGrid.innerHTML = state.inventory.map(item => `
+            upgGrid.innerHTML = bettable.map(item => `
                 <div class="card rarity-${item.rarity} ${upgSelectedInv.has(item.inv_id) ? 'selected' : ''}"
                      style="cursor:pointer;" onclick="toggleUpgItem(${item.inv_id})">
                     ${renderItemImg(item)}
@@ -724,9 +750,9 @@
 
         const diceGrid = document.getElementById("dice-inv-grid");
         if (diceGrid) {
-            diceGrid.innerHTML = !state.inventory.length
+            diceGrid.innerHTML = !bettable.length
                 ? `<p style="color:var(--muted);font-size:13px;">Нет предметов</p>`
-                : state.inventory.map(item => `
+                : bettable.map(item => `
                     <div class="card rarity-${item.rarity} ${diceSelectedInv.has(item.inv_id) ? 'selected' : ''}"
                          style="cursor:pointer;" onclick="toggleDiceItem(${item.inv_id})">
                         ${renderItemImg(item)}
@@ -736,10 +762,10 @@
         }
 
         const crashGrid = document.getElementById("crash-inv-grid");
-        if (!state.inventory.length) {
+        if (!bettable.length) {
             crashGrid.innerHTML = `<p style="color:var(--muted); font-size:13px;">Нет предметов</p>`;
         } else {
-            crashGrid.innerHTML = state.inventory.map(item => `
+            crashGrid.innerHTML = bettable.map(item => `
                 <div class="card rarity-${item.rarity} ${crashSelectedInv.has(item.inv_id) ? 'selected' : ''}"
                      style="cursor:pointer;" onclick="toggleCrashItem(${item.inv_id})">
                     ${renderItemImg(item)}
@@ -790,7 +816,7 @@
     function calcUpgrade() {
         const coins = parseFloat(document.getElementById("upg-coins-bet").value) || 0;
         let itemsSum = 0;
-        state.inventory.forEach(i => { if (upgSelectedInv.has(i.inv_id)) itemsSum += i.price; });
+        state.inventory.forEach(i => { if (!i.locked && upgSelectedInv.has(i.inv_id)) itemsSum += i.price; });
         const totalBet = itemsSum + coins;
         document.getElementById("upg-bet-sum").textContent = totalBet.toFixed(2);
 
@@ -876,15 +902,74 @@
     }
 
     /* --- КЕЙСЫ И ПРОДАЖА --- */
-    function playCaseRoulette(caseName, poolItems, wonItem) {
+    let pendingCaseId = null;
+    let pendingOpenCount = 1;
+
+    function openCaseMenu(caseId) {
+        const c = state.cases.find(x => x.id === caseId);
+        if (!c) return;
+        pendingCaseId = caseId;
+        pendingOpenCount = 1;
+        document.getElementById("ci-title").textContent = c.name;
+        document.getElementById("ci-img").innerHTML = renderItemImg(c);
+        const sumW = c.drops.reduce((s, d) => s + d.weight, 0);
+        document.getElementById("ci-drops").innerHTML = c.drops.map(d => {
+            const it = state.all_items.find(a => a.id === d.item_id);
+            const chance = (d.weight / sumW) * 100;
+            const pct = chance >= 10 ? chance.toFixed(1) : chance.toFixed(2);
+            return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;border-bottom:1px solid #3a2a20;font-size:13px;">
+                <span>${it ? it.name : '???'}</span>
+                <span style="color:#82b1ff;font-weight:700;">${pct}% · ${it ? it.price : 0} 💰</span>
+            </div>`;
+        }).join("");
+        document.querySelectorAll("#case-info-modal .count-btn").forEach((b, i) => b.classList.toggle("active", i === 0));
+        updateCiTotal();
+        document.getElementById("case-info-modal").classList.add("open");
+    }
+
+    function setOpenCount(n, el) {
+        pendingOpenCount = n;
+        document.querySelectorAll("#case-info-modal .count-btn").forEach(b => b.classList.remove("active"));
+        el.classList.add("active");
+        updateCiTotal();
+    }
+
+    function updateCiTotal() {
+        const c = state.cases.find(x => x.id === pendingCaseId);
+        if (c) document.getElementById("ci-total").textContent = (c.price * pendingOpenCount).toFixed(2);
+    }
+
+    function closeCaseInfo() {
+        document.getElementById("case-info-modal").classList.remove("open");
+    }
+
+    async function confirmOpenCase() {
+        const c = state.cases.find(x => x.id === pendingCaseId);
+        if (!c || isCaseOpening) return;
+        closeCaseInfo();
+        const count = pendingOpenCount;
+        const res = await fetch("/api/open_case", {
+            method: "POST", headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ user_id: userId, case_id: c.id, count: count })
+        });
+        const data = await res.json();
+        if (!res.ok) return showToast(data.detail);
+
+        document.getElementById("balance-val").textContent = (state.balance - c.price * count).toFixed(2);
+        const poolItems = c.drops.map(d => state.all_items.find(item => item.id === d.item_id)).filter(Boolean);
+        playCaseRoulette(c.name, poolItems, data.won_items, data.won_inv_ids);
+    }
+
+    function playCaseRoulette(caseName, poolItems, wonItems, wonInvIds) {
         isCaseOpening = true;
         const modal = document.getElementById("case-modal");
         const title = document.getElementById("case-modal-title");
         const viewport = document.getElementById("case-roulette-viewport");
         const track = document.getElementById("case-roulette-track");
         const winResult = document.getElementById("case-win-result");
+        const firstWon = wonItems[0];
 
-        title.textContent = `Открываем: ${caseName}`;
+        title.textContent = `Открываем: ${caseName}${wonItems.length > 1 ? ' x' + wonItems.length : ''}`;
         viewport.style.display = "block";
         winResult.style.display = "none";
 
@@ -894,7 +979,7 @@
 
         let slotsHtml = "";
         for (let i = 0; i < totalSlots; i++) {
-            const item = (i === winIndex) ? wonItem : itemsPool[Math.floor(Math.random() * itemsPool.length)];
+            const item = (i === winIndex) ? firstWon : itemsPool[Math.floor(Math.random() * itemsPool.length)];
             slotsHtml += `
                 <div class="roulette-slot rarity-${item.rarity}">
                     ${renderItemImg(item)}
@@ -916,22 +1001,49 @@
         setTimeout(async () => {
             await loadState();
             isCaseOpening = false;
-            title.textContent = "🎉 Ваш выигрыш!";
+            title.textContent = wonItems.length > 1 ? `🎉 Ваши выигрыши (x${wonItems.length})!` : "🎉 Ваш выигрыш!";
             viewport.style.display = "none";
 
             const winCard = document.getElementById("case-win-card");
-            winCard.className = `case-win-card rarity-${wonItem.rarity}`;
-            winCard.innerHTML = `${renderItemImg(wonItem)}<div style="font-size:17px;font-weight:800;margin-top:6px;">${wonItem.name}</div><div style="font-size:15px;color:#ffcc80;font-weight:700;margin-top:4px;">${wonItem.price} 💰</div>`;
+            const totalValue = wonItems.reduce((s, i) => s + i.price, 0);
+
+            if (wonItems.length === 1) {
+                winCard.className = `case-win-card rarity-${firstWon.rarity}`;
+                winCard.innerHTML = `${renderItemImg(firstWon)}<div style="font-size:17px;font-weight:800;margin-top:6px;">${firstWon.name}</div><div style="font-size:15px;color:#ffcc80;font-weight:700;margin-top:4px;">${firstWon.price} 💰</div>`;
+            } else {
+                winCard.className = "case-win-card";
+                winCard.innerHTML = `
+                    <div style="max-height:190px;overflow-y:auto;text-align:left;min-width:220px;">
+                        ${wonItems.map(i => `<div style="display:flex;justify-content:space-between;gap:14px;padding:5px 0;border-bottom:1px solid #3a2a20;font-size:13px;"><span>${i.name}</span><span style="color:#ffcc80;font-weight:700;white-space:nowrap;">${i.price} 💰</span></div>`).join("")}
+                    </div>
+                    <div style="font-size:16px;font-weight:800;margin-top:10px;">Итого: ${totalValue} 💰</div>`;
+            }
 
             const sellBtn = document.getElementById("case-quick-sell-btn");
-            sellBtn.textContent = `Продать за ${wonItem.price} 💰`;
+            sellBtn.textContent = wonItems.length > 1 ? `Продать всё за ${totalValue} 💰` : `Продать за ${firstWon.price} 💰`;
             sellBtn.onclick = async () => {
-                const candidates = state.inventory.filter(i => i.id === wonItem.id);
-                if (candidates.length) {
-                    const newest = candidates.reduce((a, b) => (a.inv_id > b.inv_id ? a : b));
-                    await sellItem(newest.inv_id);
+                if (wonItems.length > 1) {
+                    let soldTotal = 0;
+                    for (const iid of wonInvIds) {
+                        const r = await fetch("/api/sell_item", {
+                            method: "POST", headers: {"Content-Type": "application/json"},
+                            body: JSON.stringify({ user_id: userId, inv_id: iid })
+                        });
+                        const d = await r.json();
+                        if (r.ok) soldTotal += d.sold_for;
+                    }
+                    closeCaseModal();
+                    await loadState();
+                    showToast(`Продано всё за ${soldTotal} 💰`);
+                } else {
+                    let targetInv = (wonInvIds && wonInvIds.length === 1) ? wonInvIds[0] : null;
+                    if (targetInv == null) {
+                        const candidates = state.inventory.filter(i => i.id === firstWon.id && !i.locked);
+                        if (candidates.length) targetInv = candidates.reduce((a, b) => (a.inv_id > b.inv_id ? a : b)).inv_id;
+                    }
+                    if (targetInv != null) await sellItem(targetInv);
+                    closeCaseModal();
                 }
-                closeCaseModal();
             };
             winResult.style.display = "flex";
         }, 4350);
@@ -939,23 +1051,6 @@
 
     function closeCaseModal() {
         if (!isCaseOpening) document.getElementById("case-modal").classList.remove("open");
-    }
-
-    async function openCase(caseId) {
-        if (isCaseOpening) return;
-        const targetCase = state.cases.find(c => c.id === caseId);
-        if (!targetCase) return;
-
-        const res = await fetch("/api/open_case", {
-            method: "POST", headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ user_id: userId, case_id: caseId })
-        });
-        const data = await res.json();
-        if (!res.ok) return showToast(data.detail);
-
-        document.getElementById("balance-val").textContent = (state.balance - targetCase.price).toFixed(2);
-        const poolItems = targetCase.drops.map(d => state.all_items.find(item => item.id === d.item_id)).filter(Boolean);
-        playCaseRoulette(targetCase.name, poolItems, data.won_item);
     }
 
     async function sellItem(invId) {
@@ -966,6 +1061,18 @@
         const data = await res.json();
         if (!res.ok) return showToast(data.detail);
         showToast(`Продано за ${data.sold_for} 💰`);
+        await loadState();
+    }
+
+    async function withdrawItem(invId) {
+        if (!confirm("Создать заявку на вывод этого предмета?\nПредмет будет заблокирован до завершения сделки с модератором.")) return;
+        const res = await fetch("/api/withdraw_request", {
+            method: "POST", headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ user_id: userId, inv_id: invId })
+        });
+        const data = await res.json();
+        if (!res.ok) return showToast(data.detail);
+        showToast("📤 Заявка на вывод создана! Модератор свяжется с вами в Telegram.");
         await loadState();
     }
 
@@ -993,7 +1100,7 @@
         const data = await res.json();
         if (!res.ok) return showToast(data.detail);
 
-        playCaseRoulette("Бесплатный кейс", state.free_case_items, data.won_item);
+        playCaseRoulette("Бесплатный кейс", state.free_case_items, data.won_items, data.won_inv_ids);
     }
 
     async function redeemPromo() {
@@ -1037,7 +1144,7 @@
     function updateCrashTotal() {
         const coins = parseFloat(document.getElementById("crash-coins-input").value) || 0;
         let itemsSum = 0;
-        state.inventory.forEach(i => { if (crashSelectedInv.has(i.inv_id)) itemsSum += i.price; });
+        state.inventory.forEach(i => { if (!i.locked && crashSelectedInv.has(i.inv_id)) itemsSum += i.price; });
         document.getElementById("crash-total-bet").textContent = (itemsSum + coins).toFixed(2);
     }
 
@@ -1197,7 +1304,7 @@
         if (!el) return;
         let s = parseFloat(el.value) || 0;
         state.inventory.forEach(i => {
-            if (diceSelectedInv.has(i.inv_id)) s += i.price;
+            if (!i.locked && diceSelectedInv.has(i.inv_id)) s += i.price;
         });
         document.getElementById("dice-total-bet").textContent = s.toFixed(2);
     }
