@@ -103,7 +103,8 @@
         },
         {
           "inv_id": 445,
-          "item_id": 36
+          "item_id": 36,
+          "locked": true
         }
       ],
       "last_free_case": 1794927273
@@ -176,6 +177,14 @@
       "status": "cancelled",
       "moderator": "1789157813",
       "created_at": 1795111968
+    },
+    "3": {
+      "user_id": "8450028899",
+      "inv_id": 445,
+      "item_id": 36,
+      "status": "open",
+      "moderator": "",
+      "created_at": 1795124673
     }
   },
   "topup_requests": {
@@ -189,5 +198,5 @@
       "created_at": 1795107249
     }
   },
-  "next_req_id": 3
+  "next_req_id": 4
 }
