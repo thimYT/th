@@ -14,7 +14,7 @@
       ]
     },
     "1789157813": {
-      "balance": 0.0,
+      "balance": 500.0,
       "inventory": [],
       "last_free_case": 1795078170
     },
@@ -190,9 +190,9 @@
       "user_id": "1789157813",
       "username": "ThimYT",
       "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
-      "status": "taken",
+      "status": "done",
       "moderator": "1789157813",
-      "amount": null,
+      "amount": 500.0,
       "created_at": 1795107249
     }
   },
