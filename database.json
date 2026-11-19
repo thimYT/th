@@ -104,7 +104,7 @@
         {
           "inv_id": 445,
           "item_id": 36,
-          "locked": true
+          "locked": false
         }
       ],
       "last_free_case": 1794927273
@@ -182,7 +182,7 @@
       "user_id": "8450028899",
       "inv_id": 445,
       "item_id": 36,
-      "status": "taken",
+      "status": "cancelled",
       "moderator": "1789157813",
       "created_at": 1795124673
     }
