@@ -182,8 +182,8 @@
       "user_id": "8450028899",
       "inv_id": 445,
       "item_id": 36,
-      "status": "open",
-      "moderator": "",
+      "status": "taken",
+      "moderator": "1789157813",
       "created_at": 1795124673
     }
   },
