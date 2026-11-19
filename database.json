@@ -34,7 +34,8 @@
         },
         {
           "inv_id": 602,
-          "item_id": 3
+          "item_id": 3,
+          "locked": true
         }
       ],
       "last_free_case": 1795078170
@@ -205,7 +206,16 @@
       ]
     }
   },
-  "withdraw_requests": {},
+  "withdraw_requests": {
+    "2": {
+      "user_id": "1789157813",
+      "inv_id": 602,
+      "item_id": 3,
+      "status": "open",
+      "moderator": "",
+      "created_at": 1795111968
+    }
+  },
   "topup_requests": {
     "1": {
       "user_id": "1789157813",
@@ -217,5 +227,5 @@
       "created_at": 1795107249
     }
   },
-  "next_req_id": 2
+  "next_req_id": 3
 }
