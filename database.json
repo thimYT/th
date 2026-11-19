@@ -14,7 +14,7 @@
       ]
     },
     "1789157813": {
-      "balance": 24.7,
+      "balance": 4.7,
       "inventory": [
         {
           "inv_id": 639,
@@ -179,12 +179,16 @@
         {
           "inv_id": 679,
           "item_id": 1
+        },
+        {
+          "inv_id": 680,
+          "item_id": 6
         }
       ],
       "last_free_case": 1795078170
     },
     "8450028899": {
-      "balance": 475.44,
+      "balance": 477.44,
       "inventory": [
         {
           "inv_id": 265,
@@ -337,7 +341,7 @@
       "last_free_case": 0
     }
   },
-  "next_inv_id": 680,
+  "next_inv_id": 681,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
