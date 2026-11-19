@@ -183,5 +183,18 @@
         "1789157813"
       ]
     }
-  }
+  },
+  "withdraw_requests": {},
+  "topup_requests": {
+    "1": {
+      "user_id": "1789157813",
+      "username": "ThimYT",
+      "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
+      "status": "open",
+      "moderator": "",
+      "amount": null,
+      "created_at": 1795107249
+    }
+  },
+  "next_req_id": 2
 }
