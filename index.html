@@ -150,7 +150,7 @@
     .case-modal-box {
         background: linear-gradient(180deg, #281b15 0%, #171d2c 100%);
         border: 1px solid var(--orange); border-radius: 18px;
-        width: 100%; max-width: 400px; max-height: 88vh; overflow-y: auto;
+        width: 100%; max-width: 460px; max-height: 88vh; overflow-y: auto;
         padding: 16px 14px; text-align: center;
         box-shadow: 0 10px 35px rgba(0, 0, 0, 0.85), 0 0 20px var(--orange-glow);
     }
@@ -190,11 +190,25 @@
         color: #82b1ff; font-weight: 700; white-space: nowrap; flex-shrink: 0; font-size: 11px;
     }
 
-    /* Рулетка открытия кейса */
+    /* СТЕК РУЛЕТОК ОТКРЫТИЯ КЕЙСА */
+    .case-roulettes-stack {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        margin-bottom: 12px;
+    }
     .case-roulette-viewport {
-        position: relative; width: 100%; height: 116px; background: #130d0a;
+        position: relative; width: 100%; max-width: 420px; height: 116px; background: #130d0a;
         border: 2px solid var(--card-border); border-radius: 12px;
-        overflow: hidden; margin-bottom: 12px;
+        overflow: hidden;
+    }
+    .case-roulette-label {
+        position: absolute; top: 4px; left: 8px; z-index: 7;
+        font-size: 10px; font-weight: 800; color: var(--muted);
+        background: rgba(19, 13, 10, 0.8); padding: 1px 6px; border-radius: 6px;
+        border: 1px solid var(--card-border);
     }
     .case-roulette-line {
         position: absolute; top: 0; bottom: 0; left: 50%; transform: translateX(-50%);
@@ -213,6 +227,7 @@
     .roulette-slot .fallback-icon { font-size: 28px; height: 42px; margin-bottom: 3px; }
     .roulette-slot-name { font-size: 10px; font-weight: 700; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .roulette-slot-price { font-size: 10px; color: #ffcc80; font-weight: 700; }
+
     .case-win-result { display: none; flex-direction: column; align-items: center; width: 100%; }
     .case-win-card {
         background: rgba(44, 30, 24, 0.95); border: 2px solid var(--orange);
@@ -601,14 +616,11 @@
     </div>
 </div>
 
-<!-- Рулетка открытия кейса -->
+<!-- Рулетки открытия кейса -->
 <div class="case-modal-overlay" id="case-modal">
     <div class="case-modal-box">
         <div class="case-modal-title" id="case-modal-title">Открываем кейс...</div>
-        <div class="case-roulette-viewport" id="case-roulette-viewport">
-            <div class="case-roulette-line"></div>
-            <div class="case-roulette-track" id="case-roulette-track"></div>
-        </div>
+        <div class="case-roulettes-stack" id="case-roulettes-stack"></div>
         <div class="case-win-result" id="case-win-result">
             <div class="case-win-card" id="case-win-card"></div>
             <div class="case-win-actions">
@@ -1070,46 +1082,77 @@ function playCaseRoulette(caseName, poolItems, wonItems, wonInvIds) {
     isCaseOpening = true;
     const modal = el("case-modal");
     const title = el("case-modal-title");
-    const viewport = el("case-roulette-viewport");
-    const track = el("case-roulette-track");
+    const stack = el("case-roulettes-stack");
     const winResult = el("case-win-result");
     const firstWon = wonItems[0];
 
     title.textContent = caseName + (wonItems.length > 1 ? " ×" + wonItems.length : "");
-    viewport.style.display = "block";
+    stack.style.display = "flex";
     winResult.style.display = "none";
+    stack.innerHTML = "";
 
     const totalSlots = 45;
     const winIndex = 36;
-    const itemsPool = (poolItems && poolItems.length) ? poolItems : state.all_items;
-    if (!itemsPool.length) itemsPool.push(firstWon);
+    const itemsPool = (poolItems && poolItems.length) ? poolItems.slice() : state.all_items.slice();
+    if (!itemsPool.length && firstWon) itemsPool.push(firstWon);
 
-    let slotsHtml = "";
-    for (let i = 0; i < totalSlots; i++) {
-        const item = (i === winIndex) ? firstWon : itemsPool[Math.floor(Math.random() * itemsPool.length)];
-        slotsHtml += '<div class="roulette-slot rarity-' + item.rarity + '">' +
-            renderItemImg(item) +
-            '<div class="roulette-slot-name">' + item.name + '</div>' +
-            '<div class="roulette-slot-price">' + item.price + ' 💰</div>' +
-        '</div>';
-    }
+    const STEP = 104; // 96px слот + 8px gap
+    const PAD_LEFT = 8;
 
-    track.style.transition = "none";
-    track.style.transform = "translateX(0px)";
-    track.innerHTML = slotsHtml;
+    // Для каждого выигранного предмета создаём свою рулетку
+    const viewports = [];
+    wonItems.forEach((wonItem, idx) => {
+        const vp = document.createElement("div");
+        vp.className = "case-roulette-viewport";
+
+        const label = document.createElement("div");
+        label.className = "case-roulette-label";
+        label.textContent = "Кейс " + (idx + 1);
+        vp.appendChild(label);
+
+        const line = document.createElement("div");
+        line.className = "case-roulette-line";
+        vp.appendChild(line);
+
+        const track = document.createElement("div");
+        track.className = "case-roulette-track";
+
+        let slotsHtml = "";
+        for (let i = 0; i < totalSlots; i++) {
+            const item = (i === winIndex) ? wonItem : itemsPool[Math.floor(Math.random() * itemsPool.length)];
+            slotsHtml += '<div class="roulette-slot rarity-' + item.rarity + '">' +
+                renderItemImg(item) +
+                '<div class="roulette-slot-name">' + item.name + '</div>' +
+                '<div class="roulette-slot-price">' + item.price + ' 💰</div>' +
+            '</div>';
+        }
+        track.innerHTML = slotsHtml;
+        vp.appendChild(track);
+        stack.appendChild(vp);
+
+        track.style.transition = "none";
+        track.style.transform = "translateX(0px)";
+        viewports.push(vp);
+    });
+
     modal.classList.add("open");
-    void track.offsetWidth;
 
-    /* 96px слот + 8px gap = 104px шаг, центр слота +48px */
-    const targetX = (8 + winIndex * 104 + 48) - (viewport.clientWidth / 2) + (Math.floor(Math.random() * 50) - 25);
-    track.style.transition = "transform 4.2s cubic-bezier(0.12, 0.85, 0.2, 1)";
-    track.style.transform = "translateX(-" + targetX + "px)";
+    // Принудительный reflow и одновременный запуск всех дорожек
+    void stack.offsetWidth;
+
+    viewports.forEach((vp, idx) => {
+        const track = vp.querySelector(".case-roulette-track");
+        const vpWidth = vp.clientWidth;
+        const targetX = (PAD_LEFT + winIndex * STEP + 48) - (vpWidth / 2) + (Math.floor(Math.random() * 50) - 25);
+        track.style.transition = "transform 4.2s cubic-bezier(0.12, 0.85, 0.2, 1)";
+        track.style.transform = "translateX(-" + targetX + "px)";
+    });
 
     setTimeout(async () => {
         await loadState();
         isCaseOpening = false;
         title.textContent = wonItems.length > 1 ? "🎉 Выигрыш (×" + wonItems.length + ")" : "🎉 Ваш выигрыш!";
-        viewport.style.display = "none";
+        stack.style.display = "none";
 
         const winCard = el("case-win-card");
         const totalValue = wonItems.reduce((s, i) => s + i.price, 0);
