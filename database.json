@@ -102,11 +102,6 @@
           "item_id": 36
         },
         {
-          "inv_id": 445,
-          "item_id": 36,
-          "locked": false
-        },
-        {
           "inv_id": 741,
           "item_id": 6
         },
@@ -116,6 +111,10 @@
         },
         {
           "inv_id": 746,
+          "item_id": 41
+        },
+        {
+          "inv_id": 747,
           "item_id": 41
         }
       ],
@@ -161,7 +160,7 @@
       "last_free_case": 0
     }
   },
-  "next_inv_id": 747,
+  "next_inv_id": 748,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
