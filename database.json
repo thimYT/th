@@ -14,7 +14,7 @@
       ]
     },
     "1789157813": {
-      "balance": 224.7,
+      "balance": 174.7,
       "inventory": [
         {
           "inv_id": 639,
@@ -98,6 +98,26 @@
         },
         {
           "inv_id": 659,
+          "item_id": 1
+        },
+        {
+          "inv_id": 660,
+          "item_id": 1
+        },
+        {
+          "inv_id": 661,
+          "item_id": 1
+        },
+        {
+          "inv_id": 662,
+          "item_id": 1
+        },
+        {
+          "inv_id": 663,
+          "item_id": 1
+        },
+        {
+          "inv_id": 664,
           "item_id": 1
         }
       ],
@@ -257,7 +277,7 @@
       "last_free_case": 0
     }
   },
-  "next_inv_id": 660,
+  "next_inv_id": 665,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
