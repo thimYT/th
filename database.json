@@ -17,27 +17,6 @@
       "balance": 245.0,
       "inventory": [
         {
-          "inv_id": 598,
-          "item_id": 1
-        },
-        {
-          "inv_id": 599,
-          "item_id": 4
-        },
-        {
-          "inv_id": 600,
-          "item_id": 3
-        },
-        {
-          "inv_id": 601,
-          "item_id": 1
-        },
-        {
-          "inv_id": 602,
-          "item_id": 3,
-          "locked": false
-        },
-        {
           "inv_id": 603,
           "item_id": 15
         },
@@ -50,28 +29,8 @@
           "item_id": 15
         },
         {
-          "inv_id": 606,
-          "item_id": 2
-        },
-        {
-          "inv_id": 607,
-          "item_id": 3
-        },
-        {
-          "inv_id": 608,
-          "item_id": 1
-        },
-        {
           "inv_id": 632,
           "item_id": 9
-        },
-        {
-          "inv_id": 633,
-          "item_id": 6
-        },
-        {
-          "inv_id": 634,
-          "item_id": 6
         },
         {
           "inv_id": 635,
