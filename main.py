@@ -1,6 +1,7 @@
 import os
 import json
 import time
+import math
 import base64
 import random
 import threading
@@ -21,13 +22,12 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", "").strip()
 GITHUB_REPO = os.getenv("GITHUB_REPO", "").strip()
 BOT_TOKEN = os.getenv("BOT_TOKEN", "").strip()
 ADMIN_CHAT_ID = os.getenv("ADMIN_CHAT_ID", "").strip()
-# Список Telegram ID модераторов через запятую, например: "123456,789012"
-# Если пусто — заявки уходят только ADMIN_CHAT_ID.
 MODERATOR_IDS = [m.strip() for m in os.getenv("MODERATOR_IDS", "").split(",") if m.strip()]
 if not MODERATOR_IDS and ADMIN_CHAT_ID:
     MODERATOR_IDS = [ADMIN_CHAT_ID]
 DB_FILE_PATH = "database.json"
 
+# ---------- ITEMS_DB: без дубликатов ключей, id == ключу ----------
 ITEMS_DB = {
     1: {"id": 1, "name": "Gub", "price": 5, "rarity": "common", "image": "/images/item1.png", "fallback": "🗡️"},
     2: {"id": 2, "name": "Sir Mangus", "price": 7, "rarity": "common", "image": "/images/item2.png", "fallback": "🔫"},
@@ -72,97 +72,56 @@ ITEMS_DB = {
     41: {"id": 41, "name": "Pretzo Robo", "price": 70, "rarity": "mythic", "image": "/images/item41.png", "fallback": "🐉"},
     42: {"id": 42, "name": "Los Spagettis", "price": 75, "rarity": "legendary", "image": "/images/item42.png", "fallback": "🐉"},
     43: {"id": 43, "name": "Cloverat Clapat", "price": 80, "rarity": "legendary", "image": "/images/item43.png", "fallback": "🐉"},
+    44: {"id": 44, "name": "La Ginger Sekolah", "price": 78, "rarity": "legendary", "image": "/images/item44.png", "fallback": "🐉"},
+    45: {"id": 45, "name": "Queen Bee", "price": 82, "rarity": "legendary", "image": "/images/item45.png", "fallback": "🐉"},
+    46: {"id": 46, "name": "Guest 666", "price": 83, "rarity": "legendary", "image": "/images/item46.png", "fallback": "🐉"},
+    47: {"id": 47, "name": "Panda Popanda", "price": 84, "rarity": "legendary", "image": "/images/item47.png", "fallback": "🐉"},
+    48: {"id": 48, "name": "Festive 67", "price": 85, "rarity": "legendary", "image": "/images/item48.png", "fallback": "🐉"},
+    49: {"id": 49, "name": "Candini Fluffini", "price": 86, "rarity": "legendary", "image": "/images/item49.png", "fallback": "🐉"},
+    50: {"id": 50, "name": "Cangurato Gelato", "price": 87, "rarity": "legendary", "image": "/images/item50.png", "fallback": "🐉"},
+    51: {"id": 51, "name": "Boppin Bunny", "price": 88, "rarity": "legendary", "image": "/images/item51.png", "fallback": "🐉"},
+    52: {"id": 52, "name": "Spooky And Pumpky", "price": 89, "rarity": "legendary", "image": "/images/item52.png", "fallback": "🐉"},
+    53: {"id": 53, "name": "Sammyni Fattini", "price": 90, "rarity": "legendary", "image": "/images/item53.png", "fallback": "🐉"},
+    54: {"id": 54, "name": "Yetimatic", "price": 91, "rarity": "legendary", "image": "/images/item54.png", "fallback": "🐉"},
+    55: {"id": 55, "name": "La Secret", "price": 92, "rarity": "legendary", "image": "/images/item55.png", "fallback": "🐉"},
+    56: {"id": 56, "name": "La Food", "price": 94, "rarity": "legendary", "image": "/images/item56.png", "fallback": "🐉"},
+    57: {"id": 57, "name": "Los Hackers", "price": 96, "rarity": "legendary", "image": "/images/item57.png", "fallback": "🐉"},
+    58: {"id": 58, "name": "Popcuru", "price": 98, "rarity": "legendary", "image": "/images/item58.png", "fallback": "🐉"},
+    59: {"id": 59, "name": "Fragrama", "price": 100, "rarity": "legendary", "image": "/images/item59.png", "fallback": "🐉"},
+    60: {"id": 60, "name": "Reinito Sleighito", "price": 110, "rarity": "legendary", "image": "/images/item60.png", "fallback": "🐉"},
+    61: {"id": 61, "name": "Rico Dinero", "price": 125, "rarity": "legendary", "image": "/images/item61.png", "fallback": "🐉"},
+    62: {"id": 62, "name": "Pizza And Ranch", "price": 150, "rarity": "legendary", "image": "/images/item62.png", "fallback": "🐉"},
+    63: {"id": 63, "name": "Celestial Pegas", "price": 180, "rarity": "legendary", "image": "/images/item63.png", "fallback": "🐉"},
+    64: {"id": 64, "name": "Cooki And Milki", "price": 200, "rarity": "legendary", "image": "/images/item64.png", "fallback": "🐉"},
+    65: {"id": 65, "name": "Burguro And Fryuro", "price": 205, "rarity": "legendary", "image": "/images/item65.png", "fallback": "🐉"},
+    66: {"id": 66, "name": "Los Chillis", "price": 220, "rarity": "legendary", "image": "/images/item66.png", "fallback": "🐉"},
+    67: {"id": 67, "name": "Duggy Bros", "price": 240, "rarity": "legendary", "image": "/images/item67.png", "fallback": "🐉"},
+    68: {"id": 68, "name": "Los Admins", "price": 275, "rarity": "legendary", "image": "/images/item68.png", "fallback": "🐉"},
+    69: {"id": 69, "name": "Los Sekolahs", "price": 300, "rarity": "legendary", "image": "/images/item69.png", "fallback": "🐉"},
+    70: {"id": 70, "name": "Capitano Moby", "price": 325, "rarity": "legendary", "image": "/images/item70.png", "fallback": "🐉"},
+    71: {"id": 71, "name": "La Fuse", "price": 345, "rarity": "legendary", "image": "/images/item71.png", "fallback": "🐉"},
 }
 
 
 CASES_DB = {
-    1: {
-        "id": 1,
-        "name": "Бомжак",
-        "category": "regular", # Разные
-        "price": 10,
-        "image": "/images/case1.png",
-        "fallback": "📦",
-        "drops": [
-            {"item_id": 1, "weight": 30},
-            {"item_id": 2, "weight": 25},
-            {"item_id": 3, "weight": 15},
-            {"item_id": 4, "weight": 11.5},
-            {"item_id": 5, "weight": 10},
-            {"item_id": 6, "weight": 8.5},
-        ]
-    },
-    2: {
-            "id": 2,
-            "name": "Money$",
-            "category": "regular",
-            "price": 25,
-            "image": "/images/case2.png",
-            "fallback": "🧰",
-            "drops": [
-                {"item_id": 8, "weight": 52.5},
-                {"item_id": 15, "weight": 47.5}
-            ]
-        },
-    3: {
-            "id": 3,
-            "name": "paslkek",
-            "category": "partner",
-            "price": 20,
-            "partner_id": "1741462977",
-            "partner_percent": 10,
-            "image": "/images/case3.png",
-            "fallback": "💎",
-            "drops": [
-                {"item_id": 3, "weight": 40},
-                {"item_id": 5, "weight": 25},
-                {"item_id": 9, "weight": 20},
-                {"item_id": 10, "weight": 10},
-                {"item_id": 18, "weight": 5},
-            ]
-        },
-    4: {
-        "id": 4,
-        "name": "Pretzo all-in",
-        "category": "all_in",
-        "price": 10,
-        "image": "/images/case4.png",
-        "fallback": "💎",
-        "drops": [
-            {"item_id": 1, "weight": 99},
-            {"item_id": 41, "weight": 1},
-        ]
-    },
-    5: {
-        "id": 5,
-        "name": "we got buffed",
-        "category": "limited",
-        "expires_at": 1795629600,
-        "price": 68,
-        "image": "/images/case5.png",
-        "fallback": "⏳",
-        "drops": [
-            {"item_id": 40, "weight": 52.5},
-            {"item_id": 41, "weight": 47.5},
-        ]
-    },
-    6: {
-                "id": 6,
-                "name": "zahar_99d",
-                "category": "partner",
-                "price": 20,
-                "partner_id": "8450028899",
-                "partner_percent": 10,
-                "image": "/images/case6.png",
-                "fallback": "💎",
-                "drops": [
-                    {"item_id": 6, "weight": 40},
-                    {"item_id": 9, "weight": 25},
-                    {"item_id": 14, "weight": 20},
-                    {"item_id": 19, "weight": 10},
-                    {"item_id": 35, "weight": 5},
-                ]
-            },
+    1: {"id": 1, "name": "Бомжак", "category": "regular", "price": 10, "image": "/images/case1.png", "fallback": "📦",
+        "drops": [{"item_id": 1, "weight": 30}, {"item_id": 2, "weight": 25}, {"item_id": 3, "weight": 15},
+                  {"item_id": 4, "weight": 11.5}, {"item_id": 5, "weight": 10}, {"item_id": 6, "weight": 8.5}]},
+    2: {"id": 2, "name": "Money$", "category": "regular", "price": 25, "image": "/images/case2.png", "fallback": "🧰",
+        "drops": [{"item_id": 8, "weight": 52.5}, {"item_id": 15, "weight": 47.5}]},
+    3: {"id": 3, "name": "paslkek", "category": "partner", "price": 20, "partner_id": "1741462977",
+        "partner_percent": 10, "image": "/images/case3.png", "fallback": "💎",
+        "drops": [{"item_id": 3, "weight": 40}, {"item_id": 5, "weight": 25}, {"item_id": 9, "weight": 20},
+                  {"item_id": 10, "weight": 10}, {"item_id": 18, "weight": 5}]},
+    4: {"id": 4, "name": "Pretzo all-in", "category": "all_in", "price": 10, "image": "/images/case4.png", "fallback": "💎",
+        "drops": [{"item_id": 1, "weight": 99}, {"item_id": 41, "weight": 1}]},
+    5: {"id": 5, "name": "we got buffed", "category": "limited", "expires_at": 1795629600, "price": 68,
+        "image": "/images/case5.png", "fallback": "⏳",
+        "drops": [{"item_id": 40, "weight": 52.5}, {"item_id": 41, "weight": 47.5}]},
+    6: {"id": 6, "name": "zahar_99d", "category": "partner", "price": 20, "partner_id": "8450028899",
+        "partner_percent": 10, "image": "/images/case6.png", "fallback": "💎",
+        "drops": [{"item_id": 6, "weight": 40}, {"item_id": 9, "weight": 25}, {"item_id": 14, "weight": 20},
+                  {"item_id": 19, "weight": 10}, {"item_id": 35, "weight": 5}]},
 }
 
 FREE_CASE_DROPS = [
@@ -173,9 +132,14 @@ FREE_CASE_DROPS = [
 ]
 FREE_CASE_COOLDOWN = 12 * 3600
 
+# Кейс награды 24 ч: предметы 9..23, монеты 9..23
+DAILY_BONUS_ITEM_IDS = list(range(9, 24))
+DAILY_BONUS_COOLDOWN = 24 * 3600
+DAILY_BONUS_REQUIRED_TAG = "braindropdropbot"
+
 ACTIVE_CRASH_GAMES = {}
-# moder_chat_id -> topup request id, пока модератор вводит сумму пополнения
 WAITING_TOPUP_AMOUNT = {}
+
 
 def get_default_db():
     return {
@@ -189,6 +153,7 @@ def get_default_db():
             "GIFTKNIFE": {"stock": 10, "type": "item", "item_id": 1, "used_by": []}
         }
     }
+
 
 def github_load_db():
     if not GITHUB_TOKEN or not GITHUB_REPO:
@@ -215,8 +180,8 @@ def github_load_db():
             return get_default_db(), None
         raise HTTPException(status_code=500, detail=f"Ошибка GitHub DB: {e.code}")
 
+
 def normalize_db(db):
-    """Добавляет новые поля в старую базу, чтобы ничего не сломалось."""
     default = get_default_db()
     for key in ("users", "promocodes", "withdraw_requests", "topup_requests"):
         if key not in db:
@@ -225,7 +190,17 @@ def normalize_db(db):
         db["next_inv_id"] = 1
     if "next_req_id" not in db:
         db["next_req_id"] = 1
+    for uid, u in db.get("users", {}).items():
+        u.setdefault("balance", 0)
+        u.setdefault("inventory", [])
+        u.setdefault("last_free_case", 0)
+        u.setdefault("last_daily_bonus", 0)
+        u.setdefault("nickname", "")
+        u.setdefault("username", "")
+        u.setdefault("first_name", "")
+        u.setdefault("photo_url", "")
     return db
+
 
 def github_save_db(db_data, sha):
     if not GITHUB_TOKEN or not GITHUB_REPO:
@@ -251,19 +226,33 @@ def github_save_db(db_data, sha):
     except Exception:
         raise HTTPException(status_code=500, detail="Не удалось сохранить данные в GitHub")
 
+
 def ensure_user(db, user_id: str):
     if user_id not in db["users"]:
         db["users"][user_id] = {
-            "balance": 0,          # ИЗМЕНЕНО: стартовые 1000 монет убраны
+            "balance": 0,
             "inventory": [],
-            "last_free_case": 0
+            "last_free_case": 0,
+            "last_daily_bonus": 0,
+            "nickname": "",
+            "username": "",
+            "first_name": "",
+            "photo_url": "",
         }
-    elif "last_free_case" not in db["users"][user_id]:
-        db["users"][user_id]["last_free_case"] = 0
+    else:
+        u = db["users"][user_id]
+        u.setdefault("balance", 0)
+        u.setdefault("inventory", [])
+        u.setdefault("last_free_case", 0)
+        u.setdefault("last_daily_bonus", 0)
+        u.setdefault("nickname", "")
+        u.setdefault("username", "")
+        u.setdefault("first_name", "")
+        u.setdefault("photo_url", "")
     return db["users"][user_id]
 
-# ---------- Telegram Bot API ----------
 
+# ---------- Telegram Bot API ----------
 def bot_api(method, payload):
     if not BOT_TOKEN:
         return None
@@ -276,16 +265,19 @@ def bot_api(method, payload):
     except Exception:
         return None
 
+
 def send_tg_message(chat_id: str, text: str):
     if not BOT_TOKEN or not chat_id:
         return
     bot_api("sendMessage", {"chat_id": chat_id, "text": text})
+
 
 def bot_send_with_keyboard(chat_id: str, text: str, keyboard):
     if not BOT_TOKEN or not chat_id:
         return
     bot_api("sendMessage", {"chat_id": chat_id, "text": text,
                             "reply_markup": {"inline_keyboard": keyboard}})
+
 
 def notify_moderators(text: str, keyboard=None):
     for m in MODERATOR_IDS:
@@ -294,6 +286,7 @@ def notify_moderators(text: str, keyboard=None):
         else:
             send_tg_message(m, text)
 
+
 def answer_cb(cb_id, text=None, alert=False):
     payload = {"callback_query_id": cb_id}
     if text:
@@ -301,8 +294,10 @@ def answer_cb(cb_id, text=None, alert=False):
         payload["show_alert"] = alert
     bot_api("answerCallbackQuery", payload)
 
+
 def mod_name(cb_from):
     return cb_from.get("username") or cb_from.get("first_name") or str(cb_from.get("id"))
+
 
 def handle_callback(cb):
     cb_id = cb["id"]
@@ -319,7 +314,6 @@ def handle_callback(cb):
     db, sha = github_load_db()
     db = normalize_db(db)
 
-    # ---------- ЗАЯВКИ НА ВЫВОД ----------
     if action in ("wd_take", "wd_done", "wd_fail"):
         reqs = db.setdefault("withdraw_requests", {})
         r = reqs.get(rid)
@@ -374,7 +368,6 @@ def handle_callback(cb):
             send_tg_message(r["user_id"], f"❌ Заявка на вывод «{item.get('name', '?')}» отменена. Предмет возвращён в инвентарь.")
             return
 
-    # ---------- ЗАЯВКИ НА ПОПОЛНЕНИЕ ----------
     if action in ("tp_take", "tp_cancel"):
         reqs = db.setdefault("topup_requests", {})
         r = reqs.get(rid)
@@ -416,20 +409,20 @@ def handle_callback(cb):
             send_tg_message(r["user_id"], "❌ Ваша заявка на пополнение отменена. Вы можете создать новую.")
             return
 
+
 def handle_message(msg):
     chat_id = str(msg["chat"]["id"])
     from_id = str(msg["from"]["id"])
     text = (msg.get("text") or "").strip()
 
-    # Модератор вводит сумму пополнения
     if from_id in MODERATOR_IDS and from_id in WAITING_TOPUP_AMOUNT:
         rid = WAITING_TOPUP_AMOUNT[from_id]
         try:
             amount = round(float(text.replace(",", ".")), 2)
-            if amount <= 0:
+            if amount <= 0 or amount > 1_000_000:
                 raise ValueError
         except ValueError:
-            send_tg_message(chat_id, "Введите сумму числом, например: 500")
+            send_tg_message(chat_id, "Введите сумму числом от 0 до 1 000 000, например: 500")
             return
         db, sha = github_load_db()
         db = normalize_db(db)
@@ -460,6 +453,7 @@ def handle_message(msg):
         else:
             send_tg_message(chat_id, "👋 Это бот проекта BrainDrop. Заявки на пополнение и вывод создаются внутри игры.")
 
+
 def handle_update(upd):
     if "callback_query" in upd:
         try:
@@ -471,6 +465,7 @@ def handle_update(upd):
             handle_message(upd["message"])
         except Exception:
             pass
+
 
 def bot_loop():
     offset = 0
@@ -484,11 +479,12 @@ def bot_loop():
         except Exception:
             time.sleep(2)
 
+
 if BOT_TOKEN:
     threading.Thread(target=bot_loop, daemon=True).start()
 
-# ---------- Модели запросов ----------
 
+# ---------- Модели ----------
 class OpenCaseReq(BaseModel):
     user_id: str
     case_id: int
@@ -538,9 +534,24 @@ class ColorDiceReq(BaseModel):
     chosen_color: str
     dice_count: int = 4
 
+class ProfileSyncReq(BaseModel):
+    user_id: str
+    username: Optional[str] = ""
+    first_name: Optional[str] = ""
+    photo_url: Optional[str] = ""
+
+class SetNicknameReq(BaseModel):
+    user_id: str
+    nickname: str
+
+class DailyBonusReq(BaseModel):
+    user_id: str
+
+
 @app.get("/")
 def serve_frontend():
     return FileResponse("index.html")
+
 
 @app.get("/api/state/{user_id}")
 def get_state(user_id: str):
@@ -562,7 +573,12 @@ def get_state(user_id: str):
     now = int(time.time())
     next_free_at = user.get("last_free_case", 0) + FREE_CASE_COOLDOWN
     free_seconds_left = max(0, next_free_at - now)
+
+    next_daily_at = user.get("last_daily_bonus", 0) + DAILY_BONUS_COOLDOWN
+    daily_seconds_left = max(0, next_daily_at - now)
+
     free_case_items = [ITEMS_DB[d["item_id"]] for d in FREE_CASE_DROPS if d["item_id"] in ITEMS_DB]
+    daily_bonus_items = [ITEMS_DB[i] for i in DAILY_BONUS_ITEM_IDS if i in ITEMS_DB]
 
     return {
         "balance": round(user["balance"], 2),
@@ -570,11 +586,55 @@ def get_state(user_id: str):
         "cases": [c for c in CASES_DB.values() if not c.get("expires_at") or c["expires_at"] > now],
         "all_items": list(ITEMS_DB.values()),
         "free_seconds_left": free_seconds_left,
-        "free_case_items": free_case_items
+        "free_case_items": free_case_items,
+        "daily_seconds_left": daily_seconds_left,
+        "daily_bonus_items": daily_bonus_items,
+        "profile": {
+            "user_id": user_id,
+            "nickname": user.get("nickname", ""),
+            "username": user.get("username", ""),
+            "first_name": user.get("first_name", ""),
+            "photo_url": user.get("photo_url", ""),
+            "balance": round(user["balance"], 2),
+            "inv_count": len(user["inventory"]),
+            "inv_value": round(sum(ITEMS_DB[e["item_id"]]["price"] for e in user["inventory"] if e["item_id"] in ITEMS_DB), 2),
+        }
     }
+
+
+@app.post("/api/profile/sync")
+def profile_sync(req: ProfileSyncReq):
+    if not req.user_id:
+        raise HTTPException(status_code=400, detail="Некорректный user_id")
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    user = ensure_user(db, req.user_id)
+    user["username"] = (req.username or "")[:64]
+    user["first_name"] = (req.first_name or "")[:128]
+    user["photo_url"] = (req.photo_url or "")[:512]
+    github_save_db(db, sha)
+    return {"ok": True}
+
+
+@app.post("/api/profile/nickname")
+def set_nickname(req: SetNicknameReq):
+    if not req.user_id:
+        raise HTTPException(status_code=400, detail="Некорректный user_id")
+    nickname = (req.nickname or "").strip()
+    if len(nickname) > 64:
+        raise HTTPException(status_code=400, detail="Ник слишком длинный (макс. 64)")
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    user = ensure_user(db, req.user_id)
+    user["nickname"] = nickname
+    github_save_db(db, sha)
+    return {"ok": True, "nickname": nickname}
+
 
 @app.post("/api/topup_request")
 def topup_request(req: TopupReq):
+    if not req.user_id:
+        raise HTTPException(status_code=400, detail="Некорректный user_id")
     if not BOT_TOKEN:
         raise HTTPException(status_code=400, detail="Токен бота не настроен на сервере")
 
@@ -605,6 +665,7 @@ def topup_request(req: TopupReq):
         [[{"text": "🤝 Взять заявку", "callback_data": f"tp_take:{rid}"}]])
     send_tg_message(req.user_id, "💰 Заявка на пополнение создана. Модератор свяжется с вами.")
     return {"ok": True, "req_id": rid}
+
 
 @app.post("/api/withdraw_request")
 def create_withdraw_request(req: WithdrawReq):
@@ -643,10 +704,13 @@ def create_withdraw_request(req: WithdrawReq):
         f"📤 Заявка на вывод «{item['name']}» создана. Предмет заблокирован до завершения сделки. Модератор скоро свяжется с вами.")
     return {"ok": True, "req_id": rid}
 
+
 @app.post("/api/open_case")
 def open_case(req: OpenCaseReq):
     if req.case_id not in CASES_DB:
         raise HTTPException(status_code=400, detail="Кейс не найден")
+    if req.count not in (1, 3, 5):
+        raise HTTPException(status_code=400, detail="Недопустимое количество открытий")
 
     db, sha = github_load_db()
     db = normalize_db(db)
@@ -656,7 +720,7 @@ def open_case(req: OpenCaseReq):
     if case.get("expires_at") and int(time.time()) > case["expires_at"]:
         raise HTTPException(status_code=400, detail="Время действия этого кейса истекло")
 
-    count = max(1, min(int(req.count or 1), 10))  # 1x / 3x / 5x
+    count = int(req.count)
     total_price = round(case["price"] * count, 2)
 
     if user["balance"] < total_price:
@@ -685,6 +749,7 @@ def open_case(req: OpenCaseReq):
     github_save_db(db, sha)
     return {"won_items": [ITEMS_DB[i] for i in won_ids], "won_inv_ids": won_inv_ids}
 
+
 @app.post("/api/open_free_case")
 def open_free_case(req: FreeCaseReq):
     db, sha = github_load_db()
@@ -711,9 +776,58 @@ def open_free_case(req: FreeCaseReq):
     github_save_db(db, sha)
     return {"won_items": [ITEMS_DB[won_item_id]], "won_inv_ids": [inv_id]}
 
+
+def _has_required_tag(user) -> bool:
+    parts = [
+        user.get("nickname", "") or "",
+        user.get("username", "") or "",
+        user.get("first_name", "") or "",
+    ]
+    haystack = " ".join(parts).lower().replace(" ", "").replace("_", "")
+    return DAILY_BONUS_REQUIRED_TAG in haystack
+
+
+@app.post("/api/open_daily_bonus_case")
+def open_daily_bonus_case(req: DailyBonusReq):
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    user = ensure_user(db, req.user_id)
+
+    now = int(time.time())
+    last_open = user.get("last_daily_bonus", 0)
+    if now - last_open < DAILY_BONUS_COOLDOWN:
+        left = DAILY_BONUS_COOLDOWN - (now - last_open)
+        hours = left // 3600
+        mins = (left % 3600) // 60
+        raise HTTPException(status_code=400, detail=f"Кейс награды будет доступен через {hours}ч {mins}м")
+
+    if not _has_required_tag(user):
+        raise HTTPException(
+            status_code=400,
+            detail="Чтобы забрать кейс награды, добавьте @BrainDropDropBot в свой ник в профиле."
+        )
+
+    item_id = random.choice(DAILY_BONUS_ITEM_IDS)
+    coins = random.randint(9, 23)
+
+    user["last_daily_bonus"] = now
+    inv_id = db["next_inv_id"]
+    db["next_inv_id"] += 1
+    user["inventory"].append({"inv_id": inv_id, "item_id": item_id})
+    user["balance"] = round(user["balance"] + coins, 2)
+
+    github_save_db(db, sha)
+    return {
+        "won_items": [ITEMS_DB[item_id]],
+        "won_inv_ids": [inv_id],
+        "coins_added": coins,
+        "total_value": ITEMS_DB[item_id]["price"] + coins
+    }
+
+
 @app.post("/api/redeem_promo")
 def redeem_promo(req: PromoReq):
-    code = req.code.strip().upper()
+    code = (req.code or "").strip().upper()
     if not code:
         raise HTTPException(status_code=400, detail="Введите промокод")
 
@@ -751,11 +865,12 @@ def redeem_promo(req: PromoReq):
     else:
         raise HTTPException(status_code=400, detail="Неизвестный тип промокода")
 
-    promo["stock"] -= 1
+    promo["stock"] = max(0, int(promo["stock"]) - 1)
     used_by.append(req.user_id)
 
     github_save_db(db, sha)
     return {"message": f"Промокод активирован! Награда: {reward_text}"}
+
 
 @app.post("/api/sell_item")
 def sell_item(req: SellItemReq):
@@ -784,6 +899,7 @@ def sell_item(req: SellItemReq):
     github_save_db(db, sha)
     return {"sold_for": price}
 
+
 @app.post("/api/upgrade")
 def do_upgrade(req: UpgradeReq):
     if req.coins_bet < 0:
@@ -803,7 +919,7 @@ def do_upgrade(req: UpgradeReq):
             raise HTTPException(status_code=400, detail="Ошибка проверки предметов инвентаря")
         items_total_value += ITEMS_DB[inv_map[inv_id]]["price"]
 
-    total_bet = items_total_value + req.coins_bet
+    total_bet = round(items_total_value + req.coins_bet, 2)
     if total_bet <= 0:
         raise HTTPException(status_code=400, detail="Выберите вещи или введите монеты")
 
@@ -814,7 +930,7 @@ def do_upgrade(req: UpgradeReq):
     else:
         if not req.target_coins or req.target_coins <= total_bet:
             raise HTTPException(status_code=400, detail="Желаемая сумма должна быть больше ставки")
-        target_value = req.target_coins
+        target_value = float(req.target_coins)
 
     if target_value <= total_bet:
         raise HTTPException(status_code=400, detail="Цель должна быть дороже вашей ставки")
@@ -840,6 +956,7 @@ def do_upgrade(req: UpgradeReq):
     github_save_db(db, sha)
     return {"win": is_win, "chance": chance}
 
+
 def generate_crash_point():
     r = random.random()
     if r < 0.04:
@@ -847,10 +964,13 @@ def generate_crash_point():
     crash = 0.96 / (1.0 - r)
     return round(min(crash, 100.0), 2)
 
+
 @app.post("/api/crash/start")
 def crash_start(req: CrashStartReq):
     if req.coins_bet < 0:
         raise HTTPException(status_code=400, detail="Некорректная ставка монет")
+    if req.user_id in ACTIVE_CRASH_GAMES:
+        raise HTTPException(status_code=400, detail="У вас уже есть активная игра. Дождитесь завершения.")
 
     db, sha = github_load_db()
     db = normalize_db(db)
@@ -890,13 +1010,17 @@ def crash_start(req: CrashStartReq):
 
     return {"crash_point": crash_point, "total_bet": total_bet}
 
+
 @app.post("/api/crash/cashout")
 def crash_cashout(req: CrashCashoutReq):
+    if not math.isfinite(req.multiplier) or req.multiplier < 1.0:
+        raise HTTPException(status_code=400, detail="Некорректный множитель")
+
     game = ACTIVE_CRASH_GAMES.pop(req.user_id, None)
     if not game:
         raise HTTPException(status_code=400, detail="Активная игра не найдена или ракета уже взорвалась")
 
-    if req.multiplier < 1.0 or req.multiplier > game["crash_point"]:
+    if req.multiplier > game["crash_point"]:
         raise HTTPException(status_code=400, detail="Ракета уже взорвалась!")
 
     db, sha = github_load_db()
@@ -945,22 +1069,17 @@ def crash_cashout(req: CrashCashoutReq):
 
 DICE_COLORS = ["red", "orange", "yellow", "green", "blue", "purple"]
 
+
 def get_color_dice_multiplier(dice_count: int, matches: int) -> float:
     if matches <= 0 or matches % 2 == 0:
         return 0.0
-    multipliers_table = {
-        1: 1.85,
-        3: 5.5,
-        5: 18.0,
-        7: 60.0,
-        9: 200.0,
-        11: 750.0
-    }
+    multipliers_table = {1: 1.85, 3: 5.5, 5: 18.0, 7: 60.0, 9: 200.0, 11: 750.0}
     return multipliers_table.get(matches, 1.85)
+
 
 @app.post("/api/colordice/roll")
 def play_color_dice(req: ColorDiceReq):
-    color = req.chosen_color.strip().lower()
+    color = (req.chosen_color or "").strip().lower()
     if color not in DICE_COLORS:
         raise HTTPException(status_code=400, detail="Выберите один из 6 цветов")
     if req.dice_count < 3 or req.dice_count > 12:

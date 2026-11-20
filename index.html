@@ -66,7 +66,6 @@
         box-shadow: 0 2px 10px var(--blue-glow);
     }
 
-    /* Выдвижное меню справа */
     .drawer-overlay {
         position: fixed; inset: 0; background: rgba(10, 7, 5, 0.72); z-index: 200;
         opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
@@ -140,7 +139,6 @@
     .btn-blue { background: linear-gradient(135deg, var(--blue), #1565c0); box-shadow: 0 3px 10px var(--blue-glow); }
     .btn-red { background: linear-gradient(135deg, #ff3d00, #b71c1c); }
 
-    /* МОДАЛЬНЫЕ ОКНА КЕЙСОВ */
     .case-modal-overlay {
         position: fixed; inset: 0; background: rgba(10, 7, 5, 0.85);
         backdrop-filter: blur(6px); z-index: 300; display: none;
@@ -190,7 +188,6 @@
         color: #82b1ff; font-weight: 700; white-space: nowrap; flex-shrink: 0; font-size: 11px;
     }
 
-    /* СТЕК РУЛЕТОК ОТКРЫТИЯ КЕЙСА */
     .case-roulettes-stack {
         display: flex;
         flex-direction: column;
@@ -273,7 +270,6 @@
         padding: 3px 6px; border-radius: 6px; margin-bottom: 6px; display: inline-block;
     }
 
-    /* COLOR DICE */
     .dice-arena {
         background: radial-gradient(circle at center, rgba(41,121,255,.18) 0%, rgba(20,15,12,.95) 100%);
         border: 1px solid var(--card-border); border-radius: 18px; padding: 18px 12px;
@@ -318,7 +314,6 @@
     .outcome-pill.lose-pill { border-color: rgba(255,61,0,.35); color: #ff8a65; }
     .outcome-pill.hit-now { transform: scale(1.12); box-shadow: 0 0 12px #fff; border-color: #fff; background: #2e2019; }
 
-    /* РУЛЕТКА АПГРЕЙДЕРА */
     .roulette-wrapper {
         background: rgba(34, 23, 18, 0.92);
         border: 1px solid var(--card-border);
@@ -370,7 +365,6 @@
     .stat-line b { color: #ffcc80; }
     .center { text-align: center; }
 
-    /* КРАШ ИГРА */
     .crash-arena {
         background: radial-gradient(circle at bottom, rgba(255, 123, 0, 0.25) 0%, rgba(21, 31, 56, 0.95) 100%);
         border: 1px solid var(--blue); border-radius: 18px; height: 230px;
@@ -405,6 +399,58 @@
         font-weight: 700; z-index: 999; box-shadow: 0 6px 20px rgba(0,0,0,0.6);
         display: none; text-align: center; max-width: 90%;
     }
+
+    /* ПРОФИЛЬ */
+    .profile-card {
+        background: linear-gradient(180deg, #241711 0%, #171d2c 100%);
+        border: 1px solid var(--card-border);
+        border-radius: 18px;
+        padding: 18px 14px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+    .profile-avatar {
+        width: 92px; height: 92px; border-radius: 50%;
+        border: 3px solid var(--orange);
+        background: #130d0a;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 38px; font-weight: 900; color: var(--orange);
+        overflow: hidden;
+    }
+    .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .profile-name { font-size: 18px; font-weight: 900; text-align: center; }
+    .profile-username { color: var(--blue); font-weight: 700; font-size: 14px; }
+    .profile-id { color: var(--muted); font-size: 12px; font-weight: 700; }
+    .profile-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        width: 100%;
+        margin-top: 6px;
+    }
+    .profile-stat {
+        background: #130d0a;
+        border: 1px solid var(--card-border);
+        border-radius: 12px;
+        padding: 10px 6px;
+        text-align: center;
+    }
+    .profile-stat .v { color: #ffcc80; font-weight: 900; font-size: 15px; }
+    .profile-stat .l { color: var(--muted); font-size: 11px; font-weight: 700; }
+    .daily-badge {
+        display: inline-block;
+        background: rgba(41, 121, 255, 0.2);
+        border: 1px solid var(--blue);
+        color: #82b1ff;
+        font-size: 11px;
+        font-weight: 800;
+        padding: 3px 6px;
+        border-radius: 6px;
+        margin-bottom: 6px;
+    }
 </style>
 </head>
 <body>
@@ -426,6 +472,7 @@
         <b>Навигация</b>
         <button class="close-drawer" onclick="toggleDrawer(false)">×</button>
     </div>
+    <button class="nav-btn" data-tab="profile" onclick="switchTab('profile')">👤 Профиль</button>
     <button class="nav-btn active" data-tab="cases" onclick="switchTab('cases')">📦 Кейсы</button>
     <button class="nav-btn" data-tab="upgrade" onclick="switchTab('upgrade')">⚡ Апгрейдер</button>
     <button class="nav-btn" data-tab="crash" onclick="switchTab('crash')">🚀 Краш (Ракета)</button>
@@ -438,6 +485,32 @@
 </aside>
 
 <main class="container">
+
+    <!-- ПРОФИЛЬ -->
+    <section class="tab-section" id="tab-profile">
+        <h2>Профиль</h2>
+        <div class="profile-card">
+            <div class="profile-avatar" id="profile-avatar">?</div>
+            <div class="profile-name" id="profile-name">Игрок</div>
+            <div class="profile-username" id="profile-username">@—</div>
+            <div class="profile-id" id="profile-id">ID: —</div>
+            <div class="profile-stats">
+                <div class="profile-stat"><div class="v" id="profile-balance">0</div><div class="l">Баланс</div></div>
+                <div class="profile-stat"><div class="v" id="profile-inv-count">0</div><div class="l">Предметов</div></div>
+                <div class="profile-stat"><div class="v" id="profile-inv-value">0</div><div class="l">Стоимость</div></div>
+            </div>
+        </div>
+        <div class="panel-box">
+            <div class="panel-title">Ник игрока</div>
+            <div style="color:var(--muted);font-size:13px;margin-bottom:10px;">
+                Хотите кейс награды? Добавьте <b>@BrainDropDropBot</b> в ник. Например: «Вася @BrainDropDropBot».
+            </div>
+            <div class="input-group" style="margin-bottom:0;">
+                <input type="text" id="nickname-input" placeholder="Ваш ник" maxlength="64">
+                <button class="btn" style="width:auto;padding:10px 16px;" onclick="saveNickname()">Сохранить</button>
+            </div>
+        </div>
+    </section>
 
     <!-- КЕЙСЫ -->
     <section class="tab-section active" id="tab-cases">
@@ -576,6 +649,15 @@
             <div id="free-case-timer" class="center" style="color:var(--orange);font-size:13px;font-weight:700;margin-top:8px;"></div>
         </div>
         <div class="panel-box">
+            <div class="panel-title">Кейс награды (24 ч)</div>
+            <div class="daily-badge">🤖 Нужен @BrainDropDropBot в нике</div>
+            <div style="color:var(--muted);font-size:13px;margin-bottom:12px;">
+                Раз в 24 часа: предмет (9–23) + монеты (9–23). Условие — добавьте <b>@BrainDropDropBot</b> в ник в профиле.
+            </div>
+            <button class="btn btn-blue" id="daily-bonus-btn" onclick="openDailyBonusCase()">Забрать кейс награды</button>
+            <div id="daily-bonus-timer" class="center" style="color:var(--blue);font-size:13px;font-weight:700;margin-top:8px;"></div>
+        </div>
+        <div class="panel-box">
             <div class="panel-title">Активация промокода</div>
             <div class="input-group" style="margin-bottom:0;">
                 <input type="text" id="promo-input" placeholder="Введите промокод">
@@ -636,15 +718,17 @@
 <script>
 "use strict";
 
-/* ---------- Telegram ---------- */
 const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
 if (tg) { try { tg.expand(); } catch (e) { console.warn("expand failed", e); } }
-const userId = tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id
-    ? String(tg.initDataUnsafe.user.id)
-    : "demo_user_1";
+const tgUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : null;
+const userId = tgUser && tgUser.id ? String(tgUser.id) : "demo_user_1";
 
-/* ---------- Состояние ---------- */
-let state = { balance: 0, inventory: [], cases: [], all_items: [], free_seconds_left: 0, free_case_items: [] };
+let state = {
+    balance: 0, inventory: [], cases: [], all_items: [],
+    free_seconds_left: 0, free_case_items: [],
+    daily_seconds_left: 0, daily_bonus_items: [],
+    profile: null
+};
 let isCaseOpening = false;
 let upgSelectedInv = new Set();
 let upgTargetMode = "item";
@@ -664,7 +748,6 @@ let isDiceRolling = false;
 const DICE_NAMES_RU = { red: "Красный", orange: "Оранжевый", yellow: "Жёлтый", green: "Зелёный", blue: "Синий", purple: "Фиолетовый" };
 const MULT_TABLE = { 1: 1.85, 3: 5.5, 5: 18.0, 7: 60.0, 9: 200.0, 11: 750.0 };
 
-/* ---------- Общие хелперы ---------- */
 function el(id) { return document.getElementById(id); }
 
 async function postJSON(url, payload) {
@@ -675,7 +758,13 @@ async function postJSON(url, payload) {
     });
     let data = {};
     try { data = await res.json(); } catch (e) { data = {}; }
-    if (!res.ok) throw new Error(data.detail || "Ошибка сервера");
+    if (!res.ok) {
+        let msg = "Ошибка сервера";
+        if (data && data.detail) {
+            msg = typeof data.detail === "string" ? data.detail : JSON.stringify(data.detail);
+        }
+        throw new Error(msg);
+    }
     return data;
 }
 
@@ -715,7 +804,18 @@ function renderItemImg(item) {
     return '<img src="' + item.image + '" alt="" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"><div class="fallback-icon" style="display:none;">' + fallback + '</div>';
 }
 
-/* ---------- Загрузка состояния ---------- */
+async function syncProfile() {
+    if (!tgUser) return;
+    try {
+        await postJSON("/api/profile/sync", {
+            user_id: userId,
+            username: tgUser.username || "",
+            first_name: tgUser.first_name || "",
+            photo_url: tgUser.photo_url || ""
+        });
+    } catch (e) { /* не критично */ }
+}
+
 async function loadState() {
     try {
         const res = await fetch("/api/state/" + encodeURIComponent(userId));
@@ -727,7 +827,10 @@ async function loadState() {
             cases: Array.isArray(data.cases) ? data.cases : [],
             all_items: Array.isArray(data.all_items) ? data.all_items : [],
             free_seconds_left: Number(data.free_seconds_left) || 0,
-            free_case_items: Array.isArray(data.free_case_items) ? data.free_case_items : []
+            free_case_items: Array.isArray(data.free_case_items) ? data.free_case_items : [],
+            daily_seconds_left: Number(data.daily_seconds_left) || 0,
+            daily_bonus_items: Array.isArray(data.daily_bonus_items) ? data.daily_bonus_items : [],
+            profile: data.profile || null
         };
     } catch (e) {
         showToast(e.message || "Сервер недоступен");
@@ -742,6 +845,7 @@ async function loadState() {
     crashSelectedInv = new Set([...crashSelectedInv].filter(id => validIds.has(id)));
     diceSelectedInv = new Set([...diceSelectedInv].filter(id => validIds.has(id)));
 
+    renderProfile();
     renderCases();
     renderInventories();
     renderUpgradeTargets();
@@ -749,6 +853,43 @@ async function loadState() {
     updateCrashTotal();
     updateDiceTotal();
     updateFreeTimer();
+    updateDailyBonusTimer();
+}
+
+function renderProfile() {
+    const p = state.profile;
+    if (!p) return;
+    const avatar = el("profile-avatar");
+    const initial = (p.nickname || p.first_name || p.username || "?").trim().charAt(0).toUpperCase() || "?";
+    if (p.photo_url) {
+        avatar.innerHTML = '<img src="' + p.photo_url + '" alt="" onerror="this.style.display=\'none\'; this.parentNode.textContent=\'' + initial.replace(/'/g, "") + '\';">';
+    } else {
+        avatar.textContent = initial;
+    }
+    el("profile-name").textContent = p.nickname || p.first_name || "Игрок";
+    el("profile-username").textContent = p.username ? "@" + p.username : "@—";
+    el("profile-id").textContent = "ID: " + p.user_id;
+    el("profile-balance").textContent = Number(p.balance || 0).toFixed(2);
+    el("profile-inv-count").textContent = p.inv_count || 0;
+    el("profile-inv-value").textContent = Number(p.inv_value || 0).toFixed(2);
+
+    const nickInput = el("nickname-input");
+    if (nickInput && document.activeElement !== nickInput) {
+        nickInput.value = p.nickname || "";
+    }
+}
+
+async function saveNickname() {
+    const input = el("nickname-input");
+    const nickname = (input.value || "").trim();
+    if (nickname.length > 64) return showToast("Ник слишком длинный (макс. 64)");
+    try {
+        await postJSON("/api/profile/nickname", { user_id: userId, nickname: nickname });
+        showToast("Ник сохранён");
+    } catch (e) {
+        return showToast(e.message);
+    }
+    await loadState();
 }
 
 /* ---------- Кейсы ---------- */
@@ -820,7 +961,6 @@ setInterval(() => {
 
 /* ---------- Инвентари ---------- */
 function renderInventories() {
-    /* Основной инвентарь */
     const mainGrid = el("main-inv-grid");
     if (mainGrid) {
         if (!state.inventory.length) {
@@ -843,7 +983,6 @@ function renderInventories() {
     const bettable = state.inventory.filter(i => !i.locked);
     const emptyNote = '<p style="color:var(--muted); font-size:13px;">Нет предметов</p>';
 
-    /* Сетка для апгрейдера */
     const upgGrid = el("upg-inv-grid");
     if (upgGrid) {
         upgGrid.innerHTML = !bettable.length ? emptyNote : bettable.map(item =>
@@ -856,7 +995,6 @@ function renderInventories() {
         ).join("");
     }
 
-    /* Сетка для краша */
     const crashGrid = el("crash-inv-grid");
     if (crashGrid) {
         crashGrid.innerHTML = !bettable.length ? emptyNote : bettable.map(item =>
@@ -869,7 +1007,6 @@ function renderInventories() {
         ).join("");
     }
 
-    /* Сетка для костей */
     const diceGrid = el("dice-inv-grid");
     if (diceGrid) {
         diceGrid.innerHTML = !bettable.length ? emptyNote : bettable.map(item =>
@@ -1073,7 +1210,7 @@ async function confirmOpenCase() {
     if (!data.won_items || !data.won_items.length) {
         return showToast("Сервер не вернул результат открытия");
     }
-    el("balance-val").textContent = (state.balance - c.price * count).toFixed(2);
+    el("balance-val").textContent = Math.max(0, state.balance - c.price * count).toFixed(2);
     const poolItems = (c.drops || []).map(d => state.all_items.find(item => item.id === d.item_id)).filter(Boolean);
     playCaseRoulette(c.name, poolItems, data.won_items, data.won_inv_ids || []);
 }
@@ -1096,11 +1233,10 @@ function playCaseRoulette(caseName, poolItems, wonItems, wonInvIds) {
     const itemsPool = (poolItems && poolItems.length) ? poolItems.slice() : state.all_items.slice();
     if (!itemsPool.length && firstWon) itemsPool.push(firstWon);
 
-    const STEP = 104; // 96px слот + 8px gap
+    const STEP = 104;
     const PAD_LEFT = 8;
-
-    // Для каждого выигранного предмета создаём свою рулетку
     const viewports = [];
+
     wonItems.forEach((wonItem, idx) => {
         const vp = document.createElement("div");
         vp.className = "case-roulette-viewport";
@@ -1136,11 +1272,9 @@ function playCaseRoulette(caseName, poolItems, wonItems, wonInvIds) {
     });
 
     modal.classList.add("open");
-
-    // Принудительный reflow и одновременный запуск всех дорожек
     void stack.offsetWidth;
 
-    viewports.forEach((vp, idx) => {
+    viewports.forEach((vp) => {
         const track = vp.querySelector(".case-roulette-track");
         const vpWidth = vp.clientWidth;
         const targetX = (PAD_LEFT + winIndex * STEP + 48) - (vpWidth / 2) + (Math.floor(Math.random() * 50) - 25);
@@ -1188,7 +1322,7 @@ function playCaseRoulette(caseName, poolItems, wonItems, wonInvIds) {
                     try {
                         const d = await postJSON("/api/sell_item", { user_id: userId, inv_id: iid });
                         soldTotal += d.sold_for || 0;
-                    } catch (e) { /* предмет мог быть уже продан */ }
+                    } catch (e) { }
                 }
                 closeCaseModal();
                 await loadState();
@@ -1248,11 +1382,29 @@ function updateFreeTimer() {
     }
 }
 
-/* обратный отсчёт бесплатного кейса */
+function updateDailyBonusTimer() {
+    const btn = el("daily-bonus-btn");
+    const txt = el("daily-bonus-timer");
+    if (!btn || !txt) return;
+    if (state.daily_seconds_left <= 0) {
+        txt.textContent = "Доступен сейчас";
+        btn.disabled = false;
+    } else {
+        const h = Math.floor(state.daily_seconds_left / 3600);
+        const m = Math.floor((state.daily_seconds_left % 3600) / 60);
+        txt.textContent = "Будет доступен через " + h + "ч " + m + "м";
+        btn.disabled = true;
+    }
+}
+
 setInterval(() => {
     if (state.free_seconds_left > 0) {
         state.free_seconds_left = Math.max(0, state.free_seconds_left - 1);
         updateFreeTimer();
+    }
+    if (state.daily_seconds_left > 0) {
+        state.daily_seconds_left = Math.max(0, state.daily_seconds_left - 1);
+        updateDailyBonusTimer();
     }
 }, 1000);
 
@@ -1266,6 +1418,19 @@ async function openFreeCase() {
     }
     if (!data.won_items || !data.won_items.length) return showToast("Сервер не вернул результат");
     playCaseRoulette("Бесплатный кейс", state.free_case_items, data.won_items, data.won_inv_ids || []);
+}
+
+async function openDailyBonusCase() {
+    if (isCaseOpening) return;
+    let data;
+    try {
+        data = await postJSON("/api/open_daily_bonus_case", { user_id: userId });
+    } catch (e) {
+        return showToast(e.message);
+    }
+    if (!data.won_items || !data.won_items.length) return showToast("Сервер не вернул результат");
+    showToast("🎁 Кейс награды: +" + data.coins_added + " 💰 и предмет!");
+    playCaseRoulette("Кейс награды", state.daily_bonus_items, data.won_items, data.won_inv_ids || []);
 }
 
 async function redeemPromo() {
@@ -1283,7 +1448,7 @@ async function redeemPromo() {
 }
 
 async function requestTopup() {
-    const u = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) || {};
+    const u = tgUser || {};
     try {
         await postJSON("/api/topup_request", {
             user_id: userId,
@@ -1326,6 +1491,7 @@ async function handleCrashAction() {
 }
 
 async function startCrash() {
+    if (crashActive) return;
     const coins = parseFloat(el("crash-coins-input").value) || 0;
     let data;
     try {
@@ -1555,7 +1721,7 @@ async function rollColorDice() {
 
 /* ---------- Запуск ---------- */
 renderInitialDiceBoard();
-loadState();
+syncProfile().then(loadState);
 </script>
 </body>
 </html>
