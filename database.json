@@ -2,7 +2,13 @@
   "users": {
     "player_654541": {
       "balance": 6000,
-      "inventory": []
+      "inventory": [],
+      "last_free_case": 0,
+      "last_daily_bonus": 0,
+      "nickname": "",
+      "username": "",
+      "first_name": "",
+      "photo_url": ""
     },
     "player_715825": {
       "balance": 620,
@@ -11,12 +17,23 @@
           "inv_id": 11,
           "item_id": 6
         }
-      ]
+      ],
+      "last_free_case": 0,
+      "last_daily_bonus": 0,
+      "nickname": "",
+      "username": "",
+      "first_name": "",
+      "photo_url": ""
     },
     "1789157813": {
       "balance": 0.0,
       "inventory": [],
-      "last_free_case": 1795078170
+      "last_free_case": 1795078170,
+      "last_daily_bonus": 0,
+      "nickname": "",
+      "username": "ThimYT",
+      "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
+      "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg"
     },
     "8450028899": {
       "balance": 384.66,
@@ -102,26 +119,52 @@
           "item_id": 36
         }
       ],
-      "last_free_case": 1795125234
+      "last_free_case": 1795125234,
+      "last_daily_bonus": 0,
+      "nickname": "",
+      "username": "",
+      "first_name": "",
+      "photo_url": ""
     },
     "player_355713": {
       "balance": 1000,
-      "inventory": []
+      "inventory": [],
+      "last_free_case": 0,
+      "last_daily_bonus": 0,
+      "nickname": "",
+      "username": "",
+      "first_name": "",
+      "photo_url": ""
     },
     "8980661701": {
       "balance": 90.6,
       "inventory": [],
-      "last_free_case": 0
+      "last_free_case": 0,
+      "last_daily_bonus": 0,
+      "nickname": "",
+      "username": "",
+      "first_name": "",
+      "photo_url": ""
     },
     "8771878427": {
       "balance": 7.0,
       "inventory": [],
-      "last_free_case": 1794929375
+      "last_free_case": 1794929375,
+      "last_daily_bonus": 0,
+      "nickname": "",
+      "username": "",
+      "first_name": "",
+      "photo_url": ""
     },
     "1741462977": {
       "balance": 1.6,
       "inventory": [],
-      "last_free_case": 1795105383
+      "last_free_case": 1795105383,
+      "last_daily_bonus": 0,
+      "nickname": "",
+      "username": "",
+      "first_name": "",
+      "photo_url": ""
     },
     "8007781318": {
       "balance": 1263.6,
@@ -131,22 +174,42 @@
           "item_id": 43
         }
       ],
-      "last_free_case": 0
+      "last_free_case": 0,
+      "last_daily_bonus": 0,
+      "nickname": "",
+      "username": "",
+      "first_name": "",
+      "photo_url": ""
     },
     "457827976": {
       "balance": 970.0,
       "inventory": [],
-      "last_free_case": 0
+      "last_free_case": 0,
+      "last_daily_bonus": 0,
+      "nickname": "",
+      "username": "",
+      "first_name": "",
+      "photo_url": ""
     },
     "7379573136": {
       "balance": 1000.0,
       "inventory": [],
-      "last_free_case": 0
+      "last_free_case": 0,
+      "last_daily_bonus": 0,
+      "nickname": "",
+      "username": "",
+      "first_name": "",
+      "photo_url": ""
     },
     "7245742367": {
       "balance": 0,
       "inventory": [],
-      "last_free_case": 0
+      "last_free_case": 0,
+      "last_daily_bonus": 0,
+      "nickname": "",
+      "username": "",
+      "first_name": "",
+      "photo_url": ""
     }
   },
   "next_inv_id": 764,
