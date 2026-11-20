@@ -91,15 +91,15 @@
           "item_id": 10
         },
         {
-          "inv_id": 809,
-          "item_id": 9
-        },
-        {
           "inv_id": 811,
           "item_id": 10
         },
         {
           "inv_id": 812,
+          "item_id": 10
+        },
+        {
+          "inv_id": 813,
           "item_id": 10
         }
       ],
@@ -196,7 +196,7 @@
       "photo_url": ""
     }
   },
-  "next_inv_id": 813,
+  "next_inv_id": 814,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
