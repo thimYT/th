@@ -142,6 +142,11 @@
       "balance": 1000.0,
       "inventory": [],
       "last_free_case": 0
+    },
+    "7245742367": {
+      "balance": 0,
+      "inventory": [],
+      "last_free_case": 0
     }
   },
   "next_inv_id": 764,
