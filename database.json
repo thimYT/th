@@ -90,16 +90,7 @@
     },
     "8980661701": {
       "balance": 9.6,
-      "inventory": [
-        {
-          "inv_id": 994,
-          "item_id": 35
-        },
-        {
-          "inv_id": 996,
-          "item_id": 19
-        }
-      ],
+      "inventory": [],
       "last_free_case": 0,
       "last_daily_bonus": 0,
       "nickname": "",
