@@ -109,14 +109,10 @@
       "photo_url": ""
     },
     "1741462977": {
-      "balance": 3.0,
+      "balance": 19.0,
       "inventory": [
         {
           "inv_id": 988,
-          "item_id": 6
-        },
-        {
-          "inv_id": 989,
           "item_id": 6
         }
       ],
