@@ -89,7 +89,7 @@
       "photo_url": ""
     },
     "8980661701": {
-      "balance": 25.6,
+      "balance": 0.6,
       "inventory": [
         {
           "inv_id": 993,
@@ -106,6 +106,10 @@
         {
           "inv_id": 996,
           "item_id": 19
+        },
+        {
+          "inv_id": 997,
+          "item_id": 8
         }
       ],
       "last_free_case": 0,
@@ -190,7 +194,7 @@
       "photo_url": ""
     }
   },
-  "next_inv_id": 997,
+  "next_inv_id": 998,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
