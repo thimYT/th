@@ -36,7 +36,7 @@
       "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg"
     },
     "8450028899": {
-      "balance": 822.54,
+      "balance": 902.54,
       "inventory": [
         {
           "inv_id": 265,
@@ -65,10 +65,6 @@
         {
           "inv_id": 1019,
           "item_id": 36
-        },
-        {
-          "inv_id": 1053,
-          "item_id": 43
         }
       ],
       "last_free_case": 1795214004,
