@@ -124,6 +124,11 @@
           "inv_id": 1179,
           "item_id": 53,
           "mutation": "normal"
+        },
+        {
+          "inv_id": 1180,
+          "item_id": 43,
+          "mutation": "normal"
         }
       ],
       "last_free_case": 0,
@@ -173,7 +178,7 @@
       "photo_url": "https://t.me/i/userpic/320/n070dQV6aSk-Uji2mpBqleZeFEfoR88J_ozlC0v_fxHLdd5xEFPv1zgsgExUz2o-.svg"
     }
   },
-  "next_inv_id": 1180,
+  "next_inv_id": 1181,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
