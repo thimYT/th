@@ -163,13 +163,8 @@
       "photo_url": ""
     },
     "8484069322": {
-      "balance": 75.0,
+      "balance": 84.0,
       "inventory": [
-        {
-          "inv_id": 1219,
-          "item_id": 3,
-          "mutation": "normal"
-        },
         {
           "inv_id": 1220,
           "item_id": 2,
