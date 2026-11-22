@@ -158,14 +158,8 @@
       "photo_url": ""
     },
     "8484069322": {
-      "balance": 52.0,
-      "inventory": [
-        {
-          "inv_id": 1216,
-          "item_id": 35,
-          "mutation": "normal"
-        }
-      ],
+      "balance": 105.0,
+      "inventory": [],
       "last_free_case": 0,
       "last_daily_bonus": 1795359530,
       "username": "",
