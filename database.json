@@ -84,11 +84,6 @@
           "inv_id": 1078,
           "item_id": 36,
           "mutation": "normal"
-        },
-        {
-          "inv_id": 1083,
-          "item_id": 44,
-          "mutation": "gold"
         }
       ],
       "last_free_case": 1795214004,
