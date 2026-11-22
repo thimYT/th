@@ -86,8 +86,8 @@
           "mutation": "normal"
         },
         {
-          "inv_id": 1110,
-          "item_id": 38,
+          "inv_id": 1111,
+          "item_id": 46,
           "mutation": "normal"
         }
       ],
@@ -205,7 +205,7 @@
       "photo_url": "https://t.me/i/userpic/320/n070dQV6aSk-Uji2mpBqleZeFEfoR88J_ozlC0v_fxHLdd5xEFPv1zgsgExUz2o-.svg"
     }
   },
-  "next_inv_id": 1111,
+  "next_inv_id": 1112,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
