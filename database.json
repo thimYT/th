@@ -155,12 +155,17 @@
       "photo_url": ""
     },
     "7379573136": {
-      "balance": 800.0,
+      "balance": 500.0,
       "inventory": [
         {
           "inv_id": 1068,
           "item_id": 36,
           "mutation": "bloodroot"
+        },
+        {
+          "inv_id": 1069,
+          "item_id": 36,
+          "mutation": "rainbow"
         }
       ],
       "last_free_case": 0,
@@ -181,7 +186,7 @@
       "photo_url": ""
     }
   },
-  "next_inv_id": 1069,
+  "next_inv_id": 1070,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
