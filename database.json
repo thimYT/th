@@ -118,11 +118,16 @@
       "photo_url": "https://t.me/i/userpic/320/izWNPXRMLhEWDYrCF75kihGaB7rM4sxASucty8vX3CM.svg"
     },
     "8007781318": {
-      "balance": 1263.6,
+      "balance": 1163.6,
       "inventory": [
         {
           "inv_id": 508,
           "item_id": 43,
+          "mutation": "normal"
+        },
+        {
+          "inv_id": 1178,
+          "item_id": 35,
           "mutation": "normal"
         }
       ],
@@ -173,7 +178,7 @@
       "photo_url": "https://t.me/i/userpic/320/n070dQV6aSk-Uji2mpBqleZeFEfoR88J_ozlC0v_fxHLdd5xEFPv1zgsgExUz2o-.svg"
     }
   },
-  "next_inv_id": 1178,
+  "next_inv_id": 1179,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
