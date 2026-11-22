@@ -118,14 +118,8 @@
       "photo_url": "https://t.me/i/userpic/320/izWNPXRMLhEWDYrCF75kihGaB7rM4sxASucty8vX3CM.svg"
     },
     "8007781318": {
-      "balance": 1163.6,
-      "inventory": [
-        {
-          "inv_id": 1179,
-          "item_id": 53,
-          "mutation": "normal"
-        }
-      ],
+      "balance": 1658.6,
+      "inventory": [],
       "last_free_case": 0,
       "last_daily_bonus": 0,
       "nickname": "",
