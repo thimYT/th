@@ -27,7 +27,7 @@ if not MODERATOR_IDS and ADMIN_CHAT_ID:
     MODERATOR_IDS = [ADMIN_CHAT_ID]
 DB_FILE_PATH = "database.json"
 
-# ---------- ITEMS_DB: без дубликатов ключей, id == ключу ----------
+# ---------- ITEMS_DB ----------
 ITEMS_DB = {
     1: {"id": 1, "name": "Gub", "price": 5, "rarity": "common", "image": "/images/item1.png", "fallback": "🗡️"},
     2: {"id": 2, "name": "Sir Mangus", "price": 7, "rarity": "common", "image": "/images/item2.png", "fallback": "🔫"},
@@ -102,6 +102,62 @@ ITEMS_DB = {
     71: {"id": 71, "name": "La Fuse", "price": 345, "rarity": "legendary", "image": "/images/item71.png", "fallback": "🐉"},
 }
 
+# ---------- МУТАЦИИ (только legendary / mythic) ----------
+MUTABLE_RARITIES = {"legendary", "mythic"}
+
+MUTATIONS = {
+    "normal":  {"name": "Default",  "mult": 1.00, "icon": "", "weight": 100},
+    "gold":    {"name": "Gold",  "mult": 1.25, "icon": "/images/mutation1.png", "weight": 0},
+    "diamond": {"name": "Diamond", "mult": 1.5, "icon": "/images/mutation2.png", "weight": 0},
+    "bloodroot": {"name": "Bloodroot", "mult": 2, "icon": "/images/mutation3.png", "weight": 0},
+    "candy": {"name": "Candy",   "mult": 4, "icon": "/images/mutation4.png", "weight": 0},
+    "lava": {"name": "Lava",   "mult": 6, "icon": "/images/mutation5.png", "weight": 0},
+    "galaxy": {"name": "Galaxy",   "mult": 7, "icon": "/images/mutation6.png", "weight": 0},
+    "ying yang": {"name": "Ying Yang",   "mult": 7.5, "icon": "/images/mutation7.png", "weight": 0},
+    "radioactive": {"name": "Radioactive",   "mult": 8.5, "icon": "/images/mutation8.png", "weight": 0},
+    "cursed": {"name": "Cursed",   "mult": 9, "icon": "/images/mutation9.png", "weight": 0},
+    "Divine": {"name": "Divine",   "mult": 10, "icon": "/images/mutation10.png", "weight": 0},
+    "rainbow": {"name": "Rainbow",   "mult": 10, "icon": "/images/mutation11.png", "weight": 0},
+    "cyber": {"name": "Cyber",   "mult": 11, "icon": "/images/mutation12.png", "weight": 0},
+    "phantom": {"name": "Phantom",   "mult": 12, "icon": "/images/mutation13.png", "weight": 0},
+    "crystal": {"name": "Crystal",   "mult": 13, "icon": "/images/mutation14png", "weight": 0},
+    "eclipse": {"name": "Eclipse",   "mult": 13.5, "icon": "/images/mutation15.png", "weight": 0},
+    "hacker": {"name": "Hacker",   "mult": 114, "icon": "/images/mutation16.png", "weight": 0},
+}
+MUTATION_KEYS = list(MUTATIONS.keys())
+MUTATION_WEIGHTS = [MUTATIONS[k]["weight"] for k in MUTATION_KEYS]
+
+
+def rarity_allows_mutation(rarity: str) -> bool:
+    return (rarity or "").lower() in MUTABLE_RARITIES
+
+
+def roll_mutation(rarity: str) -> str:
+    if not rarity_allows_mutation(rarity):
+        return "normal"
+    return random.choices(MUTATION_KEYS, weights=MUTATION_WEIGHTS, k=1)[0]
+
+
+def mutation_mult(mutation: str) -> float:
+    return float(MUTATIONS.get(mutation, MUTATIONS["normal"])["mult"])
+
+
+def mutation_icon(mutation: str) -> str:
+    return MUTATIONS.get(mutation, MUTATIONS["normal"])["icon"]
+
+
+def item_with_mutation(item_id: int, mutation: str) -> dict:
+    base = ITEMS_DB[item_id]
+    mut = mutation if (mutation in MUTATIONS and rarity_allows_mutation(base["rarity"])) else "normal"
+    mult = mutation_mult(mut)
+    out = dict(base)
+    out["base_price"] = base["price"]
+    out["mutation"] = mut
+    out["mutation_mult"] = mult
+    out["mutation_icon"] = mutation_icon(mut)
+    out["price"] = round(base["price"] * mult, 2)
+    return out
+
 
 CASES_DB = {
     1: {"id": 1, "name": "Бомжак", "category": "regular", "price": 10, "image": "/images/case1.png", "fallback": "📦",
@@ -132,7 +188,6 @@ FREE_CASE_DROPS = [
 ]
 FREE_CASE_COOLDOWN = 12 * 3600
 
-# Кейс награды 24 ч: предметы 9..23, монеты 9..23
 DAILY_BONUS_ITEM_IDS = list(range(9, 24))
 DAILY_BONUS_COOLDOWN = 24 * 3600
 DAILY_BONUS_REQUIRED_TAG = "braindropdropbot"
@@ -195,10 +250,11 @@ def normalize_db(db):
         u.setdefault("inventory", [])
         u.setdefault("last_free_case", 0)
         u.setdefault("last_daily_bonus", 0)
-        u.setdefault("nickname", "")
         u.setdefault("username", "")
         u.setdefault("first_name", "")
         u.setdefault("photo_url", "")
+        for entry in u.get("inventory", []):
+            entry.setdefault("mutation", "normal")
     return db
 
 
@@ -234,7 +290,6 @@ def ensure_user(db, user_id: str):
             "inventory": [],
             "last_free_case": 0,
             "last_daily_bonus": 0,
-            "nickname": "",
             "username": "",
             "first_name": "",
             "photo_url": "",
@@ -245,7 +300,6 @@ def ensure_user(db, user_id: str):
         u.setdefault("inventory", [])
         u.setdefault("last_free_case", 0)
         u.setdefault("last_daily_bonus", 0)
-        u.setdefault("nickname", "")
         u.setdefault("username", "")
         u.setdefault("first_name", "")
         u.setdefault("photo_url", "")
@@ -516,6 +570,7 @@ class UpgradeReq(BaseModel):
     coins_bet: float
     target_type: str
     target_item_id: Optional[int] = None
+    target_mutation: Optional[str] = "normal"
     target_coins: Optional[float] = None
 
 class CrashStartReq(BaseModel):
@@ -540,10 +595,6 @@ class ProfileSyncReq(BaseModel):
     first_name: Optional[str] = ""
     photo_url: Optional[str] = ""
 
-class SetNicknameReq(BaseModel):
-    user_id: str
-    nickname: str
-
 class DailyBonusReq(BaseModel):
     user_id: str
 
@@ -565,10 +616,10 @@ def get_state(user_id: str):
     for entry in reversed(user["inventory"]):
         item_id = entry["item_id"]
         if item_id in ITEMS_DB:
-            item_info = ITEMS_DB[item_id].copy()
-            item_info["inv_id"] = entry["inv_id"]
-            item_info["locked"] = entry.get("locked", False)
-            inv_list.append(item_info)
+            info = item_with_mutation(item_id, entry.get("mutation", "normal"))
+            info["inv_id"] = entry["inv_id"]
+            info["locked"] = entry.get("locked", False)
+            inv_list.append(info)
 
     now = int(time.time())
     next_free_at = user.get("last_free_case", 0) + FREE_CASE_COOLDOWN
@@ -577,27 +628,32 @@ def get_state(user_id: str):
     next_daily_at = user.get("last_daily_bonus", 0) + DAILY_BONUS_COOLDOWN
     daily_seconds_left = max(0, next_daily_at - now)
 
-    free_case_items = [ITEMS_DB[d["item_id"]] for d in FREE_CASE_DROPS if d["item_id"] in ITEMS_DB]
-    daily_bonus_items = [ITEMS_DB[i] for i in DAILY_BONUS_ITEM_IDS if i in ITEMS_DB]
+    free_case_items = [item_with_mutation(d["item_id"], "normal") for d in FREE_CASE_DROPS if d["item_id"] in ITEMS_DB]
+    daily_bonus_items = [item_with_mutation(i, "normal") for i in DAILY_BONUS_ITEM_IDS if i in ITEMS_DB]
+    all_items = [item_with_mutation(i, "normal") for i in ITEMS_DB.keys()]
+    inv_value = round(sum(e["price"] for e in inv_list), 2)
 
     return {
         "balance": round(user["balance"], 2),
         "inventory": inv_list,
         "cases": [c for c in CASES_DB.values() if not c.get("expires_at") or c["expires_at"] > now],
-        "all_items": list(ITEMS_DB.values()),
+        "all_items": all_items,
+        "mutations": [
+            {"key": k, "name": MUTATIONS[k]["name"], "mult": MUTATIONS[k]["mult"], "icon": MUTATIONS[k]["icon"]}
+            for k in MUTATION_KEYS
+        ],
         "free_seconds_left": free_seconds_left,
         "free_case_items": free_case_items,
         "daily_seconds_left": daily_seconds_left,
         "daily_bonus_items": daily_bonus_items,
         "profile": {
             "user_id": user_id,
-            "nickname": user.get("nickname", ""),
             "username": user.get("username", ""),
             "first_name": user.get("first_name", ""),
             "photo_url": user.get("photo_url", ""),
             "balance": round(user["balance"], 2),
             "inv_count": len(user["inventory"]),
-            "inv_value": round(sum(ITEMS_DB[e["item_id"]]["price"] for e in user["inventory"] if e["item_id"] in ITEMS_DB), 2),
+            "inv_value": inv_value,
         }
     }
 
@@ -614,21 +670,6 @@ def profile_sync(req: ProfileSyncReq):
     user["photo_url"] = (req.photo_url or "")[:512]
     github_save_db(db, sha)
     return {"ok": True}
-
-
-@app.post("/api/profile/nickname")
-def set_nickname(req: SetNicknameReq):
-    if not req.user_id:
-        raise HTTPException(status_code=400, detail="Некорректный user_id")
-    nickname = (req.nickname or "").strip()
-    if len(nickname) > 64:
-        raise HTTPException(status_code=400, detail="Ник слишком длинный (макс. 64)")
-    db, sha = github_load_db()
-    db = normalize_db(db)
-    user = ensure_user(db, req.user_id)
-    user["nickname"] = nickname
-    github_save_db(db, sha)
-    return {"ok": True, "nickname": nickname}
 
 
 @app.post("/api/topup_request")
@@ -740,14 +781,17 @@ def open_case(req: OpenCaseReq):
         partner_user["balance"] = round(partner_user["balance"] + partner_reward, 2)
 
     won_inv_ids = []
+    won_items_out = []
     for wid in won_ids:
+        mut = roll_mutation(ITEMS_DB[wid]["rarity"])
         inv_id = db["next_inv_id"]
         db["next_inv_id"] += 1
-        user["inventory"].append({"inv_id": inv_id, "item_id": wid})
+        user["inventory"].append({"inv_id": inv_id, "item_id": wid, "mutation": mut})
         won_inv_ids.append(inv_id)
+        won_items_out.append(item_with_mutation(wid, mut))
 
     github_save_db(db, sha)
-    return {"won_items": [ITEMS_DB[i] for i in won_ids], "won_inv_ids": won_inv_ids}
+    return {"won_items": won_items_out, "won_inv_ids": won_inv_ids}
 
 
 @app.post("/api/open_free_case")
@@ -768,18 +812,18 @@ def open_free_case(req: FreeCaseReq):
     weights = [d["weight"] for d in FREE_CASE_DROPS]
     won_item_id = random.choices(population, weights=weights, k=1)[0]
 
+    mut = roll_mutation(ITEMS_DB[won_item_id]["rarity"])
     user["last_free_case"] = now
     inv_id = db["next_inv_id"]
     db["next_inv_id"] += 1
-    user["inventory"].append({"inv_id": inv_id, "item_id": won_item_id})
+    user["inventory"].append({"inv_id": inv_id, "item_id": won_item_id, "mutation": mut})
 
     github_save_db(db, sha)
-    return {"won_items": [ITEMS_DB[won_item_id]], "won_inv_ids": [inv_id]}
+    return {"won_items": [item_with_mutation(won_item_id, mut)], "won_inv_ids": [inv_id]}
 
 
 def _has_required_tag(user) -> bool:
     parts = [
-        user.get("nickname", "") or "",
         user.get("username", "") or "",
         user.get("first_name", "") or "",
     ]
@@ -804,24 +848,26 @@ def open_daily_bonus_case(req: DailyBonusReq):
     if not _has_required_tag(user):
         raise HTTPException(
             status_code=400,
-            detail="Чтобы забрать кейс награды, добавьте @BrainDropDropBot в свой ник в профиле."
+            detail="Чтобы забрать кейс награды, добавьте @BrainDropDropBot в свой Telegram-ник (или имя)."
         )
 
     item_id = random.choice(DAILY_BONUS_ITEM_IDS)
     coins = random.randint(9, 23)
+    mut = roll_mutation(ITEMS_DB[item_id]["rarity"])
 
     user["last_daily_bonus"] = now
     inv_id = db["next_inv_id"]
     db["next_inv_id"] += 1
-    user["inventory"].append({"inv_id": inv_id, "item_id": item_id})
+    user["inventory"].append({"inv_id": inv_id, "item_id": item_id, "mutation": mut})
     user["balance"] = round(user["balance"] + coins, 2)
 
     github_save_db(db, sha)
+    item = item_with_mutation(item_id, mut)
     return {
-        "won_items": [ITEMS_DB[item_id]],
+        "won_items": [item],
         "won_inv_ids": [inv_id],
         "coins_added": coins,
-        "total_value": ITEMS_DB[item_id]["price"] + coins
+        "total_value": round(item["price"] + coins, 2)
     }
 
 
@@ -858,10 +904,11 @@ def redeem_promo(req: PromoReq):
         item_id = int(promo.get("item_id", 0))
         if item_id not in ITEMS_DB:
             raise HTTPException(status_code=400, detail="Ошибка награды промокода (предмет не найден)")
+        mut = roll_mutation(ITEMS_DB[item_id]["rarity"])
         inv_id = db["next_inv_id"]
         db["next_inv_id"] += 1
-        user["inventory"].append({"inv_id": inv_id, "item_id": item_id})
-        reward_text = f"Предмет: {ITEMS_DB[item_id]['name']}"
+        user["inventory"].append({"inv_id": inv_id, "item_id": item_id, "mutation": mut})
+        reward_text = f"Предмет: {item_with_mutation(item_id, mut)['name']}"
     else:
         raise HTTPException(status_code=400, detail="Неизвестный тип промокода")
 
@@ -879,25 +926,25 @@ def sell_item(req: SellItemReq):
     user = ensure_user(db, req.user_id)
 
     target_idx = None
-    item_id = None
-    for idx, entry in enumerate(user["inventory"]):
-        if entry["inv_id"] == req.inv_id:
+    entry = None
+    for idx, e in enumerate(user["inventory"]):
+        if e["inv_id"] == req.inv_id:
             target_idx = idx
-            item_id = entry["item_id"]
+            entry = e
             break
 
-    if target_idx is None or item_id not in ITEMS_DB:
+    if target_idx is None or entry["item_id"] not in ITEMS_DB:
         raise HTTPException(status_code=400, detail="Предмет не найден")
-
-    if user["inventory"][target_idx].get("locked"):
+    if entry.get("locked"):
         raise HTTPException(status_code=400, detail="Предмет заблокирован заявкой на вывод")
 
-    price = ITEMS_DB[item_id]["price"]
+    info = item_with_mutation(entry["item_id"], entry.get("mutation", "normal"))
+    price = info["price"]
     user["inventory"].pop(target_idx)
     user["balance"] = round(user["balance"] + price, 2)
 
     github_save_db(db, sha)
-    return {"sold_for": price}
+    return {"sold_for": price, "mutation": info["mutation"], "item_name": info["name"]}
 
 
 @app.post("/api/upgrade")
@@ -912,12 +959,13 @@ def do_upgrade(req: UpgradeReq):
     if req.coins_bet > user["balance"]:
         raise HTTPException(status_code=400, detail="Недостаточно монет")
 
-    inv_map = {entry["inv_id"]: entry["item_id"] for entry in user["inventory"] if not entry.get("locked")}
-    items_total_value = 0
+    inv_map = {e["inv_id"]: e for e in user["inventory"] if not e.get("locked")}
+    items_total_value = 0.0
     for inv_id in req.inv_ids:
-        if inv_id not in inv_map or inv_map[inv_id] not in ITEMS_DB:
+        if inv_id not in inv_map or inv_map[inv_id]["item_id"] not in ITEMS_DB:
             raise HTTPException(status_code=400, detail="Ошибка проверки предметов инвентаря")
-        items_total_value += ITEMS_DB[inv_map[inv_id]]["price"]
+        e = inv_map[inv_id]
+        items_total_value += item_with_mutation(e["item_id"], e.get("mutation", "normal"))["price"]
 
     total_bet = round(items_total_value + req.coins_bet, 2)
     if total_bet <= 0:
@@ -926,11 +974,15 @@ def do_upgrade(req: UpgradeReq):
     if req.target_type == "item":
         if req.target_item_id not in ITEMS_DB:
             raise HTTPException(status_code=400, detail="Целевой предмет не найден")
-        target_value = ITEMS_DB[req.target_item_id]["price"]
+        target_mut = req.target_mutation if (req.target_mutation in MUTATIONS) else "normal"
+        if not rarity_allows_mutation(ITEMS_DB[req.target_item_id]["rarity"]):
+            target_mut = "normal"
+        target_value = item_with_mutation(req.target_item_id, target_mut)["price"]
     else:
         if not req.target_coins or req.target_coins <= total_bet:
             raise HTTPException(status_code=400, detail="Желаемая сумма должна быть больше ставки")
         target_value = float(req.target_coins)
+        target_mut = "normal"
 
     if target_value <= total_bet:
         raise HTTPException(status_code=400, detail="Цель должна быть дороже вашей ставки")
@@ -945,16 +997,18 @@ def do_upgrade(req: UpgradeReq):
     roll = random.uniform(0, 100)
     is_win = roll <= chance
 
+    won_item_out = None
     if is_win:
         if req.target_type == "item":
             inv_id = db["next_inv_id"]
             db["next_inv_id"] += 1
-            user["inventory"].append({"inv_id": inv_id, "item_id": req.target_item_id})
+            user["inventory"].append({"inv_id": inv_id, "item_id": req.target_item_id, "mutation": target_mut})
+            won_item_out = item_with_mutation(req.target_item_id, target_mut)
         else:
             user["balance"] = round(user["balance"] + target_value, 2)
 
     github_save_db(db, sha)
-    return {"win": is_win, "chance": chance}
+    return {"win": is_win, "chance": chance, "won_item": won_item_out}
 
 
 def generate_crash_point():
@@ -979,16 +1033,17 @@ def crash_start(req: CrashStartReq):
     if req.coins_bet > user["balance"]:
         raise HTTPException(status_code=400, detail="Недостаточно монет")
 
-    inv_map = {entry["inv_id"]: entry["item_id"] for entry in user["inventory"] if not entry.get("locked")}
+    inv_map = {e["inv_id"]: e for e in user["inventory"] if not e.get("locked")}
     bet_items = []
-    items_total_value = 0
+    items_total_value = 0.0
 
     for inv_id in req.inv_ids:
-        if inv_id not in inv_map or inv_map[inv_id] not in ITEMS_DB:
+        if inv_id not in inv_map or inv_map[inv_id]["item_id"] not in ITEMS_DB:
             raise HTTPException(status_code=400, detail="Ошибка проверки предметов инвентаря")
-        item_id = inv_map[inv_id]
-        items_total_value += ITEMS_DB[item_id]["price"]
-        bet_items.append({"inv_id": inv_id, "item_id": item_id})
+        e = inv_map[inv_id]
+        info = item_with_mutation(e["item_id"], e.get("mutation", "normal"))
+        items_total_value += info["price"]
+        bet_items.append({"inv_id": inv_id, "item_id": e["item_id"], "mutation": e.get("mutation", "normal")})
 
     total_bet = round(items_total_value + req.coins_bet, 2)
     if total_bet <= 0:
@@ -1037,21 +1092,24 @@ def crash_cashout(req: CrashCashoutReq):
     if total_win_value > max_item_price:
         for item_entry in game["bet_items"]:
             user["inventory"].append(item_entry)
-            returned_items.append(ITEMS_DB[item_entry["item_id"]])
-
+            returned_items.append(item_with_mutation(item_entry["item_id"], item_entry.get("mutation", "normal")))
         diff = round(total_win_value - game["items_value"], 2)
         user["balance"] = round(user["balance"] + diff, 2)
         coins_added = diff
     else:
-        affordable_items = [item for item in ITEMS_DB.values() if item["price"] <= total_win_value]
+        affordable_items = [it for it in ITEMS_DB.values() if it["price"] <= total_win_value]
         if affordable_items:
             best_item = max(affordable_items, key=lambda x: x["price"])
+            mut = roll_mutation(best_item["rarity"])
+            info = item_with_mutation(best_item["id"], mut)
+            while info["price"] > total_win_value and mut != "normal":
+                mut = "normal"
+                info = item_with_mutation(best_item["id"], mut)
             inv_id = db["next_inv_id"]
             db["next_inv_id"] += 1
-            user["inventory"].append({"inv_id": inv_id, "item_id": best_item["id"]})
-            won_item = best_item
-
-            remainder = round(total_win_value - best_item["price"], 2)
+            user["inventory"].append({"inv_id": inv_id, "item_id": best_item["id"], "mutation": mut})
+            won_item = info
+            remainder = round(total_win_value - info["price"], 2)
             user["balance"] = round(user["balance"] + remainder, 2)
             coins_added = remainder
         else:
@@ -1094,12 +1152,13 @@ def play_color_dice(req: ColorDiceReq):
     if req.coins_bet > user["balance"]:
         raise HTTPException(status_code=400, detail="Недостаточно монет")
 
-    inv_map = {entry["inv_id"]: entry["item_id"] for entry in user["inventory"] if not entry.get("locked")}
-    items_total_value = 0
+    inv_map = {e["inv_id"]: e for e in user["inventory"] if not e.get("locked")}
+    items_total_value = 0.0
     for inv_id in req.inv_ids:
-        if inv_id not in inv_map or inv_map[inv_id] not in ITEMS_DB:
+        if inv_id not in inv_map or inv_map[inv_id]["item_id"] not in ITEMS_DB:
             raise HTTPException(status_code=400, detail="Ошибка проверки предметов инвентаря")
-        items_total_value += ITEMS_DB[inv_map[inv_id]]["price"]
+        e = inv_map[inv_id]
+        items_total_value += item_with_mutation(e["item_id"], e.get("mutation", "normal"))["price"]
 
     total_bet = round(items_total_value + req.coins_bet, 2)
     if total_bet <= 0:
