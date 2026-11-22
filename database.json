@@ -33,11 +33,6 @@
           "inv_id": 1080,
           "item_id": 71,
           "mutation": "hacker"
-        },
-        {
-          "inv_id": 1151,
-          "item_id": 5,
-          "mutation": "normal"
         }
       ],
       "last_free_case": 1795359003,
