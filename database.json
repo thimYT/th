@@ -204,8 +204,8 @@
       "balance": 20.0,
       "inventory": [
         {
-          "inv_id": 1124,
-          "item_id": 2,
+          "inv_id": 1126,
+          "item_id": 3,
           "mutation": "normal"
         }
       ],
@@ -216,7 +216,7 @@
       "photo_url": "https://t.me/i/userpic/320/n070dQV6aSk-Uji2mpBqleZeFEfoR88J_ozlC0v_fxHLdd5xEFPv1zgsgExUz2o-.svg"
     }
   },
-  "next_inv_id": 1126,
+  "next_inv_id": 1127,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
