@@ -293,6 +293,93 @@
     .mines-slider-wrap input[type="range"] {
         width: 100%; margin-top: 6px; accent-color: var(--orange);
     }
+
+    /* ДРОП ДНЯ */
+    .daily-drops-strip {
+        background: linear-gradient(180deg, rgba(41,121,255,0.18) 0%, rgba(20,15,12,0.92) 100%);
+        border: 1px solid var(--card-border);
+        border-radius: 14px;
+        padding: 10px 8px 8px;
+        margin-bottom: 14px;
+        position: relative;
+    }
+    .daily-drops-header {
+        display: flex; align-items: center; justify-content: space-between;
+        margin-bottom: 8px; padding: 0 4px;
+    }
+    .daily-drops-title {
+        font-size: 13px; font-weight: 900;
+        background: linear-gradient(90deg, var(--orange), #ffb74d, var(--blue));
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        display: flex; align-items: center; gap: 6px;
+    }
+    .daily-drops-count { font-size: 11px; color: var(--muted); font-weight: 700; }
+    .daily-drops-track {
+        display: flex; gap: 8px; overflow-x: auto; scroll-behavior: smooth;
+        padding-bottom: 4px;
+        scrollbar-width: none;
+    }
+    .daily-drops-track::-webkit-scrollbar { display: none; }
+    .daily-drop-card {
+        flex: 0 0 auto; width: 92px;
+        background: #130d0a; border: 1px solid var(--card-border);
+        border-radius: 10px; padding: 6px 4px 5px;
+        display: flex; flex-direction: column; align-items: center;
+        position: relative;
+    }
+    .daily-drop-avatar {
+        position: absolute; top: 4px; left: 4px;
+        width: 18px; height: 18px; border-radius: 50%;
+        border: 1px solid var(--card-border);
+        background: #241711; overflow: hidden;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 9px; font-weight: 900; color: var(--orange);
+        z-index: 3;
+    }
+    .daily-drop-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .daily-drop-mut {
+        position: absolute; top: 4px; right: 4px;
+        width: 16px; height: 16px; border-radius: 50%;
+        border: 1px solid var(--card-border);
+        background: rgba(19,13,10,0.85); overflow: hidden; z-index: 3;
+    }
+    .daily-drop-mut img { width: 100%; height: 100%; object-fit: cover; }
+    .daily-drop-img {
+        width: 44px; height: 44px; margin: 12px 0 3px;
+        display: flex; align-items: center; justify-content: center;
+    }
+    .daily-drop-img img { width: 100%; height: 100%; object-fit: contain; }
+    .daily-drop-img .fallback-icon { font-size: 26px; height: 44px; margin: 0; }
+    .daily-drop-name {
+        font-size: 10px; font-weight: 700; width: 100%;
+        text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .daily-drop-price { font-size: 10px; color: #ffcc80; font-weight: 800; }
+    .daily-drop-arrow {
+        position: absolute; top: 50%; transform: translateY(-50%);
+        width: 24px; height: 24px; border-radius: 50%;
+        background: rgba(19,13,10,0.85); border: 1px solid var(--card-border);
+        color: var(--text); font-weight: 900; cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        z-index: 4; user-select: none;
+    }
+    .daily-drop-arrow.left { left: -6px; }
+    .daily-drop-arrow.right { right: -6px; }
+    .daily-drops-empty { color: var(--muted); font-size: 12px; font-weight: 700; padding: 6px 4px; }
+
+    /* ГЛОБАЛЬНОЕ СООБЩЕНИЕ */
+    .global-msg {
+        position: fixed; top: 64px; left: 50%; transform: translateX(-50%) translateY(-12px);
+        background: linear-gradient(135deg, #2b1d17 0%, #3a1f10 100%);
+        border: 1px solid var(--orange); color: #fff;
+        padding: 10px 16px; border-radius: 12px;
+        font-weight: 800; font-size: 13px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.6), 0 0 16px var(--orange-glow);
+        z-index: 998; max-width: 90%; text-align: center;
+        opacity: 0; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease;
+        line-height: 1.35;
+    }
+    .global-msg.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
@@ -307,6 +394,8 @@
         <button class="menu-toggle" onclick="toggleDrawer(true)">☰ Меню</button>
     </div>
 </header>
+
+<div class="global-msg" id="global-msg"></div>
 
 <div class="drawer-overlay" id="drawer-overlay" onclick="toggleDrawer(false)"></div>
 <aside class="side-drawer" id="side-drawer">
@@ -355,6 +444,19 @@
     <!-- КЕЙСЫ -->
     <section class="tab-section active" id="tab-cases">
         <h2>Кейсы</h2>
+
+        <div class="daily-drops-strip" id="daily-drops-strip">
+            <div class="daily-drops-header">
+                <div class="daily-drops-title">🔥 Дроп дня</div>
+                <div class="daily-drops-count" id="daily-drops-count">0 дропов</div>
+            </div>
+            <div style="position:relative;">
+                <div class="daily-drop-arrow left" onclick="scrollDailyDrops(-1)">◀</div>
+                <div class="daily-drops-track" id="daily-drops-track"></div>
+                <div class="daily-drop-arrow right" onclick="scrollDailyDrops(1)">▶</div>
+            </div>
+        </div>
+
         <div class="case-cats">
             <button class="case-cat-btn active" onclick="setCaseCategory('all', this)">🔥 Все</button>
             <button class="case-cat-btn" onclick="setCaseCategory('regular', this)">📦 Разные</button>
@@ -606,6 +708,8 @@ let state = {
     mutations: [],
     free_seconds_left: 0, free_case_items: [],
     daily_seconds_left: 0, daily_bonus_items: [],
+    daily_drops: { date: "", items: [] },
+    global_message: { text: "", until: 0 },
     profile: null
 };
 let isCaseOpening = false;
@@ -727,6 +831,8 @@ async function loadState() {
             free_case_items: Array.isArray(data.free_case_items) ? data.free_case_items : [],
             daily_seconds_left: Number(data.daily_seconds_left) || 0,
             daily_bonus_items: Array.isArray(data.daily_bonus_items) ? data.daily_bonus_items : [],
+            daily_drops: data.daily_drops || { date: "", items: [] },
+            global_message: data.global_message || { text: "", until: 0 },
             profile: data.profile || null
         };
     } catch (e) {
@@ -744,6 +850,8 @@ async function loadState() {
     minesSelectedInv = new Set([...minesSelectedInv].filter(id => validIds.has(id)));
 
     renderProfile();
+    renderDailyDrops();
+    renderGlobalMessage();
     renderCases();
     renderInventories();
     renderUpgradeTargets();
@@ -772,6 +880,64 @@ function renderProfile() {
     el("profile-balance").textContent = Number(p.balance || 0).toFixed(2);
     el("profile-inv-count").textContent = p.inv_count || 0;
     el("profile-inv-value").textContent = Number(p.inv_value || 0).toFixed(2);
+}
+
+/* ---------- ДРОП ДНЯ ---------- */
+function renderDailyDrops() {
+    const dd = state.daily_drops || { date: "", items: [] };
+    const items = Array.isArray(dd.items) ? dd.items.slice().reverse() : [];
+    const track = el("daily-drops-track");
+    const count = el("daily-drops-count");
+    if (count) count.textContent = items.length + " дропов";
+    if (!track) return;
+    if (!items.length) {
+        track.innerHTML = '<div class="daily-drops-empty">Пока пусто — будь первым!</div>';
+        return;
+    }
+    track.innerHTML = items.map(d => {
+        const initial = (d.first_name || d.username || "?").trim().charAt(0).toUpperCase() || "?";
+        const avatarHtml = d.photo_url
+            ? '<img src="' + d.photo_url + '" alt="" onerror="this.style.display=\'none\'; this.parentNode.textContent=\'' + initial.replace(/'/g, "") + '\';">'
+            : initial;
+        const userLabel = d.username ? "@" + d.username : ("ID: " + d.user_id);
+        const mutHtml = d.mutation_icon
+            ? '<div class="daily-drop-mut" title="' + (d.mutation || "normal") + ' ×' + (d.mutation_mult || 1) + '"><img src="' + d.mutation_icon + '" alt=""></div>'
+            : "";
+        return '<div class="daily-drop-card" title="' + userLabel + ' · ' + (d.source || "") + '">' +
+            '<div class="daily-drop-avatar" title="' + userLabel + '">' + avatarHtml + '</div>' +
+            mutHtml +
+            '<div class="daily-drop-img">' + renderItemImg(d) + '</div>' +
+            '<div class="daily-drop-name">' + (d.name || "?") + '</div>' +
+            '<div class="daily-drop-price">' + (d.price || 0) + ' 💰</div>' +
+        '</div>';
+    }).join("");
+}
+
+function scrollDailyDrops(dir) {
+    const track = el("daily-drops-track");
+    if (!track) return;
+    track.scrollBy({ left: dir * 220, behavior: "smooth" });
+}
+
+/* ---------- ГЛОБАЛЬНОЕ СООБЩЕНИЕ ---------- */
+let globalMsgTimer = null;
+function renderGlobalMessage() {
+    const gm = state.global_message || { text: "", until: 0 };
+    const box = el("global-msg");
+    if (!box) return;
+    const now = Math.floor(Date.now() / 1000);
+    if (!gm.text || Number(gm.until || 0) <= now) {
+        box.classList.remove("show");
+        box.textContent = "";
+        return;
+    }
+    box.textContent = gm.text;
+    box.classList.add("show");
+    if (globalMsgTimer) clearTimeout(globalMsgTimer);
+    const msLeft = (Number(gm.until) - now) * 1000;
+    globalMsgTimer = setTimeout(() => {
+        box.classList.remove("show");
+    }, Math.max(1000, msLeft));
 }
 
 /* ---------- Кейсы ---------- */
@@ -840,6 +1006,17 @@ setInterval(() => {
         if (exp) badge.textContent = "⏳ " + formatTimeLeft(exp);
     });
 }, 1000);
+
+setInterval(() => {
+    // автообновление дропов дня и глобального сообщения
+    renderGlobalMessage();
+    fetch("/api/daily_drops").then(r => r.ok ? r.json() : null).then(dd => {
+        if (dd && dd.date) {
+            state.daily_drops = dd;
+            renderDailyDrops();
+        }
+    }).catch(() => {});
+}, 15000);
 
 /* ---------- Инвентари ---------- */
 function renderInventories() {
@@ -1026,7 +1203,7 @@ function calcUpgrade() {
     }
 
     let chance = Math.round((totalBet / targetVal) * 92 * 100) / 100;
-    chance = Math.max(1, Math.min(80, chance));
+    chance = Math.max(1, Math.min(75, chance));  // п.9: предел 75%
     el("upg-chance").textContent = chance + "%";
     const deg = (chance / 100) * 360;
     wheel.style.background = "conic-gradient(var(--orange) 0deg " + deg + "deg, #1b2438 " + deg + "deg 360deg)";

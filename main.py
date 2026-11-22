@@ -7,6 +7,7 @@ import random
 import threading
 import urllib.request
 import urllib.error
+from datetime import datetime, timezone, timedelta
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -26,6 +27,12 @@ MODERATOR_IDS = [m.strip() for m in os.getenv("MODERATOR_IDS", "").split(",") if
 if not MODERATOR_IDS and ADMIN_CHAT_ID:
     MODERATOR_IDS = [ADMIN_CHAT_ID]
 DB_FILE_PATH = "database.json"
+
+# ---------- Часовой пояс Минска (UTC+3, без перехода на летнее время с 2011) ----------
+MINSK_TZ = timezone(timedelta(hours=3))
+
+def minsk_today_str() -> str:
+    return datetime.now(MINSK_TZ).strftime("%Y-%m-%d")
 
 # ---------- ITEMS_DB ----------
 ITEMS_DB = {
@@ -100,9 +107,22 @@ ITEMS_DB = {
     69: {"id": 69, "name": "Los Sekolahs", "price": 300, "rarity": "legendary", "image": "/images/item69.png", "fallback": "🐉"},
     70: {"id": 70, "name": "Capitano Moby", "price": 325, "rarity": "legendary", "image": "/images/item70.png", "fallback": "🐉"},
     71: {"id": 71, "name": "La Fuse", "price": 345, "rarity": "legendary", "image": "/images/item71.png", "fallback": "🐉"},
+    72: {"id": 72, "name": "La Craft", "price": 350, "rarity": "legendary", "image": "/images/item72.png", "fallback": "🐉"},
+    73: {"id": 73, "name": "Lavamanta", "price": 360, "rarity": "legendary", "image": "/images/item73.png", "fallback": "🐉"},
+    74: {"id": 74, "name": "Cerberus", "price": 375, "rarity": "legendary", "image": "/images/item74.png", "fallback": "🐉"},
+    75: {"id": 75, "name": "Sammyni Truckini", "price": 400, "rarity": "legendary", "image": "/images/item75.png", "fallback": "🐉"},
+    76: {"id": 76, "name": "Los Amigos", "price": 410, "rarity": "legendary", "image": "/images/item76.png", "fallback": "🐉"},
+    77: {"id": 77, "name": "Ginger Gerat", "price": 430, "rarity": "legendary", "image": "/images/item77.png", "fallback": "🐉"},
+    78: {"id": 78, "name": "Fortunu", "price": 450, "rarity": "legendary", "image": "/images/item78.png", "fallback": "🐉"},
+    79: {"id": 79, "name": "Hopilikalika", "price": 475, "rarity": "legendary", "image": "/images/item79.png", "fallback": "🐉"},
+    80: {"id": 80, "name": "Tosto Dino", "price": 480, "rarity": "legendary", "image": "/images/item80.png", "fallback": "🐉"},
+    81: {"id": 81, "name": "S'more Serat", "price": 485, "rarity": "legendary", "image": "/images/item81.png", "fallback": "🐉"},
+    82: {"id": 82, "name": "Pancake And Syrup", "price": 490, "rarity": "legendary", "image": "/images/item82.png", "fallback": "🐉"},
+    83: {"id": 83, "name": "Foxini", "price": 495, "rarity": "legendary", "image": "/images/item83.png", "fallback": "🐉"},
+    84: {"id": 84, "name": "La Casa Boo", "price": 497.5, "rarity": "legendary", "image": "/images/item84.png", "fallback": "🐉"},
+    85: {"id": 85, "name": "Flying Dutchman", "price": 500, "rarity": "legendary", "image": "/images/item85.png", "fallback": "🐉"},
 }
 
-# ---------- МУТАЦИИ (только legendary / mythic) ----------
 MUTABLE_RARITIES = {"legendary", "mythic"}
 
 MUTATIONS = {
@@ -210,7 +230,9 @@ def get_default_db():
         "promocodes": {
             "WELCOME500": {"stock": 100, "type": "coins", "amount": 500, "used_by": []},
             "GIFTKNIFE": {"stock": 10, "type": "item", "item_id": 1, "used_by": []}
-        }
+        },
+        "daily_drops": {"date": "", "items": []},
+        "global_message": {"text": "", "until": 0},
     }
 
 
@@ -249,6 +271,14 @@ def normalize_db(db):
         db["next_inv_id"] = 1
     if "next_req_id" not in db:
         db["next_req_id"] = 1
+    if "daily_drops" not in db or not isinstance(db["daily_drops"], dict):
+        db["daily_drops"] = {"date": "", "items": []}
+    db["daily_drops"].setdefault("date", "")
+    db["daily_drops"].setdefault("items", [])
+    if "global_message" not in db or not isinstance(db["global_message"], dict):
+        db["global_message"] = {"text": "", "until": 0}
+    db["global_message"].setdefault("text", "")
+    db["global_message"].setdefault("until", 0)
     for uid, u in db.get("users", {}).items():
         u.setdefault("balance", 0)
         u.setdefault("inventory", [])
@@ -308,6 +338,45 @@ def ensure_user(db, user_id: str):
         u.setdefault("first_name", "")
         u.setdefault("photo_url", "")
     return db["users"][user_id]
+
+
+# ---------- Дроп дня ----------
+def record_daily_drop(db, user_id: str, items: List[dict], source: str):
+    """Записывает дроп(ы) в daily_drops. items — список уже собранных (с мутацией) словарей."""
+    try:
+        today = minsk_today_str()
+    except Exception:
+        today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    dd = db.setdefault("daily_drops", {"date": "", "items": []})
+    if dd.get("date") != today:
+        dd["date"] = today
+        dd["items"] = []
+    u = db.get("users", {}).get(user_id, {})
+    for it in items or []:
+        if not it:
+            continue
+        entry = {
+            "ts": int(time.time()),
+            "user_id": str(user_id),
+            "username": (u.get("username") or "")[:64],
+            "first_name": (u.get("first_name") or "")[:128],
+            "photo_url": (u.get("photo_url") or "")[:512],
+            "source": source,
+            "item_id": int(it.get("id", 0)),
+            "name": it.get("name", "?"),
+            "rarity": it.get("rarity", "common"),
+            "image": it.get("image", ""),
+            "fallback": it.get("fallback", "❔"),
+            "mutation": it.get("mutation", "normal"),
+            "mutation_icon": it.get("mutation_icon", ""),
+            "mutation_mult": it.get("mutation_mult", 1.0),
+            "price": it.get("price", 0),
+        }
+        dd["items"].append(entry)
+    # не даём расти бесконечно
+    if len(dd["items"]) > 300:
+        dd["items"] = dd["items"][-300:]
+    return dd
 
 
 # ---------- Telegram Bot API ----------
@@ -615,10 +684,24 @@ class MinesOpenReq(BaseModel):
 class MinesCashoutReq(BaseModel):
     user_id: str
 
+class AdminGlobalMessageReq(BaseModel):
+    admin_id: str
+    text: str
+    duration_seconds: int = 60
+
 
 @app.get("/")
 def serve_frontend():
     return FileResponse("index.html")
+
+
+def _public_daily_drops(db) -> dict:
+    dd = db.get("daily_drops", {"date": "", "items": []})
+    today = minsk_today_str()
+    if dd.get("date") != today:
+        return {"date": today, "items": []}
+    items = dd.get("items", [])
+    return {"date": dd.get("date", today), "items": items}
 
 
 @app.get("/api/state/{user_id}")
@@ -650,6 +733,9 @@ def get_state(user_id: str):
     all_items = [item_with_mutation(i, "normal") for i in ITEMS_DB.keys()]
     inv_value = round(sum(e["price"] for e in inv_list), 2)
 
+    gm = db.get("global_message", {"text": "", "until": 0})
+    gm_public = {"text": gm.get("text", ""), "until": int(gm.get("until", 0))} if gm.get("text") and int(gm.get("until", 0)) > now else {"text": "", "until": 0}
+
     return {
         "balance": round(user["balance"], 2),
         "inventory": inv_list,
@@ -663,6 +749,8 @@ def get_state(user_id: str):
         "free_case_items": free_case_items,
         "daily_seconds_left": daily_seconds_left,
         "daily_bonus_items": daily_bonus_items,
+        "daily_drops": _public_daily_drops(db),
+        "global_message": gm_public,
         "profile": {
             "user_id": user_id,
             "username": user.get("username", ""),
@@ -807,6 +895,8 @@ def open_case(req: OpenCaseReq):
         won_inv_ids.append(inv_id)
         won_items_out.append(item_with_mutation(wid, mut))
 
+    record_daily_drop(db, req.user_id, won_items_out, "case")
+
     github_save_db(db, sha)
     return {"won_items": won_items_out, "won_inv_ids": won_inv_ids}
 
@@ -835,8 +925,11 @@ def open_free_case(req: FreeCaseReq):
     db["next_inv_id"] += 1
     user["inventory"].append({"inv_id": inv_id, "item_id": won_item_id, "mutation": mut})
 
+    item_out = item_with_mutation(won_item_id, mut)
+    record_daily_drop(db, req.user_id, [item_out], "free_case")
+
     github_save_db(db, sha)
-    return {"won_items": [item_with_mutation(won_item_id, mut)], "won_inv_ids": [inv_id]}
+    return {"won_items": [item_out], "won_inv_ids": [inv_id]}
 
 
 def _has_required_tag(user) -> bool:
@@ -878,8 +971,10 @@ def open_daily_bonus_case(req: DailyBonusReq):
     user["inventory"].append({"inv_id": inv_id, "item_id": item_id, "mutation": mut})
     user["balance"] = round(user["balance"] + coins, 2)
 
-    github_save_db(db, sha)
     item = item_with_mutation(item_id, mut)
+    record_daily_drop(db, req.user_id, [item], "daily_bonus")
+
+    github_save_db(db, sha)
     return {
         "won_items": [item],
         "won_inv_ids": [inv_id],
@@ -926,6 +1021,7 @@ def redeem_promo(req: PromoReq):
         db["next_inv_id"] += 1
         user["inventory"].append({"inv_id": inv_id, "item_id": item_id, "mutation": mut})
         reward_text = f"Предмет: {item_with_mutation(item_id, mut)['name']}"
+        record_daily_drop(db, req.user_id, [item_with_mutation(item_id, mut)], "promo")
     else:
         raise HTTPException(status_code=400, detail="Неизвестный тип промокода")
 
@@ -1004,8 +1100,9 @@ def do_upgrade(req: UpgradeReq):
     if target_value <= total_bet:
         raise HTTPException(status_code=400, detail="Цель должна быть дороже вашей ставки")
 
+    # п.9: шанс апгрейда максимум 75%
     chance = round((total_bet / target_value) * 92, 2)
-    chance = max(1.0, min(80.0, chance))
+    chance = max(1.0, min(75.0, chance))
 
     user["balance"] = round(user["balance"] - req.coins_bet, 2)
     selected_set = set(req.inv_ids)
@@ -1021,6 +1118,7 @@ def do_upgrade(req: UpgradeReq):
             db["next_inv_id"] += 1
             user["inventory"].append({"inv_id": inv_id, "item_id": req.target_item_id, "mutation": target_mut})
             won_item_out = item_with_mutation(req.target_item_id, target_mut)
+            record_daily_drop(db, req.user_id, [won_item_out], "upgrade")
         else:
             user["balance"] = round(user["balance"] + target_value, 2)
 
@@ -1105,11 +1203,14 @@ def crash_cashout(req: CrashCashoutReq):
     won_item = None
     returned_items = []
     coins_added = 0.0
+    recorded = []
 
     if total_win_value > max_item_price:
         for item_entry in game["bet_items"]:
             user["inventory"].append(item_entry)
-            returned_items.append(item_with_mutation(item_entry["item_id"], item_entry.get("mutation", "normal")))
+            info = item_with_mutation(item_entry["item_id"], item_entry.get("mutation", "normal"))
+            returned_items.append(info)
+            recorded.append(info)
         diff = round(total_win_value - game["items_value"], 2)
         user["balance"] = round(user["balance"] + diff, 2)
         coins_added = diff
@@ -1126,12 +1227,16 @@ def crash_cashout(req: CrashCashoutReq):
             db["next_inv_id"] += 1
             user["inventory"].append({"inv_id": inv_id, "item_id": best_item["id"], "mutation": mut})
             won_item = info
+            recorded.append(info)
             remainder = round(total_win_value - info["price"], 2)
             user["balance"] = round(user["balance"] + remainder, 2)
             coins_added = remainder
         else:
             user["balance"] = round(user["balance"] + total_win_value, 2)
             coins_added = total_win_value
+
+    if recorded:
+        record_daily_drop(db, req.user_id, recorded, "crash")
 
     github_save_db(db, sha)
     return {
@@ -1208,7 +1313,6 @@ def play_color_dice(req: ColorDiceReq):
     }
 
 
-# ---------- MINES 5x5 ----------
 MINES_GRID = 25
 
 
@@ -1315,11 +1419,14 @@ def mines_cashout(req: MinesCashoutReq):
     won_item = None
     returned_items = []
     coins_added = 0.0
+    recorded = []
 
     if total_win_value > max_item_price:
         for item_entry in game["bet_items"]:
             user["inventory"].append(item_entry)
-            returned_items.append(item_with_mutation(item_entry["item_id"], item_entry.get("mutation", "normal")))
+            info = item_with_mutation(item_entry["item_id"], item_entry.get("mutation", "normal"))
+            returned_items.append(info)
+            recorded.append(info)
         diff = round(total_win_value - game["items_value"], 2)
         user["balance"] = round(user["balance"] + diff, 2)
         coins_added = diff
@@ -1336,12 +1443,16 @@ def mines_cashout(req: MinesCashoutReq):
             db["next_inv_id"] += 1
             user["inventory"].append({"inv_id": inv_id, "item_id": best_item["id"], "mutation": mut})
             won_item = info
+            recorded.append(info)
             remainder = round(total_win_value - info["price"], 2)
             user["balance"] = round(user["balance"] + remainder, 2)
             coins_added = remainder
         else:
             user["balance"] = round(user["balance"] + total_win_value, 2)
             coins_added = total_win_value
+
+    if recorded:
+        record_daily_drop(db, req.user_id, recorded, "mines")
 
     github_save_db(db, sha)
     return {
@@ -1351,3 +1462,32 @@ def mines_cashout(req: MinesCashoutReq):
         "returned_items": returned_items,
         "coins_added": coins_added
     }
+
+
+# ---------- Админ: глобальное сообщение ----------
+def _is_admin(user_id: str) -> bool:
+    return str(user_id) in [str(m) for m in MODERATOR_IDS]
+
+
+@app.post("/api/admin/global_message")
+def admin_global_message(req: AdminGlobalMessageReq):
+    if not _is_admin(req.admin_id):
+        raise HTTPException(status_code=403, detail="Нет доступа")
+    text = (req.text or "").strip()
+    if not text:
+        raise HTTPException(status_code=400, detail="Текст пустой")
+    if len(text) > 500:
+        raise HTTPException(status_code=400, detail="Текст слишком длинный (макс. 500)")
+    duration = max(5, min(int(req.duration_seconds or 60), 3600))
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    db["global_message"] = {"text": text, "until": int(time.time()) + duration}
+    github_save_db(db, sha)
+    return {"ok": True}
+
+
+@app.get("/api/daily_drops")
+def get_daily_drops():
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    return _public_daily_drops(db)
