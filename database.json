@@ -156,13 +156,7 @@
     },
     "7379573136": {
       "balance": 0.0,
-      "inventory": [
-        {
-          "inv_id": 1070,
-          "item_id": 36,
-          "mutation": "eclipse"
-        }
-      ],
+      "inventory": [],
       "last_free_case": 0,
       "last_daily_bonus": 0,
       "nickname": "",
