@@ -106,7 +106,7 @@ ITEMS_DB = {
 MUTABLE_RARITIES = {"legendary", "mythic"}
 
 MUTATIONS = {
-    "normal":  {"name": "Default",  "mult": 1.00, "icon": "", "weight": 100},
+    "normal":  {"name": "Default",  "mult": 1.00, "icon": "/images/mutation.png", "weight": 100},
     "gold":    {"name": "Gold",  "mult": 1.25, "icon": "/images/mutation1.png", "weight": 0},
     "diamond": {"name": "Diamond", "mult": 1.5, "icon": "/images/mutation2.png", "weight": 0},
     "bloodroot": {"name": "Bloodroot", "mult": 2, "icon": "/images/mutation3.png", "weight": 0},
@@ -120,9 +120,9 @@ MUTATIONS = {
     "rainbow": {"name": "Rainbow",   "mult": 10, "icon": "/images/mutation11.png", "weight": 0},
     "cyber": {"name": "Cyber",   "mult": 11, "icon": "/images/mutation12.png", "weight": 0},
     "phantom": {"name": "Phantom",   "mult": 12, "icon": "/images/mutation13.png", "weight": 0},
-    "crystal": {"name": "Crystal",   "mult": 13, "icon": "/images/mutation14png", "weight": 0},
+    "crystal": {"name": "Crystal",   "mult": 13, "icon": "/images/mutation14.png", "weight": 0},
     "eclipse": {"name": "Eclipse",   "mult": 13.5, "icon": "/images/mutation15.png", "weight": 0},
-    "hacker": {"name": "Hacker",   "mult": 114, "icon": "/images/mutation16.png", "weight": 0},
+    "hacker": {"name": "Hacker",   "mult": 14, "icon": "/images/mutation16.png", "weight": 0},
 }
 MUTATION_KEYS = list(MUTATIONS.keys())
 MUTATION_WEIGHTS = [MUTATIONS[k]["weight"] for k in MUTATION_KEYS]
@@ -174,10 +174,13 @@ CASES_DB = {
     5: {"id": 5, "name": "we got buffed", "category": "limited", "expires_at": 1795629600, "price": 68,
         "image": "/images/case5.png", "fallback": "⏳",
         "drops": [{"item_id": 40, "weight": 52.5}, {"item_id": 41, "weight": 47.5}]},
-    6: {"id": 6, "name": "zahar_99d", "category": "partner", "price": 20, "partner_id": "8450028899",
+    6: {"id": 6, "name": "zahar_99d", "category": "partner", "price": 31, "partner_id": "8450028899",
         "partner_percent": 10, "image": "/images/case6.png", "fallback": "💎",
         "drops": [{"item_id": 6, "weight": 40}, {"item_id": 9, "weight": 25}, {"item_id": 14, "weight": 20},
                   {"item_id": 19, "weight": 10}, {"item_id": 35, "weight": 5}]},
+    7: {"id": 7, "name": "Garama", "category": "regular", "price": 100, "image": "/images/case7.png", "fallback": "💎",
+            "drops": [{"item_id": 25, "weight": 30}, {"item_id": 35, "weight": 30}, {"item_id": 36, "weight": 27.5},
+                      {"item_id": 53, "weight": 7.5}, {"item_id": 70, "weight": 5}]},
 }
 
 FREE_CASE_DROPS = [
