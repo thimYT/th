@@ -27,7 +27,7 @@
       "photo_url": ""
     },
     "1789157813": {
-      "balance": 0.0,
+      "balance": 10000.0,
       "inventory": [
         {
           "inv_id": 1080,
@@ -186,7 +186,7 @@
       "photo_url": ""
     },
     "8484069322": {
-      "balance": 20.0,
+      "balance": 200.0,
       "inventory": [
         {
           "inv_id": 1126,
