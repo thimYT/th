@@ -27,7 +27,7 @@
       "photo_url": ""
     },
     "1789157813": {
-      "balance": 5945.28,
+      "balance": 5445.28,
       "inventory": [
         {
           "inv_id": 1161,
@@ -53,6 +53,31 @@
           "inv_id": 1166,
           "item_id": 46,
           "mutation": "hacker"
+        },
+        {
+          "inv_id": 1168,
+          "item_id": 25,
+          "mutation": "normal"
+        },
+        {
+          "inv_id": 1169,
+          "item_id": 25,
+          "mutation": "normal"
+        },
+        {
+          "inv_id": 1170,
+          "item_id": 35,
+          "mutation": "normal"
+        },
+        {
+          "inv_id": 1171,
+          "item_id": 25,
+          "mutation": "normal"
+        },
+        {
+          "inv_id": 1172,
+          "item_id": 70,
+          "mutation": "normal"
         }
       ],
       "last_free_case": 1795359003,
@@ -205,7 +230,7 @@
       "photo_url": "https://t.me/i/userpic/320/n070dQV6aSk-Uji2mpBqleZeFEfoR88J_ozlC0v_fxHLdd5xEFPv1zgsgExUz2o-.svg"
     }
   },
-  "next_inv_id": 1168,
+  "next_inv_id": 1173,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
