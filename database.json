@@ -15,7 +15,8 @@
       "inventory": [
         {
           "inv_id": 11,
-          "item_id": 6
+          "item_id": 6,
+          "mutation": "normal"
         }
       ],
       "last_free_case": 0,
@@ -40,27 +41,33 @@
       "inventory": [
         {
           "inv_id": 265,
-          "item_id": 36
+          "item_id": 36,
+          "mutation": "normal"
         },
         {
           "inv_id": 266,
-          "item_id": 36
+          "item_id": 36,
+          "mutation": "normal"
         },
         {
           "inv_id": 267,
-          "item_id": 36
+          "item_id": 36,
+          "mutation": "normal"
         },
         {
           "inv_id": 268,
-          "item_id": 36
+          "item_id": 36,
+          "mutation": "normal"
         },
         {
           "inv_id": 269,
-          "item_id": 36
+          "item_id": 36,
+          "mutation": "normal"
         },
         {
           "inv_id": 1019,
-          "item_id": 36
+          "item_id": 36,
+          "mutation": "normal"
         }
       ],
       "last_free_case": 1795214004,
@@ -105,11 +112,13 @@
       "inventory": [
         {
           "inv_id": 988,
-          "item_id": 6
+          "item_id": 6,
+          "mutation": "normal"
         },
         {
           "inv_id": 991,
-          "item_id": 1
+          "item_id": 1,
+          "mutation": "normal"
         }
       ],
       "last_free_case": 1795214286,
@@ -124,7 +133,8 @@
       "inventory": [
         {
           "inv_id": 508,
-          "item_id": 43
+          "item_id": 43,
+          "mutation": "normal"
         }
       ],
       "last_free_case": 0,
