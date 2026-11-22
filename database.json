@@ -27,8 +27,14 @@
       "photo_url": ""
     },
     "1789157813": {
-      "balance": 10000.0,
-      "inventory": [],
+      "balance": 9900.0,
+      "inventory": [
+        {
+          "inv_id": 1072,
+          "item_id": 36,
+          "mutation": "normal"
+        }
+      ],
       "last_free_case": 1795359003,
       "last_daily_bonus": 0,
       "nickname": "кабилджон",
@@ -184,7 +190,7 @@
       "photo_url": "https://t.me/i/userpic/320/n070dQV6aSk-Uji2mpBqleZeFEfoR88J_ozlC0v_fxHLdd5xEFPv1zgsgExUz2o-.svg"
     }
   },
-  "next_inv_id": 1072,
+  "next_inv_id": 1073,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
