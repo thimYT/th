@@ -27,7 +27,7 @@
       "photo_url": ""
     },
     "1789157813": {
-      "balance": 5627.28,
+      "balance": 5952.28,
       "inventory": [
         {
           "inv_id": 1161,
@@ -53,11 +53,6 @@
           "inv_id": 1166,
           "item_id": 46,
           "mutation": "hacker"
-        },
-        {
-          "inv_id": 1172,
-          "item_id": 70,
-          "mutation": "normal"
         }
       ],
       "last_free_case": 1795359003,
