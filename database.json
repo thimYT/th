@@ -27,12 +27,17 @@
       "photo_url": ""
     },
     "1789157813": {
-      "balance": 9195.0,
+      "balance": 8595.0,
       "inventory": [
         {
           "inv_id": 1074,
           "item_id": 36,
           "mutation": "hacker"
+        },
+        {
+          "inv_id": 1076,
+          "item_id": 36,
+          "mutation": "eclipse"
         }
       ],
       "last_free_case": 1795359003,
@@ -195,7 +200,7 @@
       "photo_url": "https://t.me/i/userpic/320/n070dQV6aSk-Uji2mpBqleZeFEfoR88J_ozlC0v_fxHLdd5xEFPv1zgsgExUz2o-.svg"
     }
   },
-  "next_inv_id": 1076,
+  "next_inv_id": 1077,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
