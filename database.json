@@ -27,8 +27,19 @@
       "photo_url": ""
     },
     "1789157813": {
-      "balance": 9990.2,
-      "inventory": [],
+      "balance": 10910.56,
+      "inventory": [
+        {
+          "inv_id": 1080,
+          "item_id": 71,
+          "mutation": "hacker"
+        },
+        {
+          "inv_id": 1151,
+          "item_id": 5,
+          "mutation": "normal"
+        }
+      ],
       "last_free_case": 1795359003,
       "last_daily_bonus": 0,
       "nickname": "кабилджон",
