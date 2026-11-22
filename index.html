@@ -254,6 +254,45 @@
     .mut-btn img { width: 18px; height: 18px; object-fit: contain; margin: 0; }
     .mut-btn .m-mult { color: #ffcc80; font-size: 11px; }
     .mut-btn .m-dot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid var(--card-border); display: inline-block; }
+
+    /* МИНЫ 5x5 */
+    .mines-arena { background: radial-gradient(circle at top, rgba(255,123,0,.18) 0%, rgba(20,15,12,.95) 100%);
+        border: 1px solid var(--card-border); border-radius: 18px; padding: 16px 12px; margin-bottom: 14px;
+        display: flex; flex-direction: column; align-items: center; }
+    .mines-board {
+        display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
+        width: 100%; max-width: 360px; margin: 0 auto 12px;
+    }
+    .mines-cell {
+        aspect-ratio: 1/1; border-radius: 12px;
+        background: linear-gradient(180deg, #2b1e17 0%, #1a120e 100%);
+        border: 1px solid var(--card-border);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 22px; font-weight: 900; color: var(--text);
+        cursor: pointer; transition: transform .12s ease, background .15s ease;
+        user-select: none;
+    }
+    .mines-cell:hover:not(.opened):not(.boom) { background: linear-gradient(180deg, #38271e 0%, #231810 100%); }
+    .mines-cell.safe { background: linear-gradient(135deg, #00c853, #2e7d32); color: #fff; border-color: #66bb6a; }
+    .mines-cell.boom { background: linear-gradient(135deg, #ff3d00, #b71c1c); color: #fff; border-color: #ff8a65; }
+    .mines-cell.opened { cursor: default; transform: scale(0.97); }
+    .mines-cell.disabled { pointer-events: none; opacity: .8; }
+    .mines-top {
+        display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; width: 100%;
+        max-width: 360px; margin: 0 auto 12px;
+    }
+    .mines-stat {
+        background: #130d0a; border: 1px solid var(--card-border); border-radius: 12px;
+        padding: 8px 6px; text-align: center;
+    }
+    .mines-stat .v { color: #ffcc80; font-weight: 900; font-size: 16px; }
+    .mines-stat .l { color: var(--muted); font-size: 11px; font-weight: 700; }
+    .mines-slider-wrap { width: 100%; max-width: 360px; margin: 0 auto 12px; }
+    .mines-slider-wrap label { font-size: 13px; font-weight: 700; color: var(--muted); }
+    .mines-slider-wrap .mines-count { color: var(--orange); font-weight: 900; }
+    .mines-slider-wrap input[type="range"] {
+        width: 100%; margin-top: 6px; accent-color: var(--orange);
+    }
 </style>
 </head>
 <body>
@@ -280,6 +319,7 @@
     <button class="nav-btn" data-tab="upgrade" onclick="switchTab('upgrade')">⚡ Апгрейдер</button>
     <button class="nav-btn" data-tab="crash" onclick="switchTab('crash')">🚀 Краш (Ракета)</button>
     <button class="nav-btn" data-tab="dice" onclick="switchTab('dice')">🎲 Color Dice</button>
+    <button class="nav-btn" data-tab="mines" onclick="switchTab('mines')">💣 Мины 5×5</button>
     <button class="nav-btn" data-tab="bonuses" onclick="switchTab('bonuses')">🎁 Бонусы</button>
     <button class="nav-btn" data-tab="inventory" onclick="switchTab('inventory')">
         <span>🎒 Инвентарь</span>
@@ -440,6 +480,41 @@
         </div>
     </section>
 
+    <!-- МИНЫ 5x5 -->
+    <section class="tab-section" id="tab-mines">
+        <h2>Мины 5×5</h2>
+        <div class="mines-arena">
+            <div class="mines-top">
+                <div class="mines-stat"><div class="v" id="mines-mult">1.00x</div><div class="l">Множитель</div></div>
+                <div class="mines-stat"><div class="v" id="mines-potential">0</div><div class="l">Заберёте</div></div>
+                <div class="mines-stat"><div class="v" id="mines-opened">0</div><div class="l">Открыто</div></div>
+            </div>
+            <div class="mines-board" id="mines-board"></div>
+        </div>
+
+        <div class="panel-box">
+            <div class="mines-slider-wrap">
+                <label>Количество мин: <span class="mines-count" id="mines-count-label">3</span></label>
+                <input type="range" id="mines-slider" min="1" max="24" value="3" oninput="onMinesSlider()">
+            </div>
+            <div class="input-group">
+                <input type="number" id="mines-coins-input" min="0" step="1" placeholder="Ставка монетами" oninput="updateMinesTotal()">
+                <button class="btn" style="width:auto;padding:10px 16px;" onclick="setMaxMinesCoins()">Макс</button>
+            </div>
+            <div class="stat-line center" style="margin-bottom:12px;">Общая ставка: <b id="mines-total-bet">0</b> 💰</div>
+            <div class="case-win-actions">
+                <button class="btn" id="mines-start-btn" onclick="startMines()">Начать игру</button>
+                <button class="btn btn-blue" id="mines-cashout-btn" onclick="cashoutMines()" style="display:none;">Забрать</button>
+            </div>
+            <div id="mines-status-text" style="margin-top:10px;text-align:center;font-weight:700;font-size:13px;"></div>
+        </div>
+
+        <div class="panel-box">
+            <div class="panel-title">Добавить вещи из инвентаря в ставку:</div>
+            <div class="grid scroll-grid" id="mines-inv-grid"></div>
+        </div>
+    </section>
+
     <!-- БОНУСЫ -->
     <section class="tab-section" id="tab-bonuses">
         <h2>Бонусы</h2>
@@ -550,6 +625,14 @@ let diceChosenColor = "red";
 let diceCount = 4;
 let isDiceRolling = false;
 
+/* MINES */
+let minesSelectedInv = new Set();
+let minesActive = false;
+let minesOpened = new Set();
+let minesMines = 3;
+let minesPotentialWin = 0;
+let minesTotalBet = 0;
+
 const DICE_NAMES_RU = { red: "Красный", orange: "Оранжевый", yellow: "Жёлтый", green: "Зелёный", blue: "Синий", purple: "Фиолетовый" };
 const MULT_TABLE = { 1: 1.85, 3: 5.5, 5: 18.0, 7: 60.0, 9: 200.0, 11: 750.0 };
 
@@ -658,6 +741,7 @@ async function loadState() {
     upgSelectedInv = new Set([...upgSelectedInv].filter(id => validIds.has(id)));
     crashSelectedInv = new Set([...crashSelectedInv].filter(id => validIds.has(id)));
     diceSelectedInv = new Set([...diceSelectedInv].filter(id => validIds.has(id)));
+    minesSelectedInv = new Set([...minesSelectedInv].filter(id => validIds.has(id)));
 
     renderProfile();
     renderCases();
@@ -667,6 +751,7 @@ async function loadState() {
     calcUpgrade();
     updateCrashTotal();
     updateDiceTotal();
+    updateMinesTotal();
     updateFreeTimer();
     updateDailyBonusTimer();
 }
@@ -812,6 +897,19 @@ function renderInventories() {
         diceGrid.innerHTML = !bettable.length ? emptyNote : bettable.map(item =>
             '<div class="card rarity-' + item.rarity + (diceSelectedInv.has(item.inv_id) ? ' selected' : '') +
             '" style="cursor:pointer;" onclick="toggleDiceItem(' + item.inv_id + ')">' +
+                mutationBadge(item) +
+                renderItemImg(item) +
+                '<div class="card-title">' + item.name + '</div>' +
+                '<div class="card-price">' + item.price + ' 💰</div>' +
+            '</div>'
+        ).join("");
+    }
+
+    const minesGrid = el("mines-inv-grid");
+    if (minesGrid) {
+        minesGrid.innerHTML = !bettable.length ? emptyNote : bettable.map(item =>
+            '<div class="card rarity-' + item.rarity + (minesSelectedInv.has(item.inv_id) ? ' selected' : '') +
+            '" style="cursor:pointer;" onclick="toggleMinesItem(' + item.inv_id + ')">' +
                 mutationBadge(item) +
                 renderItemImg(item) +
                 '<div class="card-title">' + item.name + '</div>' +
@@ -1569,8 +1667,173 @@ async function rollColorDice() {
     }, 1450);
 }
 
+/* ---------- MINES 5x5 ---------- */
+function minesMultiplier(mines, opened) {
+    if (opened <= 0) return 1.0;
+    const safeTotal = 25 - mines;
+    if (opened > safeTotal) opened = safeTotal;
+    let p = 1.0;
+    for (let i = 0; i < opened; i++) {
+        p *= (safeTotal - i) / (25 - i);
+    }
+    const mult = p > 0 ? (1.0 / p) * 0.95 : 0;
+    return Math.max(1.0, Math.round(mult * 100) / 100);
+}
+
+function renderMinesBoard(revealedField, boomCell) {
+    const board = el("mines-board");
+    if (!board) return;
+    let html = "";
+    for (let i = 0; i < 25; i++) {
+        let cls = "mines-cell";
+        let content = "";
+        if (minesOpened.has(i)) {
+            cls += " safe opened";
+            content = "💎";
+        } else if (boomCell === i) {
+            cls += " boom opened";
+            content = "💣";
+        } else if (revealedField && revealedField.includes(i)) {
+            cls += " boom disabled";
+            content = "💣";
+        }
+        if (minesActive) cls += " ";
+        html += '<div class="' + cls + '" data-cell="' + i + '" onclick="openMinesCell(' + i + ')">' + content + '</div>';
+    }
+    board.innerHTML = html;
+}
+
+function updateMinesStats() {
+    const opened = minesOpened.size;
+    const mult = minesActive ? minesMultiplier(minesMines, opened) : 1.0;
+    el("mines-mult").textContent = mult.toFixed(2) + "x";
+    el("mines-opened").textContent = String(opened);
+    const potential = minesActive ? Math.round(minesTotalBet * mult * 100) / 100 : 0;
+    el("mines-potential").textContent = potential.toFixed(2);
+}
+
+function onMinesSlider() {
+    if (minesActive) return;
+    const s = el("mines-slider");
+    minesMines = parseInt(s.value, 10);
+    el("mines-count-label").textContent = minesMines;
+    updateMinesStats();
+}
+
+function toggleMinesItem(id) {
+    if (minesActive) return;
+    if (minesSelectedInv.has(id)) minesSelectedInv.delete(id);
+    else minesSelectedInv.add(id);
+    renderInventories();
+    updateMinesTotal();
+}
+
+function setMaxMinesCoins() {
+    if (minesActive) return;
+    el("mines-coins-input").value = state.balance;
+    updateMinesTotal();
+}
+
+function updateMinesTotal() {
+    const input = el("mines-coins-input");
+    if (!input) return;
+    let sum = parseFloat(input.value) || 0;
+    state.inventory.forEach(i => {
+        if (!i.locked && minesSelectedInv.has(i.inv_id)) sum += Number(i.price) || 0;
+    });
+    minesTotalBet = sum;
+    el("mines-total-bet").textContent = sum.toFixed(2);
+    updateMinesStats();
+}
+
+async function startMines() {
+    if (minesActive) return;
+    const coins = parseFloat(el("mines-coins-input").value) || 0;
+    let data;
+    try {
+        data = await postJSON("/api/mines/start", {
+            user_id: userId,
+            inv_ids: [...minesSelectedInv],
+            coins_bet: coins,
+            mines: minesMines
+        });
+    } catch (e) {
+        return showToast(e.message);
+    }
+    minesActive = true;
+    minesOpened = new Set();
+    minesSelectedInv.clear();
+    el("mines-coins-input").value = "";
+    await loadState();
+    minesTotalBet = Number(data.total_bet) || 0;
+    el("mines-status-text").textContent = "Игра началась. Открывайте клетки!";
+    el("mines-start-btn").style.display = "none";
+    el("mines-cashout-btn").style.display = "block";
+    el("mines-slider").disabled = true;
+    renderMinesBoard(null, null);
+    updateMinesStats();
+}
+
+async function openMinesCell(cell) {
+    if (!minesActive) return showToast("Сначала начните игру");
+    if (minesOpened.has(cell)) return;
+    let data;
+    try {
+        data = await postJSON("/api/mines/open", { user_id: userId, cell: cell });
+    } catch (e) {
+        return showToast(e.message);
+    }
+    if (data.boom) {
+        minesActive = false;
+        el("mines-status-text").innerHTML = '<span style="color:#ff8a65;">💥 Мина! Ставка сгорела.</span>';
+        el("mines-start-btn").style.display = "block";
+        el("mines-cashout-btn").style.display = "none";
+        el("mines-slider").disabled = false;
+        renderMinesBoard(data.field, cell);
+        updateMinesStats();
+        minesOpened = new Set();
+        await loadState();
+        return;
+    }
+    minesOpened.add(cell);
+    renderMinesBoard(null, null);
+    const potential = Number(data.potential_win) || 0;
+    el("mines-potential").textContent = potential.toFixed(2);
+    el("mines-mult").textContent = Number(data.multiplier || 1).toFixed(2) + "x";
+    el("mines-opened").textContent = String(data.opened || minesOpened.size);
+    el("mines-status-text").textContent = "Множитель ×" + data.multiplier + " — забирайте или открывайте дальше";
+}
+
+async function cashoutMines() {
+    if (!minesActive) return;
+    let data;
+    try {
+        data = await postJSON("/api/mines/cashout", { user_id: userId });
+    } catch (e) {
+        return showToast(e.message);
+    }
+    minesActive = false;
+    el("mines-start-btn").style.display = "block";
+    el("mines-cashout-btn").style.display = "none";
+    el("mines-slider").disabled = false;
+    el("mines-status-text").innerHTML = '<span style="color:#00e676;">Забрали на ×' + data.multiplier + ' — ' + data.total_win + ' 💰</span>';
+    minesOpened = new Set();
+    renderMinesBoard(null, null);
+    updateMinesStats();
+    if (data.returned_items && data.returned_items.length > 0) {
+        showToast("Вещи возвращены в инвентарь, +" + data.coins_added + " 💰 на баланс!");
+    } else if (data.won_item) {
+        showToast("Выигрыш: " + data.won_item.name + " + " + data.coins_added + " 💰");
+    } else {
+        showToast("Выигрыш: +" + data.coins_added + " 💰");
+    }
+    await loadState();
+}
+
 /* ---------- Запуск ---------- */
 renderInitialDiceBoard();
+renderMinesBoard(null, null);
+updateMinesStats();
 syncProfile().then(loadState);
 </script>
 </body>

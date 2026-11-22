@@ -179,8 +179,8 @@ CASES_DB = {
         "drops": [{"item_id": 6, "weight": 40}, {"item_id": 9, "weight": 25}, {"item_id": 14, "weight": 20},
                   {"item_id": 19, "weight": 10}, {"item_id": 35, "weight": 5}]},
     7: {"id": 7, "name": "Garama", "category": "regular", "price": 100, "image": "/images/case7.png", "fallback": "💎",
-            "drops": [{"item_id": 25, "weight": 30}, {"item_id": 35, "weight": 30}, {"item_id": 36, "weight": 27.5},
-                      {"item_id": 53, "weight": 7.5}, {"item_id": 70, "weight": 5}]},
+        "drops": [{"item_id": 25, "weight": 30}, {"item_id": 35, "weight": 30}, {"item_id": 36, "weight": 27.5},
+                  {"item_id": 53, "weight": 7.5}, {"item_id": 70, "weight": 5}]},
 }
 
 FREE_CASE_DROPS = [
@@ -196,6 +196,7 @@ DAILY_BONUS_COOLDOWN = 24 * 3600
 DAILY_BONUS_REQUIRED_TAG = "braindropdropbot"
 
 ACTIVE_CRASH_GAMES = {}
+ACTIVE_MINES_GAMES = {}
 WAITING_TOPUP_AMOUNT = {}
 
 
@@ -599,6 +600,19 @@ class ProfileSyncReq(BaseModel):
     photo_url: Optional[str] = ""
 
 class DailyBonusReq(BaseModel):
+    user_id: str
+
+class MinesStartReq(BaseModel):
+    user_id: str
+    inv_ids: List[int]
+    coins_bet: float
+    mines: int
+
+class MinesOpenReq(BaseModel):
+    user_id: str
+    cell: int
+
+class MinesCashoutReq(BaseModel):
     user_id: str
 
 
@@ -1191,4 +1205,149 @@ def play_color_dice(req: ColorDiceReq):
         "multiplier": multiplier,
         "win_amount": win_amount,
         "total_bet": total_bet
+    }
+
+
+# ---------- MINES 5x5 ----------
+MINES_GRID = 25
+
+
+def mines_multiplier(mines: int, opened: int) -> float:
+    if opened <= 0:
+        return 1.0
+    safe_total = MINES_GRID - mines
+    if opened > safe_total:
+        opened = safe_total
+    p = 1.0
+    for i in range(opened):
+        p *= (safe_total - i) / (MINES_GRID - i)
+    mult = (1.0 / p) * 0.95 if p > 0 else 0.0
+    return round(max(1.0, mult), 2)
+
+
+@app.post("/api/mines/start")
+def mines_start(req: MinesStartReq):
+    if req.coins_bet < 0:
+        raise HTTPException(status_code=400, detail="Некорректная ставка монет")
+    if req.mines < 1 or req.mines > 24:
+        raise HTTPException(status_code=400, detail="Количество мин: от 1 до 24")
+    if req.user_id in ACTIVE_MINES_GAMES:
+        raise HTTPException(status_code=400, detail="У вас уже есть активная игра в Мины")
+
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    user = ensure_user(db, req.user_id)
+
+    if req.coins_bet > user["balance"]:
+        raise HTTPException(status_code=400, detail="Недостаточно монет")
+
+    inv_map = {e["inv_id"]: e for e in user["inventory"] if not e.get("locked")}
+    bet_items = []
+    items_total_value = 0.0
+    for inv_id in req.inv_ids:
+        if inv_id not in inv_map or inv_map[inv_id]["item_id"] not in ITEMS_DB:
+            raise HTTPException(status_code=400, detail="Ошибка проверки предметов инвентаря")
+        e = inv_map[inv_id]
+        info = item_with_mutation(e["item_id"], e.get("mutation", "normal"))
+        items_total_value += info["price"]
+        bet_items.append({"inv_id": inv_id, "item_id": e["item_id"], "mutation": e.get("mutation", "normal")})
+
+    total_bet = round(items_total_value + req.coins_bet, 2)
+    if total_bet <= 0:
+        raise HTTPException(status_code=400, detail="Сделайте ставку монетами или вещами")
+
+    user["balance"] = round(user["balance"] - req.coins_bet, 2)
+    selected_set = set(req.inv_ids)
+    user["inventory"] = [e for e in user["inventory"] if e["inv_id"] not in selected_set]
+    github_save_db(db, sha)
+
+    field = set(random.sample(range(MINES_GRID), req.mines))
+    ACTIVE_MINES_GAMES[req.user_id] = {
+        "mines": req.mines,
+        "field": field,
+        "opened": [],
+        "bet_items": bet_items,
+        "items_value": items_total_value,
+        "coins_bet": req.coins_bet,
+        "total_bet": total_bet
+    }
+    return {"ok": True, "total_bet": total_bet, "mines": req.mines}
+
+
+@app.post("/api/mines/open")
+def mines_open(req: MinesOpenReq):
+    game = ACTIVE_MINES_GAMES.get(req.user_id)
+    if not game:
+        raise HTTPException(status_code=400, detail="Активная игра не найдена")
+    if req.cell < 0 or req.cell >= MINES_GRID:
+        raise HTTPException(status_code=400, detail="Некорректная клетка")
+    if req.cell in game["opened"]:
+        raise HTTPException(status_code=400, detail="Клетка уже открыта")
+
+    if req.cell in game["field"]:
+        ACTIVE_MINES_GAMES.pop(req.user_id, None)
+        return {"boom": True, "cell": req.cell, "field": sorted(list(game["field"]))}
+
+    game["opened"].append(req.cell)
+    opened = len(game["opened"])
+    mult = mines_multiplier(game["mines"], opened)
+    potential = round(game["total_bet"] * mult, 2)
+    return {"boom": False, "cell": req.cell, "opened": opened, "multiplier": mult, "potential_win": potential}
+
+
+@app.post("/api/mines/cashout")
+def mines_cashout(req: MinesCashoutReq):
+    game = ACTIVE_MINES_GAMES.pop(req.user_id, None)
+    if not game:
+        raise HTTPException(status_code=400, detail="Активная игра не найдена")
+    opened = len(game["opened"])
+    if opened <= 0:
+        raise HTTPException(status_code=400, detail="Откройте хотя бы одну клетку")
+
+    mult = mines_multiplier(game["mines"], opened)
+    total_win_value = round(game["total_bet"] * mult, 2)
+
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    user = ensure_user(db, req.user_id)
+
+    max_item_price = max(item["price"] for item in ITEMS_DB.values())
+    won_item = None
+    returned_items = []
+    coins_added = 0.0
+
+    if total_win_value > max_item_price:
+        for item_entry in game["bet_items"]:
+            user["inventory"].append(item_entry)
+            returned_items.append(item_with_mutation(item_entry["item_id"], item_entry.get("mutation", "normal")))
+        diff = round(total_win_value - game["items_value"], 2)
+        user["balance"] = round(user["balance"] + diff, 2)
+        coins_added = diff
+    else:
+        affordable_items = [it for it in ITEMS_DB.values() if it["price"] <= total_win_value]
+        if affordable_items:
+            best_item = max(affordable_items, key=lambda x: x["price"])
+            mut = roll_mutation(best_item["rarity"])
+            info = item_with_mutation(best_item["id"], mut)
+            while info["price"] > total_win_value and mut != "normal":
+                mut = "normal"
+                info = item_with_mutation(best_item["id"], mut)
+            inv_id = db["next_inv_id"]
+            db["next_inv_id"] += 1
+            user["inventory"].append({"inv_id": inv_id, "item_id": best_item["id"], "mutation": mut})
+            won_item = info
+            remainder = round(total_win_value - info["price"], 2)
+            user["balance"] = round(user["balance"] + remainder, 2)
+            coins_added = remainder
+        else:
+            user["balance"] = round(user["balance"] + total_win_value, 2)
+            coins_added = total_win_value
+
+    github_save_db(db, sha)
+    return {
+        "total_win": total_win_value,
+        "multiplier": mult,
+        "won_item": won_item,
+        "returned_items": returned_items,
+        "coins_added": coins_added
     }
