@@ -158,14 +158,9 @@
       "balance": 0.0,
       "inventory": [
         {
-          "inv_id": 1068,
+          "inv_id": 1070,
           "item_id": 36,
-          "mutation": "bloodroot"
-        },
-        {
-          "inv_id": 1069,
-          "item_id": 36,
-          "mutation": "rainbow"
+          "mutation": "eclipse"
         }
       ],
       "last_free_case": 0,
@@ -195,7 +190,7 @@
       "photo_url": "https://t.me/i/userpic/320/n070dQV6aSk-Uji2mpBqleZeFEfoR88J_ozlC0v_fxHLdd5xEFPv1zgsgExUz2o-.svg"
     }
   },
-  "next_inv_id": 1070,
+  "next_inv_id": 1071,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
