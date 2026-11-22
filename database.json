@@ -109,13 +109,7 @@
     },
     "1741462977": {
       "balance": 0.0,
-      "inventory": [
-        {
-          "inv_id": 1175,
-          "item_id": 41,
-          "mutation": "normal"
-        }
-      ],
+      "inventory": [],
       "last_free_case": 1795360483,
       "last_daily_bonus": 1795252235,
       "nickname": "",
