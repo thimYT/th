@@ -86,11 +86,6 @@
           "mutation": "normal"
         },
         {
-          "inv_id": 1103,
-          "item_id": 8,
-          "mutation": "normal"
-        },
-        {
           "inv_id": 1104,
           "item_id": 15,
           "mutation": "normal"
@@ -108,6 +103,11 @@
         {
           "inv_id": 1107,
           "item_id": 15,
+          "mutation": "normal"
+        },
+        {
+          "inv_id": 1108,
+          "item_id": 24,
           "mutation": "normal"
         }
       ],
@@ -225,7 +225,7 @@
       "photo_url": "https://t.me/i/userpic/320/n070dQV6aSk-Uji2mpBqleZeFEfoR88J_ozlC0v_fxHLdd5xEFPv1zgsgExUz2o-.svg"
     }
   },
-  "next_inv_id": 1108,
+  "next_inv_id": 1109,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
