@@ -27,8 +27,14 @@
       "photo_url": ""
     },
     "1789157813": {
-      "balance": 5952.28,
-      "inventory": [],
+      "balance": 5942.28,
+      "inventory": [
+        {
+          "inv_id": 1225,
+          "item_id": 2,
+          "mutation": "normal"
+        }
+      ],
       "last_free_case": 1795359003,
       "last_daily_bonus": 0,
       "nickname": "кабилджон",
@@ -167,7 +173,7 @@
       "photo_url": "https://t.me/i/userpic/320/n070dQV6aSk-Uji2mpBqleZeFEfoR88J_ozlC0v_fxHLdd5xEFPv1zgsgExUz2o-.svg"
     }
   },
-  "next_inv_id": 1225,
+  "next_inv_id": 1226,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -227,8 +233,26 @@
   },
   "next_req_id": 5,
   "daily_drops": {
-    "date": "",
-    "items": []
+    "date": "2026-11-22",
+    "items": [
+      {
+        "ts": 1795377696,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "case",
+        "item_id": 2,
+        "name": "Sir Mangus",
+        "rarity": "common",
+        "image": "/images/item2.png",
+        "fallback": "🔫",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 7.0
+      }
+    ]
   },
   "global_message": {
     "text": "",
