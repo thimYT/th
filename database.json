@@ -225,5 +225,13 @@
       "created_at": 1795214426
     }
   },
-  "next_req_id": 5
+  "next_req_id": 5,
+  "daily_drops": {
+    "date": "",
+    "items": []
+  },
+  "global_message": {
+    "text": "",
+    "until": 0
+  }
 }
