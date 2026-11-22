@@ -89,11 +89,6 @@
           "inv_id": 1099,
           "item_id": 25,
           "mutation": "normal"
-        },
-        {
-          "inv_id": 1100,
-          "item_id": 25,
-          "mutation": "normal"
         }
       ],
       "last_free_case": 1795214004,
