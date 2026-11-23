@@ -163,7 +163,9 @@
           "inv_id": 1244,
           "item_id": 84,
           "mutation": "hacker",
-          "traits": []
+          "traits": [
+            "spider"
+          ]
         }
       ],
       "last_free_case": 1795415756,
