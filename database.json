@@ -145,8 +145,15 @@
       "photo_url": ""
     },
     "7379573136": {
-      "balance": 20000.0,
-      "inventory": [],
+      "balance": 13300.0,
+      "inventory": [
+        {
+          "inv_id": 1243,
+          "item_id": 85,
+          "mutation": "hacker",
+          "traits": []
+        }
+      ],
       "last_free_case": 1795415756,
       "last_daily_bonus": 1795415866,
       "nickname": "",
@@ -174,7 +181,7 @@
       "photo_url": "https://t.me/i/userpic/320/n070dQV6aSk-Uji2mpBqleZeFEfoR88J_ozlC0v_fxHLdd5xEFPv1zgsgExUz2o-.svg"
     }
   },
-  "next_inv_id": 1243,
+  "next_inv_id": 1244,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -594,6 +601,23 @@
         "mutation_icon": "/images/mutation16.png",
         "mutation_mult": 14.0,
         "price": 3850.0
+      },
+      {
+        "ts": 1795446209,
+        "user_id": "7379573136",
+        "username": "FantaxyXD",
+        "first_name": "Wowowo @BrainDropDropBot",
+        "photo_url": "https://t.me/i/userpic/320/1dZNKuPHZmKwNi7BdJJt3WHOxpQsDsz9W4cbud-2OgY_j3Q_r1l6ccTaPo8E7M6z.svg",
+        "source": "upgrade",
+        "item_id": 85,
+        "name": "Flying Dutchman",
+        "rarity": "legendary",
+        "image": "/images/item85.png",
+        "fallback": "🐉",
+        "mutation": "hacker",
+        "mutation_icon": "/images/mutation16.png",
+        "mutation_mult": 14.0,
+        "price": 7000.0
       }
     ]
   },
