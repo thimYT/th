@@ -146,7 +146,14 @@
     },
     "1741462977": {
       "balance": 2.0,
-      "inventory": [],
+      "inventory": [
+        {
+          "inv_id": 1251,
+          "item_id": 56,
+          "mutation": "normal",
+          "traits": []
+        }
+      ],
       "last_free_case": 1795360483,
       "last_daily_bonus": 1795252235,
       "nickname": "",
@@ -225,7 +232,7 @@
       "photo_url": "https://t.me/i/userpic/320/n070dQV6aSk-Uji2mpBqleZeFEfoR88J_ozlC0v_fxHLdd5xEFPv1zgsgExUz2o-.svg"
     }
   },
-  "next_inv_id": 1251,
+  "next_inv_id": 1252,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -245,9 +252,11 @@
       ]
     },
     "YARIKISTHEBEST123": {
-      "stock": 1,
+      "stock": 0,
       "type": "item",
-      "used_by": [],
+      "used_by": [
+        "1741462977"
+      ],
       "item_id": 56
     }
   },
@@ -787,6 +796,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 90.0
+      },
+      {
+        "ts": 1795447007,
+        "user_id": "1741462977",
+        "username": "paslkek",
+        "first_name": "sewrez @Brainrot_Battle @Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/izWNPXRMLhEWDYrCF75kihGaB7rM4sxASucty8vX3CM.svg",
+        "source": "promo",
+        "item_id": 56,
+        "name": "La Food",
+        "rarity": "legendary",
+        "image": "/images/item56.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 94.0
       }
     ]
   },
