@@ -139,7 +139,18 @@
     },
     "7379573136": {
       "balance": 0.0,
-      "inventory": [],
+      "inventory": [
+        {
+          "inv_id": 1241,
+          "item_id": 85,
+          "mutation": "hacker"
+        },
+        {
+          "inv_id": 1242,
+          "item_id": 68,
+          "mutation": "hacker"
+        }
+      ],
       "last_free_case": 1795415756,
       "last_daily_bonus": 1795415866,
       "nickname": "",
@@ -535,6 +546,40 @@
         "first_name": "Wowowo @BrainDropDropBot",
         "photo_url": "https://t.me/i/userpic/320/1dZNKuPHZmKwNi7BdJJt3WHOxpQsDsz9W4cbud-2OgY_j3Q_r1l6ccTaPo8E7M6z.svg",
         "source": "upgrade",
+        "item_id": 68,
+        "name": "Los Admins",
+        "rarity": "legendary",
+        "image": "/images/item68.png",
+        "fallback": "🐉",
+        "mutation": "hacker",
+        "mutation_icon": "/images/mutation16.png",
+        "mutation_mult": 14.0,
+        "price": 3850.0
+      },
+      {
+        "ts": 1795420169,
+        "user_id": "7379573136",
+        "username": "FantaxyXD",
+        "first_name": "Wowowo @BrainDropDropBot",
+        "photo_url": "https://t.me/i/userpic/320/1dZNKuPHZmKwNi7BdJJt3WHOxpQsDsz9W4cbud-2OgY_j3Q_r1l6ccTaPo8E7M6z.svg",
+        "source": "mines",
+        "item_id": 85,
+        "name": "Flying Dutchman",
+        "rarity": "legendary",
+        "image": "/images/item85.png",
+        "fallback": "🐉",
+        "mutation": "hacker",
+        "mutation_icon": "/images/mutation16.png",
+        "mutation_mult": 14.0,
+        "price": 7000.0
+      },
+      {
+        "ts": 1795420169,
+        "user_id": "7379573136",
+        "username": "FantaxyXD",
+        "first_name": "Wowowo @BrainDropDropBot",
+        "photo_url": "https://t.me/i/userpic/320/1dZNKuPHZmKwNi7BdJJt3WHOxpQsDsz9W4cbud-2OgY_j3Q_r1l6ccTaPo8E7M6z.svg",
+        "source": "mines",
         "item_id": 68,
         "name": "Los Admins",
         "rarity": "legendary",
