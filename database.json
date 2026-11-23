@@ -16,7 +16,8 @@
         {
           "inv_id": 11,
           "item_id": 6,
-          "mutation": "normal"
+          "mutation": "normal",
+          "traits": []
         }
       ],
       "last_free_case": 0,
@@ -42,32 +43,38 @@
         {
           "inv_id": 265,
           "item_id": 36,
-          "mutation": "normal"
+          "mutation": "normal",
+          "traits": []
         },
         {
           "inv_id": 266,
           "item_id": 36,
-          "mutation": "normal"
+          "mutation": "normal",
+          "traits": []
         },
         {
           "inv_id": 267,
           "item_id": 36,
-          "mutation": "normal"
+          "mutation": "normal",
+          "traits": []
         },
         {
           "inv_id": 268,
           "item_id": 36,
-          "mutation": "normal"
+          "mutation": "normal",
+          "traits": []
         },
         {
           "inv_id": 269,
           "item_id": 36,
-          "mutation": "normal"
+          "mutation": "normal",
+          "traits": []
         },
         {
           "inv_id": 1201,
           "item_id": 36,
-          "mutation": "normal"
+          "mutation": "normal",
+          "traits": []
         }
       ],
       "last_free_case": 1795369020,
@@ -583,6 +590,11 @@
   },
   "global_message": {
     "text": "",
+    "until": 0
+  },
+  "events": {},
+  "luck_event": {
+    "multiplier": 0,
     "until": 0
   }
 }
