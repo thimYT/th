@@ -28,8 +28,10 @@ if not MODERATOR_IDS and ADMIN_CHAT_ID:
     MODERATOR_IDS = [ADMIN_CHAT_ID]
 DB_FILE_PATH = "database.json"
 
-# ---------- Часовой пояс Минска (UTC+3) ----------
 MINSK_TZ = timezone(timedelta(hours=3))
+ONLINE_WINDOW_SEC = 5 * 60
+TRADE_COMMISSION = 0.15
+TRADE_MAX_ITEMS = 50
 
 def minsk_today_str() -> str:
     return datetime.now(MINSK_TZ).strftime("%Y-%m-%d")
@@ -179,7 +181,6 @@ def item_with_mutation(item_id: int, mutation: str) -> dict:
     return out
 
 
-# ---------- TRAITS (Этап 4) ----------
 TRAITS_DB = {
      "taco":   {"key": "taco",   "name": "Taco",   "icon": "/images/trait1.png", "percent": -5},
       "crab":   {"key": "crab",   "name": "Crab",   "icon": "/images/trait2.png", "percent": -5},
@@ -266,9 +267,9 @@ def get_default_db():
         },
         "daily_drops": {"date": "", "items": []},
         "global_message": {"text": "", "until": 0},
-        # --- Этап 4 ---
-        "events": {},            # event_id -> {type, trait/mutation, tick_seconds, chance, until, started_at}
+        "events": {},
         "luck_event": {"multiplier": 0, "until": 0},
+        "trades": [],
     }
 
 
@@ -321,6 +322,8 @@ def normalize_db(db):
         db["luck_event"] = {"multiplier": 0, "until": 0}
     db["luck_event"].setdefault("multiplier", 0)
     db["luck_event"].setdefault("until", 0)
+    if "trades" not in db or not isinstance(db["trades"], list):
+        db["trades"] = []
     for uid, u in db.get("users", {}).items():
         u.setdefault("balance", 0)
         u.setdefault("inventory", [])
@@ -329,6 +332,7 @@ def normalize_db(db):
         u.setdefault("username", "")
         u.setdefault("first_name", "")
         u.setdefault("photo_url", "")
+        u.setdefault("last_seen", 0)
         for entry in u.get("inventory", []):
             entry.setdefault("mutation", "normal")
             entry.setdefault("traits", [])
@@ -370,6 +374,7 @@ def ensure_user(db, user_id: str):
             "username": "",
             "first_name": "",
             "photo_url": "",
+            "last_seen": 0,
         }
     else:
         u = db["users"][user_id]
@@ -380,7 +385,18 @@ def ensure_user(db, user_id: str):
         u.setdefault("username", "")
         u.setdefault("first_name", "")
         u.setdefault("photo_url", "")
+        u.setdefault("last_seen", 0)
     return db["users"][user_id]
+
+
+def touch_user(db, user_id: str):
+    u = ensure_user(db, user_id)
+    u["last_seen"] = int(time.time())
+    return u
+
+
+def is_online(user) -> bool:
+    return int(time.time()) - int(user.get("last_seen", 0)) <= ONLINE_WINDOW_SEC
 
 
 # ---------- Дроп дня ----------
@@ -747,14 +763,13 @@ class TowerOpenReq(BaseModel):
 class TowerCashoutReq(BaseModel):
     user_id: str
 
-# === ЭТАП 4: АДМИН ===
 class AdminUserIdReq(BaseModel):
     admin_id: str
 
 class AdminPromoCreateReq(BaseModel):
     admin_id: str
     code: str
-    type: str  # coins | item
+    type: str
     amount: Optional[float] = 0
     item_id: Optional[int] = None
     stock: int = 1
@@ -767,7 +782,7 @@ class AdminBalanceReq(BaseModel):
     admin_id: str
     target_user_id: str
     amount: float
-    action: str  # add | sub
+    action: str
 
 class AdminGiveItemReq(BaseModel):
     admin_id: str
@@ -778,7 +793,7 @@ class AdminGiveItemReq(BaseModel):
 
 class AdminEventStartReq(BaseModel):
     admin_id: str
-    event_type: str        # "trait" | "mutation"
+    event_type: str
     trait_key: Optional[str] = None
     mutation_key: Optional[str] = None
     tick_seconds: int = 45
@@ -791,11 +806,18 @@ class AdminEventStopReq(BaseModel):
 
 class AdminLuckStartReq(BaseModel):
     admin_id: str
-    multiplier: int        # 2 or 4
+    multiplier: int
     duration_seconds: int = 600
 
 class AdminLuckStopReq(BaseModel):
     admin_id: str
+
+# === ЭТАП 6: ТРЕЙДЫ ===
+class TradeSendReq(BaseModel):
+    from_user_id: str
+    target: str          # @username или user_id
+    inv_ids: List[int] = []
+    coins: float = 0
 
 
 @app.get("/")
@@ -854,6 +876,9 @@ def get_state(user_id: str):
     user = ensure_user(db, user_id)
     if is_new:
         github_save_db(db, sha)
+    # online-трекинг
+    user["last_seen"] = int(time.time())
+    github_save_db(db, sha)
 
     inv_list = []
     for entry in reversed(user["inventory"]):
@@ -901,6 +926,7 @@ def get_state(user_id: str):
         "active_events": _active_events_public(db),
         "luck_event": _active_luck_public(db),
         "is_admin": _is_admin(user_id),
+        "trade_commission": TRADE_COMMISSION,
         "profile": {
             "user_id": user_id,
             "username": user.get("username", ""),
@@ -923,6 +949,7 @@ def profile_sync(req: ProfileSyncReq):
     user["username"] = (req.username or "")[:64]
     user["first_name"] = (req.first_name or "")[:128]
     user["photo_url"] = (req.photo_url or "")[:512]
+    user["last_seen"] = int(time.time())
     github_save_db(db, sha)
     return {"ok": True}
 
@@ -1041,7 +1068,6 @@ def open_case(req: OpenCaseReq):
         mut = roll_mutation(ITEMS_DB[wid]["rarity"])
         inv_id = db["next_inv_id"]
         db["next_inv_id"] += 1
-        # ВАЖНО: трейты из кейсов НЕ падают (п.5)
         user["inventory"].append({"inv_id": inv_id, "item_id": wid, "mutation": mut, "traits": []})
         won_inv_ids.append(inv_id)
         won_items_out.append(item_with_traits(wid, mut, []))
@@ -1253,7 +1279,6 @@ def do_upgrade(req: UpgradeReq):
 
     chance = round((total_bet / target_value) * 92, 2)
     chance = max(1.0, min(75.0, chance))
-    # luck влияет на шанс? по ТЗ удача — только на дропы, не на апгрейд. оставляем как есть.
 
     user["balance"] = round(user["balance"] - req.coins_bet, 2)
     selected_set = set(req.inv_ids)
@@ -1267,7 +1292,6 @@ def do_upgrade(req: UpgradeReq):
         if req.target_type == "item":
             inv_id = db["next_inv_id"]
             db["next_inv_id"] += 1
-            # в апгрейде трейты не падают (только админка/трейды/ивет)
             user["inventory"].append({"inv_id": inv_id, "item_id": req.target_item_id, "mutation": target_mut, "traits": []})
             won_item_out = item_with_traits(req.target_item_id, target_mut, [])
             record_daily_drop(db, req.user_id, [won_item_out], "upgrade")
@@ -1551,7 +1575,6 @@ def mines_cashout(req: MinesCashoutReq):
     }
 
 
-# ---------- ПЛИНКО (этап 2) ----------
 PLINKO_ROWS = 12
 PLINKO_MULTS = [29.0, 14.0, 6.0, 3.0, 1.5, 0.7, 0.4, 0.7, 1.5, 3.0, 6.0, 14.0, 29.0]
 
@@ -1652,7 +1675,6 @@ def plinko_play(req: PlinkoPlayReq):
     }
 
 
-# ---------- БАШНЯ (этап 3) ----------
 TOWER_FLOORS = 5
 TOWER_COLS = 5
 
@@ -1796,6 +1818,7 @@ def admin_users(admin_id: str):
             "balance": round(u.get("balance", 0), 2),
             "inv_count": len(u.get("inventory", [])),
             "inv_value": round(inv_val, 2),
+            "online": is_online(u),
         })
     return {"users": out}
 
@@ -1951,7 +1974,6 @@ def admin_luck_stop(req: AdminLuckStopReq):
     return {"ok": True}
 
 
-# ---------- Админ: глобальное сообщение (уже было) ----------
 @app.post("/api/admin/global_message")
 def admin_global_message(req: AdminGlobalMessageReq):
     if not _is_admin(req.admin_id):
@@ -1976,15 +1998,176 @@ def get_daily_drops():
     return _public_daily_drops(db)
 
 
-# ---------- Фоновые ивенты (трейты/мутации) ----------
+# ---------- ЭТАП 6: ТРЕЙДЫ ----------
+def _resolve_target(db, target: str) -> str:
+    """Превращает @username / username / user_id в user_id. Бросает 404, если не найден."""
+    t = (target or "").strip()
+    if not t:
+        raise HTTPException(status_code=400, detail="Укажите @username или user_id")
+    if t.startswith("@"):
+        t = t[1:]
+    # сначала ищем по user_id
+    if t in db.get("users", {}):
+        return t
+    # ищем по username (регистронезависимо)
+    for uid, u in db.get("users", {}).items():
+        if (u.get("username") or "").lower() == t.lower():
+            return uid
+    raise HTTPException(status_code=404, detail="Игрок не найден")
+
+
+@app.get("/api/trade/find_user")
+def trade_find_user(q: str):
+    q = (q or "").strip()
+    if q.startswith("@"):
+        q = q[1:]
+    if not q:
+        raise HTTPException(status_code=400, detail="Введите @username или ID")
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    matches = []
+    for uid, u in db.get("users", {}).items():
+        uname = (u.get("username") or "")
+        if uid == q or uname.lower() == q.lower():
+            matches.append({
+                "user_id": uid,
+                "username": uname,
+                "first_name": u.get("first_name", ""),
+                "online": is_online(u),
+            })
+    if not matches:
+        raise HTTPException(status_code=404, detail="Игрок не найден")
+    return {"matches": matches}
+
+
+@app.get("/api/trade/history/{user_id}")
+def trade_history(user_id: str):
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    out = []
+    for t in reversed(db.get("trades", [])):
+        if t.get("from_user_id") == user_id or t.get("to_user_id") == user_id:
+            out.append(t)
+        if len(out) >= 20:
+            break
+    return {"trades": out}
+
+
+@app.post("/api/trade/send")
+def trade_send(req: TradeSendReq):
+    if not req.from_user_id:
+        raise HTTPException(status_code=400, detail="Некорректный user_id")
+    if req.coins < 0:
+        raise HTTPException(status_code=400, detail="coins < 0")
+    if len(req.inv_ids or []) > TRADE_MAX_ITEMS:
+        raise HTTPException(status_code=400, detail=f"Максимум {TRADE_MAX_ITEMS} предметов за трейд")
+
+    db, sha = github_load_db()
+    db = normalize_db(db)
+
+    from_id = req.from_user_id
+    if from_id not in db["users"]:
+        raise HTTPException(status_code=400, detail="Отправитель не найден")
+    from_user = ensure_user(db, from_id)
+    from_user["last_seen"] = int(time.time())
+
+    target_id = _resolve_target(db, req.target)
+    if target_id == from_id:
+        raise HTTPException(status_code=400, detail="Нельзя трейдить самому себе")
+    to_user = ensure_user(db, target_id)
+    if not is_online(to_user):
+        raise HTTPException(status_code=400, detail="Получатель не в сети (заходил > 5 мин назад)")
+
+    # собираем предметы
+    from_inv = {e["inv_id"]: e for e in from_user["inventory"]}
+    picked_entries = []
+    items_value = 0.0
+    for iid in req.inv_ids or []:
+        e = from_inv.get(iid)
+        if not e:
+            raise HTTPException(status_code=400, detail=f"Предмет {iid} не найден у вас")
+        if e.get("locked"):
+            raise HTTPException(status_code=400, detail=f"Предмет {iid} заблокирован (вывод)")
+        info = item_with_traits(e["item_id"], e.get("mutation", "normal"), e.get("traits", []))
+        items_value += info["price"]
+        picked_entries.append(e)
+
+    coins = round(float(req.coins or 0), 2)
+
+    # комиссия 15% с монет и с рыночной стоимости вещей
+    commission_from_coins = round(coins * TRADE_COMMISSION, 2)
+    commission_from_items = round(items_value * TRADE_COMMISSION, 2)
+    total_commission = round(commission_from_coins + commission_from_items, 2)
+
+    # с отправителя списываем: coins (полные) + total_commission
+    if from_user["balance"] < coins + total_commission:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Недостаточно монет с учётом комиссии {total_commission} 💰 (баланс {from_user['balance']:.2f})"
+        )
+
+    # перевод
+    from_user["balance"] = round(from_user["balance"] - coins - total_commission, 2)
+    to_user["balance"] = round(to_user["balance"] + (coins - commission_from_coins), 2)
+
+    # перенос вещей
+    moved = []
+    for e in picked_entries:
+        from_user["inventory"] = [x for x in from_user["inventory"] if x["inv_id"] != e["inv_id"]]
+        to_user["inventory"].append(e)
+        moved.append({
+            "inv_id": e["inv_id"],
+            "item_id": e["item_id"],
+            "mutation": e.get("mutation", "normal"),
+            "traits": e.get("traits", []),
+            "price": item_with_traits(e["item_id"], e.get("mutation", "normal"), e.get("traits", []))["price"],
+            "name": ITEMS_DB[e["item_id"]]["name"],
+        })
+
+    record = {
+        "ts": int(time.time()),
+        "from_user_id": from_id,
+        "from_username": from_user.get("username", ""),
+        "to_user_id": target_id,
+        "to_username": to_user.get("username", ""),
+        "coins_sent": coins,
+        "coins_received": round(coins - commission_from_coins, 2),
+        "items_value": round(items_value, 2),
+        "commission": total_commission,
+        "items": moved,
+    }
+    db.setdefault("trades", []).append(record)
+    if len(db["trades"]) > 500:
+        db["trades"] = db["trades"][-500:]
+
+    github_save_db(db, sha)
+
+    # уведомления через бота (если есть)
+    if BOT_TOKEN:
+        try:
+            uname_to = to_user.get("username") or to_user.get("first_name") or target_id
+            send_tg_message(target_id,
+                f"🤝 Вам трейд от {from_user.get('username') or from_id}:\n"
+                f"• монеты: {record['coins_received']} 💰 (комиссия {commission_from_coins} 💰)\n"
+                f"• предметов: {len(moved)}\n"
+                f"• комиссия с предметов: {commission_from_items} 💰 (списана с отправителя)")
+        except Exception:
+            pass
+
+    return {
+        "ok": True,
+        "to_user_id": target_id,
+        "coins_received": record["coins_received"],
+        "commission_from_coins": commission_from_coins,
+        "commission_from_items": commission_from_items,
+        "total_commission": total_commission,
+        "items_moved": len(moved),
+    }
+
+
+# ---------- Фоновые ивенты ----------
 def _events_loop():
-    """
-    Раз в 10 секунд проверяет активные ивенты.
-    Для каждого ивента ведёт расписание тиков (последний тик — в памяти).
-    На тике: с шансом chance_percent выбирает случайного игрока и случайный предмет
-    в его инвентаре и применяет трейт или мутацию (если предмета ещё нет такого трейта / мутация подходит по редкости).
-    """
-    last_tick = {}  # event_id -> timestamp последнего тика
+    last_tick = {}
     while True:
         try:
             time.sleep(10)
@@ -2004,7 +2187,6 @@ def _events_loop():
                 if now - prev < tick_sec:
                     continue
                 last_tick[eid] = now
-                # тик
                 chance = float(ev.get("chance_percent", 5.0))
                 if random.uniform(0, 100) > chance:
                     continue
@@ -2016,13 +2198,12 @@ def _events_loop():
                         if ev["event_type"] == "trait":
                             if ev["trait_key"] not in (e.get("traits") or []):
                                 candidates.append((uid, e))
-                        else:  # mutation
+                        else:
                             item_info = ITEMS_DB.get(e.get("item_id"))
                             if not item_info:
                                 continue
                             if not rarity_allows_mutation(item_info["rarity"]):
                                 continue
-                            # не накатываем, если уже такая же или "выше"
                             cur_mult = mutation_mult(e.get("mutation", "normal"))
                             new_mult = mutation_mult(ev["mutation_key"])
                             if new_mult > cur_mult:

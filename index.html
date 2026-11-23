@@ -262,7 +262,7 @@
     .mut-btn .m-mult { color: #ffcc80; font-size: 11px; }
     .mut-btn .m-dot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid var(--card-border); display: inline-block; }
 
-    /* ТРЕЙТЫ (Этап 4) */
+    /* ТРЕЙТЫ */
     .trait-strip {
         display: flex; gap: 3px; flex-wrap: wrap; justify-content: center;
         margin: 4px 0 6px;
@@ -457,7 +457,7 @@
     }
     .global-msg.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* АДМИНКА (Этап 4) */
+    /* АДМИНКА */
     .admin-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
     .admin-tab-btn { background: #1c130f; border: 1px solid var(--card-border); color: var(--muted);
         padding: 8px 12px; border-radius: 10px; font-weight: 700; font-size: 12px; cursor: pointer; }
@@ -482,6 +482,48 @@
     .trait-pick-item .pct { margin-left: auto; font-size: 11px; }
     .trait-pick-item .pct.pos { color: var(--green); }
     .trait-pick-item .pct.neg { color: var(--red); }
+
+    /* ТРЕЙДЫ */
+    .trade-commission-note { background: rgba(255,123,0,0.12); border: 1px solid var(--orange);
+        color: #ffcc80; border-radius: 10px; padding: 8px 10px; font-size: 12px; margin-bottom: 10px; }
+    .trade-history-item { background: #130d0a; border: 1px solid var(--card-border); border-radius: 10px;
+        padding: 8px 10px; font-size: 12px; margin-bottom: 6px; }
+    .trade-history-item .th-meta { color: var(--muted); font-size: 11px; }
+
+    /* БАТЛЫ (Этап 7) */
+    .battle-list { display: flex; flex-direction: column; gap: 10px; }
+    .battle-card { background: #130d0a; border: 1px solid var(--card-border); border-radius: 14px;
+        padding: 10px 12px; display: grid; grid-template-columns: 64px 1fr auto; gap: 10px; align-items: center; }
+    .battle-case-img { width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; }
+    .battle-case-img img { width: 100%; height: 100%; object-fit: contain; }
+    .battle-case-img .fallback-icon { font-size: 34px; height: 64px; margin: 0; }
+    .battle-info { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+    .battle-case-name { font-weight: 900; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .battle-meta { color: var(--muted); font-size: 12px; font-weight: 700; }
+    .battle-bet { color: #ffcc80; font-weight: 900; font-size: 13px; }
+    .battle-actions { display: flex; flex-direction: column; gap: 6px; min-width: 120px; }
+    .battle-status-badge { font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 6px; text-align: center; }
+    .battle-status-waiting { background: rgba(41,121,255,.2); border: 1px solid var(--blue); color: #82b1ff; }
+    .battle-status-running { background: rgba(255,123,0,.2); border: 1px solid var(--orange); color: #ffcc80; }
+    .battle-status-finished { background: rgba(0,230,118,.18); border: 1px solid var(--green); color: #00e676; }
+    .battle-status-cancelled { background: rgba(255,61,0,.18); border: 1px solid var(--red); color: #ff8a65; }
+    .battle-empty { color: var(--muted); font-size: 13px; font-weight: 700; padding: 8px 4px; }
+    .battle-modal-versus { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: center; margin-bottom: 12px; }
+    .battle-player { background: #130d0a; border: 1px solid var(--card-border); border-radius: 12px; padding: 8px; text-align: center; }
+    .battle-player .bp-name { font-weight: 900; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .battle-player .bp-sum { color: #ffcc80; font-weight: 900; font-size: 14px; margin-top: 4px; }
+    .battle-player.winner { border-color: var(--green); box-shadow: 0 0 14px rgba(0,230,118,.4); }
+    .battle-vs { font-weight: 900; color: var(--muted); font-size: 13px; }
+    .battle-rolls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+    .battle-rolls-col { background: #130d0a; border: 1px solid var(--card-border); border-radius: 12px; padding: 8px; }
+    .battle-rolls-col .br-title { font-size: 11px; color: var(--muted); font-weight: 800; margin-bottom: 6px; }
+    .battle-roll-item { display: flex; align-items: center; gap: 6px; padding: 4px 0; border-top: 1px solid #2b1e17; }
+    .battle-roll-item img { width: 26px; height: 26px; object-fit: contain; }
+    .battle-roll-item .bri-name { font-size: 11px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
+    .battle-roll-item .bri-price { font-size: 11px; font-weight: 800; color: #ffcc80; }
+    .battle-winner-line { text-align: center; font-weight: 900; padding: 8px; border-radius: 10px; margin-bottom: 10px; }
+    .battle-winner-line.win { background: rgba(0,230,118,.15); border: 1px solid var(--green); color: #00e676; }
+    .battle-winner-line.lose { background: rgba(255,61,0,.15); border: 1px solid var(--red); color: #ff8a65; }
 </style>
 </head>
 <body>
@@ -514,6 +556,8 @@
     <button class="nav-btn" data-tab="mines" onclick="switchTab('mines')">💣 Мины 5×5</button>
     <button class="nav-btn" data-tab="plinko" onclick="switchTab('plinko')">🎯 Плинко</button>
     <button class="nav-btn" data-tab="tower" onclick="switchTab('tower')">🏰 Башня</button>
+    <button class="nav-btn" data-tab="battles" onclick="switchTab('battles')">⚔️ Батлы</button>
+    <button class="nav-btn" data-tab="trade" onclick="switchTab('trade')">🤝 Трейды</button>
     <button class="nav-btn" data-tab="bonuses" onclick="switchTab('bonuses')">🎁 Бонусы</button>
     <button class="nav-btn" data-tab="inventory" onclick="switchTab('inventory')">
         <span>🎒 Инвентарь</span>
@@ -523,458 +567,36 @@
 </aside>
 
 <main class="container">
+<!-- === ОСТАЛЬНАЯ РАЗМЕТКА MAIN ИДЁТ ИЗ ТВОЕГО ФАЙЛА: профиль, кейсы, апгрейдер, краш, дайс, мины, плинко, башня, трейды, бонусы, инвентарь, админка === -->
 
-    <!-- ПРОФИЛЬ -->
-    <section class="tab-section" id="tab-profile">
-        <h2>Профиль</h2>
-        <div class="profile-card">
-            <div class="profile-avatar" id="profile-avatar">?</div>
-            <div class="profile-name" id="profile-name">Игрок</div>
-            <div class="profile-username" id="profile-username">@—</div>
-            <div class="profile-id" id="profile-id">ID: —</div>
-            <div class="profile-stats">
-                <div class="profile-stat"><div class="v" id="profile-balance">0</div><div class="l">Баланс</div></div>
-                <div class="profile-stat"><div class="v" id="profile-inv-count">0</div><div class="l">Предметов</div></div>
-                <div class="profile-stat"><div class="v" id="profile-inv-value">0</div><div class="l">Стоимость</div></div>
-            </div>
-        </div>
-        <div class="panel-box">
-            <div class="panel-title">Кейс награды</div>
-            <div class="daily-badge">🤖 Нужен @BrainDropDropBot в Telegram-нике</div>
-            <div style="color:var(--muted);font-size:13px;">
-                Проверка идёт по вашему нику в Telegram (username или имя). Если там есть <b>@BrainDropDropBot</b> — кейс награды доступен раз в 24 часа.
-            </div>
-        </div>
-    </section>
+<!-- БАТЛЫ — НОВАЯ СЕКЦИЯ (вставить в <main>) -->
+<section class="tab-section" id="tab-battles">
+    <h2>Батлы</h2>
 
-    <!-- КЕЙСЫ -->
-    <section class="tab-section active" id="tab-cases">
-        <h2>Кейсы</h2>
+    <div class="panel-box">
+        <div class="panel-title">Создать батл</div>
+        <div class="input-group">
+            <select id="battle-case-select"></select>
+        </div>
+        <div class="input-group" style="margin-bottom:0;">
+            <input type="number" id="battle-bet-input" min="1" step="1" placeholder="Ставка (монеты)">
+            <button class="btn" style="width:auto;padding:10px 16px;" onclick="createBattle()">Создать</button>
+        </div>
+        <div style="color:var(--muted);font-size:12px;margin-top:8px;">
+            Оба игрока открывают выбранный кейс. У кого сумма дропа больше — забирает оба предмета и обе ставки.
+        </div>
+    </div>
 
-        <div class="daily-drops-strip" id="daily-drops-strip">
-            <div class="daily-drops-header">
-                <div class="daily-drops-title">🔥 Дроп дня</div>
-                <div class="daily-drops-count" id="daily-drops-count">0 дропов</div>
-            </div>
-            <div style="position:relative;">
-                <div class="daily-drop-arrow left" onclick="scrollDailyDrops(-1)">◀</div>
-                <div class="daily-drops-track" id="daily-drops-track"></div>
-                <div class="daily-drop-arrow right" onclick="scrollDailyDrops(1)">▶</div>
-            </div>
-        </div>
-
-        <div class="case-cats">
-            <button class="case-cat-btn active" onclick="setCaseCategory('all', this)">🔥 Все</button>
-            <button class="case-cat-btn" onclick="setCaseCategory('regular', this)">📦 Разные</button>
-            <button class="case-cat-btn" onclick="setCaseCategory('all_in', this)">💎 All-In</button>
-            <button class="case-cat-btn" onclick="setCaseCategory('partner', this)">🤝 Партнёрские</button>
-            <button class="case-cat-btn" onclick="setCaseCategory('limited', this)">⏳ Ограниченное время</button>
-        </div>
-        <div class="grid" id="cases-grid"></div>
-    </section>
-
-    <!-- АПГРЕЙДЕР -->
-    <section class="tab-section" id="tab-upgrade">
-        <h2>Апгрейдер</h2>
-        <div class="roulette-wrapper">
-            <div class="wheel-container">
-                <div class="wheel-pointer"></div>
-                <div class="wheel-circle" id="upg-wheel"></div>
-                <div class="wheel-center">
-                    <div class="wheel-chance" id="upg-chance">0%</div>
-                    <div class="wheel-label">ШАНС</div>
-                </div>
-            </div>
-            <div class="upg-split">
-                <div class="stat-line">Ставка: <b id="upg-bet-sum">0</b> 💰</div>
-                <div class="stat-line">Цель: <b id="upg-target-sum">0</b> 💰</div>
-            </div>
-            <button class="btn" id="upg-spin-btn" onclick="doUpgrade()" style="max-width:280px;margin-top:14px;">Крутить рулетку</button>
-        </div>
-
-        <div class="panel-box">
-            <div class="panel-title">1. Нажмите на вещи из инвентаря:</div>
-            <div class="grid scroll-grid" id="upg-inv-grid"></div>
-            <div class="input-group" style="margin-top:12px;margin-bottom:0;">
-                <input type="number" id="upg-coins-bet" min="0" step="1" placeholder="Монеты к ставке" oninput="calcUpgrade()">
-            </div>
-        </div>
-
-        <div class="panel-box">
-            <div class="panel-title">2. Выберите награду:</div>
-            <div class="mode-switch">
-                <button class="mode-btn active" id="mode-item-btn" onclick="setUpgradeTargetMode('item')">Предмет</button>
-                <button class="mode-btn" id="mode-coins-btn" onclick="setUpgradeTargetMode('coins')">Монеты</button>
-            </div>
-            <div id="upg-target-coins-box" style="display:none;">
-                <div class="stat-line" style="margin-bottom:8px;">Укажите желаемую сумму монет:</div>
-                <input type="number" id="upg-target-coins-input" min="0" step="1" placeholder="Например: 500" oninput="calcUpgrade()" style="width:100%;">
-            </div>
-            <div id="upg-target-mut-box" class="mut-panel" style="display:none;"></div>
-            <div class="grid scroll-grid" id="upg-target-items-box"></div>
-        </div>
-    </section>
-
-    <!-- КРАШ -->
-    <section class="tab-section" id="tab-crash">
-        <h2>Краш (Ракета)</h2>
-        <div class="crash-arena">
-            <div class="rocket" id="crash-rocket">🚀</div>
-            <div class="crash-multiplier" id="crash-mult">1.00x</div>
-            <div class="crash-status" id="crash-status">Сделайте ставку и запустите ракету</div>
-        </div>
-        <div class="panel-box">
-            <div class="input-group">
-                <input type="number" id="crash-coins-input" min="0" step="1" placeholder="Ставка монетами" oninput="updateCrashTotal()">
-                <button class="btn" style="width:auto;padding:10px 16px;" onclick="setMaxCrashCoins()">Макс</button>
-            </div>
-            <div class="stat-line center" style="margin-bottom:12px;">Общая ставка: <b id="crash-total-bet">0</b> монет</div>
-            <button class="btn" id="crash-action-btn" onclick="handleCrashAction()">Запустить ракету</button>
-        </div>
-        <div class="panel-box">
-            <div class="panel-title">Добавить вещи из инвентаря в ставку:</div>
-            <div class="grid scroll-grid" id="crash-inv-grid"></div>
-        </div>
-    </section>
-
-    <!-- COLOR DICE -->
-    <section class="tab-section" id="tab-dice">
-        <h2>Color Dice</h2>
-        <div class="dice-arena">
-            <div class="dice-board" id="dice-board"></div>
-            <div style="color:var(--muted);font-size:12px;text-align:center;margin-bottom:12px;">
-                1 выпавший цвет = Победа, 2 = Луз, 3 = Победа, 4 = Луз...
-            </div>
-            <div class="outcomes-strip" id="dice-outcomes-strip"></div>
-        </div>
-
-        <div class="panel-box">
-            <div class="panel-title">1. Выберите целевой цвет:</div>
-            <div class="dice-colors-grid">
-                <button class="color-pick-btn bg-c-red active" onclick="selectDiceColor('red', this)">Красный</button>
-                <button class="color-pick-btn bg-c-orange" onclick="selectDiceColor('orange', this)">Оранжевый</button>
-                <button class="color-pick-btn bg-c-yellow" onclick="selectDiceColor('yellow', this)">Жёлтый</button>
-                <button class="color-pick-btn bg-c-green" onclick="selectDiceColor('green', this)">Зелёный</button>
-                <button class="color-pick-btn bg-c-blue" onclick="selectDiceColor('blue', this)">Синий</button>
-                <button class="color-pick-btn bg-c-purple" onclick="selectDiceColor('purple', this)">Фиолетовый</button>
-            </div>
-
-            <div class="panel-title">2. Количество кубиков: <span id="dice-count-label">4</span> шт.</div>
-            <div class="dice-count-grid" id="dice-count-grid">
-                <button class="count-btn" onclick="setDiceCount(3, this)">3 🎲</button>
-                <button class="count-btn active" onclick="setDiceCount(4, this)">4 🎲</button>
-                <button class="count-btn" onclick="setDiceCount(5, this)">5 🎲</button>
-                <button class="count-btn" onclick="setDiceCount(6, this)">6 🎲</button>
-                <button class="count-btn" onclick="setDiceCount(7, this)">7 🎲</button>
-                <button class="count-btn" onclick="setDiceCount(8, this)">8 🎲</button>
-                <button class="count-btn" onclick="setDiceCount(9, this)">9 🎲</button>
-                <button class="count-btn" onclick="setDiceCount(10, this)">10 🎲</button>
-                <button class="count-btn" onclick="setDiceCount(11, this)">11 🎲</button>
-                <button class="count-btn" onclick="setDiceCount(12, this)">12 🎲</button>
-            </div>
-
-            <div class="input-group">
-                <input type="number" id="dice-coins-input" min="0" step="1" placeholder="Ставка монетами" oninput="updateDiceTotal()">
-                <button class="btn" style="width:auto;padding:10px 16px;" onclick="setMaxDiceCoins()">Макс</button>
-            </div>
-            <div class="stat-line center" style="margin-bottom:12px;">Общая ставка: <b id="dice-total-bet">0</b> 💰</div>
-            <button class="btn" id="dice-roll-btn" onclick="rollColorDice()">🎲 Бросить кубики</button>
-            <div id="dice-status-text" style="margin-top:10px;text-align:center;font-weight:700;font-size:13px;"></div>
-        </div>
-
-        <div class="panel-box">
-            <div class="panel-title">Добавить вещи из инвентаря в ставку:</div>
-            <div class="grid scroll-grid" id="dice-inv-grid"></div>
-        </div>
-    </section>
-
-    <!-- МИНЫ 5x5 -->
-    <section class="tab-section" id="tab-mines">
-        <h2>Мины 5×5</h2>
-        <div class="mines-arena">
-            <div class="mines-top">
-                <div class="mines-stat"><div class="v" id="mines-mult">1.00x</div><div class="l">Множитель</div></div>
-                <div class="mines-stat"><div class="v" id="mines-potential">0</div><div class="l">Заберёте</div></div>
-                <div class="mines-stat"><div class="v" id="mines-opened">0</div><div class="l">Открыто</div></div>
-            </div>
-            <div class="mines-board" id="mines-board"></div>
-        </div>
-
-        <div class="panel-box">
-            <div class="mines-slider-wrap">
-                <label>Количество мин: <span class="mines-count" id="mines-count-label">3</span></label>
-                <input type="range" id="mines-slider" min="1" max="24" value="3" oninput="onMinesSlider()">
-            </div>
-            <div class="input-group">
-                <input type="number" id="mines-coins-input" min="0" step="1" placeholder="Ставка монетами" oninput="updateMinesTotal()">
-                <button class="btn" style="width:auto;padding:10px 16px;" onclick="setMaxMinesCoins()">Макс</button>
-            </div>
-            <div class="stat-line center" style="margin-bottom:12px;">Общая ставка: <b id="mines-total-bet">0</b> 💰</div>
-            <div class="case-win-actions">
-                <button class="btn" id="mines-start-btn" onclick="startMines()">Начать игру</button>
-                <button class="btn btn-blue" id="mines-cashout-btn" onclick="cashoutMines()" style="display:none;">Забрать</button>
-            </div>
-            <div id="mines-status-text" style="margin-top:10px;text-align:center;font-weight:700;font-size:13px;"></div>
-        </div>
-
-        <div class="panel-box">
-            <div class="panel-title">Добавить вещи из инвентаря в ставку:</div>
-            <div class="grid scroll-grid" id="mines-inv-grid"></div>
-        </div>
-    </section>
-
-    <!-- ПЛИНКО -->
-    <section class="tab-section" id="tab-plinko">
-        <h2>Плинко</h2>
-        <div class="plinko-arena">
-            <div class="plinko-board-wrap">
-                <canvas id="plinko-canvas" width="360" height="420"></canvas>
-            </div>
-            <div class="plinko-mults" id="plinko-mults"></div>
-            <div class="plinko-status" id="plinko-status">Сделайте ставку и бросьте шарик</div>
-        </div>
-
-        <div class="panel-box">
-            <div class="input-group">
-                <input type="number" id="plinko-coins-input" min="0" step="1" placeholder="Ставка монетами" oninput="updatePlinkoTotal()">
-                <button class="btn" style="width:auto;padding:10px 16px;" onclick="setMaxPlinkoCoins()">Макс</button>
-            </div>
-            <div class="stat-line center" style="margin-bottom:12px;">Общая ставка: <b id="plinko-total-bet">0</b> 💰</div>
-            <button class="btn" id="plinko-drop-btn" onclick="playPlinko()">🎯 Бросить шарик</button>
-        </div>
-
-        <div class="panel-box">
-            <div class="panel-title">Добавить вещи из инвентаря в ставку:</div>
-            <div class="grid scroll-grid" id="plinko-inv-grid"></div>
-        </div>
-    </section>
-
-    <!-- БАШНЯ -->
-    <section class="tab-section" id="tab-tower">
-        <h2>Башня 5×5</h2>
-        <div class="tower-arena">
-            <div class="tower-top">
-                <div class="tower-stat"><div class="v" id="tower-mult">1.00x</div><div class="l">Множитель</div></div>
-                <div class="tower-stat"><div class="v" id="tower-potential">0</div><div class="l">Заберёте</div></div>
-                <div class="tower-stat"><div class="v" id="tower-floor">0/5</div><div class="l">Этаж</div></div>
-            </div>
-            <div class="tower-floors" id="tower-floors"></div>
-            <div class="tower-status" id="tower-status">Сделайте ставку и начните игру</div>
-        </div>
-
-        <div class="panel-box">
-            <div class="input-group">
-                <input type="number" id="tower-coins-input" min="0" step="1" placeholder="Ставка монетами" oninput="updateTowerTotal()">
-                <button class="btn" style="width:auto;padding:10px 16px;" onclick="setMaxTowerCoins()">Макс</button>
-            </div>
-            <div class="stat-line center" style="margin-bottom:12px;">Общая ставка: <b id="tower-total-bet">0</b> 💰</div>
-            <div class="case-win-actions">
-                <button class="btn" id="tower-start-btn" onclick="startTower()">Начать игру</button>
-                <button class="btn btn-blue" id="tower-cashout-btn" onclick="cashoutTower()" style="display:none;">Забрать</button>
-            </div>
-            <div id="tower-status-text" style="margin-top:10px;text-align:center;font-weight:700;font-size:13px;"></div>
-        </div>
-
-        <div class="panel-box">
-            <div class="panel-title">Добавить вещи из инвентаря в ставку:</div>
-            <div class="grid scroll-grid" id="tower-inv-grid"></div>
-        </div>
-    </section>
-
-    <!-- БОНУСЫ -->
-    <section class="tab-section" id="tab-bonuses">
-        <h2>Бонусы</h2>
-        <div class="panel-box">
-            <div class="panel-title">Ежедневная награда</div>
-            <div style="color:var(--muted);font-size:13px;margin-bottom:12px;">Бесплатный кейс раз в 12 часов</div>
-            <button class="btn" id="free-case-btn" onclick="openFreeCase()">Открыть бесплатный кейс</button>
-            <div id="free-case-timer" class="center" style="color:var(--orange);font-size:13px;font-weight:700;margin-top:8px;"></div>
-        </div>
-        <div class="panel-box">
-            <div class="panel-title">Кейс награды (24 ч)</div>
-            <div class="daily-badge">🤖 Нужен @BrainDropDropBot в Telegram-нике</div>
-            <div style="color:var(--muted);font-size:13px;margin-bottom:12px;">
-                Раз в 24 часа: предмет (9–23) + монеты (9–23). Проверка по вашему Telegram-нику/имени.
-            </div>
-            <button class="btn btn-blue" id="daily-bonus-btn" onclick="openDailyBonusCase()">Забрать кейс награды</button>
-            <div id="daily-bonus-timer" class="center" style="color:var(--blue);font-size:13px;font-weight:700;margin-top:8px;"></div>
-        </div>
-        <div class="panel-box">
-            <div class="panel-title">Активация промокода</div>
-            <div class="input-group" style="margin-bottom:0;">
-                <input type="text" id="promo-input" placeholder="Введите промокод">
-                <button class="btn" style="width:auto;padding:10px 16px;" onclick="redeemPromo()">Активировать</button>
-            </div>
-        </div>
-        <div class="panel-box">
-            <div class="panel-title">Пополнение баланса</div>
-            <div style="color:var(--muted);font-size:13px;margin-bottom:12px;">Создайте заявку — модератор свяжется с вами в Telegram.</div>
-            <button class="btn btn-blue" onclick="requestTopup()">Пополнить баланс</button>
-        </div>
-    </section>
-
-    <!-- ИНВЕНТАРЬ -->
-    <section class="tab-section" id="tab-inventory">
-        <h2>Инвентарь</h2>
-        <div class="grid" id="main-inv-grid"></div>
-    </section>
-
-    <!-- АДМИНКА (Этап 4) -->
-    <section class="tab-section" id="tab-admin">
-        <h2>Админ-панель</h2>
-
-        <div class="admin-tabs">
-            <button class="admin-tab-btn active" data-admin-pane="promo" onclick="switchAdminPane('promo', this)">🎟 Промо</button>
-            <button class="admin-tab-btn" data-admin-pane="balance" onclick="switchAdminPane('balance', this)">💰 Баланс</button>
-            <button class="admin-tab-btn" data-admin-pane="give" onclick="switchAdminPane('give', this)">🎁 Выдать предмет</button>
-            <button class="admin-tab-btn" data-admin-pane="users" onclick="switchAdminPane('users', this)">👥 Пользователи</button>
-            <button class="admin-tab-btn" data-admin-pane="events" onclick="switchAdminPane('events', this)">🎉 Ивенты</button>
-            <button class="admin-tab-btn" data-admin-pane="luck" onclick="switchAdminPane('luck', this)">🍀 Удача</button>
-            <button class="admin-tab-btn" data-admin-pane="global" onclick="switchAdminPane('global', this)">📢 Глобалка</button>
-        </div>
-
-        <!-- Промо -->
-        <div class="admin-pane active" id="admin-pane-promo">
-            <div class="panel-box">
-                <div class="panel-title">Создать промокод</div>
-                <div class="input-group">
-                    <input type="text" id="adm-promo-code" placeholder="CODE">
-                    <select id="adm-promo-type" onchange="onAdminPromoTypeChange()">
-                        <option value="coins">coins</option>
-                        <option value="item">item</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <input type="number" id="adm-promo-amount" placeholder="amount (для coins)" min="0" step="1">
-                    <input type="number" id="adm-promo-item" placeholder="item_id (для item)" min="1" step="1">
-                </div>
-                <div class="input-group">
-                    <input type="number" id="adm-promo-stock" placeholder="stock" value="1" min="1" step="1">
-                    <button class="btn" style="width:auto;padding:10px 16px;" onclick="adminCreatePromo()">Создать</button>
-                </div>
-            </div>
-            <div class="panel-box">
-                <div class="panel-title">Удалить промокод</div>
-                <div class="input-group" style="margin-bottom:0;">
-                    <input type="text" id="adm-promo-del-code" placeholder="CODE">
-                    <button class="btn btn-red" style="width:auto;padding:10px 16px;" onclick="adminDeletePromo()">Удалить</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Баланс -->
-        <div class="admin-pane" id="admin-pane-balance">
-            <div class="panel-box">
-                <div class="panel-title">Начислить / списать монеты</div>
-                <div class="input-group">
-                    <input type="text" id="adm-bal-target" placeholder="target user_id">
-                    <input type="number" id="adm-bal-amount" placeholder="amount" min="0" step="1">
-                </div>
-                <div class="input-group" style="margin-bottom:0;">
-                    <button class="btn" onclick="adminBalance('add')">+ Начислить</button>
-                    <button class="btn btn-red" onclick="adminBalance('sub')">− Списать</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Выдать предмет -->
-        <div class="admin-pane" id="admin-pane-give">
-            <div class="panel-box">
-                <div class="panel-title">Выдать предмет с мутацией и трейтами</div>
-                <div class="input-group">
-                    <input type="text" id="adm-give-target" placeholder="target user_id">
-                    <input type="number" id="adm-give-item" placeholder="item_id" min="1" step="1">
-                </div>
-                <div class="input-group">
-                    <select id="adm-give-mut"></select>
-                </div>
-                <div class="panel-title" style="margin-top:6px;">Трейты (можно много):</div>
-                <div class="trait-pick-grid" id="adm-give-traits"></div>
-                <button class="btn" style="margin-top:10px;" onclick="adminGiveItem()">Выдать</button>
-            </div>
-        </div>
-
-        <!-- Пользователи -->
-        <div class="admin-pane" id="admin-pane-users">
-            <div class="panel-box">
-                <div class="panel-title">Список пользователей</div>
-                <button class="btn btn-blue" style="margin-bottom:10px;" onclick="adminLoadUsers()">Обновить</button>
-                <div id="adm-users-box" style="max-height:400px; overflow-y:auto;"></div>
-            </div>
-        </div>
-
-        <!-- Ивенты -->
-        <div class="admin-pane" id="admin-pane-events">
-            <div class="panel-box">
-                <div class="panel-title">Активные ивенты</div>
-                <div class="admin-list-events" id="adm-events-list"></div>
-            </div>
-            <div class="panel-box">
-                <div class="panel-title">Запустить ивент трейта</div>
-                <div class="input-group">
-                    <select id="adm-event-trait"></select>
-                </div>
-                <div class="input-group">
-                    <input type="number" id="adm-event-trait-tick" placeholder="tick_seconds" value="45" min="10" step="1">
-                    <input type="number" id="adm-event-trait-chance" placeholder="chance %" value="5" min="0.1" max="100" step="0.1">
-                </div>
-                <div class="input-group" style="margin-bottom:0;">
-                    <input type="number" id="adm-event-trait-dur" placeholder="duration_sec" value="600" min="30" step="1">
-                    <button class="btn" style="width:auto;padding:10px 16px;" onclick="adminStartEvent('trait')">Запустить</button>
-                </div>
-            </div>
-            <div class="panel-box">
-                <div class="panel-title">Запустить ивент мутации</div>
-                <div class="input-group">
-                    <select id="adm-event-mut"></select>
-                </div>
-                <div class="input-group">
-                    <input type="number" id="adm-event-mut-tick" placeholder="tick_seconds" value="60" min="10" step="1">
-                    <input type="number" id="adm-event-mut-chance" placeholder="chance %" value="2.5" min="0.1" max="100" step="0.1">
-                </div>
-                <div class="input-group" style="margin-bottom:0;">
-                    <input type="number" id="adm-event-mut-dur" placeholder="duration_sec" value="600" min="30" step="1">
-                    <button class="btn" style="width:auto;padding:10px 16px;" onclick="adminStartEvent('mutation')">Запустить</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Удача -->
-        <div class="admin-pane" id="admin-pane-luck">
-            <div class="panel-box">
-                <div class="panel-title">Ивент удачи</div>
-                <div class="input-group">
-                    <select id="adm-luck-mult">
-                        <option value="2">×2</option>
-                        <option value="4">×4</option>
-                    </select>
-                    <input type="number" id="adm-luck-dur" placeholder="duration_sec" value="600" min="30" step="1">
-                </div>
-                <div class="input-group" style="margin-bottom:0;">
-                    <button class="btn" onclick="adminStartLuck()">Запустить</button>
-                    <button class="btn btn-red" onclick="adminStopLuck()">Остановить</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Глобалка -->
-        <div class="admin-pane" id="admin-pane-global">
-            <div class="panel-box">
-                <div class="panel-title">Глобальное сообщение</div>
-                <div class="input-group">
-                    <input type="text" id="adm-global-text" placeholder="Текст (макс 500)" maxlength="500">
-                </div>
-                <div class="input-group" style="margin-bottom:0;">
-                    <input type="number" id="adm-global-dur" placeholder="duration_sec" value="60" min="5" max="3600" step="1">
-                    <button class="btn" style="width:auto;padding:10px 16px;" onclick="adminGlobalMessage()">Отправить</button>
-                </div>
-            </div>
-        </div>
-    </section>
+    <div class="panel-box">
+        <div class="panel-title">Активные батлы</div>
+        <button class="btn btn-blue" style="margin-bottom:10px;" onclick="loadBattles()">Обновить</button>
+        <div class="battle-list" id="battle-list"></div>
+    </div>
+</section>
 
 </main>
 
-<!-- Превью кейса -->
+<!-- Модалки кейсов и батлов -->
 <div class="case-modal-overlay" id="case-info-modal">
     <div class="case-modal-box">
         <div class="ci-preview" id="ci-img"></div>
@@ -993,7 +615,6 @@
     </div>
 </div>
 
-<!-- Рулетки открытия кейса -->
 <div class="case-modal-overlay" id="case-modal">
     <div class="case-modal-box">
         <div class="case-modal-title" id="case-modal-title">Открываем кейс...</div>
@@ -1004,6 +625,16 @@
                 <button class="btn btn-blue" onclick="closeCaseModal()">В инвентарь</button>
                 <button class="btn" id="case-quick-sell-btn">Продать</button>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="case-modal-overlay" id="battle-modal">
+    <div class="case-modal-box">
+        <div class="case-modal-title" id="battle-modal-title">Батл</div>
+        <div id="battle-modal-body"></div>
+        <div class="case-win-actions" style="margin-top:10px;">
+            <button class="btn btn-blue" onclick="closeBattleModal()">Закрыть</button>
         </div>
     </div>
 </div>
@@ -1022,15 +653,13 @@ const MUTABLE_RARITIES = new Set(["legendary", "mythic"]);
 
 let state = {
     balance: 0, inventory: [], cases: [], all_items: [],
-    mutations: [],
-    traits: [],
+    mutations: [], traits: [],
     free_seconds_left: 0, free_case_items: [],
     daily_seconds_left: 0, daily_bonus_items: [],
     daily_drops: { date: "", items: [] },
     global_message: { text: "", until: 0 },
-    active_events: [],
-    luck_event: { multiplier: 0, until: 0 },
-    is_admin: false,
+    active_events: [], luck_event: { multiplier: 0, until: 0 },
+    is_admin: false, trade_commission: 0.15,
     profile: null
 };
 let isCaseOpening = false;
@@ -1055,7 +684,6 @@ let minesSelectedInv = new Set();
 let minesActive = false;
 let minesOpened = new Set();
 let minesMines = 3;
-let minesPotentialWin = 0;
 let minesTotalBet = 0;
 
 /* PLINKO */
@@ -1074,8 +702,16 @@ let towerBoomFloor = null;
 let towerBoomCell = null;
 let towerTotalBet = 0;
 
-/* ADMIN (Этап 4) */
+/* ADMIN */
 let admGiveTraits = new Set();
+
+/* TRADE */
+let tradeSelectedInv = new Set();
+let tradeFoundUserId = null;
+
+/* BATTLES */
+let battlePollTimer = null;
+let battleCurrentModalId = null;
 
 const DICE_NAMES_RU = { red: "Красный", orange: "Оранжевый", yellow: "Жёлтый", green: "Зелёный", blue: "Синий", purple: "Фиолетовый" };
 const MULT_TABLE = { 1: 1.85, 3: 5.5, 5: 18.0, 7: 60.0, 9: 200.0, 11: 750.0 };
@@ -1116,6 +752,9 @@ function switchTab(tabName) {
     if (btn) btn.classList.add("active");
     toggleDrawer(false);
     if (tabName === "admin") { renderAdminStaticOptions(); adminLoadUsers(); }
+    if (tabName === "trade") { loadTradeHistory(); }
+    if (tabName === "battles") { loadBattles(); startBattlePolling(); }
+    else { stopBattlePolling(); }
 }
 
 let toastTimer = null;
@@ -1170,77 +809,80 @@ async function syncProfile() {
     } catch (e) { /* не критично */ }
 }
 
-async function loadState() {
-    try {
-        const res = await fetch("/api/state/" + encodeURIComponent(userId));
-        if (!res.ok) throw new Error("Не удалось загрузить состояние");
-        const data = await res.json();
-        state = {
-            balance: Number(data.balance) || 0,
-            inventory: Array.isArray(data.inventory) ? data.inventory : [],
-            cases: Array.isArray(data.cases) ? data.cases : [],
-            all_items: Array.isArray(data.all_items) ? data.all_items : [],
-            mutations: Array.isArray(data.mutations) ? data.mutations : [],
-            traits: Array.isArray(data.traits) ? data.traits : [],
-            free_seconds_left: Number(data.free_seconds_left) || 0,
-            free_case_items: Array.isArray(data.free_case_items) ? data.free_case_items : [],
-            daily_seconds_left: Number(data.daily_seconds_left) || 0,
-            daily_bonus_items: Array.isArray(data.daily_bonus_items) ? data.daily_bonus_items : [],
-            daily_drops: data.daily_drops || { date: "", items: [] },
-            global_message: data.global_message || { text: "", until: 0 },
-            active_events: Array.isArray(data.active_events) ? data.active_events : [],
-            luck_event: data.luck_event || { multiplier: 0, until: 0 },
-            is_admin: !!data.is_admin,
-            profile: data.profile || null
-        };
-    } catch (e) {
-        showToast(e.message || "Сервер недоступен");
-        return;
-    }
-
-    el("balance-val").textContent = state.balance.toFixed(2);
-    el("inv-count-badge").textContent = state.inventory.length;
-
-    // Админка: показ/скрытие
-    const admBtn = el("nav-admin-btn");
-    if (admBtn) admBtn.classList.toggle("show", state.is_admin);
-
-    // Удача в хедере
-    const luckBox = el("luck-badge");
-    if (luckBox) {
-        const now = Math.floor(Date.now() / 1000);
-        if (state.luck_event && state.luck_event.multiplier > 0 && Number(state.luck_event.until) > now) {
-            luckBox.textContent = "🍀 Удача ×" + state.luck_event.multiplier;
-            luckBox.classList.add("show");
-        } else {
-            luckBox.classList.remove("show");
+function loadState() {
+    return (async () => {
+        try {
+            const res = await fetch("/api/state/" + encodeURIComponent(userId));
+            if (!res.ok) throw new Error("Не удалось загрузить состояние");
+            const data = await res.json();
+            state = {
+                balance: Number(data.balance) || 0,
+                inventory: Array.isArray(data.inventory) ? data.inventory : [],
+                cases: Array.isArray(data.cases) ? data.cases : [],
+                all_items: Array.isArray(data.all_items) ? data.all_items : [],
+                mutations: Array.isArray(data.mutations) ? data.mutations : [],
+                traits: Array.isArray(data.traits) ? data.traits : [],
+                free_seconds_left: Number(data.free_seconds_left) || 0,
+                free_case_items: Array.isArray(data.free_case_items) ? data.free_case_items : [],
+                daily_seconds_left: Number(data.daily_seconds_left) || 0,
+                daily_bonus_items: Array.isArray(data.daily_bonus_items) ? data.daily_bonus_items : [],
+                daily_drops: data.daily_drops || { date: "", items: [] },
+                global_message: data.global_message || { text: "", until: 0 },
+                active_events: Array.isArray(data.active_events) ? data.active_events : [],
+                luck_event: data.luck_event || { multiplier: 0, until: 0 },
+                is_admin: !!data.is_admin,
+                trade_commission: Number(data.trade_commission) || 0.15,
+                profile: data.profile || null
+            };
+        } catch (e) {
+            showToast(e.message || "Сервер недоступен");
+            return;
         }
-    }
 
-    const validIds = new Set(state.inventory.map(i => i.inv_id));
-    upgSelectedInv = new Set([...upgSelectedInv].filter(id => validIds.has(id)));
-    crashSelectedInv = new Set([...crashSelectedInv].filter(id => validIds.has(id)));
-    diceSelectedInv = new Set([...diceSelectedInv].filter(id => validIds.has(id)));
-    minesSelectedInv = new Set([...minesSelectedInv].filter(id => validIds.has(id)));
-    plinkoSelectedInv = new Set([...plinkoSelectedInv].filter(id => validIds.has(id)));
-    towerSelectedInv = new Set([...towerSelectedInv].filter(id => validIds.has(id)));
+        el("balance-val").textContent = state.balance.toFixed(2);
+        el("inv-count-badge").textContent = state.inventory.length;
 
-    renderProfile();
-    renderDailyDrops();
-    renderGlobalMessage();
-    renderCases();
-    renderInventories();
-    renderUpgradeTargets();
-    renderMutationPanel();
-    calcUpgrade();
-    updateCrashTotal();
-    updateDiceTotal();
-    updateMinesTotal();
-    updatePlinkoTotal();
-    updateTowerTotal();
-    updateFreeTimer();
-    updateDailyBonusTimer();
-    renderActiveEvents();
+        const admBtn = el("nav-admin-btn");
+        if (admBtn) admBtn.classList.toggle("show", state.is_admin);
+
+        const luckBox = el("luck-badge");
+        if (luckBox) {
+            const now = Math.floor(Date.now() / 1000);
+            if (state.luck_event && state.luck_event.multiplier > 0 && Number(state.luck_event.until) > now) {
+                luckBox.textContent = "🍀 Удача ×" + state.luck_event.multiplier;
+                luckBox.classList.add("show");
+            } else {
+                luckBox.classList.remove("show");
+            }
+        }
+
+        const validIds = new Set(state.inventory.map(i => i.inv_id));
+        upgSelectedInv = new Set([...upgSelectedInv].filter(id => validIds.has(id)));
+        crashSelectedInv = new Set([...crashSelectedInv].filter(id => validIds.has(id)));
+        diceSelectedInv = new Set([...diceSelectedInv].filter(id => validIds.has(id)));
+        minesSelectedInv = new Set([...minesSelectedInv].filter(id => validIds.has(id)));
+        plinkoSelectedInv = new Set([...plinkoSelectedInv].filter(id => validIds.has(id)));
+        towerSelectedInv = new Set([...towerSelectedInv].filter(id => validIds.has(id)));
+        tradeSelectedInv = new Set([...tradeSelectedInv].filter(id => validIds.has(id)));
+
+        renderProfile();
+        renderDailyDrops();
+        renderGlobalMessage();
+        renderCases();
+        renderInventories();
+        renderUpgradeTargets();
+        renderMutationPanel();
+        calcUpgrade();
+        updateCrashTotal();
+        updateDiceTotal();
+        updateMinesTotal();
+        updatePlinkoTotal();
+        updateTowerTotal();
+        updateTradeTotal();
+        updateFreeTimer();
+        updateDailyBonusTimer();
+        renderActiveEvents();
+    })();
 }
 
 function renderProfile() {
@@ -1353,12 +995,10 @@ function renderCases() {
         if (currentCaseCategory === "all") return true;
         return getCaseCategory(c) === currentCaseCategory;
     });
-
     if (!filtered.length) {
         grid.innerHTML = '<p style="color:var(--muted); grid-column: 1/-1;">В этой категории пока нет доступных кейсов</p>';
         return;
     }
-
     grid.innerHTML = filtered.map(c => {
         let badgeHtml = "";
         const cat = getCaseCategory(c);
@@ -1389,10 +1029,7 @@ setInterval(() => {
 setInterval(() => {
     renderGlobalMessage();
     fetch("/api/daily_drops").then(r => r.ok ? r.json() : null).then(dd => {
-        if (dd && dd.date) {
-            state.daily_drops = dd;
-            renderDailyDrops();
-        }
+        if (dd && dd.date) { state.daily_drops = dd; renderDailyDrops(); }
     }).catch(() => {});
 }, 15000);
 
@@ -1405,9 +1042,7 @@ function renderInventories() {
         } else {
             mainGrid.innerHTML = state.inventory.map(item =>
                 '<div class="card rarity-' + item.rarity + '">' +
-                    mutationBadge(item) +
-                    renderItemImg(item) +
-                    traitStrip(item) +
+                    mutationBadge(item) + renderItemImg(item) + traitStrip(item) +
                     '<div class="card-title">' + item.name + '</div>' +
                     '<div class="card-price">' + item.price + ' 💰</div>' +
                     (item.locked
@@ -1418,93 +1053,29 @@ function renderInventories() {
             ).join("");
         }
     }
-
     const bettable = state.inventory.filter(i => !i.locked);
     const emptyNote = '<p style="color:var(--muted); font-size:13px;">Нет предметов</p>';
-
-    const upgGrid = el("upg-inv-grid");
-    if (upgGrid) {
-        upgGrid.innerHTML = !bettable.length ? emptyNote : bettable.map(item =>
-            '<div class="card rarity-' + item.rarity + (upgSelectedInv.has(item.inv_id) ? ' selected' : '') +
-            '" style="cursor:pointer;" onclick="toggleUpgItem(' + item.inv_id + ')">' +
-                mutationBadge(item) +
-                renderItemImg(item) +
-                traitStrip(item) +
+    const grids = [
+        ["upg-inv-grid", upgSelectedInv, "toggleUpgItem"],
+        ["crash-inv-grid", crashSelectedInv, "toggleCrashItem"],
+        ["dice-inv-grid", diceSelectedInv, "toggleDiceItem"],
+        ["mines-inv-grid", minesSelectedInv, "toggleMinesItem"],
+        ["plinko-inv-grid", plinkoSelectedInv, "togglePlinkoItem"],
+        ["tower-inv-grid", towerSelectedInv, "toggleTowerItem"],
+        ["trade-inv-grid", tradeSelectedInv, "toggleTradeItem"]
+    ];
+    grids.forEach(([gridId, selSet, fn]) => {
+        const g = el(gridId);
+        if (!g) return;
+        g.innerHTML = !bettable.length ? emptyNote : bettable.map(item =>
+            '<div class="card rarity-' + item.rarity + (selSet.has(item.inv_id) ? ' selected' : '') +
+            '" style="cursor:pointer;" onclick="' + fn + '(' + item.inv_id + ')">' +
+                mutationBadge(item) + renderItemImg(item) + traitStrip(item) +
                 '<div class="card-title">' + item.name + '</div>' +
                 '<div class="card-price">' + item.price + ' 💰</div>' +
             '</div>'
         ).join("");
-    }
-
-    const crashGrid = el("crash-inv-grid");
-    if (crashGrid) {
-        crashGrid.innerHTML = !bettable.length ? emptyNote : bettable.map(item =>
-            '<div class="card rarity-' + item.rarity + (crashSelectedInv.has(item.inv_id) ? ' selected' : '') +
-            '" style="cursor:pointer;" onclick="toggleCrashItem(' + item.inv_id + ')">' +
-                mutationBadge(item) +
-                renderItemImg(item) +
-                traitStrip(item) +
-                '<div class="card-title">' + item.name + '</div>' +
-                '<div class="card-price">' + item.price + ' 💰</div>' +
-            '</div>'
-        ).join("");
-    }
-
-    const diceGrid = el("dice-inv-grid");
-    if (diceGrid) {
-        diceGrid.innerHTML = !bettable.length ? emptyNote : bettable.map(item =>
-            '<div class="card rarity-' + item.rarity + (diceSelectedInv.has(item.inv_id) ? ' selected' : '') +
-            '" style="cursor:pointer;" onclick="toggleDiceItem(' + item.inv_id + ')">' +
-                mutationBadge(item) +
-                renderItemImg(item) +
-                traitStrip(item) +
-                '<div class="card-title">' + item.name + '</div>' +
-                '<div class="card-price">' + item.price + ' 💰</div>' +
-            '</div>'
-        ).join("");
-    }
-
-    const minesGrid = el("mines-inv-grid");
-    if (minesGrid) {
-        minesGrid.innerHTML = !bettable.length ? emptyNote : bettable.map(item =>
-            '<div class="card rarity-' + item.rarity + (minesSelectedInv.has(item.inv_id) ? ' selected' : '') +
-            '" style="cursor:pointer;" onclick="toggleMinesItem(' + item.inv_id + ')">' +
-                mutationBadge(item) +
-                renderItemImg(item) +
-                traitStrip(item) +
-                '<div class="card-title">' + item.name + '</div>' +
-                '<div class="card-price">' + item.price + ' 💰</div>' +
-            '</div>'
-        ).join("");
-    }
-
-    const plinkoGrid = el("plinko-inv-grid");
-    if (plinkoGrid) {
-        plinkoGrid.innerHTML = !bettable.length ? emptyNote : bettable.map(item =>
-            '<div class="card rarity-' + item.rarity + (plinkoSelectedInv.has(item.inv_id) ? ' selected' : '') +
-            '" style="cursor:pointer;" onclick="togglePlinkoItem(' + item.inv_id + ')">' +
-                mutationBadge(item) +
-                renderItemImg(item) +
-                traitStrip(item) +
-                '<div class="card-title">' + item.name + '</div>' +
-                '<div class="card-price">' + item.price + ' 💰</div>' +
-            '</div>'
-        ).join("");
-    }
-
-    const towerGrid = el("tower-inv-grid");
-    if (towerGrid) {
-        towerGrid.innerHTML = !bettable.length ? emptyNote : bettable.map(item =>
-            '<div class="card rarity-' + item.rarity + (towerSelectedInv.has(item.inv_id) ? ' selected' : '') +
-            '" style="cursor:pointer;" onclick="toggleTowerItem(' + item.inv_id + ')">' +
-                mutationBadge(item) +
-                renderItemImg(item) +
-                traitStrip(item) +
-                '<div class="card-title">' + item.name + '</div>' +
-                '<div class="card-price">' + item.price + ' 💰</div>' +
-            '</div>'
-        ).join("");
-    }
+    });
 }
 
 /* ---------- Апгрейдер ---------- */
@@ -1514,11 +1085,8 @@ function setUpgradeTargetMode(mode) {
     el("mode-coins-btn").classList.toggle("active", mode === "coins");
     el("upg-target-items-box").style.display = mode === "item" ? "grid" : "none";
     el("upg-target-coins-box").style.display = mode === "coins" ? "block" : "none";
-    if (mode === "coins") {
-        el("upg-target-mut-box").style.display = "none";
-    } else {
-        renderMutationPanel();
-    }
+    if (mode === "coins") el("upg-target-mut-box").style.display = "none";
+    else renderMutationPanel();
     calcUpgrade();
 }
 
@@ -1558,9 +1126,7 @@ function renderMutationPanel() {
     box.style.display = "flex";
     box.innerHTML = state.mutations.map(m => {
         const active = m.key === upgTargetMutation ? " active" : "";
-        const icon = m.icon
-            ? '<img src="' + m.icon + '" alt="">'
-            : '<span class="m-dot"></span>';
+        const icon = m.icon ? '<img src="' + m.icon + '" alt="">' : '<span class="m-dot"></span>';
         return '<button class="mut-btn' + active + '" onclick="selectUpgradeMutation(\'' + m.key + '\')">' +
             icon + '<span>' + m.name + '</span><span class="m-mult">×' + m.mult + '</span>' +
         '</button>';
@@ -1576,10 +1142,8 @@ function selectUpgradeMutation(key) {
 
 function toggleUpgItem(invId) {
     if (isSpinning) return;
-    if (upgSelectedInv.has(invId)) upgSelectedInv.delete(invId);
-    else upgSelectedInv.add(invId);
-    renderInventories();
-    calcUpgrade();
+    if (upgSelectedInv.has(invId)) upgSelectedInv.delete(invId); else upgSelectedInv.add(invId);
+    renderInventories(); calcUpgrade();
 }
 
 function calcUpgrade() {
@@ -1612,9 +1176,8 @@ function calcUpgrade() {
         wheel.style.background = "conic-gradient(var(--orange) 0deg, #1b2438 0deg)";
         return 0;
     }
-
     let chance = Math.round((totalBet / targetVal) * 92 * 100) / 100;
-    chance = Math.max(1, Math.min(75, chance));  // п.9: предел 75%
+    chance = Math.max(1, Math.min(75, chance));
     el("upg-chance").textContent = chance + "%";
     const deg = (chance / 100) * 360;
     wheel.style.background = "conic-gradient(var(--orange) 0deg " + deg + "deg, #1b2438 " + deg + "deg 360deg)";
@@ -1625,51 +1188,33 @@ async function doUpgrade() {
     if (isSpinning) return;
     const coins = parseFloat(el("upg-coins-bet").value) || 0;
     const targetCoins = parseFloat(el("upg-target-coins-input").value) || 0;
-    if (upgTargetMode === "item" && !upgSelectedTargetId) {
-        return showToast("Выберите целевой предмет справа!");
-    }
-
+    if (upgTargetMode === "item" && !upgSelectedTargetId) return showToast("Выберите целевой предмет справа!");
     let data;
     try {
         data = await postJSON("/api/upgrade", {
-            user_id: userId,
-            inv_ids: [...upgSelectedInv],
-            coins_bet: coins,
-            target_type: upgTargetMode,
-            target_item_id: upgSelectedTargetId,
-            target_mutation: upgTargetMutation,
-            target_coins: targetCoins
+            user_id: userId, inv_ids: [...upgSelectedInv], coins_bet: coins,
+            target_type: upgTargetMode, target_item_id: upgSelectedTargetId,
+            target_mutation: upgTargetMutation, target_coins: targetCoins
         });
-    } catch (e) {
-        return showToast(e.message);
-    }
+    } catch (e) { return showToast(e.message); }
 
     isSpinning = true;
     const btn = el("upg-spin-btn");
-    btn.disabled = true;
-    btn.textContent = "Крутится...";
-
+    btn.disabled = true; btn.textContent = "Крутится...";
     const winDeg = (data.chance / 100) * 360;
-    let stopAngle;
-    if (data.win) {
-        stopAngle = Math.random() * Math.max(winDeg - 2, 0) + 1;
-    } else {
-        stopAngle = winDeg + Math.random() * Math.max(360 - winDeg - 2, 0) + 1;
-    }
+    let stopAngle = data.win
+        ? Math.random() * Math.max(winDeg - 2, 0) + 1
+        : winDeg + Math.random() * Math.max(360 - winDeg - 2, 0) + 1;
     const targetMod = (360 - stopAngle) % 360;
     const currentMod = currentWheelDeg % 360;
     const delta = (targetMod - currentMod + 360) % 360;
     currentWheelDeg += 360 * 5 + delta;
-
     const wheel = el("upg-wheel");
-    wheel.style.background = "conic-gradient(var(--orange) 0deg " + ((data.chance / 100) * 360) +
-        "deg, #1b2438 " + ((data.chance / 100) * 360) + "deg 360deg)";
+    wheel.style.background = "conic-gradient(var(--orange) 0deg " + winDeg + "deg, #1b2438 " + winDeg + "deg 360deg)";
     wheel.style.transform = "rotate(" + currentWheelDeg + "deg)";
-
     setTimeout(async () => {
         isSpinning = false;
-        btn.disabled = false;
-        btn.textContent = "Крутить рулетку";
+        btn.disabled = false; btn.textContent = "Крутить рулетку";
         showToast(data.win ? "🎉 ПОБЕДА! Награда получена!" : "💥 Неудача! Ставка сгорела.");
         upgSelectedInv.clear();
         el("upg-coins-bet").value = "";
@@ -1684,28 +1229,22 @@ let pendingOpenCount = 1;
 
 function openCaseMenu(caseId) {
     const c = state.cases.find(x => x.id === caseId);
-    if (!c) { showToast("Кейс недоступен"); return; }
+    if (!c) return showToast("Кейс недоступен");
     pendingCaseId = caseId;
     pendingOpenCount = 1;
     el("ci-img").innerHTML = renderItemImg(c);
     el("ci-title").textContent = c.name;
-
     const drops = Array.isArray(c.drops) ? c.drops : [];
     const sumW = drops.reduce((s, d) => s + (d.weight || 0), 0) || 1;
     el("ci-drops").innerHTML = drops.map(d => {
         const it = state.all_items.find(a => a.id === d.item_id);
         const chance = ((d.weight || 0) / sumW) * 100;
         const pct = chance >= 10 ? chance.toFixed(1) : chance.toFixed(2);
-        return '<div class="ci-drop-row">' +
-            '<div class="ci-drop-left">' + renderItemImg(it) +
+        return '<div class="ci-drop-row"><div class="ci-drop-left">' + renderItemImg(it) +
             '<span class="ci-drop-name">' + (it ? it.name : "???") + '</span></div>' +
-            '<span class="ci-drop-meta">' + pct + '% · ' + (it ? it.base_price : 0) + ' 💰</span>' +
-        '</div>';
+            '<span class="ci-drop-meta">' + pct + '% · ' + (it ? it.base_price : 0) + ' 💰</span></div>';
     }).join("");
-
-    document.querySelectorAll("#case-info-modal .count-btn").forEach((b, i) => {
-        b.classList.toggle("active", i === 0);
-    });
+    document.querySelectorAll("#case-info-modal .count-btn").forEach((b, i) => b.classList.toggle("active", i === 0));
     updateCiTotal();
     el("case-info-modal").classList.add("open");
 }
@@ -1716,33 +1255,23 @@ function setOpenCount(n, btnEl) {
     if (btnEl) btnEl.classList.add("active");
     updateCiTotal();
 }
-
 function updateCiTotal() {
     const c = state.cases.find(x => x.id === pendingCaseId);
     const total = c ? c.price * pendingOpenCount : 0;
     el("ci-total").textContent = total.toFixed(2);
 }
-
-function closeCaseInfo() {
-    el("case-info-modal").classList.remove("open");
-}
+function closeCaseInfo() { el("case-info-modal").classList.remove("open"); }
 
 async function confirmOpenCase() {
     const c = state.cases.find(x => x.id === pendingCaseId);
     if (!c || isCaseOpening) return;
     closeCaseInfo();
-
-    const count = pendingOpenCount;
     let data;
     try {
-        data = await postJSON("/api/open_case", { user_id: userId, case_id: c.id, count: count });
-    } catch (e) {
-        return showToast(e.message);
-    }
-    if (!data.won_items || !data.won_items.length) {
-        return showToast("Сервер не вернул результат открытия");
-    }
-    el("balance-val").textContent = Math.max(0, state.balance - c.price * count).toFixed(2);
+        data = await postJSON("/api/open_case", { user_id: userId, case_id: c.id, count: pendingOpenCount });
+    } catch (e) { return showToast(e.message); }
+    if (!data.won_items || !data.won_items.length) return showToast("Сервер не вернул результат");
+    el("balance-val").textContent = Math.max(0, state.balance - c.price * pendingOpenCount).toFixed(2);
     const poolItems = (c.drops || []).map(d => state.all_items.find(item => item.id === d.item_id)).filter(Boolean);
     playCaseRoulette(c.name, poolItems, data.won_items, data.won_inv_ids || []);
 }
@@ -1754,60 +1283,42 @@ function playCaseRoulette(caseName, poolItems, wonItems, wonInvIds) {
     const stack = el("case-roulettes-stack");
     const winResult = el("case-win-result");
     const firstWon = wonItems[0];
-
     title.textContent = caseName + (wonItems.length > 1 ? " ×" + wonItems.length : "");
-    stack.style.display = "flex";
-    winResult.style.display = "none";
-    stack.innerHTML = "";
-
-    const totalSlots = 45;
-    const winIndex = 36;
+    stack.style.display = "flex"; winResult.style.display = "none"; stack.innerHTML = "";
+    const totalSlots = 45, winIndex = 36;
     const itemsPool = (poolItems && poolItems.length) ? poolItems.slice() : state.all_items.slice();
     if (!itemsPool.length && firstWon) itemsPool.push(firstWon);
-
-    const STEP = 104;
-    const PAD_LEFT = 8;
+    const STEP = 104, PAD_LEFT = 8;
     const viewports = [];
-
     wonItems.forEach((wonItem, idx) => {
         const vp = document.createElement("div");
         vp.className = "case-roulette-viewport";
-
         const label = document.createElement("div");
         label.className = "case-roulette-label";
         label.textContent = "Кейс " + (idx + 1);
         vp.appendChild(label);
-
         const line = document.createElement("div");
         line.className = "case-roulette-line";
         vp.appendChild(line);
-
         const track = document.createElement("div");
         track.className = "case-roulette-track";
-
         let slotsHtml = "";
         for (let i = 0; i < totalSlots; i++) {
             const item = (i === winIndex) ? wonItem : itemsPool[Math.floor(Math.random() * itemsPool.length)];
             const priceShow = (item && typeof item.price === "number") ? item.price : (item.base_price || 0);
-            slotsHtml += '<div class="roulette-slot rarity-' + item.rarity + '">' +
-                mutationBadge(item) +
-                renderItemImg(item) +
+            slotsHtml += '<div class="roulette-slot rarity-' + item.rarity + '">' + mutationBadge(item) + renderItemImg(item) +
                 '<div class="roulette-slot-name">' + item.name + '</div>' +
-                '<div class="roulette-slot-price">' + priceShow + ' 💰</div>' +
-            '</div>';
+                '<div class="roulette-slot-price">' + priceShow + ' 💰</div></div>';
         }
         track.innerHTML = slotsHtml;
         vp.appendChild(track);
         stack.appendChild(vp);
-
         track.style.transition = "none";
         track.style.transform = "translateX(0px)";
         viewports.push(vp);
     });
-
     modal.classList.add("open");
     void stack.offsetWidth;
-
     viewports.forEach((vp) => {
         const track = vp.querySelector(".case-roulette-track");
         const vpWidth = vp.clientWidth;
@@ -1815,56 +1326,39 @@ function playCaseRoulette(caseName, poolItems, wonItems, wonInvIds) {
         track.style.transition = "transform 4.2s cubic-bezier(0.12, 0.85, 0.2, 1)";
         track.style.transform = "translateX(-" + targetX + "px)";
     });
-
     setTimeout(async () => {
         await loadState();
         isCaseOpening = false;
         title.textContent = wonItems.length > 1 ? "🎉 Выигрыш (×" + wonItems.length + ")" : "🎉 Ваш выигрыш!";
         stack.style.display = "none";
-
         const winCard = el("case-win-card");
         const totalValue = wonItems.reduce((s, i) => s + (Number(i.price) || 0), 0);
-
         if (wonItems.length === 1) {
             winCard.className = "case-win-card rarity-" + firstWon.rarity;
             winCard.innerHTML = mutationBadge(firstWon) +
                 '<div style="display:flex;flex-direction:column;align-items:center;">' +
-                renderItemImg(firstWon) +
-                traitStrip(firstWon) +
+                renderItemImg(firstWon) + traitStrip(firstWon) +
                 '<div style="font-size:15px;font-weight:800;margin-top:6px;">' + firstWon.name + '</div>' +
-                '<div style="font-size:14px;color:#ffcc80;font-weight:700;margin-top:2px;">' + firstWon.price + ' 💰</div>' +
-            '</div>';
+                '<div style="font-size:14px;color:#ffcc80;font-weight:700;margin-top:2px;">' + firstWon.price + ' 💰</div></div>';
         } else {
             winCard.className = "case-win-card";
             winCard.innerHTML = '<div class="multi-win-grid">' +
-                wonItems.map(i =>
-                    '<div class="multi-win-item rarity-' + i.rarity + '">' +
-                        mutationBadge(i) +
-                        renderItemImg(i) +
-                        traitStrip(i) +
-                        '<div class="multi-win-item-name">' + i.name + '</div>' +
-                        '<div class="multi-win-item-price">' + i.price + ' 💰</div>' +
-                    '</div>'
-                ).join("") +
-                '</div>' +
-                '<div style="font-size:14px;font-weight:800;padding-top:6px;border-top:1px solid #3a2a20;">Итого: ' +
+                wonItems.map(i => '<div class="multi-win-item rarity-' + i.rarity + '">' +
+                    mutationBadge(i) + renderItemImg(i) + traitStrip(i) +
+                    '<div class="multi-win-item-name">' + i.name + '</div>' +
+                    '<div class="multi-win-item-price">' + i.price + ' 💰</div></div>').join("") +
+                '</div><div style="font-size:14px;font-weight:800;padding-top:6px;border-top:1px solid #3a2a20;">Итого: ' +
                 '<span style="color:var(--orange);">' + totalValue.toFixed(2) + ' 💰</span></div>';
         }
-
         const sellBtn = el("case-quick-sell-btn");
         sellBtn.textContent = wonItems.length > 1 ? "Продать всё (" + totalValue.toFixed(2) + " 💰)" : "Продать (" + firstWon.price + " 💰)";
         sellBtn.onclick = async () => {
             if (wonItems.length > 1) {
                 let soldTotal = 0;
                 for (const iid of wonInvIds) {
-                    try {
-                        const d = await postJSON("/api/sell_item", { user_id: userId, inv_id: iid });
-                        soldTotal += d.sold_for || 0;
-                    } catch (e) { }
+                    try { const d = await postJSON("/api/sell_item", { user_id: userId, inv_id: iid }); soldTotal += d.sold_for || 0; } catch (e) {}
                 }
-                closeCaseModal();
-                await loadState();
-                showToast("Продано всё за " + soldTotal.toFixed(2) + " 💰");
+                closeCaseModal(); await loadState(); showToast("Продано всё за " + soldTotal.toFixed(2) + " 💰");
             } else {
                 let targetInv = (wonInvIds && wonInvIds.length === 1) ? wonInvIds[0] : null;
                 if (targetInv == null) {
@@ -1879,141 +1373,84 @@ function playCaseRoulette(caseName, poolItems, wonItems, wonInvIds) {
     }, 4350);
 }
 
-function closeCaseModal() {
-    if (!isCaseOpening) el("case-modal").classList.remove("open");
-}
+function closeCaseModal() { if (!isCaseOpening) el("case-modal").classList.remove("open"); }
 
 async function sellItem(invId) {
-    try {
-        const data = await postJSON("/api/sell_item", { user_id: userId, inv_id: invId });
-        showToast("Продано за " + data.sold_for + " 💰");
-    } catch (e) {
-        return showToast(e.message);
-    }
+    try { const data = await postJSON("/api/sell_item", { user_id: userId, inv_id: invId }); showToast("Продано за " + data.sold_for + " 💰"); }
+    catch (e) { return showToast(e.message); }
     await loadState();
 }
-
 async function withdrawItem(invId) {
     if (!confirm("Создать заявку на вывод этого предмета?\nПредмет будет заблокирован до завершения сделки с модератором.")) return;
-    try {
-        await postJSON("/api/withdraw_request", { user_id: userId, inv_id: invId });
-        showToast("📤 Заявка на вывод создана! Модератор свяжется с вами в Telegram.");
-    } catch (e) {
-        return showToast(e.message);
-    }
+    try { await postJSON("/api/withdraw_request", { user_id: userId, inv_id: invId }); showToast("📤 Заявка на вывод создана! Модератор свяжется с вами в Telegram."); }
+    catch (e) { return showToast(e.message); }
     await loadState();
 }
 
 /* ---------- Бонусы ---------- */
 function updateFreeTimer() {
-    const btn = el("free-case-btn");
-    const txt = el("free-case-timer");
+    const btn = el("free-case-btn"), txt = el("free-case-timer");
     if (!btn || !txt) return;
-    if (state.free_seconds_left <= 0) {
-        txt.textContent = "Доступен сейчас";
-        btn.disabled = false;
-    } else {
+    if (state.free_seconds_left <= 0) { txt.textContent = "Доступен сейчас"; btn.disabled = false; }
+    else {
         const h = Math.floor(state.free_seconds_left / 3600);
         const m = Math.floor((state.free_seconds_left % 3600) / 60);
         txt.textContent = "Будет доступен через " + h + "ч " + m + "м";
         btn.disabled = true;
     }
 }
-
 function updateDailyBonusTimer() {
-    const btn = el("daily-bonus-btn");
-    const txt = el("daily-bonus-timer");
+    const btn = el("daily-bonus-btn"), txt = el("daily-bonus-timer");
     if (!btn || !txt) return;
-    if (state.daily_seconds_left <= 0) {
-        txt.textContent = "Доступен сейчас";
-        btn.disabled = false;
-    } else {
+    if (state.daily_seconds_left <= 0) { txt.textContent = "Доступен сейчас"; btn.disabled = false; }
+    else {
         const h = Math.floor(state.daily_seconds_left / 3600);
         const m = Math.floor((state.daily_seconds_left % 3600) / 60);
         txt.textContent = "Будет доступен через " + h + "ч " + m + "м";
         btn.disabled = true;
     }
 }
-
 setInterval(() => {
-    if (state.free_seconds_left > 0) {
-        state.free_seconds_left = Math.max(0, state.free_seconds_left - 1);
-        updateFreeTimer();
-    }
-    if (state.daily_seconds_left > 0) {
-        state.daily_seconds_left = Math.max(0, state.daily_seconds_left - 1);
-        updateDailyBonusTimer();
-    }
+    if (state.free_seconds_left > 0) { state.free_seconds_left = Math.max(0, state.free_seconds_left - 1); updateFreeTimer(); }
+    if (state.daily_seconds_left > 0) { state.daily_seconds_left = Math.max(0, state.daily_seconds_left - 1); updateDailyBonusTimer(); }
 }, 1000);
 
 async function openFreeCase() {
     if (isCaseOpening) return;
     let data;
-    try {
-        data = await postJSON("/api/open_free_case", { user_id: userId });
-    } catch (e) {
-        return showToast(e.message);
-    }
+    try { data = await postJSON("/api/open_free_case", { user_id: userId }); } catch (e) { return showToast(e.message); }
     if (!data.won_items || !data.won_items.length) return showToast("Сервер не вернул результат");
     playCaseRoulette("Бесплатный кейс", state.free_case_items, data.won_items, data.won_inv_ids || []);
 }
-
 async function openDailyBonusCase() {
     if (isCaseOpening) return;
     let data;
-    try {
-        data = await postJSON("/api/open_daily_bonus_case", { user_id: userId });
-    } catch (e) {
-        return showToast(e.message);
-    }
+    try { data = await postJSON("/api/open_daily_bonus_case", { user_id: userId }); } catch (e) { return showToast(e.message); }
     if (!data.won_items || !data.won_items.length) return showToast("Сервер не вернул результат");
     showToast("🎁 Кейс награды: +" + data.coins_added + " 💰 и предмет!");
     playCaseRoulette("Кейс награды", state.daily_bonus_items, data.won_items, data.won_inv_ids || []);
 }
-
 async function redeemPromo() {
     const input = el("promo-input");
     const code = (input.value || "").trim();
     if (!code) return showToast("Введите промокод");
-    try {
-        const data = await postJSON("/api/redeem_promo", { user_id: userId, code: code });
-        showToast(data.message);
-        input.value = "";
-    } catch (e) {
-        return showToast(e.message);
-    }
+    try { const data = await postJSON("/api/redeem_promo", { user_id: userId, code: code }); showToast(data.message); input.value = ""; }
+    catch (e) { return showToast(e.message); }
     await loadState();
 }
-
 async function requestTopup() {
     const u = tgUser || {};
-    try {
-        await postJSON("/api/topup_request", {
-            user_id: userId,
-            username: u.username || "",
-            first_name: u.first_name || ""
-        });
-        showToast("Заявка отправлена модератору!");
-    } catch (e) {
-        showToast(e.message);
-    }
+    try { await postJSON("/api/topup_request", { user_id: userId, username: u.username || "", first_name: u.first_name || "" }); showToast("Заявка отправлена модератору!"); }
+    catch (e) { showToast(e.message); }
 }
 
 /* ---------- Краш ---------- */
 function toggleCrashItem(invId) {
     if (crashActive) return;
-    if (crashSelectedInv.has(invId)) crashSelectedInv.delete(invId);
-    else crashSelectedInv.add(invId);
-    renderInventories();
-    updateCrashTotal();
+    if (crashSelectedInv.has(invId)) crashSelectedInv.delete(invId); else crashSelectedInv.add(invId);
+    renderInventories(); updateCrashTotal();
 }
-
-function setMaxCrashCoins() {
-    if (crashActive) return;
-    el("crash-coins-input").value = state.balance;
-    updateCrashTotal();
-}
-
+function setMaxCrashCoins() { if (crashActive) return; el("crash-coins-input").value = state.balance; updateCrashTotal(); }
 function updateCrashTotal() {
     const input = el("crash-coins-input");
     if (!input) return;
@@ -2022,65 +1459,32 @@ function updateCrashTotal() {
     state.inventory.forEach(i => { if (!i.locked && crashSelectedInv.has(i.inv_id)) itemsSum += Number(i.price) || 0; });
     el("crash-total-bet").textContent = (itemsSum + coins).toFixed(2);
 }
-
-async function handleCrashAction() {
-    if (!crashActive) await startCrash();
-    else await cashoutCrash();
-}
-
+async function handleCrashAction() { if (!crashActive) await startCrash(); else await cashoutCrash(); }
 async function startCrash() {
     if (crashActive) return;
     const coins = parseFloat(el("crash-coins-input").value) || 0;
     let data;
-    try {
-        data = await postJSON("/api/crash/start", {
-            user_id: userId,
-            inv_ids: [...crashSelectedInv],
-            coins_bet: coins
-        });
-    } catch (e) {
-        return showToast(e.message);
-    }
-
-    crashActive = true;
-    crashPoint = Number(data.crash_point) || 1;
-    currentMult = 1.0;
-    crashSelectedInv.clear();
-    el("crash-coins-input").value = "";
-    await loadState();
-
-    const multEl = el("crash-mult");
-    const statusEl = el("crash-status");
-    const rocketEl = el("crash-rocket");
-    const btn = el("crash-action-btn");
-
-    multEl.style.color = "#ff9100";
-    multEl.textContent = "1.00x";
-    rocketEl.textContent = "🚀";
-    rocketEl.style.transform = "translate(0px, 0px)";
+    try { data = await postJSON("/api/crash/start", { user_id: userId, inv_ids: [...crashSelectedInv], coins_bet: coins }); }
+    catch (e) { return showToast(e.message); }
+    crashActive = true; crashPoint = Number(data.crash_point) || 1; currentMult = 1.0;
+    crashSelectedInv.clear(); el("crash-coins-input").value = ""; await loadState();
+    const multEl = el("crash-mult"), statusEl = el("crash-status"), rocketEl = el("crash-rocket"), btn = el("crash-action-btn");
+    multEl.style.color = "#ff9100"; multEl.textContent = "1.00x";
+    rocketEl.textContent = "🚀"; rocketEl.style.transform = "translate(0px, 0px)";
     statusEl.textContent = "Ракета летит! Успейте забрать выигрыш!";
-    btn.className = "btn btn-red";
-    btn.textContent = "Забрать выигрыш";
-
+    btn.className = "btn btn-red"; btn.textContent = "Забрать выигрыш";
     const startTime = Date.now();
     if (crashTimer) clearInterval(crashTimer);
     crashTimer = setInterval(() => {
         const elapsed = (Date.now() - startTime) / 1000;
         currentMult = parseFloat(Math.pow(Math.E, 0.12 * elapsed).toFixed(2));
-
         if (currentMult >= crashPoint) {
-            clearInterval(crashTimer);
-            crashTimer = null;
-            crashActive = false;
-            multEl.textContent = crashPoint.toFixed(2) + "x";
-            multEl.style.color = "#ff3d00";
-            rocketEl.textContent = "💥";
-            statusEl.textContent = "ВЗРЫВ на " + crashPoint.toFixed(2) + "x! Ставка сгорела.";
-            btn.className = "btn";
-            btn.textContent = "Запустить ракету";
+            clearInterval(crashTimer); crashTimer = null; crashActive = false;
+            multEl.textContent = crashPoint.toFixed(2) + "x"; multEl.style.color = "#ff3d00";
+            rocketEl.textContent = "💥"; statusEl.textContent = "ВЗРЫВ на " + crashPoint.toFixed(2) + "x! Ставка сгорела.";
+            btn.className = "btn"; btn.textContent = "Запустить ракету";
             return;
         }
-
         multEl.textContent = currentMult.toFixed(2) + "x";
         const potentialWin = (data.total_bet * currentMult).toFixed(2);
         btn.textContent = "Забрать " + potentialWin + " 💰";
@@ -2089,35 +1493,18 @@ async function startCrash() {
         rocketEl.style.transform = "translate(" + moveX + "px, -" + moveY + "px)";
     }, 50);
 }
-
 async function cashoutCrash() {
     if (!crashActive) return;
-    clearInterval(crashTimer);
-    crashTimer = null;
-    crashActive = false;
+    clearInterval(crashTimer); crashTimer = null; crashActive = false;
     const lockedMult = currentMult;
-    const btn = el("crash-action-btn");
-    btn.className = "btn";
-    btn.textContent = "Запустить ракету";
-
+    const btn = el("crash-action-btn"); btn.className = "btn"; btn.textContent = "Запустить ракету";
     let data;
-    try {
-        data = await postJSON("/api/crash/cashout", { user_id: userId, multiplier: lockedMult });
-    } catch (e) {
-        el("crash-status").textContent = e.message;
-        showToast(e.message);
-        await loadState();
-        return;
-    }
-
+    try { data = await postJSON("/api/crash/cashout", { user_id: userId, multiplier: lockedMult }); }
+    catch (e) { el("crash-status").textContent = e.message; showToast(e.message); await loadState(); return; }
     el("crash-status").textContent = "Вы забрали на " + lockedMult.toFixed(2) + "x!";
-    if (data.returned_items && data.returned_items.length > 0) {
-        showToast("Мега-выигрыш! Вещи возвращены в инвентарь, а +" + data.coins_added + " 💰 зачислено на баланс!");
-    } else if (data.won_item) {
-        showToast("Выигрыш: " + data.won_item.name + " + " + data.coins_added + " 💰 сдачи на баланс!");
-    } else {
-        showToast("Выигрыш: +" + data.coins_added + " 💰 на баланс!");
-    }
+    if (data.returned_items && data.returned_items.length > 0) showToast("Мега-выигрыш! Вещи возвращены в инвентарь, а +" + data.coins_added + " 💰 зачислено на баланс!");
+    else if (data.won_item) showToast("Выигрыш: " + data.won_item.name + " + " + data.coins_added + " 💰 сдачи на баланс!");
+    else showToast("Выигрыш: +" + data.coins_added + " 💰 на баланс!");
     await loadState();
 }
 
@@ -2130,26 +1517,18 @@ function renderOutcomesStrip(hit = null) {
         const w = (m > 0 && m % 2 === 1);
         const mult = MULT_TABLE[m];
         html += '<div class="outcome-pill ' + (w ? "win-pill" : "lose-pill") + (hit === m ? " hit-now" : "") + '">' +
-            '<div>' + m + ' шт.</div>' +
-            '<div>' + (w ? "x" + (mult != null ? mult : "-") : "ЛУЗ") + '</div>' +
-        '</div>';
+            '<div>' + m + ' шт.</div><div>' + (w ? "x" + (mult != null ? mult : "-") : "ЛУЗ") + '</div></div>';
     }
     s.innerHTML = html;
 }
-
 function renderInitialDiceBoard() {
     const b = el("dice-board");
     if (!b) return;
     let html = "";
-    for (let i = 0; i < diceCount; i++) {
-        html += '<div class="mini-dice bg-c-' + diceChosenColor + '">' +
-            '<span style="font-size:22px;">🎲</span><span>#' + (i + 1) + '</span>' +
-        '</div>';
-    }
+    for (let i = 0; i < diceCount; i++) html += '<div class="mini-dice bg-c-' + diceChosenColor + '"><span style="font-size:22px;">🎲</span><span>#' + (i + 1) + '</span></div>';
     b.innerHTML = html;
     renderOutcomesStrip();
 }
-
 function selectDiceColor(color, btnEl) {
     if (isDiceRolling) return;
     diceChosenColor = color;
@@ -2157,7 +1536,6 @@ function selectDiceColor(color, btnEl) {
     if (btnEl) btnEl.classList.add("active");
     renderInitialDiceBoard();
 }
-
 function setDiceCount(c, btnEl) {
     if (isDiceRolling) return;
     diceCount = c;
@@ -2166,91 +1544,53 @@ function setDiceCount(c, btnEl) {
     el("dice-count-label").textContent = c;
     renderInitialDiceBoard();
 }
-
 function toggleDiceItem(id) {
     if (isDiceRolling) return;
-    if (diceSelectedInv.has(id)) diceSelectedInv.delete(id);
-    else diceSelectedInv.add(id);
-    renderInventories();
-    updateDiceTotal();
+    if (diceSelectedInv.has(id)) diceSelectedInv.delete(id); else diceSelectedInv.add(id);
+    renderInventories(); updateDiceTotal();
 }
-
-function setMaxDiceCoins() {
-    if (isDiceRolling) return;
-    el("dice-coins-input").value = state.balance;
-    updateDiceTotal();
-}
-
+function setMaxDiceCoins() { if (isDiceRolling) return; el("dice-coins-input").value = state.balance; updateDiceTotal(); }
 function updateDiceTotal() {
     const input = el("dice-coins-input");
     if (!input) return;
     let sum = parseFloat(input.value) || 0;
-    state.inventory.forEach(i => {
-        if (!i.locked && diceSelectedInv.has(i.inv_id)) sum += Number(i.price) || 0;
-    });
+    state.inventory.forEach(i => { if (!i.locked && diceSelectedInv.has(i.inv_id)) sum += Number(i.price) || 0; });
     el("dice-total-bet").textContent = sum.toFixed(2);
 }
-
 async function rollColorDice() {
     if (isDiceRolling) return;
     const coins = parseFloat(el("dice-coins-input").value) || 0;
-
     let data;
-    try {
-        data = await postJSON("/api/colordice/roll", {
-            user_id: userId,
-            inv_ids: [...diceSelectedInv],
-            coins_bet: coins,
-            chosen_color: diceChosenColor,
-            dice_count: diceCount
-        });
-    } catch (e) {
-        return showToast(e.message);
-    }
-
+    try { data = await postJSON("/api/colordice/roll", { user_id: userId, inv_ids: [...diceSelectedInv], coins_bet: coins, chosen_color: diceChosenColor, dice_count: diceCount }); }
+    catch (e) { return showToast(e.message); }
     isDiceRolling = true;
-    const btn = el("dice-roll-btn");
-    btn.disabled = true;
-    btn.textContent = "Кубики крутятся...";
+    const btn = el("dice-roll-btn"); btn.disabled = true; btn.textContent = "Кубики крутятся...";
     el("dice-status-text").textContent = "Ищем цвет: " + DICE_NAMES_RU[diceChosenColor] + "...";
-
     const board = el("dice-board");
     const pool = ["red", "orange", "yellow", "green", "blue", "purple"];
     const anim = setInterval(() => {
         let t = "";
-        for (let i = 0; i < diceCount; i++) {
-            t += '<div class="mini-dice rolling bg-c-' + pool[Math.floor(Math.random() * pool.length)] + '">' +
-                '<span style="font-size:20px;">🎲</span></div>';
-        }
+        for (let i = 0; i < diceCount; i++) t += '<div class="mini-dice rolling bg-c-' + pool[Math.floor(Math.random() * pool.length)] + '"><span style="font-size:20px;">🎲</span></div>';
         board.innerHTML = t;
     }, 105);
-
     setTimeout(async () => {
         clearInterval(anim);
-        isDiceRolling = false;
-        btn.disabled = false;
-        btn.textContent = "🎲 Бросить кубики";
-
+        isDiceRolling = false; btn.disabled = false; btn.textContent = "🎲 Бросить кубики";
         board.innerHTML = data.rolled_colors.map(c =>
             '<div class="mini-dice bg-c-' + c + (c === data.chosen_color ? " is-match" : " not-match") + '">' +
                 '<span>' + DICE_NAMES_RU[c] + '</span>' +
-                (c === data.chosen_color ? '<span style="font-size:13px;margin-top:2px;">⭐</span>' : "") +
-            '</div>'
+                (c === data.chosen_color ? '<span style="font-size:13px;margin-top:2px;">⭐</span>' : "") + '</div>'
         ).join("");
-
         renderOutcomesStrip(data.matches);
-
         const st = el("dice-status-text");
         const cn = DICE_NAMES_RU[data.chosen_color];
         if (data.win) {
-            st.innerHTML = '<span style="color:#00e676;">Выпало ' + data.matches + ' шт. (' + cn +
-                ') — Победа x' + data.multiplier + ' (+' + data.win_amount + ' 💰)!</span>';
+            st.innerHTML = '<span style="color:#00e676;">Выпало ' + data.matches + ' шт. (' + cn + ') — Победа x' + data.multiplier + ' (+' + data.win_amount + ' 💰)!</span>';
             showToast("🎉 Выпало " + data.matches + " (" + cn + ")! Выигрыш: +" + data.win_amount + " 💰");
         } else {
             st.innerHTML = '<span style="color:#ff8a65;">Выпало ' + data.matches + ' шт. (' + cn + ') — Луз!</span>';
             showToast("Выпало " + data.matches + " (" + cn + ") — проигрыш!");
         }
-
         diceSelectedInv.clear();
         el("dice-coins-input").value = "";
         await loadState();
@@ -2263,36 +1603,23 @@ function minesMultiplier(mines, opened) {
     const safeTotal = 25 - mines;
     if (opened > safeTotal) opened = safeTotal;
     let p = 1.0;
-    for (let i = 0; i < opened; i++) {
-        p *= (safeTotal - i) / (25 - i);
-    }
+    for (let i = 0; i < opened; i++) p *= (safeTotal - i) / (25 - i);
     const mult = p > 0 ? (1.0 / p) * 0.95 : 0;
     return Math.max(1.0, Math.round(mult * 100) / 100);
 }
-
 function renderMinesBoard(revealedField, boomCell) {
     const board = el("mines-board");
     if (!board) return;
     let html = "";
     for (let i = 0; i < 25; i++) {
-        let cls = "mines-cell";
-        let content = "";
-        if (minesOpened.has(i)) {
-            cls += " safe opened";
-            content = "💎";
-        } else if (boomCell === i) {
-            cls += " boom opened";
-            content = "💣";
-        } else if (revealedField && revealedField.includes(i)) {
-            cls += " boom disabled";
-            content = "💣";
-        }
-        if (minesActive) cls += " ";
-        html += '<div class="' + cls + '" data-cell="' + i + '" onclick="openMinesCell(' + i + ')">' + content + '</div>';
+        let cls = "mines-cell", content = "";
+        if (minesOpened.has(i)) { cls += " safe opened"; content = "💎"; }
+        else if (boomCell === i) { cls += " boom opened"; content = "💣"; }
+        else if (revealedField && revealedField.includes(i)) { cls += " boom disabled"; content = "💣"; }
+        html += '<div class="' + cls + '" onclick="openMinesCell(' + i + ')">' + content + '</div>';
     }
     board.innerHTML = html;
 }
-
 function updateMinesStats() {
     const opened = minesOpened.size;
     const mult = minesActive ? minesMultiplier(minesMines, opened) : 1.0;
@@ -2301,7 +1628,6 @@ function updateMinesStats() {
     const potential = minesActive ? Math.round(minesTotalBet * mult * 100) / 100 : 0;
     el("mines-potential").textContent = potential.toFixed(2);
 }
-
 function onMinesSlider() {
     if (minesActive) return;
     const s = el("mines-slider");
@@ -2309,293 +1635,234 @@ function onMinesSlider() {
     el("mines-count-label").textContent = minesMines;
     updateMinesStats();
 }
-
 function toggleMinesItem(id) {
     if (minesActive) return;
-    if (minesSelectedInv.has(id)) minesSelectedInv.delete(id);
-    else minesSelectedInv.add(id);
-    renderInventories();
-    updateMinesTotal();
+    if (minesSelectedInv.has(id)) minesSelectedInv.delete(id); else minesSelectedInv.add(id);
+    renderInventories(); updateMinesTotal();
 }
-
-function setMaxMinesCoins() {
-    if (minesActive) return;
-    el("mines-coins-input").value = state.balance;
-    updateMinesTotal();
-}
-
+function setMaxMinesCoins() { if (minesActive) return; el("mines-coins-input").value = state.balance; updateMinesTotal(); }
 function updateMinesTotal() {
     const input = el("mines-coins-input");
     if (!input) return;
     let sum = parseFloat(input.value) || 0;
-    state.inventory.forEach(i => {
-        if (!i.locked && minesSelectedInv.has(i.inv_id)) sum += Number(i.price) || 0;
-    });
+    state.inventory.forEach(i => { if (!i.locked && minesSelectedInv.has(i.inv_id)) sum += Number(i.price) || 0; });
     minesTotalBet = sum;
     el("mines-total-bet").textContent = sum.toFixed(2);
     updateMinesStats();
 }
-
 async function startMines() {
     if (minesActive) return;
     const coins = parseFloat(el("mines-coins-input").value) || 0;
     let data;
-    try {
-        data = await postJSON("/api/mines/start", {
-            user_id: userId,
-            inv_ids: [...minesSelectedInv],
-            coins_bet: coins,
-            mines: minesMines
-        });
-    } catch (e) {
-        return showToast(e.message);
-    }
-    minesActive = true;
-    minesOpened = new Set();
-    minesSelectedInv.clear();
-    el("mines-coins-input").value = "";
-    await loadState();
+    try { data = await postJSON("/api/mines/start", { user_id: userId, inv_ids: [...minesSelectedInv], coins_bet: coins, mines: minesMines }); }
+    catch (e) { return showToast(e.message); }
+    minesActive = true; minesOpened = new Set(); minesSelectedInv.clear();
+    el("mines-coins-input").value = ""; await loadState();
     minesTotalBet = Number(data.total_bet) || 0;
     el("mines-status-text").textContent = "Игра началась. Открывайте клетки!";
-    el("mines-start-btn").style.display = "none";
-    el("mines-cashout-btn").style.display = "block";
+    el("mines-start-btn").style.display = "none"; el("mines-cashout-btn").style.display = "block";
     el("mines-slider").disabled = true;
-    renderMinesBoard(null, null);
-    updateMinesStats();
+    renderMinesBoard(null, null); updateMinesStats();
 }
-
 async function openMinesCell(cell) {
     if (!minesActive) return showToast("Сначала начните игру");
     if (minesOpened.has(cell)) return;
     let data;
-    try {
-        data = await postJSON("/api/mines/open", { user_id: userId, cell: cell });
-    } catch (e) {
-        return showToast(e.message);
-    }
+    try { data = await postJSON("/api/mines/open", { user_id: userId, cell: cell }); }
+    catch (e) { return showToast(e.message); }
     if (data.boom) {
         minesActive = false;
         el("mines-status-text").innerHTML = '<span style="color:#ff8a65;">💥 Мина! Ставка сгорела.</span>';
-        el("mines-start-btn").style.display = "block";
-        el("mines-cashout-btn").style.display = "none";
+        el("mines-start-btn").style.display = "block"; el("mines-cashout-btn").style.display = "none";
         el("mines-slider").disabled = false;
-        renderMinesBoard(data.field, cell);
-        updateMinesStats();
+        renderMinesBoard(data.field, cell); updateMinesStats();
         minesOpened = new Set();
         await loadState();
         return;
     }
-    minesOpened.add(cell);
-    renderMinesBoard(null, null);
-    const potential = Number(data.potential_win) || 0;
-    el("mines-potential").textContent = potential.toFixed(2);
+    minesOpened.add(cell); renderMinesBoard(null, null);
+    el("mines-potential").textContent = (Number(data.potential_win) || 0).toFixed(2);
     el("mines-mult").textContent = Number(data.multiplier || 1).toFixed(2) + "x";
     el("mines-opened").textContent = String(data.opened || minesOpened.size);
     el("mines-status-text").textContent = "Множитель ×" + data.multiplier + " — забирайте или открывайте дальше";
 }
-
 async function cashoutMines() {
     if (!minesActive) return;
     let data;
-    try {
-        data = await postJSON("/api/mines/cashout", { user_id: userId });
-    } catch (e) {
-        return showToast(e.message);
-    }
+    try { data = await postJSON("/api/mines/cashout", { user_id: userId }); }
+    catch (e) { return showToast(e.message); }
     minesActive = false;
-    el("mines-start-btn").style.display = "block";
-    el("mines-cashout-btn").style.display = "none";
+    el("mines-start-btn").style.display = "block"; el("mines-cashout-btn").style.display = "none";
     el("mines-slider").disabled = false;
     el("mines-status-text").innerHTML = '<span style="color:#00e676;">Забрали на ×' + data.multiplier + ' — ' + data.total_win + ' 💰</span>';
-    minesOpened = new Set();
-    renderMinesBoard(null, null);
-    updateMinesStats();
-    if (data.returned_items && data.returned_items.length > 0) {
-        showToast("Вещи возвращены в инвентарь, +" + data.coins_added + " 💰 на баланс!");
-    } else if (data.won_item) {
-        showToast("Выигрыш: " + data.won_item.name + " + " + data.coins_added + " 💰");
-    } else {
-        showToast("Выигрыш: +" + data.coins_added + " 💰");
-    }
+    minesOpened = new Set(); renderMinesBoard(null, null); updateMinesStats();
+    if (data.returned_items && data.returned_items.length > 0) showToast("Вещи возвращены в инвентарь, +" + data.coins_added + " 💰 на баланс!");
+    else if (data.won_item) showToast("Выигрыш: " + data.won_item.name + " + " + data.coins_added + " 💰");
+    else showToast("Выигрыш: +" + data.coins_added + " 💰");
     await loadState();
 }
 
 /* ---------- ПЛИНКО ---------- */
-function renderPlinkoMults() {
+let plinkoAnimTimer = null;
+function renderPlinkoMults(hitIndex = null) {
     const box = el("plinko-mults");
     if (!box) return;
-    box.innerHTML = PLINKO_MULTS.map((m, i) =>
-        '<div class="plinko-mult-pill" data-idx="' + i + '">x' + m + '</div>'
-    ).join("");
+    box.innerHTML = PLINKO_MULTS.map((m, i) => {
+        const cls = m >= 6 ? "high" : (m >= 2 ? "mid" : "low");
+        return '<div class="plinko-mult-pill ' + cls + (i === hitIndex ? ' hit' : '') + '">x' + m + '</div>';
+    }).join("");
 }
+function plinkoResize() {
+    const canvas = el("plinko-canvas");
+    if (!canvas) return;
+    const wrap = canvas.parentElement;
+    const rect = wrap.getBoundingClientRect();
+    if (rect.width > 0) {
+        canvas.width = Math.round(rect.width);
+        canvas.height = Math.round(rect.width * 1.2);
+        drawPlinkoBoard();
+    }
+}
+window.addEventListener("resize", plinkoResize);
 
-function drawPlinkoBoard(hitSlot) {
+function drawPlinkoBoard(ball = null, hitPath = null) {
     const canvas = el("plinko-canvas");
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     const W = canvas.width, H = canvas.height;
     ctx.clearRect(0, 0, W, H);
 
-    const bg = ctx.createLinearGradient(0, 0, 0, H);
-    bg.addColorStop(0, "rgba(41,121,255,0.10)");
-    bg.addColorStop(1, "rgba(20,15,12,0.95)");
-    ctx.fillStyle = bg;
-    ctx.fillRect(0, 0, W, H);
+    const padX = W * 0.06;
+    const padTop = H * 0.05;
+    const padBottom = H * 0.18;
+    const rows = PLINKO_ROWS;
+    const rowStepY = (H - padTop - padBottom) / rows;
 
-    const topPad = 18;
-    const bottomPad = 64;
-    const usableW = W - 60;
-    const usableH = H - topPad - bottomPad;
-    const rowGap = usableH / PLINKO_ROWS;
-    const startX = W / 2;
-
-    for (let r = 0; r <= PLINKO_ROWS; r++) {
-        const y = topPad + r * rowGap;
-        const count = r + 1;
-        const spacing = usableW / PLINKO_ROWS;
-        const rowWidth = (count - 1) * spacing;
-        const rowStartX = startX - rowWidth / 2;
-        for (let c = 0; c < count; c++) {
-            const x = rowStartX + c * spacing;
-            if (r < PLINKO_ROWS) {
-                const nextSpacing = usableW / PLINKO_ROWS;
-                const nextRowWidth = ((r + 2) - 1) * nextSpacing;
-                const nextStartX = startX - nextRowWidth / 2;
-                const ny = topPad + (r + 1) * rowGap;
-                ctx.strokeStyle = "rgba(255,123,0,0.08)";
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.moveTo(x, y);
-                ctx.lineTo(nextStartX + c * nextSpacing, ny);
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.moveTo(x, y);
-                ctx.lineTo(nextStartX + (c + 1) * nextSpacing, ny);
-                ctx.stroke();
-            }
-            ctx.fillStyle = "#ff7b00";
+    // peg grid
+    for (let r = 0; r < rows; r++) {
+        const pegsInRow = r + 2;
+        const y = padTop + r * rowStepY;
+        const totalW = W - padX * 2;
+        const stepX = totalW / (pegsInRow - 1);
+        for (let i = 0; i < pegsInRow; i++) {
+            const x = padX + i * stepX;
             ctx.beginPath();
-            ctx.arc(x, y, 3.2, 0, Math.PI * 2);
+            ctx.arc(x, y, Math.max(2, W * 0.008), 0, Math.PI * 2);
+            ctx.fillStyle = r % 2 === 0 ? "#ffcc80" : "#82b1ff";
             ctx.fill();
-            ctx.strokeStyle = "rgba(255,255,255,0.25)";
-            ctx.lineWidth = 1;
-            ctx.stroke();
         }
     }
 
-    const slotsY = topPad + (PLINKO_ROWS + 1) * rowGap - 6;
-    const slotCount = PLINKO_ROWS + 1;
-    const slotW = usableW / slotCount;
-    for (let i = 0; i < slotCount; i++) {
-        const x = startX - usableW / 2 + i * slotW;
-        const isHit = (hitSlot === i);
+    // slot cells
+    const slots = PLINKO_MULTS.length;
+    const slotY = H - padBottom + rowStepY * 0.35;
+    const slotH = padBottom * 0.55;
+    const slotW = (W - padX * 2) / slots;
+    for (let i = 0; i < slots; i++) {
+        const x = padX + i * slotW;
         const m = PLINKO_MULTS[i];
-        let color = "#1a120e";
-        if (isHit) color = "rgba(255,123,0,0.85)";
-        else if (m >= 6) color = "rgba(255,61,0,0.35)";
-        else if (m >= 1.5) color = "rgba(255,123,0,0.25)";
-        else color = "rgba(41,121,255,0.20)";
-        ctx.fillStyle = color;
-        ctx.strokeStyle = isHit ? "#ff7b00" : "rgba(74,51,40,0.9)";
-        ctx.lineWidth = isHit ? 2 : 1;
-        ctx.beginPath();
-        ctx.moveTo(x + 2, slotsY);
-        ctx.lineTo(x + slotW - 2, slotsY);
-        ctx.lineTo(x + slotW - 2, slotsY + 22);
-        ctx.lineTo(x + 2, slotsY + 22);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-        ctx.fillStyle = isHit ? "#fff" : "#ffcc80";
-        ctx.font = "bold 9px Segoe UI";
+        ctx.fillStyle = (hitPath != null && hitPath === i)
+            ? "#ff7b00"
+            : (m >= 6 ? "rgba(255,61,0,0.25)" : (m >= 2 ? "rgba(255,123,0,0.2)" : "rgba(41,121,255,0.2)"));
+        ctx.strokeStyle = (hitPath != null && hitPath === i) ? "#ffab40" : "#4a3328";
+        ctx.lineWidth = 1;
+        ctx.fillRect(x + 1, slotY, slotW - 2, slotH);
+        ctx.strokeRect(x + 1, slotY, slotW - 2, slotH);
+        ctx.fillStyle = (hitPath != null && hitPath === i) ? "#fff" : "#ffcc80";
+        ctx.font = "800 " + Math.max(9, Math.round(W * 0.026)) + "px Segoe UI, Roboto, sans-serif";
         ctx.textAlign = "center";
-        ctx.fillText("x" + m, x + slotW / 2, slotsY + 14);
-    }
-}
-
-let plinkoAnimationFrame = null;
-function animatePlinko(path, finalSlot, onDone) {
-    const canvas = el("plinko-canvas");
-    if (!canvas) { if (onDone) onDone(); return; }
-    const W = canvas.width, H = canvas.height;
-    const topPad = 18;
-    const bottomPad = 64;
-    const usableW = W - 60;
-    const usableH = H - topPad - bottomPad;
-    const rowGap = usableH / PLINKO_ROWS;
-    const startX = W / 2;
-    const spacing = usableW / PLINKO_ROWS;
-
-    let colOffset = 0;
-    const points = [{ x: startX, y: topPad }];
-    for (let r = 0; r < PLINKO_ROWS; r++) {
-        colOffset += path[r];
-        const y = topPad + (r + 1) * rowGap;
-        const x = startX + (colOffset - (r + 1) / 2) * spacing;
-        points.push({ x, y });
+        ctx.textBaseline = "middle";
+        ctx.fillText("x" + m, x + slotW / 2, slotY + slotH / 2);
     }
 
-    let segStart = performance.now();
-    let currentSeg = 0;
-    const segDuration = 90;
-
-    function step(now) {
-        const elapsed = now - segStart;
-        const t = Math.min(elapsed / segDuration, 1);
-        const p0 = points[currentSeg];
-        const p1 = points[currentSeg + 1];
-        if (!p1) {
-            drawPlinkoBoard(finalSlot);
-            if (onDone) onDone();
-            return;
-        }
-        const x = p0.x + (p1.x - p0.x) * t;
-        const y = p0.y + (p1.y - p0.y) * t;
-
-        drawPlinkoBoard(null);
-        const ctx = canvas.getContext("2d");
-        const grd = ctx.createRadialGradient(x - 3, y - 3, 1, x, y, 9);
-        grd.addColorStop(0, "#fff3e0");
-        grd.addColorStop(1, "#ff7b00");
-        ctx.fillStyle = grd;
+    // ball
+    if (ball) {
         ctx.beginPath();
-        ctx.arc(x, y, 8, 0, Math.PI * 2);
+        ctx.arc(ball.x, ball.y, Math.max(4, W * 0.014), 0, Math.PI * 2);
+        ctx.fillStyle = "#00e676";
+        ctx.shadowColor = "#00e676";
+        ctx.shadowBlur = 12;
         ctx.fill();
-        ctx.strokeStyle = "rgba(255,255,255,0.8)";
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-
-        if (t >= 1) {
-            currentSeg++;
-            segStart = performance.now();
-        }
-        plinkoAnimationFrame = requestAnimationFrame(step);
+        ctx.shadowBlur = 0;
     }
-    if (plinkoAnimationFrame) cancelAnimationFrame(plinkoAnimationFrame);
-    plinkoAnimationFrame = requestAnimationFrame(step);
 }
 
-function togglePlinkoItem(invId) {
+function computePlinkoBallPositions(path) {
+    const canvas = el("plinko-canvas");
+    if (!canvas) return [];
+    const W = canvas.width, H = canvas.height;
+    const padX = W * 0.06;
+    const padTop = H * 0.05;
+    const padBottom = H * 0.18;
+    const rows = PLINKO_ROWS;
+    const rowStepY = (H - padTop - padBottom) / rows;
+    const totalW = W - padX * 2;
+
+    const positions = [];
+    let idx = 0; // 0..rows-1 right moves
+    // start
+    positions.push({ x: W / 2, y: padTop - rowStepY * 0.4 });
+    for (let r = 0; r < rows; r++) {
+        if (path[r] === 1) idx++;
+        const pegsInRow = r + 2;
+        const stepX = totalW / (pegsInRow - 1);
+        const x = padX + idx * stepX + (path[r] === 1 ? stepX / 2 : 0);
+        const y = padTop + (r + 0.5) * rowStepY;
+        positions.push({ x, y });
+    }
+    // land into slot
+    const slots = PLINKO_MULTS.length;
+    const slotW = totalW / slots;
+    const slotX = padX + idx * slotW + slotW / 2;
+    positions.push({ x: slotX, y: padTop + rows * rowStepY + rowStepY * 0.4 });
+    return positions;
+}
+
+function animatePlinko(path, cb) {
+    const positions = computePlinkoBallPositions(path);
+    const startTs = performance.now();
+    const totalMs = 1400;
+    const canvas = el("plinko-canvas");
+    if (!canvas) { cb && cb(); return; }
+    function step(ts) {
+        const t = Math.min(1, (ts - startTs) / totalMs);
+        const segCount = positions.length - 1;
+        const segF = t * segCount;
+        const seg = Math.min(segCount - 1, Math.floor(segF));
+        const localT = segF - seg;
+        const a = positions[seg], b = positions[seg + 1];
+        // небольшое покачивание
+        const wobble = Math.sin(localT * Math.PI) * 4;
+        const ball = { x: a.x + (b.x - a.x) * localT + wobble, y: a.y + (b.y - a.y) * localT };
+        drawPlinkoBoard(ball);
+        if (t < 1) requestAnimationFrame(step);
+        else {
+            drawPlinkoBoard({ x: positions[positions.length - 1].x, y: positions[positions.length - 1].y });
+            cb && cb();
+        }
+    }
+    requestAnimationFrame(step);
+}
+
+function renderPlinkoStatic() {
+    renderPlinkoMults();
+    if (el("plinko-canvas")) {
+        if (plinkoAnimTimer) { clearInterval(plinkoAnimTimer); plinkoAnimTimer = null; }
+        plinkoResize();
+    }
+}
+
+function togglePlinkoItem(id) {
     if (plinkoDropping) return;
-    if (plinkoSelectedInv.has(invId)) plinkoSelectedInv.delete(invId);
-    else plinkoSelectedInv.add(invId);
-    renderInventories();
-    updatePlinkoTotal();
+    if (plinkoSelectedInv.has(id)) plinkoSelectedInv.delete(id); else plinkoSelectedInv.add(id);
+    renderInventories(); updatePlinkoTotal();
 }
-
-function setMaxPlinkoCoins() {
-    if (plinkoDropping) return;
-    el("plinko-coins-input").value = state.balance;
-    updatePlinkoTotal();
-}
-
+function setMaxPlinkoCoins() { if (plinkoDropping) return; el("plinko-coins-input").value = state.balance; updatePlinkoTotal(); }
 function updatePlinkoTotal() {
     const input = el("plinko-coins-input");
     if (!input) return;
     let sum = parseFloat(input.value) || 0;
-    state.inventory.forEach(i => {
-        if (!i.locked && plinkoSelectedInv.has(i.inv_id)) sum += Number(i.price) || 0;
-    });
+    state.inventory.forEach(i => { if (!i.locked && plinkoSelectedInv.has(i.inv_id)) sum += Number(i.price) || 0; });
     el("plinko-total-bet").textContent = sum.toFixed(2);
 }
 
@@ -2603,48 +1870,22 @@ async function playPlinko() {
     if (plinkoDropping) return;
     const coins = parseFloat(el("plinko-coins-input").value) || 0;
     let data;
-    try {
-        data = await postJSON("/api/plinko/play", {
-            user_id: userId,
-            inv_ids: [...plinkoSelectedInv],
-            coins_bet: coins
-        });
-    } catch (e) {
-        return showToast(e.message);
-    }
-
+    try { data = await postJSON("/api/plinko/play", { user_id: userId, inv_ids: [...plinkoSelectedInv], coins_bet: coins }); }
+    catch (e) { return showToast(e.message); }
     plinkoDropping = true;
-    const btn = el("plinko-drop-btn");
-    btn.disabled = true;
-    btn.textContent = "Шарик летит...";
-    el("plinko-status").textContent = "Шарик катится...";
-    plinkoSelectedInv.clear();
-    el("plinko-coins-input").value = "";
-    await loadState();
-
-    const finalSlot = Number(data.slot) || 0;
-    animatePlinko(data.path || [], finalSlot, async () => {
-        plinkoDropping = false;
-        btn.disabled = false;
-        btn.textContent = "🎯 Бросить шарик";
-
-        const pills = document.querySelectorAll(".plinko-mult-pill");
-        pills.forEach(p => p.classList.remove("hit"));
-        const hitPill = document.querySelector('.plinko-mult-pill[data-idx="' + finalSlot + '"]');
-        if (hitPill) hitPill.classList.add("hit");
-
-        const mult = Number(data.multiplier) || 0;
-        const st = el("plinko-status");
-        if (data.returned_items && data.returned_items.length > 0) {
-            st.innerHTML = '<span style="color:#00e676;">Слот ' + finalSlot + ' × ' + mult + 'x — мега-выигрыш! Вещи вернулись, +' + data.coins_added + ' 💰 на баланс.</span>';
-            showToast("🎉 ×" + mult + "! Вещи возвращены + " + data.coins_added + " 💰");
-        } else if (data.won_item) {
-            st.innerHTML = '<span style="color:#00e676;">Слот ' + finalSlot + ' × ' + mult + 'x — выигрыш: ' + data.won_item.name + ' + ' + data.coins_added + ' 💰</span>';
-            showToast("🎉 ×" + mult + "! " + data.won_item.name + " + " + data.coins_added + " 💰");
-        } else {
-            st.innerHTML = '<span style="color:#ff8a65;">Слот ' + finalSlot + ' × ' + mult + 'x — +' + data.coins_added + ' 💰 на баланс.</span>';
-            showToast("Слот " + finalSlot + " × " + mult + "x — +" + data.coins_added + " 💰");
-        }
+    const btn = el("plinko-drop-btn"); btn.disabled = true; btn.textContent = "Шарик падает...";
+    el("plinko-status").textContent = "Шарик падает...";
+    renderPlinkoMults();
+    animatePlinko(data.path || [], async () => {
+        renderPlinkoMults(data.slot);
+        plinkoDropping = false; btn.disabled = false; btn.textContent = "🎯 Бросить шарик";
+        const winText = "Множитель x" + data.multiplier + " → " + data.total_win + " 💰";
+        el("plinko-status").innerHTML = '<span style="color:#ffcc80;">' + winText + '</span>';
+        if (data.returned_items && data.returned_items.length > 0) showToast("Вещи возвращены в инвентарь, +" + data.coins_added + " 💰 на баланс!");
+        else if (data.won_item) showToast("Выигрыш: " + data.won_item.name + " + " + data.coins_added + " 💰");
+        else showToast("Выигрыш: +" + data.coins_added + " 💰");
+        plinkoSelectedInv.clear();
+        el("plinko-coins-input").value = "";
         await loadState();
     });
 }
@@ -2655,407 +1896,555 @@ function towerMultiplier(passed) {
     const base = Math.pow(TOWER_COLS / (TOWER_COLS - 1), passed);
     return Math.round(base * 0.95 * 100) / 100;
 }
-
-function renderTowerBoard() {
+function renderTower() {
     const box = el("tower-floors");
     if (!box) return;
     let html = "";
     for (let f = 0; f < TOWER_FLOORS; f++) {
-        const floorCells = [];
+        const passed = towerPassed[f];
+        const boomHere = towerBoomFloor === f;
+        const current = towerActive && towerPassed.length === f;
+        let cellsHtml = "";
         for (let c = 0; c < TOWER_COLS; c++) {
             let cls = "tower-cell";
             let content = "";
-            const isPassed = towerPassed.length > f;
-            const isBoom = (towerBoomFloor === f && towerBoomCell === c);
-            if (isPassed) {
-                if (towerPassed[f] === c) {
-                    cls += " safe";
-                    content = "💎";
-                } else {
-                    cls += " locked";
-                }
-            } else if (isBoom) {
-                cls += " boom";
-                content = "💣";
-            } else if (towerBoomFloor !== null && f >= towerBoomFloor) {
-                cls += " locked";
-            } else if (towerActive && f === towerPassed.length) {
-                cls += " clickable";
-            }
-            const clickAttr = (towerActive && f === towerPassed.length) ? ' onclick="openTowerCell(' + c + ')"' : '';
-            floorCells.push('<div class="' + cls + '"' + clickAttr + '>' + content + '</div>');
+            if (boomHere && towerBoomCell === c) { cls += " boom"; content = "💣"; }
+            else if (passed === c) { cls += " safe"; content = "💎"; }
+            else if (!towerActive && !boomHere) { cls += " locked"; }
+            if (current && !boomHere) cls += " clickable";
+            const onclick = (current && !boomHere) ? ' onclick="openTowerCell(' + c + ')"' : '';
+            cellsHtml += '<div class="' + cls + '"' + onclick + '>' + content + '</div>';
         }
-        html += '<div class="tower-floor">' +
-            '<div class="tower-floor-label">' + (f + 1) + ' эт.</div>' +
-            '<div class="tower-floor-cells">' + floorCells.join("") + '</div>' +
-        '</div>';
+        html += '<div class="tower-floor"><div class="tower-floor-label">Этаж ' + (f + 1) + '</div><div class="tower-floor-cells">' + cellsHtml + '</div></div>';
     }
     box.innerHTML = html;
-}
-
-function updateTowerStats() {
-    const passed = towerPassed.length;
-    const mult = towerActive ? towerMultiplier(passed) : 1.0;
+    const passedCount = towerPassed.length;
+    const mult = towerActive ? towerMultiplier(passedCount) : 1.0;
     el("tower-mult").textContent = mult.toFixed(2) + "x";
-    el("tower-floor").textContent = passed + "/" + TOWER_FLOORS;
-    const potential = towerActive ? Math.round(towerTotalBet * mult * 100) / 100 : 0;
-    el("tower-potential").textContent = potential.toFixed(2);
+    el("tower-floor").textContent = passedCount + "/" + TOWER_FLOORS;
+    el("tower-potential").textContent = towerActive ? (Math.round(towerTotalBet * mult * 100) / 100).toFixed(2) : "0";
 }
-
-function toggleTowerItem(invId) {
+function toggleTowerItem(id) {
     if (towerActive) return;
-    if (towerSelectedInv.has(invId)) towerSelectedInv.delete(invId);
-    else towerSelectedInv.add(invId);
-    renderInventories();
-    updateTowerTotal();
+    if (towerSelectedInv.has(id)) towerSelectedInv.delete(id); else towerSelectedInv.add(id);
+    renderInventories(); updateTowerTotal();
 }
-
-function setMaxTowerCoins() {
-    if (towerActive) return;
-    el("tower-coins-input").value = state.balance;
-    updateTowerTotal();
-}
-
+function setMaxTowerCoins() { if (towerActive) return; el("tower-coins-input").value = state.balance; updateTowerTotal(); }
 function updateTowerTotal() {
     const input = el("tower-coins-input");
     if (!input) return;
     let sum = parseFloat(input.value) || 0;
-    state.inventory.forEach(i => {
-        if (!i.locked && towerSelectedInv.has(i.inv_id)) sum += Number(i.price) || 0;
-    });
+    state.inventory.forEach(i => { if (!i.locked && towerSelectedInv.has(i.inv_id)) sum += Number(i.price) || 0; });
     towerTotalBet = sum;
     el("tower-total-bet").textContent = sum.toFixed(2);
-    updateTowerStats();
+    if (!towerActive) {
+        el("tower-mult").textContent = "1.00x";
+        el("tower-potential").textContent = "0";
+        el("tower-floor").textContent = "0/" + TOWER_FLOORS;
+    }
 }
-
 async function startTower() {
     if (towerActive) return;
     const coins = parseFloat(el("tower-coins-input").value) || 0;
     let data;
-    try {
-        data = await postJSON("/api/tower/start", {
-            user_id: userId,
-            inv_ids: [...towerSelectedInv],
-            coins_bet: coins
-        });
-    } catch (e) {
-        return showToast(e.message);
-    }
-    towerActive = true;
-    towerPassed = [];
-    towerBoomFloor = null;
-    towerBoomCell = null;
-    towerSelectedInv.clear();
-    el("tower-coins-input").value = "";
+    try { data = await postJSON("/api/tower/start", { user_id: userId, inv_ids: [...towerSelectedInv], coins_bet: coins }); }
+    catch (e) { return showToast(e.message); }
+    towerActive = true; towerPassed = []; towerBoomFloor = null; towerBoomCell = null;
+    towerSelectedInv.clear(); el("tower-coins-input").value = "";
     await loadState();
     towerTotalBet = Number(data.total_bet) || 0;
-    el("tower-status-text").textContent = "Игра началась. Открывайте клетки этаж за этажом!";
-    el("tower-start-btn").style.display = "none";
-    el("tower-cashout-btn").style.display = "block";
-    renderTowerBoard();
-    updateTowerStats();
+    el("tower-status-text").textContent = "Игра началась. Открывайте этажи!";
+    el("tower-start-btn").style.display = "none"; el("tower-cashout-btn").style.display = "block";
+    renderTower();
 }
-
 async function openTowerCell(cell) {
     if (!towerActive) return showToast("Сначала начните игру");
+    const floor = towerPassed.length;
+    if (floor >= TOWER_FLOORS) return showToast("Все этажи пройдены — забирайте выигрыш");
     let data;
-    try {
-        data = await postJSON("/api/tower/open", { user_id: userId, cell: cell });
-    } catch (e) {
-        return showToast(e.message);
-    }
+    try { data = await postJSON("/api/tower/open", { user_id: userId, cell: cell }); }
+    catch (e) { return showToast(e.message); }
     if (data.boom) {
         towerActive = false;
         towerBoomFloor = data.floor;
         towerBoomCell = data.cell;
         el("tower-status-text").innerHTML = '<span style="color:#ff8a65;">💥 Мина на этаже ' + (data.floor + 1) + '! Ставка сгорела.</span>';
-        el("tower-start-btn").style.display = "block";
-        el("tower-cashout-btn").style.display = "none";
-        renderTowerBoard();
-        updateTowerStats();
+        el("tower-start-btn").style.display = "block"; el("tower-cashout-btn").style.display = "none";
+        renderTower();
+        towerPassed = []; towerBoomFloor = null; towerBoomCell = null;
         await loadState();
         return;
     }
-    towerPassed.push(data.cell);
-    renderTowerBoard();
-    const potential = Number(data.potential_win) || 0;
-    el("tower-potential").textContent = potential.toFixed(2);
-    el("tower-mult").textContent = Number(data.multiplier || 1).toFixed(2) + "x";
-    el("tower-floor").textContent = towerPassed.length + "/" + TOWER_FLOORS;
+    towerPassed.push(cell);
+    renderTower();
+    el("tower-status-text").textContent = "Этаж " + towerPassed.length + " пройден ×" + data.multiplier + " — дальше или забираем?";
     if (data.finished) {
         el("tower-status-text").innerHTML = '<span style="color:#00e676;">Все 5 этажей пройдены! Забирайте выигрыш.</span>';
-    } else {
-        el("tower-status-text").textContent = "Этаж " + towerPassed.length + " пройден ×" + data.multiplier + " — открывайте дальше или забирайте";
     }
 }
-
 async function cashoutTower() {
     if (!towerActive) return;
     let data;
-    try {
-        data = await postJSON("/api/tower/cashout", { user_id: userId });
-    } catch (e) {
-        return showToast(e.message);
-    }
+    try { data = await postJSON("/api/tower/cashout", { user_id: userId }); }
+    catch (e) { return showToast(e.message); }
     towerActive = false;
-    el("tower-start-btn").style.display = "block";
-    el("tower-cashout-btn").style.display = "none";
+    el("tower-start-btn").style.display = "block"; el("tower-cashout-btn").style.display = "none";
     el("tower-status-text").innerHTML = '<span style="color:#00e676;">Забрали на ×' + data.multiplier + ' — ' + data.total_win + ' 💰</span>';
-    towerPassed = [];
-    towerBoomFloor = null;
-    towerBoomCell = null;
-    renderTowerBoard();
-    updateTowerStats();
-    if (data.returned_items && data.returned_items.length > 0) {
-        showToast("Вещи возвращены в инвентарь, +" + data.coins_added + " 💰 на баланс!");
-    } else if (data.won_item) {
-        showToast("Выигрыш: " + data.won_item.name + " + " + data.coins_added + " 💰");
-    } else {
-        showToast("Выигрыш: +" + data.coins_added + " 💰");
-    }
+    towerPassed = []; renderTower();
+    if (data.returned_items && data.returned_items.length > 0) showToast("Вещи возвращены в инвентарь, +" + data.coins_added + " 💰 на баланс!");
+    else if (data.won_item) showToast("Выигрыш: " + data.won_item.name + " + " + data.coins_added + " 💰");
+    else showToast("Выигрыш: +" + data.coins_added + " 💰");
     await loadState();
 }
 
-/* ---------- АДМИНКА (Этап 4) ---------- */
-function switchAdminPane(pane, btnEl) {
-    document.querySelectorAll(".admin-pane").forEach(p => p.classList.remove("active"));
-    document.querySelectorAll(".admin-tab-btn").forEach(b => b.classList.remove("active"));
-    const target = el("admin-pane-" + pane);
-    if (target) target.classList.add("active");
-    if (btnEl) btnEl.classList.add("active");
-}
-
-function onAdminPromoTypeChange() {
-    const t = el("adm-promo-type").value;
-    const amountEl = el("adm-promo-amount");
-    const itemEl = el("adm-promo-item");
-    if (t === "coins") { amountEl.style.display = ""; itemEl.style.display = "none"; }
-    else { amountEl.style.display = "none"; itemEl.style.display = ""; }
-}
-
-function renderAdminStaticOptions() {
-    // Мутации в селект для выдачи предмета
-    const mutSel = el("adm-give-mut");
-    if (mutSel && !mutSel.dataset.filled) {
-        mutSel.innerHTML = state.mutations.map(m =>
-            '<option value="' + m.key + '">' + m.name + ' (×' + m.mult + ')</option>'
-        ).join("");
-        mutSel.dataset.filled = "1";
-    }
-    // Трейты в чекбоксы
-    const traitsBox = el("adm-give-traits");
-    if (traitsBox && !traitsBox.dataset.filled) {
-        traitsBox.innerHTML = state.traits.map(t => {
-            const cls = (t.percent || 0) >= 0 ? "pos" : "neg";
-            const sign = (t.percent || 0) >= 0 ? "+" : "";
-            return '<div class="trait-pick-item" data-key="' + t.key + '" onclick="toggleAdmTrait(\'' + t.key + '\')">' +
-                '<span>' + t.name + '</span>' +
-                '<span class="pct ' + cls + '">' + sign + t.percent + '%</span>' +
-            '</div>';
-        }).join("");
-        traitsBox.dataset.filled = "1";
-    }
-    // Ивент: трейты в селект
-    const evTraitSel = el("adm-event-trait");
-    if (evTraitSel && !evTraitSel.dataset.filled) {
-        evTraitSel.innerHTML = state.traits.map(t =>
-            '<option value="' + t.key + '">' + t.name + ' (' + (t.percent >= 0 ? "+" : "") + t.percent + '%)</option>'
-        ).join("");
-        evTraitSel.dataset.filled = "1";
-    }
-    // Ивент: мутации в селект (без normal)
-    const evMutSel = el("adm-event-mut");
-    if (evMutSel && !evMutSel.dataset.filled) {
-        evMutSel.innerHTML = state.mutations.filter(m => m.key !== "normal").map(m =>
-            '<option value="' + m.key + '">' + m.name + ' (×' + m.mult + ')</option>'
-        ).join("");
-        evMutSel.dataset.filled = "1";
-    }
-    onAdminPromoTypeChange();
-}
-
-function toggleAdmTrait(key) {
-    if (admGiveTraits.has(key)) admGiveTraits.delete(key);
-    else admGiveTraits.add(key);
-    document.querySelectorAll("#adm-give-traits .trait-pick-item").forEach(it => {
-        if (it.dataset.key === key) it.classList.toggle("active", admGiveTraits.has(key));
-    });
-}
-
-async function adminCreatePromo() {
-    const code = (el("adm-promo-code").value || "").trim();
-    const type = el("adm-promo-type").value;
-    const amount = parseFloat(el("adm-promo-amount").value) || 0;
-    const itemId = parseInt(el("adm-promo-item").value, 10) || null;
-    const stock = parseInt(el("adm-promo-stock").value, 10) || 1;
-    if (!code) return showToast("Введите код");
+/* ---------- ТРЕЙДЫ ---------- */
+async function tradeFindUser() {
+    const input = el("trade-target-input");
+    const q = (input.value || "").trim();
+    if (!q) return showToast("Введите @username или ID");
+    let data;
     try {
-        await postJSON("/api/admin/promo/create", {
-            admin_id: userId, code, type, amount, item_id: itemId, stock
+        const res = await fetch("/api/trade/find_user?q=" + encodeURIComponent(q));
+        if (!res.ok) throw new Error((await res.json()).detail || "Не найден");
+        data = await res.json();
+    } catch (e) { return showToast(e.message); }
+    const found = (data.matches || [])[0];
+    if (!found) return showToast("Игрок не найден");
+    tradeFoundUserId = found.user_id;
+    const box = el("trade-target-found");
+    box.innerHTML = '<div class="trade-user-card">' +
+        '<div style="flex:1;min-width:0;">' +
+            '<div style="font-weight:800;">@' + (found.username || found.user_id) + '</div>' +
+            '<div style="color:var(--muted);font-size:11px;">ID: ' + found.user_id + '</div>' +
+        '</div>' +
+        '<div class="' + (found.online ? "u-online" : "u-offline") + '">' + (found.online ? "● online" : "● offline") + '</div>' +
+    '</div>';
+}
+function toggleTradeItem(id) {
+    if (tradeSelectedInv.has(id)) tradeSelectedInv.delete(id); else tradeSelectedInv.add(id);
+    renderInventories(); updateTradeTotal();
+}
+function updateTradeTotal() {
+    let itemsValue = 0;
+    state.inventory.forEach(i => { if (!i.locked && tradeSelectedInv.has(i.inv_id)) itemsValue += Number(i.price) || 0; });
+    const coinsInput = el("trade-coins-input");
+    const coins = coinsInput ? (parseFloat(coinsInput.value) || 0) : 0;
+    const commission = Math.round((itemsValue + coins) * state.trade_commission * 100) / 100;
+    el("trade-items-count").textContent = String(tradeSelectedInv.size);
+    el("trade-items-value").textContent = itemsValue.toFixed(2);
+    el("trade-commission-val").textContent = commission.toFixed(2);
+    el("trade-total-charge").textContent = (itemsValue + coins + commission).toFixed(2);
+}
+async function tradeSend() {
+    if (!tradeFoundUserId) return showToast("Сначала найдите получателя");
+    const coins = parseFloat(el("trade-coins-input").value) || 0;
+    if (!tradeSelectedInv.size && coins <= 0) return showToast("Нечего отправлять");
+    let data;
+    try {
+        data = await postJSON("/api/trade/send", {
+            from_user_id: userId, target: tradeFoundUserId,
+            inv_ids: [...tradeSelectedInv], coins: coins
         });
-        showToast("Промокод создан: " + code);
-        el("adm-promo-code").value = "";
-    } catch (e) { showToast(e.message); }
+    } catch (e) { return showToast(e.message); }
+    showToast("Трейд отправлен! Получателю: " + data.coins_received + " 💰, предметов: " + data.items_moved + ", комиссия: " + data.total_commission + " 💰");
+    tradeSelectedInv.clear(); el("trade-coins-input").value = "";
+    await loadState(); loadTradeHistory();
 }
-
-async function adminDeletePromo() {
-    const code = (el("adm-promo-del-code").value || "").trim();
-    if (!code) return showToast("Введите код");
+async function loadTradeHistory() {
+    let data;
     try {
-        await postJSON("/api/admin/promo/delete", { admin_id: userId, code });
-        showToast("Удалён: " + code);
-        el("adm-promo-del-code").value = "";
-    } catch (e) { showToast(e.message); }
-}
-
-async function adminBalance(action) {
-    const target = (el("adm-bal-target").value || "").trim();
-    const amount = parseFloat(el("adm-bal-amount").value) || 0;
-    if (!target || amount <= 0) return showToast("Укажите user_id и amount>0");
-    try {
-        const data = await postJSON("/api/admin/balance", {
-            admin_id: userId, target_user_id: target, amount, action
-        });
-        showToast((action === "add" ? "Начислено" : "Списано") + ". Новый баланс: " + data.new_balance);
-    } catch (e) { showToast(e.message); }
-}
-
-async function adminGiveItem() {
-    const target = (el("adm-give-target").value || "").trim();
-    const itemId = parseInt(el("adm-give-item").value, 10) || 0;
-    const mutation = el("adm-give-mut").value || "normal";
-    const traits = [...admGiveTraits];
-    if (!target || !itemId) return showToast("Укажите user_id и item_id");
-    try {
-        const data = await postJSON("/api/admin/give_item", {
-            admin_id: userId, target_user_id: target, item_id: itemId, mutation, traits
-        });
-        showToast("Выдано: " + data.item.name + " (inv_id=" + data.inv_id + ")");
-    } catch (e) { showToast(e.message); }
-}
-
-async function adminLoadUsers() {
-    if (!state.is_admin) return;
-    try {
-        const res = await fetch("/api/admin/users?admin_id=" + encodeURIComponent(userId));
-        if (!res.ok) {
-            const d = await res.json().catch(() => ({}));
-            throw new Error(d.detail || "Не удалось загрузить");
-        }
-        const data = await res.json();
-        const box = el("adm-users-box");
-        if (!box) return;
-        if (!data.users || !data.users.length) {
-            box.innerHTML = '<p style="color:var(--muted);">Пользователей нет</p>';
-            return;
-        }
-        box.innerHTML = '<table class="admin-users-table"><thead><tr>' +
-            '<th>user_id</th><th>@username</th><th>имя</th><th>баланс</th><th>предметов</th><th>стоимость</th>' +
-            '</tr></thead><tbody>' +
-            data.users.map(u =>
-                '<tr><td class="mono">' + u.user_id + '</td>' +
-                '<td>' + (u.username ? "@" + u.username : "—") + '</td>' +
-                '<td>' + (u.first_name || "—") + '</td>' +
-                '<td>' + u.balance + '</td>' +
-                '<td>' + u.inv_count + '</td>' +
-                '<td>' + u.inv_value + '</td></tr>'
-            ).join("") +
-            '</tbody></table>';
-    } catch (e) {
-        showToast(e.message);
-    }
-}
-
-function renderActiveEvents() {
-    const box = el("adm-events-list");
+        const res = await fetch("/api/trade/history/" + encodeURIComponent(userId));
+        if (!res.ok) return;
+        data = await res.json();
+    } catch (e) { return; }
+    const box = el("trade-history-box");
     if (!box) return;
-    const now = Math.floor(Date.now() / 1000);
-    const list = (state.active_events || []).filter(ev => Number(ev.until) > now);
-    if (!list.length) {
-        box.innerHTML = '<p style="color:var(--muted);">Нет активных ивентов</p>';
-        return;
-    }
-    box.innerHTML = list.map(ev => {
-        const typeRu = ev.event_type === "trait" ? "Трейт" : "Мутация";
-        const key = ev.event_type === "trait" ? ev.trait_key : ev.mutation_key;
-        const left = Math.max(0, Number(ev.until) - now);
-        return '<div class="admin-event-item">' +
-            '<div>' +
-                '<div><b>' + typeRu + ':</b> ' + key + '</div>' +
-                '<div class="ev-meta">тик ' + ev.tick_seconds + 'с · шанс ' + ev.chance_percent + '% · осталось ' + left + 'с</div>' +
-                '<div class="ev-id">' + ev.event_id + '</div>' +
-            '</div>' +
-            '<button class="btn btn-red" style="width:auto;padding:6px 10px;font-size:12px;" onclick="adminStopEvent(\'' + ev.event_id + '\')">Стоп</button>' +
+    const trades = data.trades || [];
+    if (!trades.length) { box.innerHTML = '<div style="color:var(--muted);font-size:12px;">Пока нет трейдов</div>'; return; }
+    box.innerHTML = trades.map(t => {
+        const isOutgoing = t.from_user_id === userId;
+        const direction = isOutgoing ? "→ @" + (t.to_username || t.to_user_id) : "← @" + (t.from_username || t.from_user_id);
+        const date = new Date(t.ts * 1000).toLocaleString("ru-RU");
+        return '<div class="trade-history-item">' +
+            '<div><b>' + direction + '</b> · ' + (isOutgoing ? "-" : "+") + t.coins_sent + ' 💰</div>' +
+            '<div class="th-meta">' + date + ' · предметов: ' + (t.items ? t.items.length : 0) + ' · комиссия: ' + t.commission + ' 💰</div>' +
         '</div>';
     }).join("");
 }
 
+/* ---------- АДМИНКА ---------- */
+let adminUsersCache = [];
+
+function switchAdminPane(pane, btnEl) {
+    document.querySelectorAll(".admin-pane").forEach(p => p.classList.remove("active"));
+    document.querySelectorAll(".admin-tab-btn").forEach(b => b.classList.remove("active"));
+    const p = el("admin-pane-" + pane);
+    if (p) p.classList.add("active");
+    if (btnEl) btnEl.classList.add("active");
+}
+function onAdminPromoTypeChange() {
+    const t = el("adm-promo-type").value;
+    el("adm-promo-amount").style.display = t === "coins" ? "block" : "none";
+    el("adm-promo-item").style.display = t === "item" ? "block" : "none";
+}
+function renderAdminStaticOptions() {
+    const mutSel = el("adm-give-mut");
+    if (mutSel && !mutSel.options.length) {
+        mutSel.innerHTML = state.mutations.map(m =>
+            '<option value="' + m.key + '">' + m.name + ' ×' + m.mult + '</option>'
+        ).join("");
+    }
+    const traitGrid = el("adm-give-traits");
+    if (traitGrid && !traitGrid.children.length) {
+        traitGrid.innerHTML = state.traits.map(t => {
+            const cls = t.percent >= 0 ? "pos" : "neg";
+            const sign = t.percent >= 0 ? "+" : "";
+            return '<div class="trait-pick-item" data-trait="' + t.key + '" onclick="toggleAdminGiveTrait(\'' + t.key + '\', this)">' +
+                '<span>' + t.name + '</span><span class="pct ' + cls + '">' + sign + t.percent + '%</span></div>';
+        }).join("");
+    }
+    const evTraitSel = el("adm-event-trait");
+    if (evTraitSel && !evTraitSel.options.length) {
+        evTraitSel.innerHTML = state.traits.map(t =>
+            '<option value="' + t.key + '">' + t.name + ' (' + (t.percent >= 0 ? "+" : "") + t.percent + '%)</option>'
+        ).join("");
+    }
+    const evMutSel = el("adm-event-mut");
+    if (evMutSel && !evMutSel.options.length) {
+        evMutSel.innerHTML = state.mutations.filter(m => m.key !== "normal").map(m =>
+            '<option value="' + m.key + '">' + m.name + ' ×' + m.mult + '</option>'
+        ).join("");
+    }
+    onAdminPromoTypeChange();
+}
+function toggleAdminGiveTrait(key, elm) {
+    if (admGiveTraits.has(key)) { admGiveTraits.delete(key); elm.classList.remove("active"); }
+    else { admGiveTraits.add(key); elm.classList.add("active"); }
+}
+async function adminCreatePromo() {
+    const code = (el("adm-promo-code").value || "").trim();
+    const type = el("adm-promo-type").value;
+    const amount = parseFloat(el("adm-promo-amount").value) || 0;
+    const itemId = parseInt(el("adm-promo-item").value) || 0;
+    const stock = parseInt(el("adm-promo-stock").value) || 1;
+    if (!code) return showToast("Введите код");
+    let data;
+    try {
+        data = await postJSON("/api/admin/promo/create", {
+            admin_id: userId, code: code, type: type,
+            amount: amount, item_id: itemId, stock: stock
+        });
+    } catch (e) { return showToast(e.message); }
+    showToast("Промокод " + code + " создан");
+}
+async function adminDeletePromo() {
+    const code = (el("adm-promo-del-code").value || "").trim();
+    if (!code) return showToast("Введите код");
+    try { await postJSON("/api/admin/promo/delete", { admin_id: userId, code: code }); showToast("Удалён"); }
+    catch (e) { return showToast(e.message); }
+}
+async function adminBalance(action) {
+    const target = (el("adm-bal-target").value || "").trim();
+    const amount = parseFloat(el("adm-bal-amount").value) || 0;
+    if (!target || amount <= 0) return showToast("Проверьте target и amount");
+    let data;
+    try { data = await postJSON("/api/admin/balance", { admin_id: userId, target_user_id: target, amount: amount, action: action }); }
+    catch (e) { return showToast(e.message); }
+    showToast((action === "add" ? "Начислено" : "Списано") + " " + amount + " 💰. Новый баланс: " + data.new_balance);
+    await loadState();
+}
+async function adminGiveItem() {
+    const target = (el("adm-give-target").value || "").trim();
+    const itemId = parseInt(el("adm-give-item").value) || 0;
+    const mut = el("adm-give-mut").value;
+    if (!target || !itemId) return showToast("Проверьте target и item_id");
+    let data;
+    try { data = await postJSON("/api/admin/give_item", { admin_id: userId, target_user_id: target, item_id: itemId, mutation: mut, traits: [...admGiveTraits] }); }
+    catch (e) { return showToast(e.message); }
+    showToast("Выдан предмет: " + data.item.name);
+    admGiveTraits = new Set();
+    document.querySelectorAll("#adm-give-traits .trait-pick-item").forEach(x => x.classList.remove("active"));
+    await loadState();
+}
+async function adminLoadUsers() {
+    let data;
+    try {
+        const res = await fetch("/api/admin/users?admin_id=" + encodeURIComponent(userId));
+        if (!res.ok) throw new Error("Нет доступа");
+        data = await res.json();
+    } catch (e) { return; }
+    adminUsersCache = data.users || [];
+    const box = el("adm-users-box");
+    if (!box) return;
+    if (!adminUsersCache.length) { box.innerHTML = '<div style="color:var(--muted);font-size:12px;">Пусто</div>'; return; }
+    box.innerHTML = '<table class="admin-users-table"><thead><tr><th>user</th><th>@</th><th>balance</th><th>inv</th><th>online</th></tr></thead><tbody>' +
+        adminUsersCache.map(u =>
+            '<tr>' +
+                '<td class="mono">' + u.user_id + '</td>' +
+                '<td>' + (u.username ? "@" + u.username : (u.first_name || "—")) + '</td>' +
+                '<td>' + u.balance + ' 💰</td>' +
+                '<td>' + u.inv_count + ' (' + u.inv_value + ' 💰)</td>' +
+                '<td>' + (u.online ? '✅' : '—') + '</td>' +
+            '</tr>'
+        ).join("") + '</tbody></table>';
+}
 async function adminStartEvent(type) {
-    let payload = { admin_id: userId, event_type: type };
+    const payload = { admin_id: userId, event_type: type };
     if (type === "trait") {
         payload.trait_key = el("adm-event-trait").value;
-        payload.tick_seconds = parseInt(el("adm-event-trait-tick").value, 10) || 45;
+        payload.tick_seconds = parseInt(el("adm-event-trait-tick").value) || 45;
         payload.chance_percent = parseFloat(el("adm-event-trait-chance").value) || 5;
-        payload.duration_seconds = parseInt(el("adm-event-trait-dur").value, 10) || 600;
+        payload.duration_seconds = parseInt(el("adm-event-trait-dur").value) || 600;
     } else {
         payload.mutation_key = el("adm-event-mut").value;
-        payload.tick_seconds = parseInt(el("adm-event-mut-tick").value, 10) || 60;
+        payload.tick_seconds = parseInt(el("adm-event-mut-tick").value) || 60;
         payload.chance_percent = parseFloat(el("adm-event-mut-chance").value) || 2.5;
-        payload.duration_seconds = parseInt(el("adm-event-mut-dur").value, 10) || 600;
+        payload.duration_seconds = parseInt(el("adm-event-mut-dur").value) || 600;
     }
-    try {
-        const data = await postJSON("/api/admin/event/start", payload);
-        showToast("Ивент запущен: " + data.event_id);
-        await loadState();
-    } catch (e) { showToast(e.message); }
+    try { await postJSON("/api/admin/event/start", payload); showToast("Ивент запущен"); }
+    catch (e) { return showToast(e.message); }
+    await loadState();
 }
-
 async function adminStopEvent(eventId) {
-    try {
-        await postJSON("/api/admin/event/stop", { admin_id: userId, event_id: eventId });
-        showToast("Ивент остановлен");
-        await loadState();
-    } catch (e) { showToast(e.message); }
+    try { await postJSON("/api/admin/event/stop", { admin_id: userId, event_id: eventId }); showToast("Остановлен"); }
+    catch (e) { return showToast(e.message); }
+    await loadState();
 }
-
 async function adminStartLuck() {
-    const mult = parseInt(el("adm-luck-mult").value, 10);
-    const dur = parseInt(el("adm-luck-dur").value, 10) || 600;
-    try {
-        await postJSON("/api/admin/luck/start", { admin_id: userId, multiplier: mult, duration_seconds: dur });
-        showToast("Удача ×" + mult + " запущена на " + dur + "с");
-        await loadState();
-    } catch (e) { showToast(e.message); }
+    const mult = parseInt(el("adm-luck-mult").value) || 2;
+    const dur = parseInt(el("adm-luck-dur").value) || 600;
+    try { await postJSON("/api/admin/luck/start", { admin_id: userId, multiplier: mult, duration_seconds: dur }); showToast("Удача ×" + mult + " запущена"); }
+    catch (e) { return showToast(e.message); }
+    await loadState();
 }
-
 async function adminStopLuck() {
-    try {
-        await postJSON("/api/admin/luck/stop", { admin_id: userId });
-        showToast("Удача остановлена");
-        await loadState();
-    } catch (e) { showToast(e.message); }
+    try { await postJSON("/api/admin/luck/stop", { admin_id: userId }); showToast("Удача остановлена"); }
+    catch (e) { return showToast(e.message); }
+    await loadState();
 }
-
 async function adminGlobalMessage() {
     const text = (el("adm-global-text").value || "").trim();
-    const dur = parseInt(el("adm-global-dur").value, 10) || 60;
+    const dur = parseInt(el("adm-global-dur").value) || 60;
     if (!text) return showToast("Введите текст");
+    try { await postJSON("/api/admin/global_message", { admin_id: userId, text: text, duration_seconds: dur }); showToast("Отправлено"); }
+    catch (e) { return showToast(e.message); }
+    await loadState();
+}
+function renderActiveEvents() {
+    const box = el("adm-events-list");
+    if (!box) return;
+    const list = state.active_events || [];
+    if (!list.length) { box.innerHTML = '<div style="color:var(--muted);font-size:12px;">Нет активных ивентов</div>'; return; }
+    box.innerHTML = list.map(ev => {
+        const typeStr = ev.event_type === "trait" ? ("трейт " + ev.trait_key) : ("мутация " + ev.mutation_key);
+        return '<div class="admin-event-item">' +
+            '<div><div class="ev-id">' + ev.event_id + '</div>' +
+            '<div class="ev-meta">' + typeStr + ' · каждые ' + ev.tick_seconds + 'с, шанс ' + ev.chance_percent + '%, до ' + new Date(ev.until * 1000).toLocaleTimeString("ru-RU") + '</div></div>' +
+            '<button class="btn btn-red" style="width:auto;padding:6px 10px;" onclick="adminStopEvent(\'' + ev.event_id + '\')">Стоп</button>' +
+        '</div>';
+    }).join("");
+}
+
+/* ---------- БАТЛЫ ---------- */
+function battleStatusLabel(s) {
+    if (s === "waiting") return { cls: "battle-status-waiting", text: "Ждёт соперника" };
+    if (s === "running") return { cls: "battle-status-running", text: "Открываем кейсы" };
+    if (s === "finished") return { cls: "battle-status-finished", text: "Завершён" };
+    return { cls: "battle-status-cancelled", text: "Отменён" };
+}
+function fillBattleCaseSelect() {
+    const sel = el("battle-case-select");
+    if (!sel) return;
+    const prev = sel.value;
+    sel.innerHTML = state.cases.map(c =>
+        '<option value="' + c.id + '">' + c.name + ' — ' + c.price + ' 💰</option>'
+    ).join("");
+    if (prev && state.cases.some(c => String(c.id) === String(prev))) sel.value = prev;
+}
+async function loadBattles() {
+    let data;
     try {
-        await postJSON("/api/admin/global_message", { admin_id: userId, text, duration_seconds: dur });
-        showToast("Глобалка отправлена");
-        el("adm-global-text").value = "";
-    } catch (e) { showToast(e.message); }
+        const res = await fetch("/api/battle/list");
+        data = await res.json();
+    } catch (e) { return; }
+    const list = el("battle-list");
+    if (!list) return;
+    fillBattleCaseSelect();
+    const battles = (data && data.battles) || [];
+    if (!battles.length) { list.innerHTML = '<div class="battle-empty">Пока нет батлов — создай первый!</div>'; return; }
+    list.innerHTML = battles.map(b => {
+        const st = battleStatusLabel(b.status);
+        const img = b.case_image ? '<img src="' + b.case_image + '" alt="">' : '<div class="fallback-icon">📦</div>';
+        const canJoin = (b.status === "waiting" && b.creator_id !== userId);
+        const canCancel = (b.status === "waiting" && b.creator_id === userId);
+        const canOpen = (b.status === "running" && (b.creator_id === userId || b.joiner_id === userId));
+        const joinBtn = canJoin ? '<button class="btn" onclick="joinBattle(\'' + b.battle_id + '\')">Войти</button>' : '';
+        const cancelBtn = canCancel ? '<button class="btn btn-red" onclick="cancelBattle(\'' + b.battle_id + '\')">Отменить</button>' : '';
+        const openBtn = canOpen ? '<button class="btn btn-blue" onclick="openBattle(\'' + b.battle_id + '\')">Открыть</button>' : '';
+        const viewBtn = '<button class="btn" style="background:#2a1a12;box-shadow:none;" onclick="showBattleModal(\'' + b.battle_id + '\')">Подробнее</button>';
+        return '<div class="battle-card">' +
+            '<div class="battle-case-img">' + img + '</div>' +
+            '<div class="battle-info">' +
+                '<div class="battle-case-name">' + b.case_name + '</div>' +
+                '<div class="battle-bet">Ставка: ' + b.bet + ' 💰</div>' +
+                '<div class="battle-meta">@' + (b.creator_username || b.creator_id) +
+                    (b.joiner_id ? ' vs @' + (b.joiner_username || b.joiner_id) : ' · ждёт соперника') + '</div>' +
+            '</div>' +
+            '<div class="battle-actions">' +
+                '<div class="battle-status-badge ' + st.cls + '">' + st.text + '</div>' +
+                joinBtn + cancelBtn + openBtn + viewBtn +
+            '</div>' +
+        '</div>';
+    }).join("");
+}
+function startBattlePolling() {
+    stopBattlePolling();
+    battlePollTimer = setInterval(() => {
+        if (el("tab-battles") && el("tab-battles").classList.contains("active")) {
+            loadBattles();
+            if (battleCurrentModalId) refreshBattleModal();
+        }
+    }, 4000);
+}
+function stopBattlePolling() {
+    if (battlePollTimer) { clearInterval(battlePollTimer); battlePollTimer = null; }
+}
+async function createBattle() {
+    const caseId = parseInt((el("battle-case-select") || {}).value || "0", 10);
+    const bet = parseFloat((el("battle-bet-input") || {}).value || "0");
+    if (!caseId) return showToast("Выбери кейс");
+    if (!bet || bet <= 0) return showToast("Укажи ставку > 0");
+    if (bet > state.balance) return showToast("Недостаточно монет");
+    let data;
+    try { data = await postJSON("/api/battle/create", { user_id: userId, case_id: caseId, bet: bet }); }
+    catch (e) { return showToast(e.message); }
+    showToast("Батл создан! Ждём соперника...");
+    await loadState();
+    await loadBattles();
+    if (data.battle_id) showBattleModal(data.battle_id);
+}
+async function joinBattle(battleId) {
+    try { await postJSON("/api/battle/join", { user_id: userId, battle_id: battleId }); }
+    catch (e) { return showToast(e.message); }
+    showToast("Ты в батле! Открывай кейс.");
+    await loadState();
+    await loadBattles();
+    showBattleModal(battleId);
+}
+async function cancelBattle(battleId) {
+    if (!confirm("Отменить батл? Ставка вернётся.")) return;
+    try { await postJSON("/api/battle/cancel", { user_id: userId, battle_id: battleId }); showToast("Батл отменён, ставка возвращена."); }
+    catch (e) { return showToast(e.message); }
+    await loadState();
+    await loadBattles();
+    closeBattleModal();
+}
+async function openBattle(battleId) {
+    let data;
+    try { data = await postJSON("/api/battle/open", { user_id: userId, battle_id: battleId }); }
+    catch (e) { return showToast(e.message); }
+    showToast("Кейсы открыты!");
+    await loadState();
+    await loadBattles();
+    showBattleModal(battleId);
+}
+async function refreshBattleModal() {
+    if (!battleCurrentModalId) return;
+    let data;
+    try {
+        const res = await fetch("/api/battle/" + encodeURIComponent(battleCurrentModalId));
+        if (!res.ok) return;
+        data = await res.json();
+    } catch (e) { return; }
+    renderBattleModal(data);
+}
+function showBattleModal(battleId) {
+    battleCurrentModalId = battleId;
+    el("battle-modal").classList.add("open");
+    refreshBattleModal();
+}
+function closeBattleModal() {
+    battleCurrentModalId = null;
+    el("battle-modal").classList.remove("open");
+}
+function renderBattleModal(data) {
+    const box = el("battle-modal-body");
+    const title = el("battle-modal-title");
+    if (!box || !title) return;
+    title.textContent = "Батл #" + data.battle_id;
+
+    const cTotal = Number(data.creator_total || 0);
+    const jTotal = Number(data.joiner_total || 0);
+    const creatorIsWinner = data.status === "finished" && data.winner_id === data.creator_id;
+    const joinerIsWinner = data.status === "finished" && data.winner_id === data.joiner_id;
+
+    const cRolls = (data.creator_rolls || []).map(r =>
+        '<div class="battle-roll-item">' +
+            (r.image ? '<img src="' + r.image + '" alt="">' : '<span style="font-size:16px;">' + (r.fallback || "❔") + '</span>') +
+            '<div class="bri-name">' + (r.name || "?") + '</div>' +
+            '<div class="bri-price">' + (r.price || 0) + ' 💰</div>' +
+        '</div>'
+    ).join("");
+    const jRolls = (data.joiner_rolls || []).map(r =>
+        '<div class="battle-roll-item">' +
+            (r.image ? '<img src="' + r.image + '" alt="">' : '<span style="font-size:16px;">' + (r.fallback || "❔") + '</span>') +
+            '<div class="bri-name">' + (r.name || "?") + '</div>' +
+            '<div class="bri-price">' + (r.price || 0) + ' 💰</div>' +
+        '</div>'
+    ).join("");
+
+    const st = battleStatusLabel(data.status);
+    let resultLine = "";
+    if (data.status === "finished") {
+        const winnerName = data.winner_id === data.creator_id
+            ? (data.creator_username || data.creator_id)
+            : (data.joiner_username || data.joiner_id);
+        const isMeWinner = data.winner_id === userId;
+        resultLine = '<div class="battle-winner-line ' + (isMeWinner ? "win" : "lose") + '">' +
+            (isMeWinner ? "🎉 Ты победил! " : "💥 Победил @" + winnerName + ". ") +
+            (data.winner_id === data.creator_id ? cTotal : jTotal) + ' vs ' +
+            (data.winner_id === data.creator_id ? jTotal : cTotal) + ' 💰' +
+        '</div>';
+    }
+
+    box.innerHTML =
+        '<div class="battle-modal-versus">' +
+            '<div class="battle-player' + (creatorIsWinner ? ' winner' : '') + '">' +
+                '<div class="bp-name">@' + (data.creator_username || data.creator_id) + '</div>' +
+                '<div class="bp-sum">' + cTotal.toFixed(2) + ' 💰</div>' +
+            '</div>' +
+            '<div class="battle-vs">VS</div>' +
+            '<div class="battle-player' + (joinerIsWinner ? ' winner' : '') + '">' +
+                '<div class="bp-name">' + (data.joiner_id ? '@' + (data.joiner_username || data.joiner_id) : "ждёт соперника") + '</div>' +
+                '<div class="bp-sum">' + jTotal.toFixed(2) + ' 💰</div>' +
+            '</div>' +
+        '</div>' +
+        '<div style="text-align:center;margin-bottom:10px;">' +
+            '<span class="battle-status-badge ' + st.cls + '">' + st.text + '</span>' +
+        '</div>' +
+        resultLine +
+        '<div class="battle-rolls">' +
+            '<div class="battle-rolls-col">' +
+                '<div class="br-title">Создатель: ' + (data.creator_rolls.length ? "открыл" : "не открыл") + '</div>' +
+                (cRolls || '<div style="color:var(--muted);font-size:11px;">—</div>') +
+            '</div>' +
+            '<div class="battle-rolls-col">' +
+                '<div class="br-title">Соперник: ' + (data.joiner_rolls.length ? "открыл" : "не открыл") + '</div>' +
+                (jRolls || '<div style="color:var(--muted);font-size:11px;">—</div>') +
+            '</div>' +
+        '</div>';
 }
 
 /* ---------- Запуск ---------- */
+renderPlinkoStatic();
 renderInitialDiceBoard();
 renderMinesBoard(null, null);
 updateMinesStats();
-renderPlinkoMults();
-drawPlinkoBoard(null);
-renderTowerBoard();
-updateTowerStats();
-syncProfile().then(loadState);
+renderTower();
+updateTradeTotal();
+syncProfile().then(loadState).then(() => {
+    renderPlinkoStatic();
+});
 </script>
 </body>
 </html>
