@@ -138,7 +138,7 @@
       "photo_url": ""
     },
     "7379573136": {
-      "balance": 0.0,
+      "balance": 500.0,
       "inventory": [],
       "last_free_case": 1795415756,
       "last_daily_bonus": 1795415866,
@@ -228,9 +228,9 @@
       "user_id": "7379573136",
       "username": "FantaxyXD",
       "first_name": "Wowowo @BrainDropDropBot",
-      "status": "taken",
+      "status": "done",
       "moderator": "1789157813",
-      "amount": null,
+      "amount": 500.0,
       "created_at": 1795415918
     }
   },
