@@ -179,7 +179,9 @@
           "inv_id": 1245,
           "item_id": 60,
           "mutation": "normal",
-          "traits": []
+          "traits": [
+            "crab"
+          ]
         }
       ],
       "last_free_case": 1795415756,
