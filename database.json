@@ -170,7 +170,7 @@
       "photo_url": ""
     },
     "7379573136": {
-      "balance": 13400.19,
+      "balance": 13000.19,
       "inventory": [
         {
           "inv_id": 1244,
@@ -189,38 +189,6 @@
           "traits": [
             "crab"
           ]
-        },
-        {
-          "inv_id": 1246,
-          "item_id": 36,
-          "mutation": "normal",
-          "traits": [
-            "taco"
-          ]
-        },
-        {
-          "inv_id": 1247,
-          "item_id": 36,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1248,
-          "item_id": 25,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1249,
-          "item_id": 25,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1250,
-          "item_id": 53,
-          "mutation": "normal",
-          "traits": []
         }
       ],
       "last_free_case": 1795415756,
