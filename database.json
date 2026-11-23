@@ -54,7 +54,7 @@
         {
           "inv_id": 266,
           "item_id": 36,
-          "mutation": "normal",
+          "mutation": "hacker",
           "traits": [
             "spider",
             "crab"
@@ -175,7 +175,8 @@
           "mutation": "hacker",
           "traits": [
             "spider",
-            "Sombrero"
+            "Sombrero",
+            "crab"
           ]
         },
         {
