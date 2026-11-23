@@ -139,8 +139,14 @@
     },
     "7379573136": {
       "balance": 0.0,
-      "inventory": [],
-      "last_free_case": 0,
+      "inventory": [
+        {
+          "inv_id": 1226,
+          "item_id": 1,
+          "mutation": "normal"
+        }
+      ],
+      "last_free_case": 1795415756,
       "last_daily_bonus": 0,
       "nickname": "",
       "username": "FantaxyXD",
@@ -167,7 +173,7 @@
       "photo_url": "https://t.me/i/userpic/320/n070dQV6aSk-Uji2mpBqleZeFEfoR88J_ozlC0v_fxHLdd5xEFPv1zgsgExUz2o-.svg"
     }
   },
-  "next_inv_id": 1226,
+  "next_inv_id": 1227,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -227,24 +233,24 @@
   },
   "next_req_id": 5,
   "daily_drops": {
-    "date": "2026-11-22",
+    "date": "2026-11-23",
     "items": [
       {
-        "ts": 1795377696,
-        "user_id": "1789157813",
-        "username": "ThimYT",
-        "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
-        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
-        "source": "case",
-        "item_id": 2,
-        "name": "Sir Mangus",
+        "ts": 1795415756,
+        "user_id": "7379573136",
+        "username": "FantaxyXD",
+        "first_name": "Wowowo @Brainrot_Battle@FarmBrainrots_bot",
+        "photo_url": "https://t.me/i/userpic/320/1dZNKuPHZmKwNi7BdJJt3WHOxpQsDsz9W4cbud-2OgY_j3Q_r1l6ccTaPo8E7M6z.svg",
+        "source": "free_case",
+        "item_id": 1,
+        "name": "Gub",
         "rarity": "common",
-        "image": "/images/item2.png",
-        "fallback": "🔫",
+        "image": "/images/item1.png",
+        "fallback": "🗡️",
         "mutation": "normal",
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
-        "price": 7.0
+        "price": 5.0
       }
     ]
   },
