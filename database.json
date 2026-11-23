@@ -658,7 +658,17 @@
     "text": "golda",
     "until": 1795446107
   },
-  "events": {},
+  "events": {
+    "17954463847272593": {
+      "event_type": "trait",
+      "trait_key": "Sombrero",
+      "mutation_key": null,
+      "tick_seconds": 10,
+      "chance_percent": 100.0,
+      "until": 1795446984,
+      "started_at": 1795446384
+    }
+  },
   "luck_event": {
     "multiplier": 0,
     "until": 0
