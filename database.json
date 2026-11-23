@@ -700,6 +700,15 @@
       "chance_percent": 100.0,
       "until": 1795447031,
       "started_at": 1795446431
+    },
+    "17954465095045463": {
+      "event_type": "mutation",
+      "trait_key": null,
+      "mutation_key": "hacker",
+      "tick_seconds": 10,
+      "chance_percent": 100.0,
+      "until": 1795447109,
+      "started_at": 1795446509
     }
   },
   "luck_event": {
