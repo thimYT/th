@@ -105,9 +105,15 @@
             "crab",
             "taco"
           ]
+        },
+        {
+          "inv_id": 1252,
+          "item_id": 1,
+          "mutation": "normal",
+          "traits": []
         }
       ],
-      "last_free_case": 1795369020,
+      "last_free_case": 1795447111,
       "last_daily_bonus": 0,
       "nickname": "",
       "username": "Fortolol",
@@ -225,7 +231,7 @@
       "photo_url": "https://t.me/i/userpic/320/n070dQV6aSk-Uji2mpBqleZeFEfoR88J_ozlC0v_fxHLdd5xEFPv1zgsgExUz2o-.svg"
     }
   },
-  "next_inv_id": 1252,
+  "next_inv_id": 1253,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -806,6 +812,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 94.0
+      },
+      {
+        "ts": 1795447111,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# на @FarmBrainrots_bot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "free_case",
+        "item_id": 1,
+        "name": "Gub",
+        "rarity": "common",
+        "image": "/images/item1.png",
+        "fallback": "🗡️",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 5.0
       }
     ]
   },
