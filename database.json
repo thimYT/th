@@ -592,7 +592,17 @@
     "text": "",
     "until": 0
   },
-  "events": {},
+  "events": {
+    "17954460149762550": {
+      "event_type": "trait",
+      "trait_key": "taco",
+      "mutation_key": null,
+      "tick_seconds": 45,
+      "chance_percent": 5.0,
+      "until": 1795446614,
+      "started_at": 1795446014
+    }
+  },
   "luck_event": {
     "multiplier": 0,
     "until": 0
