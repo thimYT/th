@@ -51,8 +51,8 @@
           "traits": []
         },
         {
-          "inv_id": 1253,
-          "item_id": 84,
+          "inv_id": 1254,
+          "item_id": 85,
           "mutation": "bloodroot",
           "traits": []
         }
@@ -175,7 +175,7 @@
       "photo_url": "https://t.me/i/userpic/320/n070dQV6aSk-Uji2mpBqleZeFEfoR88J_ozlC0v_fxHLdd5xEFPv1zgsgExUz2o-.svg"
     }
   },
-  "next_inv_id": 1254,
+  "next_inv_id": 1255,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -790,6 +790,23 @@
         "mutation_icon": "/images/mutation3.png",
         "mutation_mult": 2.0,
         "price": 995.0
+      },
+      {
+        "ts": 1795447260,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# на @FarmBrainrots_bot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "upgrade",
+        "item_id": 85,
+        "name": "Flying Dutchman",
+        "rarity": "legendary",
+        "image": "/images/item85.png",
+        "fallback": "🐉",
+        "mutation": "bloodroot",
+        "mutation_icon": "/images/mutation3.png",
+        "mutation_mult": 2.0,
+        "price": 1000.0
       }
     ]
   },
