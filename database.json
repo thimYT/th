@@ -138,16 +138,21 @@
       "photo_url": ""
     },
     "7379573136": {
-      "balance": 0.0,
+      "balance": 10.0,
       "inventory": [
         {
           "inv_id": 1226,
           "item_id": 1,
           "mutation": "normal"
+        },
+        {
+          "inv_id": 1227,
+          "item_id": 20,
+          "mutation": "normal"
         }
       ],
       "last_free_case": 1795415756,
-      "last_daily_bonus": 0,
+      "last_daily_bonus": 1795415866,
       "nickname": "",
       "username": "FantaxyXD",
       "first_name": "Wowowo @BrainDropDropBot",
@@ -173,7 +178,7 @@
       "photo_url": "https://t.me/i/userpic/320/n070dQV6aSk-Uji2mpBqleZeFEfoR88J_ozlC0v_fxHLdd5xEFPv1zgsgExUz2o-.svg"
     }
   },
-  "next_inv_id": 1227,
+  "next_inv_id": 1228,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -251,6 +256,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 5.0
+      },
+      {
+        "ts": 1795415866,
+        "user_id": "7379573136",
+        "username": "FantaxyXD",
+        "first_name": "Wowowo @BrainDropDropBot",
+        "photo_url": "https://t.me/i/userpic/320/1dZNKuPHZmKwNi7BdJJt3WHOxpQsDsz9W4cbud-2OgY_j3Q_r1l6ccTaPo8E7M6z.svg",
+        "source": "daily_bonus",
+        "item_id": 20,
+        "name": "Esok Sekolah",
+        "rarity": "rare",
+        "image": "/images/item20.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 36.0
       }
     ]
   },
