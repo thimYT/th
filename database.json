@@ -45,12 +45,6 @@
       "balance": 3008.87,
       "inventory": [
         {
-          "inv_id": 1252,
-          "item_id": 1,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
           "inv_id": 1254,
           "item_id": 85,
           "mutation": "bloodroot",
