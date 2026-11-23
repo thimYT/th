@@ -42,20 +42,10 @@
       "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg"
     },
     "8450028899": {
-      "balance": 2288.92,
+      "balance": 3008.87,
       "inventory": [
         {
           "inv_id": 265,
-          "item_id": 36,
-          "mutation": "hacker",
-          "traits": [
-            "spider",
-            "crab",
-            "taco"
-          ]
-        },
-        {
-          "inv_id": 266,
           "item_id": 36,
           "mutation": "hacker",
           "traits": [
