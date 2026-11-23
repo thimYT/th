@@ -194,7 +194,9 @@
           "inv_id": 1246,
           "item_id": 36,
           "mutation": "normal",
-          "traits": []
+          "traits": [
+            "taco"
+          ]
         },
         {
           "inv_id": 1247,
