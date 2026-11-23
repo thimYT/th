@@ -42,12 +42,18 @@
       "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg"
     },
     "8450028899": {
-      "balance": 3008.87,
+      "balance": 2908.87,
       "inventory": [
         {
           "inv_id": 1254,
           "item_id": 85,
           "mutation": "bloodroot",
+          "traits": []
+        },
+        {
+          "inv_id": 1255,
+          "item_id": 36,
+          "mutation": "normal",
           "traits": []
         }
       ],
@@ -169,7 +175,7 @@
       "photo_url": "https://t.me/i/userpic/320/n070dQV6aSk-Uji2mpBqleZeFEfoR88J_ozlC0v_fxHLdd5xEFPv1zgsgExUz2o-.svg"
     }
   },
-  "next_inv_id": 1255,
+  "next_inv_id": 1256,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -801,6 +807,23 @@
         "mutation_icon": "/images/mutation3.png",
         "mutation_mult": 2.0,
         "price": 1000.0
+      },
+      {
+        "ts": 1795448040,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# на @FarmBrainrots_bot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "case",
+        "item_id": 36,
+        "name": "Garama",
+        "rarity": "legendary",
+        "image": "/images/item36.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 55.0
       }
     ]
   },
