@@ -888,20 +888,24 @@ function loadState() {
 function renderProfile() {
     const p = state.profile;
     if (!p) return;
+    const set = (id, val) => { const n = el(id); if (n) n.textContent = val; };
     const avatar = el("profile-avatar");
     const initial = (p.first_name || p.username || "?").trim().charAt(0).toUpperCase() || "?";
-    if (p.photo_url) {
-        avatar.innerHTML = '<img src="' + p.photo_url + '" alt="" onerror="this.style.display=\'none\'; this.parentNode.textContent=\'' + initial.replace(/'/g, "") + '\';">';
-    } else {
-        avatar.textContent = initial;
+    if (avatar) {
+        if (p.photo_url) {
+            avatar.innerHTML = '<img src="' + p.photo_url + '" alt="" onerror="this.style.display=\'none\'; this.parentNode.textContent=\'' + initial.replace(/'/g, "") + '\';">';
+        } else {
+            avatar.textContent = initial;
+        }
     }
-    el("profile-name").textContent = p.first_name || p.username || "Игрок";
-    el("profile-username").textContent = p.username ? "@" + p.username : "@—";
-    el("profile-id").textContent = "ID: " + p.user_id;
-    el("profile-balance").textContent = Number(p.balance || 0).toFixed(2);
-    el("profile-inv-count").textContent = p.inv_count || 0;
-    el("profile-inv-value").textContent = Number(p.inv_value || 0).toFixed(2);
+    set("profile-name", p.first_name || p.username || "Игрок");
+    set("profile-username", p.username ? "@" + p.username : "@—");
+    set("profile-id", "ID: " + p.user_id);
+    set("profile-balance", Number(p.balance || 0).toFixed(2));
+    set("profile-inv-count", p.inv_count || 0);
+    set("profile-inv-value", Number(p.inv_value || 0).toFixed(2));
 }
+
 
 /* ---------- ДРОП ДНЯ ---------- */
 function renderDailyDrops() {
