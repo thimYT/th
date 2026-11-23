@@ -28,7 +28,7 @@ if not MODERATOR_IDS and ADMIN_CHAT_ID:
     MODERATOR_IDS = [ADMIN_CHAT_ID]
 DB_FILE_PATH = "database.json"
 
-# ---------- Часовой пояс Минска (UTC+3, без перехода на летнее время с 2011) ----------
+# ---------- Часовой пояс Минска (UTC+3) ----------
 MINSK_TZ = timezone(timedelta(hours=3))
 
 def minsk_today_str() -> str:
@@ -179,6 +179,38 @@ def item_with_mutation(item_id: int, mutation: str) -> dict:
     return out
 
 
+# ---------- TRAITS (Этап 4) ----------
+TRAITS_DB = {
+     "taco":   {"key": "taco",   "name": "Taco",   "icon": "/images/trait1.png", "percent": -5},
+      "crab":   {"key": "crab",   "name": "Crab",   "icon": "/images/trait2.png", "percent": -5},
+       "Sombrero":   {"key": "Sombrero",   "name": "Sombrero",   "icon": "/images/trait3.png", "percent": +5},
+        "spider":   {"key": "spider",   "name": "Spider",   "icon": "/images/trait4.png", "percent": +3.5}
+
+}
+TRAIT_KEYS = list(TRAITS_DB.keys())
+
+
+def trait_percent_sum(trait_keys: list) -> float:
+    total = 0.0
+    for k in trait_keys or []:
+        if k in TRAITS_DB:
+            total += float(TRAITS_DB[k]["percent"])
+    return total
+
+
+def item_with_traits(item_id: int, mutation: str, trait_keys: list) -> dict:
+    info = item_with_mutation(item_id, mutation)
+    valid = [k for k in (trait_keys or []) if k in TRAITS_DB]
+    pct = trait_percent_sum(valid)
+    info["traits"] = [
+        {"key": k, "name": TRAITS_DB[k]["name"], "icon": TRAITS_DB[k]["icon"], "percent": TRAITS_DB[k]["percent"]}
+        for k in valid
+    ]
+    info["traits_percent"] = pct
+    info["price"] = round(info["price"] * (1 + pct / 100.0), 2)
+    return info
+
+
 CASES_DB = {
     1: {"id": 1, "name": "Бомжак", "category": "regular", "price": 10, "image": "/images/case1.png", "fallback": "📦",
         "drops": [{"item_id": 1, "weight": 30}, {"item_id": 2, "weight": 25}, {"item_id": 3, "weight": 15},
@@ -217,6 +249,7 @@ DAILY_BONUS_REQUIRED_TAG = "braindropdropbot"
 
 ACTIVE_CRASH_GAMES = {}
 ACTIVE_MINES_GAMES = {}
+ACTIVE_TOWER_GAMES = {}
 WAITING_TOPUP_AMOUNT = {}
 
 
@@ -233,6 +266,9 @@ def get_default_db():
         },
         "daily_drops": {"date": "", "items": []},
         "global_message": {"text": "", "until": 0},
+        # --- Этап 4 ---
+        "events": {},            # event_id -> {type, trait/mutation, tick_seconds, chance, until, started_at}
+        "luck_event": {"multiplier": 0, "until": 0},
     }
 
 
@@ -279,6 +315,12 @@ def normalize_db(db):
         db["global_message"] = {"text": "", "until": 0}
     db["global_message"].setdefault("text", "")
     db["global_message"].setdefault("until", 0)
+    if "events" not in db or not isinstance(db["events"], dict):
+        db["events"] = {}
+    if "luck_event" not in db or not isinstance(db["luck_event"], dict):
+        db["luck_event"] = {"multiplier": 0, "until": 0}
+    db["luck_event"].setdefault("multiplier", 0)
+    db["luck_event"].setdefault("until", 0)
     for uid, u in db.get("users", {}).items():
         u.setdefault("balance", 0)
         u.setdefault("inventory", [])
@@ -289,6 +331,7 @@ def normalize_db(db):
         u.setdefault("photo_url", "")
         for entry in u.get("inventory", []):
             entry.setdefault("mutation", "normal")
+            entry.setdefault("traits", [])
     return db
 
 
@@ -342,7 +385,6 @@ def ensure_user(db, user_id: str):
 
 # ---------- Дроп дня ----------
 def record_daily_drop(db, user_id: str, items: List[dict], source: str):
-    """Записывает дроп(ы) в daily_drops. items — список уже собранных (с мутацией) словарей."""
     try:
         today = minsk_today_str()
     except Exception:
@@ -373,7 +415,6 @@ def record_daily_drop(db, user_id: str, items: List[dict], source: str):
             "price": it.get("price", 0),
         }
         dd["items"].append(entry)
-    # не даём расти бесконечно
     if len(dd["items"]) > 300:
         dd["items"] = dd["items"][-300:]
     return dd
@@ -689,6 +730,73 @@ class AdminGlobalMessageReq(BaseModel):
     text: str
     duration_seconds: int = 60
 
+class PlinkoPlayReq(BaseModel):
+    user_id: str
+    inv_ids: List[int]
+    coins_bet: float
+
+class TowerStartReq(BaseModel):
+    user_id: str
+    inv_ids: List[int]
+    coins_bet: float
+
+class TowerOpenReq(BaseModel):
+    user_id: str
+    cell: int
+
+class TowerCashoutReq(BaseModel):
+    user_id: str
+
+# === ЭТАП 4: АДМИН ===
+class AdminUserIdReq(BaseModel):
+    admin_id: str
+
+class AdminPromoCreateReq(BaseModel):
+    admin_id: str
+    code: str
+    type: str  # coins | item
+    amount: Optional[float] = 0
+    item_id: Optional[int] = None
+    stock: int = 1
+
+class AdminPromoDeleteReq(BaseModel):
+    admin_id: str
+    code: str
+
+class AdminBalanceReq(BaseModel):
+    admin_id: str
+    target_user_id: str
+    amount: float
+    action: str  # add | sub
+
+class AdminGiveItemReq(BaseModel):
+    admin_id: str
+    target_user_id: str
+    item_id: int
+    mutation: Optional[str] = "normal"
+    traits: Optional[List[str]] = []
+
+class AdminEventStartReq(BaseModel):
+    admin_id: str
+    event_type: str        # "trait" | "mutation"
+    trait_key: Optional[str] = None
+    mutation_key: Optional[str] = None
+    tick_seconds: int = 45
+    chance_percent: float = 5.0
+    duration_seconds: int = 600
+
+class AdminEventStopReq(BaseModel):
+    admin_id: str
+    event_id: str
+
+class AdminLuckStartReq(BaseModel):
+    admin_id: str
+    multiplier: int        # 2 or 4
+    duration_seconds: int = 600
+
+class AdminLuckStopReq(BaseModel):
+    admin_id: str
+
 
 @app.get("/")
 def serve_frontend():
@@ -704,6 +812,41 @@ def _public_daily_drops(db) -> dict:
     return {"date": dd.get("date", today), "items": items}
 
 
+def _is_admin(user_id: str) -> bool:
+    return str(user_id) in [str(m) for m in MODERATOR_IDS]
+
+
+def _luck_multiplier(db) -> int:
+    le = db.get("luck_event", {"multiplier": 0, "until": 0})
+    if int(le.get("until", 0)) > int(time.time()):
+        return int(le.get("multiplier", 0))
+    return 0
+
+
+def _active_events_public(db) -> list:
+    now = int(time.time())
+    out = []
+    for eid, ev in (db.get("events") or {}).items():
+        if int(ev.get("until", 0)) > now:
+            out.append({
+                "event_id": eid,
+                "event_type": ev.get("event_type"),
+                "trait_key": ev.get("trait_key"),
+                "mutation_key": ev.get("mutation_key"),
+                "tick_seconds": ev.get("tick_seconds"),
+                "chance_percent": ev.get("chance_percent"),
+                "until": ev.get("until"),
+            })
+    return out
+
+
+def _active_luck_public(db) -> dict:
+    le = db.get("luck_event", {"multiplier": 0, "until": 0})
+    if int(le.get("until", 0)) > int(time.time()):
+        return {"multiplier": int(le.get("multiplier", 0)), "until": int(le.get("until", 0))}
+    return {"multiplier": 0, "until": 0}
+
+
 @app.get("/api/state/{user_id}")
 def get_state(user_id: str):
     db, sha = github_load_db()
@@ -716,7 +859,7 @@ def get_state(user_id: str):
     for entry in reversed(user["inventory"]):
         item_id = entry["item_id"]
         if item_id in ITEMS_DB:
-            info = item_with_mutation(item_id, entry.get("mutation", "normal"))
+            info = item_with_traits(item_id, entry.get("mutation", "normal"), entry.get("traits", []))
             info["inv_id"] = entry["inv_id"]
             info["locked"] = entry.get("locked", False)
             inv_list.append(info)
@@ -728,9 +871,9 @@ def get_state(user_id: str):
     next_daily_at = user.get("last_daily_bonus", 0) + DAILY_BONUS_COOLDOWN
     daily_seconds_left = max(0, next_daily_at - now)
 
-    free_case_items = [item_with_mutation(d["item_id"], "normal") for d in FREE_CASE_DROPS if d["item_id"] in ITEMS_DB]
-    daily_bonus_items = [item_with_mutation(i, "normal") for i in DAILY_BONUS_ITEM_IDS if i in ITEMS_DB]
-    all_items = [item_with_mutation(i, "normal") for i in ITEMS_DB.keys()]
+    free_case_items = [item_with_traits(d["item_id"], "normal", []) for d in FREE_CASE_DROPS if d["item_id"] in ITEMS_DB]
+    daily_bonus_items = [item_with_traits(i, "normal", []) for i in DAILY_BONUS_ITEM_IDS if i in ITEMS_DB]
+    all_items = [item_with_traits(i, "normal", []) for i in ITEMS_DB.keys()]
     inv_value = round(sum(e["price"] for e in inv_list), 2)
 
     gm = db.get("global_message", {"text": "", "until": 0})
@@ -745,12 +888,19 @@ def get_state(user_id: str):
             {"key": k, "name": MUTATIONS[k]["name"], "mult": MUTATIONS[k]["mult"], "icon": MUTATIONS[k]["icon"]}
             for k in MUTATION_KEYS
         ],
+        "traits": [
+            {"key": k, "name": TRAITS_DB[k]["name"], "icon": TRAITS_DB[k]["icon"], "percent": TRAITS_DB[k]["percent"]}
+            for k in TRAIT_KEYS
+        ],
         "free_seconds_left": free_seconds_left,
         "free_case_items": free_case_items,
         "daily_seconds_left": daily_seconds_left,
         "daily_bonus_items": daily_bonus_items,
         "daily_drops": _public_daily_drops(db),
         "global_message": gm_public,
+        "active_events": _active_events_public(db),
+        "luck_event": _active_luck_public(db),
+        "is_admin": _is_admin(user_id),
         "profile": {
             "user_id": user_id,
             "username": user.get("username", ""),
@@ -891,9 +1041,10 @@ def open_case(req: OpenCaseReq):
         mut = roll_mutation(ITEMS_DB[wid]["rarity"])
         inv_id = db["next_inv_id"]
         db["next_inv_id"] += 1
-        user["inventory"].append({"inv_id": inv_id, "item_id": wid, "mutation": mut})
+        # ВАЖНО: трейты из кейсов НЕ падают (п.5)
+        user["inventory"].append({"inv_id": inv_id, "item_id": wid, "mutation": mut, "traits": []})
         won_inv_ids.append(inv_id)
-        won_items_out.append(item_with_mutation(wid, mut))
+        won_items_out.append(item_with_traits(wid, mut, []))
 
     record_daily_drop(db, req.user_id, won_items_out, "case")
 
@@ -923,9 +1074,9 @@ def open_free_case(req: FreeCaseReq):
     user["last_free_case"] = now
     inv_id = db["next_inv_id"]
     db["next_inv_id"] += 1
-    user["inventory"].append({"inv_id": inv_id, "item_id": won_item_id, "mutation": mut})
+    user["inventory"].append({"inv_id": inv_id, "item_id": won_item_id, "mutation": mut, "traits": []})
 
-    item_out = item_with_mutation(won_item_id, mut)
+    item_out = item_with_traits(won_item_id, mut, [])
     record_daily_drop(db, req.user_id, [item_out], "free_case")
 
     github_save_db(db, sha)
@@ -968,10 +1119,10 @@ def open_daily_bonus_case(req: DailyBonusReq):
     user["last_daily_bonus"] = now
     inv_id = db["next_inv_id"]
     db["next_inv_id"] += 1
-    user["inventory"].append({"inv_id": inv_id, "item_id": item_id, "mutation": mut})
+    user["inventory"].append({"inv_id": inv_id, "item_id": item_id, "mutation": mut, "traits": []})
     user["balance"] = round(user["balance"] + coins, 2)
 
-    item = item_with_mutation(item_id, mut)
+    item = item_with_traits(item_id, mut, [])
     record_daily_drop(db, req.user_id, [item], "daily_bonus")
 
     github_save_db(db, sha)
@@ -1019,9 +1170,9 @@ def redeem_promo(req: PromoReq):
         mut = roll_mutation(ITEMS_DB[item_id]["rarity"])
         inv_id = db["next_inv_id"]
         db["next_inv_id"] += 1
-        user["inventory"].append({"inv_id": inv_id, "item_id": item_id, "mutation": mut})
-        reward_text = f"Предмет: {item_with_mutation(item_id, mut)['name']}"
-        record_daily_drop(db, req.user_id, [item_with_mutation(item_id, mut)], "promo")
+        user["inventory"].append({"inv_id": inv_id, "item_id": item_id, "mutation": mut, "traits": []})
+        reward_text = f"Предмет: {item_with_traits(item_id, mut, [])['name']}"
+        record_daily_drop(db, req.user_id, [item_with_traits(item_id, mut, [])], "promo")
     else:
         raise HTTPException(status_code=400, detail="Неизвестный тип промокода")
 
@@ -1051,7 +1202,7 @@ def sell_item(req: SellItemReq):
     if entry.get("locked"):
         raise HTTPException(status_code=400, detail="Предмет заблокирован заявкой на вывод")
 
-    info = item_with_mutation(entry["item_id"], entry.get("mutation", "normal"))
+    info = item_with_traits(entry["item_id"], entry.get("mutation", "normal"), entry.get("traits", []))
     price = info["price"]
     user["inventory"].pop(target_idx)
     user["balance"] = round(user["balance"] + price, 2)
@@ -1078,7 +1229,7 @@ def do_upgrade(req: UpgradeReq):
         if inv_id not in inv_map or inv_map[inv_id]["item_id"] not in ITEMS_DB:
             raise HTTPException(status_code=400, detail="Ошибка проверки предметов инвентаря")
         e = inv_map[inv_id]
-        items_total_value += item_with_mutation(e["item_id"], e.get("mutation", "normal"))["price"]
+        items_total_value += item_with_traits(e["item_id"], e.get("mutation", "normal"), e.get("traits", []))["price"]
 
     total_bet = round(items_total_value + req.coins_bet, 2)
     if total_bet <= 0:
@@ -1090,7 +1241,7 @@ def do_upgrade(req: UpgradeReq):
         target_mut = req.target_mutation if (req.target_mutation in MUTATIONS) else "normal"
         if not rarity_allows_mutation(ITEMS_DB[req.target_item_id]["rarity"]):
             target_mut = "normal"
-        target_value = item_with_mutation(req.target_item_id, target_mut)["price"]
+        target_value = item_with_traits(req.target_item_id, target_mut, [])["price"]
     else:
         if not req.target_coins or req.target_coins <= total_bet:
             raise HTTPException(status_code=400, detail="Желаемая сумма должна быть больше ставки")
@@ -1100,9 +1251,9 @@ def do_upgrade(req: UpgradeReq):
     if target_value <= total_bet:
         raise HTTPException(status_code=400, detail="Цель должна быть дороже вашей ставки")
 
-    # п.9: шанс апгрейда максимум 75%
     chance = round((total_bet / target_value) * 92, 2)
     chance = max(1.0, min(75.0, chance))
+    # luck влияет на шанс? по ТЗ удача — только на дропы, не на апгрейд. оставляем как есть.
 
     user["balance"] = round(user["balance"] - req.coins_bet, 2)
     selected_set = set(req.inv_ids)
@@ -1116,8 +1267,9 @@ def do_upgrade(req: UpgradeReq):
         if req.target_type == "item":
             inv_id = db["next_inv_id"]
             db["next_inv_id"] += 1
-            user["inventory"].append({"inv_id": inv_id, "item_id": req.target_item_id, "mutation": target_mut})
-            won_item_out = item_with_mutation(req.target_item_id, target_mut)
+            # в апгрейде трейты не падают (только админка/трейды/ивет)
+            user["inventory"].append({"inv_id": inv_id, "item_id": req.target_item_id, "mutation": target_mut, "traits": []})
+            won_item_out = item_with_traits(req.target_item_id, target_mut, [])
             record_daily_drop(db, req.user_id, [won_item_out], "upgrade")
         else:
             user["balance"] = round(user["balance"] + target_value, 2)
@@ -1156,9 +1308,9 @@ def crash_start(req: CrashStartReq):
         if inv_id not in inv_map or inv_map[inv_id]["item_id"] not in ITEMS_DB:
             raise HTTPException(status_code=400, detail="Ошибка проверки предметов инвентаря")
         e = inv_map[inv_id]
-        info = item_with_mutation(e["item_id"], e.get("mutation", "normal"))
+        info = item_with_traits(e["item_id"], e.get("mutation", "normal"), e.get("traits", []))
         items_total_value += info["price"]
-        bet_items.append({"inv_id": inv_id, "item_id": e["item_id"], "mutation": e.get("mutation", "normal")})
+        bet_items.append({"inv_id": inv_id, "item_id": e["item_id"], "mutation": e.get("mutation", "normal"), "traits": e.get("traits", [])})
 
     total_bet = round(items_total_value + req.coins_bet, 2)
     if total_bet <= 0:
@@ -1198,42 +1350,9 @@ def crash_cashout(req: CrashCashoutReq):
     user = ensure_user(db, req.user_id)
 
     total_win_value = round(game["total_bet"] * req.multiplier, 2)
-    max_item_price = max(item["price"] for item in ITEMS_DB.values())
-
-    won_item = None
-    returned_items = []
-    coins_added = 0.0
-    recorded = []
-
-    if total_win_value > max_item_price:
-        for item_entry in game["bet_items"]:
-            user["inventory"].append(item_entry)
-            info = item_with_mutation(item_entry["item_id"], item_entry.get("mutation", "normal"))
-            returned_items.append(info)
-            recorded.append(info)
-        diff = round(total_win_value - game["items_value"], 2)
-        user["balance"] = round(user["balance"] + diff, 2)
-        coins_added = diff
-    else:
-        affordable_items = [it for it in ITEMS_DB.values() if it["price"] <= total_win_value]
-        if affordable_items:
-            best_item = max(affordable_items, key=lambda x: x["price"])
-            mut = roll_mutation(best_item["rarity"])
-            info = item_with_mutation(best_item["id"], mut)
-            while info["price"] > total_win_value and mut != "normal":
-                mut = "normal"
-                info = item_with_mutation(best_item["id"], mut)
-            inv_id = db["next_inv_id"]
-            db["next_inv_id"] += 1
-            user["inventory"].append({"inv_id": inv_id, "item_id": best_item["id"], "mutation": mut})
-            won_item = info
-            recorded.append(info)
-            remainder = round(total_win_value - info["price"], 2)
-            user["balance"] = round(user["balance"] + remainder, 2)
-            coins_added = remainder
-        else:
-            user["balance"] = round(user["balance"] + total_win_value, 2)
-            coins_added = total_win_value
+    won_item, returned_items, coins_added, recorded = _payout_like_crash(
+        db, user, total_win_value, game["bet_items"], game["items_value"]
+    )
 
     if recorded:
         record_daily_drop(db, req.user_id, recorded, "crash")
@@ -1280,7 +1399,7 @@ def play_color_dice(req: ColorDiceReq):
         if inv_id not in inv_map or inv_map[inv_id]["item_id"] not in ITEMS_DB:
             raise HTTPException(status_code=400, detail="Ошибка проверки предметов инвентаря")
         e = inv_map[inv_id]
-        items_total_value += item_with_mutation(e["item_id"], e.get("mutation", "normal"))["price"]
+        items_total_value += item_with_traits(e["item_id"], e.get("mutation", "normal"), e.get("traits", []))["price"]
 
     total_bet = round(items_total_value + req.coins_bet, 2)
     if total_bet <= 0:
@@ -1352,9 +1471,9 @@ def mines_start(req: MinesStartReq):
         if inv_id not in inv_map or inv_map[inv_id]["item_id"] not in ITEMS_DB:
             raise HTTPException(status_code=400, detail="Ошибка проверки предметов инвентаря")
         e = inv_map[inv_id]
-        info = item_with_mutation(e["item_id"], e.get("mutation", "normal"))
+        info = item_with_traits(e["item_id"], e.get("mutation", "normal"), e.get("traits", []))
         items_total_value += info["price"]
-        bet_items.append({"inv_id": inv_id, "item_id": e["item_id"], "mutation": e.get("mutation", "normal")})
+        bet_items.append({"inv_id": inv_id, "item_id": e["item_id"], "mutation": e.get("mutation", "normal"), "traits": e.get("traits", [])})
 
     total_bet = round(items_total_value + req.coins_bet, 2)
     if total_bet <= 0:
@@ -1415,41 +1534,9 @@ def mines_cashout(req: MinesCashoutReq):
     db = normalize_db(db)
     user = ensure_user(db, req.user_id)
 
-    max_item_price = max(item["price"] for item in ITEMS_DB.values())
-    won_item = None
-    returned_items = []
-    coins_added = 0.0
-    recorded = []
-
-    if total_win_value > max_item_price:
-        for item_entry in game["bet_items"]:
-            user["inventory"].append(item_entry)
-            info = item_with_mutation(item_entry["item_id"], item_entry.get("mutation", "normal"))
-            returned_items.append(info)
-            recorded.append(info)
-        diff = round(total_win_value - game["items_value"], 2)
-        user["balance"] = round(user["balance"] + diff, 2)
-        coins_added = diff
-    else:
-        affordable_items = [it for it in ITEMS_DB.values() if it["price"] <= total_win_value]
-        if affordable_items:
-            best_item = max(affordable_items, key=lambda x: x["price"])
-            mut = roll_mutation(best_item["rarity"])
-            info = item_with_mutation(best_item["id"], mut)
-            while info["price"] > total_win_value and mut != "normal":
-                mut = "normal"
-                info = item_with_mutation(best_item["id"], mut)
-            inv_id = db["next_inv_id"]
-            db["next_inv_id"] += 1
-            user["inventory"].append({"inv_id": inv_id, "item_id": best_item["id"], "mutation": mut})
-            won_item = info
-            recorded.append(info)
-            remainder = round(total_win_value - info["price"], 2)
-            user["balance"] = round(user["balance"] + remainder, 2)
-            coins_added = remainder
-        else:
-            user["balance"] = round(user["balance"] + total_win_value, 2)
-            coins_added = total_win_value
+    won_item, returned_items, coins_added, recorded = _payout_like_crash(
+        db, user, total_win_value, game["bet_items"], game["items_value"]
+    )
 
     if recorded:
         record_daily_drop(db, req.user_id, recorded, "mines")
@@ -1464,11 +1551,407 @@ def mines_cashout(req: MinesCashoutReq):
     }
 
 
-# ---------- Админ: глобальное сообщение ----------
-def _is_admin(user_id: str) -> bool:
-    return str(user_id) in [str(m) for m in MODERATOR_IDS]
+# ---------- ПЛИНКО (этап 2) ----------
+PLINKO_ROWS = 12
+PLINKO_MULTS = [29.0, 14.0, 6.0, 3.0, 1.5, 0.7, 0.4, 0.7, 1.5, 3.0, 6.0, 14.0, 29.0]
 
 
+def _payout_like_crash(db, user, total_win_value: float, bet_items: list, items_value: float):
+    max_item_price = max(it["price"] for it in ITEMS_DB.values())
+    won_item = None
+    returned_items = []
+    coins_added = 0.0
+    recorded = []
+
+    if total_win_value > max_item_price:
+        for item_entry in bet_items:
+            user["inventory"].append(item_entry)
+            info = item_with_traits(item_entry["item_id"], item_entry.get("mutation", "normal"), item_entry.get("traits", []))
+            returned_items.append(info)
+            recorded.append(info)
+        diff = round(total_win_value - items_value, 2)
+        user["balance"] = round(user["balance"] + diff, 2)
+        coins_added = diff
+    else:
+        affordable = [it for it in ITEMS_DB.values() if it["price"] <= total_win_value]
+        if affordable:
+            best_item = max(affordable, key=lambda x: x["price"])
+            mut = roll_mutation(best_item["rarity"])
+            info = item_with_traits(best_item["id"], mut, [])
+            while info["price"] > total_win_value and mut != "normal":
+                mut = "normal"
+                info = item_with_traits(best_item["id"], mut, [])
+            inv_id = db["next_inv_id"]
+            db["next_inv_id"] += 1
+            user["inventory"].append({"inv_id": inv_id, "item_id": best_item["id"], "mutation": mut, "traits": []})
+            won_item = info
+            recorded.append(info)
+            remainder = round(total_win_value - info["price"], 2)
+            user["balance"] = round(user["balance"] + remainder, 2)
+            coins_added = remainder
+        else:
+            user["balance"] = round(user["balance"] + total_win_value, 2)
+            coins_added = total_win_value
+
+    return won_item, returned_items, coins_added, recorded
+
+
+@app.post("/api/plinko/play")
+def plinko_play(req: PlinkoPlayReq):
+    if req.coins_bet < 0:
+        raise HTTPException(status_code=400, detail="Некорректная ставка монет")
+
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    user = ensure_user(db, req.user_id)
+
+    if req.coins_bet > user["balance"]:
+        raise HTTPException(status_code=400, detail="Недостаточно монет")
+
+    inv_map = {e["inv_id"]: e for e in user["inventory"] if not e.get("locked")}
+    bet_items = []
+    items_value = 0.0
+    for inv_id in req.inv_ids:
+        if inv_id not in inv_map or inv_map[inv_id]["item_id"] not in ITEMS_DB:
+            raise HTTPException(status_code=400, detail="Ошибка проверки предметов инвентаря")
+        e = inv_map[inv_id]
+        info = item_with_traits(e["item_id"], e.get("mutation", "normal"), e.get("traits", []))
+        items_value += info["price"]
+        bet_items.append({"inv_id": inv_id, "item_id": e["item_id"], "mutation": e.get("mutation", "normal"), "traits": e.get("traits", [])})
+
+    total_bet = round(items_value + req.coins_bet, 2)
+    if total_bet <= 0:
+        raise HTTPException(status_code=400, detail="Сделайте ставку монетами или вещами")
+
+    user["balance"] = round(user["balance"] - req.coins_bet, 2)
+    selected_set = set(req.inv_ids)
+    user["inventory"] = [e for e in user["inventory"] if e["inv_id"] not in selected_set]
+
+    path = [random.randint(0, 1) for _ in range(PLINKO_ROWS)]
+    slot = sum(path)
+    mult = PLINKO_MULTS[slot]
+    total_win_value = round(total_bet * mult, 2)
+
+    won_item, returned_items, coins_added, recorded = _payout_like_crash(
+        db, user, total_win_value, bet_items, items_value
+    )
+
+    if recorded:
+        record_daily_drop(db, req.user_id, recorded, "plinko")
+
+    github_save_db(db, sha)
+    return {
+        "path": path,
+        "slot": slot,
+        "multiplier": mult,
+        "total_bet": total_bet,
+        "total_win": total_win_value,
+        "won_item": won_item,
+        "returned_items": returned_items,
+        "coins_added": coins_added,
+    }
+
+
+# ---------- БАШНЯ (этап 3) ----------
+TOWER_FLOORS = 5
+TOWER_COLS = 5
+
+
+def tower_multiplier(floor: int) -> float:
+    if floor <= 0:
+        return 1.0
+    base = (TOWER_COLS / (TOWER_COLS - 1)) ** floor
+    return round(base * 0.95, 2)
+
+
+@app.post("/api/tower/start")
+def tower_start(req: TowerStartReq):
+    if req.coins_bet < 0:
+        raise HTTPException(status_code=400, detail="Некорректная ставка монет")
+    if req.user_id in ACTIVE_TOWER_GAMES:
+        raise HTTPException(status_code=400, detail="У вас уже есть активная игра в Башню")
+
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    user = ensure_user(db, req.user_id)
+
+    if req.coins_bet > user["balance"]:
+        raise HTTPException(status_code=400, detail="Недостаточно монет")
+
+    inv_map = {e["inv_id"]: e for e in user["inventory"] if not e.get("locked")}
+    bet_items = []
+    items_total_value = 0.0
+    for inv_id in req.inv_ids:
+        if inv_id not in inv_map or inv_map[inv_id]["item_id"] not in ITEMS_DB:
+            raise HTTPException(status_code=400, detail="Ошибка проверки предметов инвентаря")
+        e = inv_map[inv_id]
+        info = item_with_traits(e["item_id"], e.get("mutation", "normal"), e.get("traits", []))
+        items_total_value += info["price"]
+        bet_items.append({"inv_id": inv_id, "item_id": e["item_id"], "mutation": e.get("mutation", "normal"), "traits": e.get("traits", [])})
+
+    total_bet = round(items_total_value + req.coins_bet, 2)
+    if total_bet <= 0:
+        raise HTTPException(status_code=400, detail="Сделайте ставку монетами или вещами")
+
+    user["balance"] = round(user["balance"] - req.coins_bet, 2)
+    selected_set = set(req.inv_ids)
+    user["inventory"] = [e for e in user["inventory"] if e["inv_id"] not in selected_set]
+    github_save_db(db, sha)
+
+    field = [random.randint(0, TOWER_COLS - 1) for _ in range(TOWER_FLOORS)]
+    ACTIVE_TOWER_GAMES[req.user_id] = {
+        "field": field,
+        "opened": [],
+        "bet_items": bet_items,
+        "items_value": items_total_value,
+        "coins_bet": req.coins_bet,
+        "total_bet": total_bet
+    }
+    return {"ok": True, "total_bet": total_bet, "floors": TOWER_FLOORS, "cols": TOWER_COLS}
+
+
+@app.post("/api/tower/open")
+def tower_open(req: TowerOpenReq):
+    game = ACTIVE_TOWER_GAMES.get(req.user_id)
+    if not game:
+        raise HTTPException(status_code=400, detail="Активная игра не найдена")
+    floor = len(game["opened"])
+    if floor >= TOWER_FLOORS:
+        raise HTTPException(status_code=400, detail="Все этажи пройдены — забирайте выигрыш")
+    if req.cell < 0 or req.cell >= TOWER_COLS:
+        raise HTTPException(status_code=400, detail="Некорректная клетка")
+
+    if req.cell == game["field"][floor]:
+        ACTIVE_TOWER_GAMES.pop(req.user_id, None)
+        return {"boom": True, "floor": floor, "cell": req.cell, "field": game["field"]}
+
+    game["opened"].append(req.cell)
+    passed = len(game["opened"])
+    mult = tower_multiplier(passed)
+    potential = round(game["total_bet"] * mult, 2)
+    return {
+        "boom": False,
+        "floor": floor,
+        "cell": req.cell,
+        "passed_floors": passed,
+        "multiplier": mult,
+        "potential_win": potential,
+        "finished": passed >= TOWER_FLOORS
+    }
+
+
+@app.post("/api/tower/cashout")
+def tower_cashout(req: TowerCashoutReq):
+    game = ACTIVE_TOWER_GAMES.pop(req.user_id, None)
+    if not game:
+        raise HTTPException(status_code=400, detail="Активная игра не найдена")
+    passed = len(game["opened"])
+    if passed <= 0:
+        raise HTTPException(status_code=400, detail="Пройдите хотя бы один этаж")
+
+    mult = tower_multiplier(passed)
+    total_win_value = round(game["total_bet"] * mult, 2)
+
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    user = ensure_user(db, req.user_id)
+
+    won_item, returned_items, coins_added, recorded = _payout_like_crash(
+        db, user, total_win_value, game["bet_items"], game["items_value"]
+    )
+
+    if recorded:
+        record_daily_drop(db, req.user_id, recorded, "tower")
+
+    github_save_db(db, sha)
+    return {
+        "total_win": total_win_value,
+        "multiplier": mult,
+        "won_item": won_item,
+        "returned_items": returned_items,
+        "coins_added": coins_added,
+        "passed_floors": passed
+    }
+
+
+# ---------- ЭТАП 4: АДМИН ----------
+@app.get("/api/admin/users")
+def admin_users(admin_id: str):
+    if not _is_admin(admin_id):
+        raise HTTPException(status_code=403, detail="Нет доступа")
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    out = []
+    for uid, u in db["users"].items():
+        inv_val = 0.0
+        for e in u.get("inventory", []):
+            try:
+                inv_val += item_with_traits(e["item_id"], e.get("mutation", "normal"), e.get("traits", []))["price"]
+            except Exception:
+                pass
+        out.append({
+            "user_id": uid,
+            "username": u.get("username", ""),
+            "first_name": u.get("first_name", ""),
+            "balance": round(u.get("balance", 0), 2),
+            "inv_count": len(u.get("inventory", [])),
+            "inv_value": round(inv_val, 2),
+        })
+    return {"users": out}
+
+
+@app.post("/api/admin/promo/create")
+def admin_promo_create(req: AdminPromoCreateReq):
+    if not _is_admin(req.admin_id):
+        raise HTTPException(status_code=403, detail="Нет доступа")
+    code = (req.code or "").strip().upper()
+    if not code:
+        raise HTTPException(status_code=400, detail="Пустой код")
+    if req.type not in ("coins", "item"):
+        raise HTTPException(status_code=400, detail="type: coins | item")
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    promos = db.setdefault("promocodes", {})
+    if code in promos:
+        raise HTTPException(status_code=400, detail="Такой промокод уже есть")
+    entry = {"stock": max(1, int(req.stock or 1)), "type": req.type, "used_by": []}
+    if req.type == "coins":
+        entry["amount"] = float(req.amount or 0)
+    else:
+        if req.item_id not in ITEMS_DB:
+            raise HTTPException(status_code=400, detail="item_id не найден")
+        entry["item_id"] = int(req.item_id)
+    promos[code] = entry
+    github_save_db(db, sha)
+    return {"ok": True, "code": code}
+
+
+@app.post("/api/admin/promo/delete")
+def admin_promo_delete(req: AdminPromoDeleteReq):
+    if not _is_admin(req.admin_id):
+        raise HTTPException(status_code=403, detail="Нет доступа")
+    code = (req.code or "").strip().upper()
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    promos = db.setdefault("promocodes", {})
+    if code not in promos:
+        raise HTTPException(status_code=400, detail="Промокод не найден")
+    promos.pop(code, None)
+    github_save_db(db, sha)
+    return {"ok": True}
+
+
+@app.post("/api/admin/balance")
+def admin_balance(req: AdminBalanceReq):
+    if not _is_admin(req.admin_id):
+        raise HTTPException(status_code=403, detail="Нет доступа")
+    if req.action not in ("add", "sub"):
+        raise HTTPException(status_code=400, detail="action: add | sub")
+    if req.amount <= 0:
+        raise HTTPException(status_code=400, detail="amount > 0")
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    user = ensure_user(db, req.target_user_id)
+    if req.action == "add":
+        user["balance"] = round(user["balance"] + req.amount, 2)
+    else:
+        user["balance"] = round(max(0.0, user["balance"] - req.amount), 2)
+    github_save_db(db, sha)
+    return {"ok": True, "new_balance": user["balance"]}
+
+
+@app.post("/api/admin/give_item")
+def admin_give_item(req: AdminGiveItemReq):
+    if not _is_admin(req.admin_id):
+        raise HTTPException(status_code=403, detail="Нет доступа")
+    if req.item_id not in ITEMS_DB:
+        raise HTTPException(status_code=400, detail="item_id не найден")
+    mut = req.mutation if (req.mutation in MUTATIONS) else "normal"
+    if not rarity_allows_mutation(ITEMS_DB[req.item_id]["rarity"]):
+        mut = "normal"
+    traits = [k for k in (req.traits or []) if k in TRAITS_DB]
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    user = ensure_user(db, req.target_user_id)
+    inv_id = db["next_inv_id"]
+    db["next_inv_id"] += 1
+    user["inventory"].append({"inv_id": inv_id, "item_id": req.item_id, "mutation": mut, "traits": traits})
+    info = item_with_traits(req.item_id, mut, traits)
+    record_daily_drop(db, req.target_user_id, [info], "admin_give")
+    github_save_db(db, sha)
+    return {"ok": True, "inv_id": inv_id, "item": info}
+
+
+@app.post("/api/admin/event/start")
+def admin_event_start(req: AdminEventStartReq):
+    if not _is_admin(req.admin_id):
+        raise HTTPException(status_code=403, detail="Нет доступа")
+    if req.event_type not in ("trait", "mutation"):
+        raise HTTPException(status_code=400, detail="event_type: trait | mutation")
+    if req.event_type == "trait":
+        if req.trait_key not in TRAITS_DB:
+            raise HTTPException(status_code=400, detail="trait_key не найден")
+    else:
+        if req.mutation_key not in MUTATIONS or req.mutation_key == "normal":
+            raise HTTPException(status_code=400, detail="mutation_key не найден")
+    tick = max(10, min(int(req.tick_seconds or 45), 3600))
+    chance = max(0.1, min(float(req.chance_percent or 5.0), 100.0))
+    duration = max(30, min(int(req.duration_seconds or 600), 24 * 3600))
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    events = db.setdefault("events", {})
+    eid = str(int(time.time() * 1000)) + str(random.randint(1000, 9999))
+    events[eid] = {
+        "event_type": req.event_type,
+        "trait_key": req.trait_key,
+        "mutation_key": req.mutation_key,
+        "tick_seconds": tick,
+        "chance_percent": chance,
+        "until": int(time.time()) + duration,
+        "started_at": int(time.time()),
+    }
+    github_save_db(db, sha)
+    return {"ok": True, "event_id": eid}
+
+
+@app.post("/api/admin/event/stop")
+def admin_event_stop(req: AdminEventStopReq):
+    if not _is_admin(req.admin_id):
+        raise HTTPException(status_code=403, detail="Нет доступа")
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    events = db.setdefault("events", {})
+    events.pop(req.event_id, None)
+    github_save_db(db, sha)
+    return {"ok": True}
+
+
+@app.post("/api/admin/luck/start")
+def admin_luck_start(req: AdminLuckStartReq):
+    if not _is_admin(req.admin_id):
+        raise HTTPException(status_code=403, detail="Нет доступа")
+    if req.multiplier not in (2, 4):
+        raise HTTPException(status_code=400, detail="multiplier: 2 | 4")
+    duration = max(30, min(int(req.duration_seconds or 600), 24 * 3600))
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    db["luck_event"] = {"multiplier": int(req.multiplier), "until": int(time.time()) + duration}
+    github_save_db(db, sha)
+    return {"ok": True}
+
+
+@app.post("/api/admin/luck/stop")
+def admin_luck_stop(req: AdminLuckStopReq):
+    if not _is_admin(req.admin_id):
+        raise HTTPException(status_code=403, detail="Нет доступа")
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    db["luck_event"] = {"multiplier": 0, "until": 0}
+    github_save_db(db, sha)
+    return {"ok": True}
+
+
+# ---------- Админ: глобальное сообщение (уже было) ----------
 @app.post("/api/admin/global_message")
 def admin_global_message(req: AdminGlobalMessageReq):
     if not _is_admin(req.admin_id):
@@ -1491,3 +1974,75 @@ def get_daily_drops():
     db, sha = github_load_db()
     db = normalize_db(db)
     return _public_daily_drops(db)
+
+
+# ---------- Фоновые ивенты (трейты/мутации) ----------
+def _events_loop():
+    """
+    Раз в 10 секунд проверяет активные ивенты.
+    Для каждого ивента ведёт расписание тиков (последний тик — в памяти).
+    На тике: с шансом chance_percent выбирает случайного игрока и случайный предмет
+    в его инвентаре и применяет трейт или мутацию (если предмета ещё нет такого трейта / мутация подходит по редкости).
+    """
+    last_tick = {}  # event_id -> timestamp последнего тика
+    while True:
+        try:
+            time.sleep(10)
+            db, sha = github_load_db()
+            db = normalize_db(db)
+            now = int(time.time())
+            events = db.get("events") or {}
+            changed = False
+            for eid, ev in list(events.items()):
+                if int(ev.get("until", 0)) <= now:
+                    events.pop(eid, None)
+                    last_tick.pop(eid, None)
+                    changed = True
+                    continue
+                tick_sec = int(ev.get("tick_seconds", 45))
+                prev = last_tick.get(eid, int(ev.get("started_at", now)))
+                if now - prev < tick_sec:
+                    continue
+                last_tick[eid] = now
+                # тик
+                chance = float(ev.get("chance_percent", 5.0))
+                if random.uniform(0, 100) > chance:
+                    continue
+                candidates = []
+                for uid, u in db.get("users", {}).items():
+                    for e in u.get("inventory", []):
+                        if e.get("locked"):
+                            continue
+                        if ev["event_type"] == "trait":
+                            if ev["trait_key"] not in (e.get("traits") or []):
+                                candidates.append((uid, e))
+                        else:  # mutation
+                            item_info = ITEMS_DB.get(e.get("item_id"))
+                            if not item_info:
+                                continue
+                            if not rarity_allows_mutation(item_info["rarity"]):
+                                continue
+                            # не накатываем, если уже такая же или "выше"
+                            cur_mult = mutation_mult(e.get("mutation", "normal"))
+                            new_mult = mutation_mult(ev["mutation_key"])
+                            if new_mult > cur_mult:
+                                candidates.append((uid, e))
+                if not candidates:
+                    continue
+                uid, entry = random.choice(candidates)
+                if ev["event_type"] == "trait":
+                    entry.setdefault("traits", [])
+                    if ev["trait_key"] not in entry["traits"]:
+                        entry["traits"].append(ev["trait_key"])
+                        changed = True
+                else:
+                    entry["mutation"] = ev["mutation_key"]
+                    changed = True
+            if changed:
+                github_save_db(db, sha)
+        except Exception:
+            time.sleep(5)
+
+
+if BOT_TOKEN or True:
+    threading.Thread(target=_events_loop, daemon=True).start()

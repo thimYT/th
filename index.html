@@ -39,6 +39,9 @@
     .menu-toggle { background: linear-gradient(135deg, var(--blue), #1565c0); border: none; color: #fff;
         padding: 8px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 14px;
         box-shadow: 0 2px 10px var(--blue-glow); }
+    .luck-badge { background: rgba(0,230,118,0.15); border: 1px solid var(--green); color: var(--green);
+        font-size: 12px; font-weight: 800; padding: 4px 8px; border-radius: 8px; display: none; }
+    .luck-badge.show { display: inline-block; }
     .drawer-overlay { position: fixed; inset: 0; background: rgba(10, 7, 5, 0.72); z-index: 200;
         opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
     .drawer-overlay.open { opacity: 1; pointer-events: auto; }
@@ -55,6 +58,8 @@
         cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
     .nav-btn.active { background: linear-gradient(90deg, var(--orange), #d84315);
         border-color: #ffab40; box-shadow: 0 4px 14px var(--orange-glow); }
+    .nav-btn.admin-only { display: none; }
+    .nav-btn.admin-only.show { display: flex; }
     .nav-badge { background: #130d0a; border: 1px solid var(--card-border);
         border-radius: 8px; padding: 1px 8px; font-size: 12px; }
     .container { max-width: 820px; margin: 0 auto; padding: 16px; }
@@ -201,6 +206,8 @@
     input[type="number"], input[type="text"] { flex: 1; background: #160f0c; border: 1px solid var(--card-border);
         color: #fff; padding: 10px 12px; border-radius: 10px; font-size: 14px; outline: none; min-width: 0; }
     input:focus { border-color: var(--orange); }
+    select { background: #160f0c; border: 1px solid var(--card-border); color: #fff; padding: 10px 12px;
+        border-radius: 10px; font-size: 14px; outline: none; }
     .mode-switch { display: flex; gap: 8px; margin-bottom: 12px; }
     .mode-btn { flex: 1; padding: 8px; border-radius: 8px; border: 1px solid var(--card-border);
         background: #1c130f; color: var(--muted); font-weight: 700; cursor: pointer; }
@@ -255,6 +262,22 @@
     .mut-btn .m-mult { color: #ffcc80; font-size: 11px; }
     .mut-btn .m-dot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid var(--card-border); display: inline-block; }
 
+    /* ТРЕЙТЫ (Этап 4) */
+    .trait-strip {
+        display: flex; gap: 3px; flex-wrap: wrap; justify-content: center;
+        margin: 4px 0 6px;
+    }
+    .trait-icon {
+        width: 18px; height: 18px; border-radius: 50%;
+        background: #130d0a; border: 1px solid var(--card-border);
+        display: flex; align-items: center; justify-content: center;
+        overflow: hidden;
+    }
+    .trait-icon img { width: 100%; height: 100%; object-fit: cover; margin: 0; }
+    .trait-icon.positive { border-color: var(--green); }
+    .trait-icon.negative { border-color: var(--red); }
+    .trait-icon .trait-fallback { font-size: 10px; font-weight: 900; color: var(--muted); }
+
     /* МИНЫ 5x5 */
     .mines-arena { background: radial-gradient(circle at top, rgba(255,123,0,.18) 0%, rgba(20,15,12,.95) 100%);
         border: 1px solid var(--card-border); border-radius: 18px; padding: 16px 12px; margin-bottom: 14px;
@@ -293,6 +316,59 @@
     .mines-slider-wrap input[type="range"] {
         width: 100%; margin-top: 6px; accent-color: var(--orange);
     }
+
+    /* ПЛИНКО */
+    .plinko-arena { background: radial-gradient(circle at top, rgba(41,121,255,.18) 0%, rgba(20,15,12,.95) 100%);
+        border: 1px solid var(--card-border); border-radius: 18px; padding: 14px 10px; margin-bottom: 14px;
+        display: flex; flex-direction: column; align-items: center; }
+    .plinko-board-wrap { width: 100%; max-width: 380px; }
+    #plinko-canvas { width: 100%; height: auto; display: block; }
+    .plinko-mults { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
+    .plinko-mult-pill { font-size: 10px; font-weight: 800; padding: 3px 6px; border-radius: 6px;
+        background: #1a120e; border: 1px solid var(--card-border); color: #ffcc80; min-width: 34px; text-align: center; }
+    .plinko-mult-pill.hit { border-color: var(--orange); box-shadow: 0 0 12px var(--orange-glow); background: rgba(255,123,0,.18); }
+    .plinko-status { margin-top: 10px; text-align: center; font-weight: 700; font-size: 13px; }
+
+    /* БАШНЯ */
+    .tower-arena { background: radial-gradient(circle at top, rgba(255,123,0,.18) 0%, rgba(20,15,12,.95) 100%);
+        border: 1px solid var(--card-border); border-radius: 18px; padding: 16px 12px; margin-bottom: 14px;
+        display: flex; flex-direction: column; align-items: center; }
+    .tower-top {
+        display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; width: 100%;
+        max-width: 400px; margin: 0 auto 12px;
+    }
+    .tower-stat {
+        background: #130d0a; border: 1px solid var(--card-border); border-radius: 12px;
+        padding: 8px 6px; text-align: center;
+    }
+    .tower-stat .v { color: #ffcc80; font-weight: 900; font-size: 16px; }
+    .tower-stat .l { color: var(--muted); font-size: 11px; font-weight: 700; }
+    .tower-floors { display: flex; flex-direction: column-reverse; gap: 8px; width: 100%; max-width: 400px; margin: 0 auto; }
+    .tower-floor {
+        display: flex; align-items: center; gap: 6px;
+        background: rgba(19, 13, 10, 0.6); border: 1px solid var(--card-border);
+        border-radius: 12px; padding: 6px 8px;
+    }
+    .tower-floor-label {
+        min-width: 46px; font-size: 11px; font-weight: 800; color: var(--muted);
+        text-align: center; flex-shrink: 0;
+    }
+    .tower-floor-cells { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; flex: 1; }
+    .tower-cell {
+        aspect-ratio: 1/1; border-radius: 9px;
+        background: linear-gradient(180deg, #2b1e17 0%, #1a120e 100%);
+        border: 1px solid var(--card-border);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 18px; font-weight: 900; color: var(--text);
+        cursor: default; transition: transform .12s ease, background .15s ease;
+        user-select: none;
+    }
+    .tower-cell.clickable { cursor: pointer; }
+    .tower-cell.clickable:hover { background: linear-gradient(180deg, #38271e 0%, #231810 100%); border-color: var(--orange); }
+    .tower-cell.safe { background: linear-gradient(135deg, #00c853, #2e7d32); color: #fff; border-color: #66bb6a; }
+    .tower-cell.boom { background: linear-gradient(135deg, #ff3d00, #b71c1c); color: #fff; border-color: #ff8a65; }
+    .tower-cell.locked { opacity: .4; }
+    .tower-status { margin-top: 10px; text-align: center; font-weight: 700; font-size: 13px; }
 
     /* ДРОП ДНЯ */
     .daily-drops-strip {
@@ -380,6 +456,32 @@
         line-height: 1.35;
     }
     .global-msg.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* АДМИНКА (Этап 4) */
+    .admin-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+    .admin-tab-btn { background: #1c130f; border: 1px solid var(--card-border); color: var(--muted);
+        padding: 8px 12px; border-radius: 10px; font-weight: 700; font-size: 12px; cursor: pointer; }
+    .admin-tab-btn.active { background: linear-gradient(135deg, var(--orange), #e65100);
+        color: #fff; border-color: #ffab40; }
+    .admin-pane { display: none; }
+    .admin-pane.active { display: block; }
+    .admin-users-table { width: 100%; font-size: 12px; border-collapse: collapse; }
+    .admin-users-table th, .admin-users-table td { padding: 6px 8px; border-bottom: 1px solid var(--card-border); text-align: left; }
+    .admin-users-table th { color: var(--muted); font-weight: 800; }
+    .admin-users-table td.mono { font-family: ui-monospace, monospace; }
+    .admin-list-events { display: flex; flex-direction: column; gap: 6px; }
+    .admin-event-item { background: #130d0a; border: 1px solid var(--card-border);
+        border-radius: 10px; padding: 8px 10px; font-size: 12px;
+        display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .admin-event-item .ev-meta { color: var(--muted); font-size: 11px; }
+    .admin-event-item .ev-id { font-family: ui-monospace, monospace; font-size: 11px; color: #ffcc80; }
+    .trait-pick-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 6px; }
+    .trait-pick-item { background: #1c130f; border: 1px solid var(--card-border); border-radius: 8px;
+        padding: 6px 8px; display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 12px; font-weight: 700; }
+    .trait-pick-item.active { border-color: var(--orange); background: rgba(255,123,0,0.16); }
+    .trait-pick-item .pct { margin-left: auto; font-size: 11px; }
+    .trait-pick-item .pct.pos { color: var(--green); }
+    .trait-pick-item .pct.neg { color: var(--red); }
 </style>
 </head>
 <body>
@@ -387,6 +489,7 @@
 <header>
     <div class="logo">🔥 BrainDrop</div>
     <div class="header-right">
+        <div class="luck-badge" id="luck-badge">🍀 Удача ×2</div>
         <div class="balance-box">
             <span id="balance-val">0</span> 💰
             <button class="plus-btn" onclick="requestTopup()">+</button>
@@ -409,11 +512,14 @@
     <button class="nav-btn" data-tab="crash" onclick="switchTab('crash')">🚀 Краш (Ракета)</button>
     <button class="nav-btn" data-tab="dice" onclick="switchTab('dice')">🎲 Color Dice</button>
     <button class="nav-btn" data-tab="mines" onclick="switchTab('mines')">💣 Мины 5×5</button>
+    <button class="nav-btn" data-tab="plinko" onclick="switchTab('plinko')">🎯 Плинко</button>
+    <button class="nav-btn" data-tab="tower" onclick="switchTab('tower')">🏰 Башня</button>
     <button class="nav-btn" data-tab="bonuses" onclick="switchTab('bonuses')">🎁 Бонусы</button>
     <button class="nav-btn" data-tab="inventory" onclick="switchTab('inventory')">
         <span>🎒 Инвентарь</span>
         <span class="nav-badge" id="inv-count-badge">0</span>
     </button>
+    <button class="nav-btn admin-only" data-tab="admin" id="nav-admin-btn" onclick="switchTab('admin')">🛠 Админка</button>
 </aside>
 
 <main class="container">
@@ -617,6 +723,64 @@
         </div>
     </section>
 
+    <!-- ПЛИНКО -->
+    <section class="tab-section" id="tab-plinko">
+        <h2>Плинко</h2>
+        <div class="plinko-arena">
+            <div class="plinko-board-wrap">
+                <canvas id="plinko-canvas" width="360" height="420"></canvas>
+            </div>
+            <div class="plinko-mults" id="plinko-mults"></div>
+            <div class="plinko-status" id="plinko-status">Сделайте ставку и бросьте шарик</div>
+        </div>
+
+        <div class="panel-box">
+            <div class="input-group">
+                <input type="number" id="plinko-coins-input" min="0" step="1" placeholder="Ставка монетами" oninput="updatePlinkoTotal()">
+                <button class="btn" style="width:auto;padding:10px 16px;" onclick="setMaxPlinkoCoins()">Макс</button>
+            </div>
+            <div class="stat-line center" style="margin-bottom:12px;">Общая ставка: <b id="plinko-total-bet">0</b> 💰</div>
+            <button class="btn" id="plinko-drop-btn" onclick="playPlinko()">🎯 Бросить шарик</button>
+        </div>
+
+        <div class="panel-box">
+            <div class="panel-title">Добавить вещи из инвентаря в ставку:</div>
+            <div class="grid scroll-grid" id="plinko-inv-grid"></div>
+        </div>
+    </section>
+
+    <!-- БАШНЯ -->
+    <section class="tab-section" id="tab-tower">
+        <h2>Башня 5×5</h2>
+        <div class="tower-arena">
+            <div class="tower-top">
+                <div class="tower-stat"><div class="v" id="tower-mult">1.00x</div><div class="l">Множитель</div></div>
+                <div class="tower-stat"><div class="v" id="tower-potential">0</div><div class="l">Заберёте</div></div>
+                <div class="tower-stat"><div class="v" id="tower-floor">0/5</div><div class="l">Этаж</div></div>
+            </div>
+            <div class="tower-floors" id="tower-floors"></div>
+            <div class="tower-status" id="tower-status">Сделайте ставку и начните игру</div>
+        </div>
+
+        <div class="panel-box">
+            <div class="input-group">
+                <input type="number" id="tower-coins-input" min="0" step="1" placeholder="Ставка монетами" oninput="updateTowerTotal()">
+                <button class="btn" style="width:auto;padding:10px 16px;" onclick="setMaxTowerCoins()">Макс</button>
+            </div>
+            <div class="stat-line center" style="margin-bottom:12px;">Общая ставка: <b id="tower-total-bet">0</b> 💰</div>
+            <div class="case-win-actions">
+                <button class="btn" id="tower-start-btn" onclick="startTower()">Начать игру</button>
+                <button class="btn btn-blue" id="tower-cashout-btn" onclick="cashoutTower()" style="display:none;">Забрать</button>
+            </div>
+            <div id="tower-status-text" style="margin-top:10px;text-align:center;font-weight:700;font-size:13px;"></div>
+        </div>
+
+        <div class="panel-box">
+            <div class="panel-title">Добавить вещи из инвентаря в ставку:</div>
+            <div class="grid scroll-grid" id="tower-inv-grid"></div>
+        </div>
+    </section>
+
     <!-- БОНУСЫ -->
     <section class="tab-section" id="tab-bonuses">
         <h2>Бонусы</h2>
@@ -653,6 +817,159 @@
     <section class="tab-section" id="tab-inventory">
         <h2>Инвентарь</h2>
         <div class="grid" id="main-inv-grid"></div>
+    </section>
+
+    <!-- АДМИНКА (Этап 4) -->
+    <section class="tab-section" id="tab-admin">
+        <h2>Админ-панель</h2>
+
+        <div class="admin-tabs">
+            <button class="admin-tab-btn active" data-admin-pane="promo" onclick="switchAdminPane('promo', this)">🎟 Промо</button>
+            <button class="admin-tab-btn" data-admin-pane="balance" onclick="switchAdminPane('balance', this)">💰 Баланс</button>
+            <button class="admin-tab-btn" data-admin-pane="give" onclick="switchAdminPane('give', this)">🎁 Выдать предмет</button>
+            <button class="admin-tab-btn" data-admin-pane="users" onclick="switchAdminPane('users', this)">👥 Пользователи</button>
+            <button class="admin-tab-btn" data-admin-pane="events" onclick="switchAdminPane('events', this)">🎉 Ивенты</button>
+            <button class="admin-tab-btn" data-admin-pane="luck" onclick="switchAdminPane('luck', this)">🍀 Удача</button>
+            <button class="admin-tab-btn" data-admin-pane="global" onclick="switchAdminPane('global', this)">📢 Глобалка</button>
+        </div>
+
+        <!-- Промо -->
+        <div class="admin-pane active" id="admin-pane-promo">
+            <div class="panel-box">
+                <div class="panel-title">Создать промокод</div>
+                <div class="input-group">
+                    <input type="text" id="adm-promo-code" placeholder="CODE">
+                    <select id="adm-promo-type" onchange="onAdminPromoTypeChange()">
+                        <option value="coins">coins</option>
+                        <option value="item">item</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="adm-promo-amount" placeholder="amount (для coins)" min="0" step="1">
+                    <input type="number" id="adm-promo-item" placeholder="item_id (для item)" min="1" step="1">
+                </div>
+                <div class="input-group">
+                    <input type="number" id="adm-promo-stock" placeholder="stock" value="1" min="1" step="1">
+                    <button class="btn" style="width:auto;padding:10px 16px;" onclick="adminCreatePromo()">Создать</button>
+                </div>
+            </div>
+            <div class="panel-box">
+                <div class="panel-title">Удалить промокод</div>
+                <div class="input-group" style="margin-bottom:0;">
+                    <input type="text" id="adm-promo-del-code" placeholder="CODE">
+                    <button class="btn btn-red" style="width:auto;padding:10px 16px;" onclick="adminDeletePromo()">Удалить</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Баланс -->
+        <div class="admin-pane" id="admin-pane-balance">
+            <div class="panel-box">
+                <div class="panel-title">Начислить / списать монеты</div>
+                <div class="input-group">
+                    <input type="text" id="adm-bal-target" placeholder="target user_id">
+                    <input type="number" id="adm-bal-amount" placeholder="amount" min="0" step="1">
+                </div>
+                <div class="input-group" style="margin-bottom:0;">
+                    <button class="btn" onclick="adminBalance('add')">+ Начислить</button>
+                    <button class="btn btn-red" onclick="adminBalance('sub')">− Списать</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Выдать предмет -->
+        <div class="admin-pane" id="admin-pane-give">
+            <div class="panel-box">
+                <div class="panel-title">Выдать предмет с мутацией и трейтами</div>
+                <div class="input-group">
+                    <input type="text" id="adm-give-target" placeholder="target user_id">
+                    <input type="number" id="adm-give-item" placeholder="item_id" min="1" step="1">
+                </div>
+                <div class="input-group">
+                    <select id="adm-give-mut"></select>
+                </div>
+                <div class="panel-title" style="margin-top:6px;">Трейты (можно много):</div>
+                <div class="trait-pick-grid" id="adm-give-traits"></div>
+                <button class="btn" style="margin-top:10px;" onclick="adminGiveItem()">Выдать</button>
+            </div>
+        </div>
+
+        <!-- Пользователи -->
+        <div class="admin-pane" id="admin-pane-users">
+            <div class="panel-box">
+                <div class="panel-title">Список пользователей</div>
+                <button class="btn btn-blue" style="margin-bottom:10px;" onclick="adminLoadUsers()">Обновить</button>
+                <div id="adm-users-box" style="max-height:400px; overflow-y:auto;"></div>
+            </div>
+        </div>
+
+        <!-- Ивенты -->
+        <div class="admin-pane" id="admin-pane-events">
+            <div class="panel-box">
+                <div class="panel-title">Активные ивенты</div>
+                <div class="admin-list-events" id="adm-events-list"></div>
+            </div>
+            <div class="panel-box">
+                <div class="panel-title">Запустить ивент трейта</div>
+                <div class="input-group">
+                    <select id="adm-event-trait"></select>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="adm-event-trait-tick" placeholder="tick_seconds" value="45" min="10" step="1">
+                    <input type="number" id="adm-event-trait-chance" placeholder="chance %" value="5" min="0.1" max="100" step="0.1">
+                </div>
+                <div class="input-group" style="margin-bottom:0;">
+                    <input type="number" id="adm-event-trait-dur" placeholder="duration_sec" value="600" min="30" step="1">
+                    <button class="btn" style="width:auto;padding:10px 16px;" onclick="adminStartEvent('trait')">Запустить</button>
+                </div>
+            </div>
+            <div class="panel-box">
+                <div class="panel-title">Запустить ивент мутации</div>
+                <div class="input-group">
+                    <select id="adm-event-mut"></select>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="adm-event-mut-tick" placeholder="tick_seconds" value="60" min="10" step="1">
+                    <input type="number" id="adm-event-mut-chance" placeholder="chance %" value="2.5" min="0.1" max="100" step="0.1">
+                </div>
+                <div class="input-group" style="margin-bottom:0;">
+                    <input type="number" id="adm-event-mut-dur" placeholder="duration_sec" value="600" min="30" step="1">
+                    <button class="btn" style="width:auto;padding:10px 16px;" onclick="adminStartEvent('mutation')">Запустить</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Удача -->
+        <div class="admin-pane" id="admin-pane-luck">
+            <div class="panel-box">
+                <div class="panel-title">Ивент удачи</div>
+                <div class="input-group">
+                    <select id="adm-luck-mult">
+                        <option value="2">×2</option>
+                        <option value="4">×4</option>
+                    </select>
+                    <input type="number" id="adm-luck-dur" placeholder="duration_sec" value="600" min="30" step="1">
+                </div>
+                <div class="input-group" style="margin-bottom:0;">
+                    <button class="btn" onclick="adminStartLuck()">Запустить</button>
+                    <button class="btn btn-red" onclick="adminStopLuck()">Остановить</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Глобалка -->
+        <div class="admin-pane" id="admin-pane-global">
+            <div class="panel-box">
+                <div class="panel-title">Глобальное сообщение</div>
+                <div class="input-group">
+                    <input type="text" id="adm-global-text" placeholder="Текст (макс 500)" maxlength="500">
+                </div>
+                <div class="input-group" style="margin-bottom:0;">
+                    <input type="number" id="adm-global-dur" placeholder="duration_sec" value="60" min="5" max="3600" step="1">
+                    <button class="btn" style="width:auto;padding:10px 16px;" onclick="adminGlobalMessage()">Отправить</button>
+                </div>
+            </div>
+        </div>
     </section>
 
 </main>
@@ -706,10 +1023,14 @@ const MUTABLE_RARITIES = new Set(["legendary", "mythic"]);
 let state = {
     balance: 0, inventory: [], cases: [], all_items: [],
     mutations: [],
+    traits: [],
     free_seconds_left: 0, free_case_items: [],
     daily_seconds_left: 0, daily_bonus_items: [],
     daily_drops: { date: "", items: [] },
     global_message: { text: "", until: 0 },
+    active_events: [],
+    luck_event: { multiplier: 0, until: 0 },
+    is_admin: false,
     profile: null
 };
 let isCaseOpening = false;
@@ -736,6 +1057,25 @@ let minesOpened = new Set();
 let minesMines = 3;
 let minesPotentialWin = 0;
 let minesTotalBet = 0;
+
+/* PLINKO */
+const PLINKO_ROWS = 12;
+const PLINKO_MULTS = [29.0, 14.0, 6.0, 3.0, 1.5, 0.7, 0.4, 0.7, 1.5, 3.0, 6.0, 14.0, 29.0];
+let plinkoSelectedInv = new Set();
+let plinkoDropping = false;
+
+/* TOWER */
+const TOWER_FLOORS = 5;
+const TOWER_COLS = 5;
+let towerSelectedInv = new Set();
+let towerActive = false;
+let towerPassed = [];
+let towerBoomFloor = null;
+let towerBoomCell = null;
+let towerTotalBet = 0;
+
+/* ADMIN (Этап 4) */
+let admGiveTraits = new Set();
 
 const DICE_NAMES_RU = { red: "Красный", orange: "Оранжевый", yellow: "Жёлтый", green: "Зелёный", blue: "Синий", purple: "Фиолетовый" };
 const MULT_TABLE = { 1: 1.85, 3: 5.5, 5: 18.0, 7: 60.0, 9: 200.0, 11: 750.0 };
@@ -775,6 +1115,7 @@ function switchTab(tabName) {
     const btn = document.querySelector('.nav-btn[data-tab="' + tabName + '"]');
     if (btn) btn.classList.add("active");
     toggleDrawer(false);
+    if (tabName === "admin") { renderAdminStaticOptions(); adminLoadUsers(); }
 }
 
 let toastTimer = null;
@@ -804,6 +1145,19 @@ function mutationBadge(item) {
     '</div>';
 }
 
+function traitStrip(item) {
+    if (!item || !Array.isArray(item.traits) || !item.traits.length) return "";
+    return '<div class="trait-strip">' + item.traits.map(t => {
+        const cls = (t.percent || 0) >= 0 ? "positive" : "negative";
+        const sign = (t.percent || 0) >= 0 ? "+" : "";
+        const title = t.name + " (" + sign + t.percent + "%)";
+        if (t.icon) {
+            return '<div class="trait-icon ' + cls + '" title="' + title + '"><img src="' + t.icon + '" alt=""></div>';
+        }
+        return '<div class="trait-icon ' + cls + '" title="' + title + '"><span class="trait-fallback">' + (sign + t.percent) + '</span></div>';
+    }).join("") + '</div>';
+}
+
 async function syncProfile() {
     if (!tgUser) return;
     try {
@@ -827,12 +1181,16 @@ async function loadState() {
             cases: Array.isArray(data.cases) ? data.cases : [],
             all_items: Array.isArray(data.all_items) ? data.all_items : [],
             mutations: Array.isArray(data.mutations) ? data.mutations : [],
+            traits: Array.isArray(data.traits) ? data.traits : [],
             free_seconds_left: Number(data.free_seconds_left) || 0,
             free_case_items: Array.isArray(data.free_case_items) ? data.free_case_items : [],
             daily_seconds_left: Number(data.daily_seconds_left) || 0,
             daily_bonus_items: Array.isArray(data.daily_bonus_items) ? data.daily_bonus_items : [],
             daily_drops: data.daily_drops || { date: "", items: [] },
             global_message: data.global_message || { text: "", until: 0 },
+            active_events: Array.isArray(data.active_events) ? data.active_events : [],
+            luck_event: data.luck_event || { multiplier: 0, until: 0 },
+            is_admin: !!data.is_admin,
             profile: data.profile || null
         };
     } catch (e) {
@@ -843,11 +1201,29 @@ async function loadState() {
     el("balance-val").textContent = state.balance.toFixed(2);
     el("inv-count-badge").textContent = state.inventory.length;
 
+    // Админка: показ/скрытие
+    const admBtn = el("nav-admin-btn");
+    if (admBtn) admBtn.classList.toggle("show", state.is_admin);
+
+    // Удача в хедере
+    const luckBox = el("luck-badge");
+    if (luckBox) {
+        const now = Math.floor(Date.now() / 1000);
+        if (state.luck_event && state.luck_event.multiplier > 0 && Number(state.luck_event.until) > now) {
+            luckBox.textContent = "🍀 Удача ×" + state.luck_event.multiplier;
+            luckBox.classList.add("show");
+        } else {
+            luckBox.classList.remove("show");
+        }
+    }
+
     const validIds = new Set(state.inventory.map(i => i.inv_id));
     upgSelectedInv = new Set([...upgSelectedInv].filter(id => validIds.has(id)));
     crashSelectedInv = new Set([...crashSelectedInv].filter(id => validIds.has(id)));
     diceSelectedInv = new Set([...diceSelectedInv].filter(id => validIds.has(id)));
     minesSelectedInv = new Set([...minesSelectedInv].filter(id => validIds.has(id)));
+    plinkoSelectedInv = new Set([...plinkoSelectedInv].filter(id => validIds.has(id)));
+    towerSelectedInv = new Set([...towerSelectedInv].filter(id => validIds.has(id)));
 
     renderProfile();
     renderDailyDrops();
@@ -860,8 +1236,11 @@ async function loadState() {
     updateCrashTotal();
     updateDiceTotal();
     updateMinesTotal();
+    updatePlinkoTotal();
+    updateTowerTotal();
     updateFreeTimer();
     updateDailyBonusTimer();
+    renderActiveEvents();
 }
 
 function renderProfile() {
@@ -1008,7 +1387,6 @@ setInterval(() => {
 }, 1000);
 
 setInterval(() => {
-    // автообновление дропов дня и глобального сообщения
     renderGlobalMessage();
     fetch("/api/daily_drops").then(r => r.ok ? r.json() : null).then(dd => {
         if (dd && dd.date) {
@@ -1029,6 +1407,7 @@ function renderInventories() {
                 '<div class="card rarity-' + item.rarity + '">' +
                     mutationBadge(item) +
                     renderItemImg(item) +
+                    traitStrip(item) +
                     '<div class="card-title">' + item.name + '</div>' +
                     '<div class="card-price">' + item.price + ' 💰</div>' +
                     (item.locked
@@ -1050,6 +1429,7 @@ function renderInventories() {
             '" style="cursor:pointer;" onclick="toggleUpgItem(' + item.inv_id + ')">' +
                 mutationBadge(item) +
                 renderItemImg(item) +
+                traitStrip(item) +
                 '<div class="card-title">' + item.name + '</div>' +
                 '<div class="card-price">' + item.price + ' 💰</div>' +
             '</div>'
@@ -1063,6 +1443,7 @@ function renderInventories() {
             '" style="cursor:pointer;" onclick="toggleCrashItem(' + item.inv_id + ')">' +
                 mutationBadge(item) +
                 renderItemImg(item) +
+                traitStrip(item) +
                 '<div class="card-title">' + item.name + '</div>' +
                 '<div class="card-price">' + item.price + ' 💰</div>' +
             '</div>'
@@ -1076,6 +1457,7 @@ function renderInventories() {
             '" style="cursor:pointer;" onclick="toggleDiceItem(' + item.inv_id + ')">' +
                 mutationBadge(item) +
                 renderItemImg(item) +
+                traitStrip(item) +
                 '<div class="card-title">' + item.name + '</div>' +
                 '<div class="card-price">' + item.price + ' 💰</div>' +
             '</div>'
@@ -1089,6 +1471,35 @@ function renderInventories() {
             '" style="cursor:pointer;" onclick="toggleMinesItem(' + item.inv_id + ')">' +
                 mutationBadge(item) +
                 renderItemImg(item) +
+                traitStrip(item) +
+                '<div class="card-title">' + item.name + '</div>' +
+                '<div class="card-price">' + item.price + ' 💰</div>' +
+            '</div>'
+        ).join("");
+    }
+
+    const plinkoGrid = el("plinko-inv-grid");
+    if (plinkoGrid) {
+        plinkoGrid.innerHTML = !bettable.length ? emptyNote : bettable.map(item =>
+            '<div class="card rarity-' + item.rarity + (plinkoSelectedInv.has(item.inv_id) ? ' selected' : '') +
+            '" style="cursor:pointer;" onclick="togglePlinkoItem(' + item.inv_id + ')">' +
+                mutationBadge(item) +
+                renderItemImg(item) +
+                traitStrip(item) +
+                '<div class="card-title">' + item.name + '</div>' +
+                '<div class="card-price">' + item.price + ' 💰</div>' +
+            '</div>'
+        ).join("");
+    }
+
+    const towerGrid = el("tower-inv-grid");
+    if (towerGrid) {
+        towerGrid.innerHTML = !bettable.length ? emptyNote : bettable.map(item =>
+            '<div class="card rarity-' + item.rarity + (towerSelectedInv.has(item.inv_id) ? ' selected' : '') +
+            '" style="cursor:pointer;" onclick="toggleTowerItem(' + item.inv_id + ')">' +
+                mutationBadge(item) +
+                renderItemImg(item) +
+                traitStrip(item) +
                 '<div class="card-title">' + item.name + '</div>' +
                 '<div class="card-price">' + item.price + ' 💰</div>' +
             '</div>'
@@ -1419,6 +1830,7 @@ function playCaseRoulette(caseName, poolItems, wonItems, wonInvIds) {
             winCard.innerHTML = mutationBadge(firstWon) +
                 '<div style="display:flex;flex-direction:column;align-items:center;">' +
                 renderItemImg(firstWon) +
+                traitStrip(firstWon) +
                 '<div style="font-size:15px;font-weight:800;margin-top:6px;">' + firstWon.name + '</div>' +
                 '<div style="font-size:14px;color:#ffcc80;font-weight:700;margin-top:2px;">' + firstWon.price + ' 💰</div>' +
             '</div>';
@@ -1429,6 +1841,7 @@ function playCaseRoulette(caseName, poolItems, wonItems, wonInvIds) {
                     '<div class="multi-win-item rarity-' + i.rarity + '">' +
                         mutationBadge(i) +
                         renderItemImg(i) +
+                        traitStrip(i) +
                         '<div class="multi-win-item-name">' + i.name + '</div>' +
                         '<div class="multi-win-item-price">' + i.price + ' 💰</div>' +
                     '</div>'
@@ -2007,10 +2420,641 @@ async function cashoutMines() {
     await loadState();
 }
 
+/* ---------- ПЛИНКО ---------- */
+function renderPlinkoMults() {
+    const box = el("plinko-mults");
+    if (!box) return;
+    box.innerHTML = PLINKO_MULTS.map((m, i) =>
+        '<div class="plinko-mult-pill" data-idx="' + i + '">x' + m + '</div>'
+    ).join("");
+}
+
+function drawPlinkoBoard(hitSlot) {
+    const canvas = el("plinko-canvas");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    const bg = ctx.createLinearGradient(0, 0, 0, H);
+    bg.addColorStop(0, "rgba(41,121,255,0.10)");
+    bg.addColorStop(1, "rgba(20,15,12,0.95)");
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    const topPad = 18;
+    const bottomPad = 64;
+    const usableW = W - 60;
+    const usableH = H - topPad - bottomPad;
+    const rowGap = usableH / PLINKO_ROWS;
+    const startX = W / 2;
+
+    for (let r = 0; r <= PLINKO_ROWS; r++) {
+        const y = topPad + r * rowGap;
+        const count = r + 1;
+        const spacing = usableW / PLINKO_ROWS;
+        const rowWidth = (count - 1) * spacing;
+        const rowStartX = startX - rowWidth / 2;
+        for (let c = 0; c < count; c++) {
+            const x = rowStartX + c * spacing;
+            if (r < PLINKO_ROWS) {
+                const nextSpacing = usableW / PLINKO_ROWS;
+                const nextRowWidth = ((r + 2) - 1) * nextSpacing;
+                const nextStartX = startX - nextRowWidth / 2;
+                const ny = topPad + (r + 1) * rowGap;
+                ctx.strokeStyle = "rgba(255,123,0,0.08)";
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(nextStartX + c * nextSpacing, ny);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(nextStartX + (c + 1) * nextSpacing, ny);
+                ctx.stroke();
+            }
+            ctx.fillStyle = "#ff7b00";
+            ctx.beginPath();
+            ctx.arc(x, y, 3.2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = "rgba(255,255,255,0.25)";
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        }
+    }
+
+    const slotsY = topPad + (PLINKO_ROWS + 1) * rowGap - 6;
+    const slotCount = PLINKO_ROWS + 1;
+    const slotW = usableW / slotCount;
+    for (let i = 0; i < slotCount; i++) {
+        const x = startX - usableW / 2 + i * slotW;
+        const isHit = (hitSlot === i);
+        const m = PLINKO_MULTS[i];
+        let color = "#1a120e";
+        if (isHit) color = "rgba(255,123,0,0.85)";
+        else if (m >= 6) color = "rgba(255,61,0,0.35)";
+        else if (m >= 1.5) color = "rgba(255,123,0,0.25)";
+        else color = "rgba(41,121,255,0.20)";
+        ctx.fillStyle = color;
+        ctx.strokeStyle = isHit ? "#ff7b00" : "rgba(74,51,40,0.9)";
+        ctx.lineWidth = isHit ? 2 : 1;
+        ctx.beginPath();
+        ctx.moveTo(x + 2, slotsY);
+        ctx.lineTo(x + slotW - 2, slotsY);
+        ctx.lineTo(x + slotW - 2, slotsY + 22);
+        ctx.lineTo(x + 2, slotsY + 22);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = isHit ? "#fff" : "#ffcc80";
+        ctx.font = "bold 9px Segoe UI";
+        ctx.textAlign = "center";
+        ctx.fillText("x" + m, x + slotW / 2, slotsY + 14);
+    }
+}
+
+let plinkoAnimationFrame = null;
+function animatePlinko(path, finalSlot, onDone) {
+    const canvas = el("plinko-canvas");
+    if (!canvas) { if (onDone) onDone(); return; }
+    const W = canvas.width, H = canvas.height;
+    const topPad = 18;
+    const bottomPad = 64;
+    const usableW = W - 60;
+    const usableH = H - topPad - bottomPad;
+    const rowGap = usableH / PLINKO_ROWS;
+    const startX = W / 2;
+    const spacing = usableW / PLINKO_ROWS;
+
+    let colOffset = 0;
+    const points = [{ x: startX, y: topPad }];
+    for (let r = 0; r < PLINKO_ROWS; r++) {
+        colOffset += path[r];
+        const y = topPad + (r + 1) * rowGap;
+        const x = startX + (colOffset - (r + 1) / 2) * spacing;
+        points.push({ x, y });
+    }
+
+    let segStart = performance.now();
+    let currentSeg = 0;
+    const segDuration = 90;
+
+    function step(now) {
+        const elapsed = now - segStart;
+        const t = Math.min(elapsed / segDuration, 1);
+        const p0 = points[currentSeg];
+        const p1 = points[currentSeg + 1];
+        if (!p1) {
+            drawPlinkoBoard(finalSlot);
+            if (onDone) onDone();
+            return;
+        }
+        const x = p0.x + (p1.x - p0.x) * t;
+        const y = p0.y + (p1.y - p0.y) * t;
+
+        drawPlinkoBoard(null);
+        const ctx = canvas.getContext("2d");
+        const grd = ctx.createRadialGradient(x - 3, y - 3, 1, x, y, 9);
+        grd.addColorStop(0, "#fff3e0");
+        grd.addColorStop(1, "#ff7b00");
+        ctx.fillStyle = grd;
+        ctx.beginPath();
+        ctx.arc(x, y, 8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = "rgba(255,255,255,0.8)";
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        if (t >= 1) {
+            currentSeg++;
+            segStart = performance.now();
+        }
+        plinkoAnimationFrame = requestAnimationFrame(step);
+    }
+    if (plinkoAnimationFrame) cancelAnimationFrame(plinkoAnimationFrame);
+    plinkoAnimationFrame = requestAnimationFrame(step);
+}
+
+function togglePlinkoItem(invId) {
+    if (plinkoDropping) return;
+    if (plinkoSelectedInv.has(invId)) plinkoSelectedInv.delete(invId);
+    else plinkoSelectedInv.add(invId);
+    renderInventories();
+    updatePlinkoTotal();
+}
+
+function setMaxPlinkoCoins() {
+    if (plinkoDropping) return;
+    el("plinko-coins-input").value = state.balance;
+    updatePlinkoTotal();
+}
+
+function updatePlinkoTotal() {
+    const input = el("plinko-coins-input");
+    if (!input) return;
+    let sum = parseFloat(input.value) || 0;
+    state.inventory.forEach(i => {
+        if (!i.locked && plinkoSelectedInv.has(i.inv_id)) sum += Number(i.price) || 0;
+    });
+    el("plinko-total-bet").textContent = sum.toFixed(2);
+}
+
+async function playPlinko() {
+    if (plinkoDropping) return;
+    const coins = parseFloat(el("plinko-coins-input").value) || 0;
+    let data;
+    try {
+        data = await postJSON("/api/plinko/play", {
+            user_id: userId,
+            inv_ids: [...plinkoSelectedInv],
+            coins_bet: coins
+        });
+    } catch (e) {
+        return showToast(e.message);
+    }
+
+    plinkoDropping = true;
+    const btn = el("plinko-drop-btn");
+    btn.disabled = true;
+    btn.textContent = "Шарик летит...";
+    el("plinko-status").textContent = "Шарик катится...";
+    plinkoSelectedInv.clear();
+    el("plinko-coins-input").value = "";
+    await loadState();
+
+    const finalSlot = Number(data.slot) || 0;
+    animatePlinko(data.path || [], finalSlot, async () => {
+        plinkoDropping = false;
+        btn.disabled = false;
+        btn.textContent = "🎯 Бросить шарик";
+
+        const pills = document.querySelectorAll(".plinko-mult-pill");
+        pills.forEach(p => p.classList.remove("hit"));
+        const hitPill = document.querySelector('.plinko-mult-pill[data-idx="' + finalSlot + '"]');
+        if (hitPill) hitPill.classList.add("hit");
+
+        const mult = Number(data.multiplier) || 0;
+        const st = el("plinko-status");
+        if (data.returned_items && data.returned_items.length > 0) {
+            st.innerHTML = '<span style="color:#00e676;">Слот ' + finalSlot + ' × ' + mult + 'x — мега-выигрыш! Вещи вернулись, +' + data.coins_added + ' 💰 на баланс.</span>';
+            showToast("🎉 ×" + mult + "! Вещи возвращены + " + data.coins_added + " 💰");
+        } else if (data.won_item) {
+            st.innerHTML = '<span style="color:#00e676;">Слот ' + finalSlot + ' × ' + mult + 'x — выигрыш: ' + data.won_item.name + ' + ' + data.coins_added + ' 💰</span>';
+            showToast("🎉 ×" + mult + "! " + data.won_item.name + " + " + data.coins_added + " 💰");
+        } else {
+            st.innerHTML = '<span style="color:#ff8a65;">Слот ' + finalSlot + ' × ' + mult + 'x — +' + data.coins_added + ' 💰 на баланс.</span>';
+            showToast("Слот " + finalSlot + " × " + mult + "x — +" + data.coins_added + " 💰");
+        }
+        await loadState();
+    });
+}
+
+/* ---------- БАШНЯ ---------- */
+function towerMultiplier(passed) {
+    if (passed <= 0) return 1.0;
+    const base = Math.pow(TOWER_COLS / (TOWER_COLS - 1), passed);
+    return Math.round(base * 0.95 * 100) / 100;
+}
+
+function renderTowerBoard() {
+    const box = el("tower-floors");
+    if (!box) return;
+    let html = "";
+    for (let f = 0; f < TOWER_FLOORS; f++) {
+        const floorCells = [];
+        for (let c = 0; c < TOWER_COLS; c++) {
+            let cls = "tower-cell";
+            let content = "";
+            const isPassed = towerPassed.length > f;
+            const isBoom = (towerBoomFloor === f && towerBoomCell === c);
+            if (isPassed) {
+                if (towerPassed[f] === c) {
+                    cls += " safe";
+                    content = "💎";
+                } else {
+                    cls += " locked";
+                }
+            } else if (isBoom) {
+                cls += " boom";
+                content = "💣";
+            } else if (towerBoomFloor !== null && f >= towerBoomFloor) {
+                cls += " locked";
+            } else if (towerActive && f === towerPassed.length) {
+                cls += " clickable";
+            }
+            const clickAttr = (towerActive && f === towerPassed.length) ? ' onclick="openTowerCell(' + c + ')"' : '';
+            floorCells.push('<div class="' + cls + '"' + clickAttr + '>' + content + '</div>');
+        }
+        html += '<div class="tower-floor">' +
+            '<div class="tower-floor-label">' + (f + 1) + ' эт.</div>' +
+            '<div class="tower-floor-cells">' + floorCells.join("") + '</div>' +
+        '</div>';
+    }
+    box.innerHTML = html;
+}
+
+function updateTowerStats() {
+    const passed = towerPassed.length;
+    const mult = towerActive ? towerMultiplier(passed) : 1.0;
+    el("tower-mult").textContent = mult.toFixed(2) + "x";
+    el("tower-floor").textContent = passed + "/" + TOWER_FLOORS;
+    const potential = towerActive ? Math.round(towerTotalBet * mult * 100) / 100 : 0;
+    el("tower-potential").textContent = potential.toFixed(2);
+}
+
+function toggleTowerItem(invId) {
+    if (towerActive) return;
+    if (towerSelectedInv.has(invId)) towerSelectedInv.delete(invId);
+    else towerSelectedInv.add(invId);
+    renderInventories();
+    updateTowerTotal();
+}
+
+function setMaxTowerCoins() {
+    if (towerActive) return;
+    el("tower-coins-input").value = state.balance;
+    updateTowerTotal();
+}
+
+function updateTowerTotal() {
+    const input = el("tower-coins-input");
+    if (!input) return;
+    let sum = parseFloat(input.value) || 0;
+    state.inventory.forEach(i => {
+        if (!i.locked && towerSelectedInv.has(i.inv_id)) sum += Number(i.price) || 0;
+    });
+    towerTotalBet = sum;
+    el("tower-total-bet").textContent = sum.toFixed(2);
+    updateTowerStats();
+}
+
+async function startTower() {
+    if (towerActive) return;
+    const coins = parseFloat(el("tower-coins-input").value) || 0;
+    let data;
+    try {
+        data = await postJSON("/api/tower/start", {
+            user_id: userId,
+            inv_ids: [...towerSelectedInv],
+            coins_bet: coins
+        });
+    } catch (e) {
+        return showToast(e.message);
+    }
+    towerActive = true;
+    towerPassed = [];
+    towerBoomFloor = null;
+    towerBoomCell = null;
+    towerSelectedInv.clear();
+    el("tower-coins-input").value = "";
+    await loadState();
+    towerTotalBet = Number(data.total_bet) || 0;
+    el("tower-status-text").textContent = "Игра началась. Открывайте клетки этаж за этажом!";
+    el("tower-start-btn").style.display = "none";
+    el("tower-cashout-btn").style.display = "block";
+    renderTowerBoard();
+    updateTowerStats();
+}
+
+async function openTowerCell(cell) {
+    if (!towerActive) return showToast("Сначала начните игру");
+    let data;
+    try {
+        data = await postJSON("/api/tower/open", { user_id: userId, cell: cell });
+    } catch (e) {
+        return showToast(e.message);
+    }
+    if (data.boom) {
+        towerActive = false;
+        towerBoomFloor = data.floor;
+        towerBoomCell = data.cell;
+        el("tower-status-text").innerHTML = '<span style="color:#ff8a65;">💥 Мина на этаже ' + (data.floor + 1) + '! Ставка сгорела.</span>';
+        el("tower-start-btn").style.display = "block";
+        el("tower-cashout-btn").style.display = "none";
+        renderTowerBoard();
+        updateTowerStats();
+        await loadState();
+        return;
+    }
+    towerPassed.push(data.cell);
+    renderTowerBoard();
+    const potential = Number(data.potential_win) || 0;
+    el("tower-potential").textContent = potential.toFixed(2);
+    el("tower-mult").textContent = Number(data.multiplier || 1).toFixed(2) + "x";
+    el("tower-floor").textContent = towerPassed.length + "/" + TOWER_FLOORS;
+    if (data.finished) {
+        el("tower-status-text").innerHTML = '<span style="color:#00e676;">Все 5 этажей пройдены! Забирайте выигрыш.</span>';
+    } else {
+        el("tower-status-text").textContent = "Этаж " + towerPassed.length + " пройден ×" + data.multiplier + " — открывайте дальше или забирайте";
+    }
+}
+
+async function cashoutTower() {
+    if (!towerActive) return;
+    let data;
+    try {
+        data = await postJSON("/api/tower/cashout", { user_id: userId });
+    } catch (e) {
+        return showToast(e.message);
+    }
+    towerActive = false;
+    el("tower-start-btn").style.display = "block";
+    el("tower-cashout-btn").style.display = "none";
+    el("tower-status-text").innerHTML = '<span style="color:#00e676;">Забрали на ×' + data.multiplier + ' — ' + data.total_win + ' 💰</span>';
+    towerPassed = [];
+    towerBoomFloor = null;
+    towerBoomCell = null;
+    renderTowerBoard();
+    updateTowerStats();
+    if (data.returned_items && data.returned_items.length > 0) {
+        showToast("Вещи возвращены в инвентарь, +" + data.coins_added + " 💰 на баланс!");
+    } else if (data.won_item) {
+        showToast("Выигрыш: " + data.won_item.name + " + " + data.coins_added + " 💰");
+    } else {
+        showToast("Выигрыш: +" + data.coins_added + " 💰");
+    }
+    await loadState();
+}
+
+/* ---------- АДМИНКА (Этап 4) ---------- */
+function switchAdminPane(pane, btnEl) {
+    document.querySelectorAll(".admin-pane").forEach(p => p.classList.remove("active"));
+    document.querySelectorAll(".admin-tab-btn").forEach(b => b.classList.remove("active"));
+    const target = el("admin-pane-" + pane);
+    if (target) target.classList.add("active");
+    if (btnEl) btnEl.classList.add("active");
+}
+
+function onAdminPromoTypeChange() {
+    const t = el("adm-promo-type").value;
+    const amountEl = el("adm-promo-amount");
+    const itemEl = el("adm-promo-item");
+    if (t === "coins") { amountEl.style.display = ""; itemEl.style.display = "none"; }
+    else { amountEl.style.display = "none"; itemEl.style.display = ""; }
+}
+
+function renderAdminStaticOptions() {
+    // Мутации в селект для выдачи предмета
+    const mutSel = el("adm-give-mut");
+    if (mutSel && !mutSel.dataset.filled) {
+        mutSel.innerHTML = state.mutations.map(m =>
+            '<option value="' + m.key + '">' + m.name + ' (×' + m.mult + ')</option>'
+        ).join("");
+        mutSel.dataset.filled = "1";
+    }
+    // Трейты в чекбоксы
+    const traitsBox = el("adm-give-traits");
+    if (traitsBox && !traitsBox.dataset.filled) {
+        traitsBox.innerHTML = state.traits.map(t => {
+            const cls = (t.percent || 0) >= 0 ? "pos" : "neg";
+            const sign = (t.percent || 0) >= 0 ? "+" : "";
+            return '<div class="trait-pick-item" data-key="' + t.key + '" onclick="toggleAdmTrait(\'' + t.key + '\')">' +
+                '<span>' + t.name + '</span>' +
+                '<span class="pct ' + cls + '">' + sign + t.percent + '%</span>' +
+            '</div>';
+        }).join("");
+        traitsBox.dataset.filled = "1";
+    }
+    // Ивент: трейты в селект
+    const evTraitSel = el("adm-event-trait");
+    if (evTraitSel && !evTraitSel.dataset.filled) {
+        evTraitSel.innerHTML = state.traits.map(t =>
+            '<option value="' + t.key + '">' + t.name + ' (' + (t.percent >= 0 ? "+" : "") + t.percent + '%)</option>'
+        ).join("");
+        evTraitSel.dataset.filled = "1";
+    }
+    // Ивент: мутации в селект (без normal)
+    const evMutSel = el("adm-event-mut");
+    if (evMutSel && !evMutSel.dataset.filled) {
+        evMutSel.innerHTML = state.mutations.filter(m => m.key !== "normal").map(m =>
+            '<option value="' + m.key + '">' + m.name + ' (×' + m.mult + ')</option>'
+        ).join("");
+        evMutSel.dataset.filled = "1";
+    }
+    onAdminPromoTypeChange();
+}
+
+function toggleAdmTrait(key) {
+    if (admGiveTraits.has(key)) admGiveTraits.delete(key);
+    else admGiveTraits.add(key);
+    document.querySelectorAll("#adm-give-traits .trait-pick-item").forEach(it => {
+        if (it.dataset.key === key) it.classList.toggle("active", admGiveTraits.has(key));
+    });
+}
+
+async function adminCreatePromo() {
+    const code = (el("adm-promo-code").value || "").trim();
+    const type = el("adm-promo-type").value;
+    const amount = parseFloat(el("adm-promo-amount").value) || 0;
+    const itemId = parseInt(el("adm-promo-item").value, 10) || null;
+    const stock = parseInt(el("adm-promo-stock").value, 10) || 1;
+    if (!code) return showToast("Введите код");
+    try {
+        await postJSON("/api/admin/promo/create", {
+            admin_id: userId, code, type, amount, item_id: itemId, stock
+        });
+        showToast("Промокод создан: " + code);
+        el("adm-promo-code").value = "";
+    } catch (e) { showToast(e.message); }
+}
+
+async function adminDeletePromo() {
+    const code = (el("adm-promo-del-code").value || "").trim();
+    if (!code) return showToast("Введите код");
+    try {
+        await postJSON("/api/admin/promo/delete", { admin_id: userId, code });
+        showToast("Удалён: " + code);
+        el("adm-promo-del-code").value = "";
+    } catch (e) { showToast(e.message); }
+}
+
+async function adminBalance(action) {
+    const target = (el("adm-bal-target").value || "").trim();
+    const amount = parseFloat(el("adm-bal-amount").value) || 0;
+    if (!target || amount <= 0) return showToast("Укажите user_id и amount>0");
+    try {
+        const data = await postJSON("/api/admin/balance", {
+            admin_id: userId, target_user_id: target, amount, action
+        });
+        showToast((action === "add" ? "Начислено" : "Списано") + ". Новый баланс: " + data.new_balance);
+    } catch (e) { showToast(e.message); }
+}
+
+async function adminGiveItem() {
+    const target = (el("adm-give-target").value || "").trim();
+    const itemId = parseInt(el("adm-give-item").value, 10) || 0;
+    const mutation = el("adm-give-mut").value || "normal";
+    const traits = [...admGiveTraits];
+    if (!target || !itemId) return showToast("Укажите user_id и item_id");
+    try {
+        const data = await postJSON("/api/admin/give_item", {
+            admin_id: userId, target_user_id: target, item_id: itemId, mutation, traits
+        });
+        showToast("Выдано: " + data.item.name + " (inv_id=" + data.inv_id + ")");
+    } catch (e) { showToast(e.message); }
+}
+
+async function adminLoadUsers() {
+    if (!state.is_admin) return;
+    try {
+        const res = await fetch("/api/admin/users?admin_id=" + encodeURIComponent(userId));
+        if (!res.ok) {
+            const d = await res.json().catch(() => ({}));
+            throw new Error(d.detail || "Не удалось загрузить");
+        }
+        const data = await res.json();
+        const box = el("adm-users-box");
+        if (!box) return;
+        if (!data.users || !data.users.length) {
+            box.innerHTML = '<p style="color:var(--muted);">Пользователей нет</p>';
+            return;
+        }
+        box.innerHTML = '<table class="admin-users-table"><thead><tr>' +
+            '<th>user_id</th><th>@username</th><th>имя</th><th>баланс</th><th>предметов</th><th>стоимость</th>' +
+            '</tr></thead><tbody>' +
+            data.users.map(u =>
+                '<tr><td class="mono">' + u.user_id + '</td>' +
+                '<td>' + (u.username ? "@" + u.username : "—") + '</td>' +
+                '<td>' + (u.first_name || "—") + '</td>' +
+                '<td>' + u.balance + '</td>' +
+                '<td>' + u.inv_count + '</td>' +
+                '<td>' + u.inv_value + '</td></tr>'
+            ).join("") +
+            '</tbody></table>';
+    } catch (e) {
+        showToast(e.message);
+    }
+}
+
+function renderActiveEvents() {
+    const box = el("adm-events-list");
+    if (!box) return;
+    const now = Math.floor(Date.now() / 1000);
+    const list = (state.active_events || []).filter(ev => Number(ev.until) > now);
+    if (!list.length) {
+        box.innerHTML = '<p style="color:var(--muted);">Нет активных ивентов</p>';
+        return;
+    }
+    box.innerHTML = list.map(ev => {
+        const typeRu = ev.event_type === "trait" ? "Трейт" : "Мутация";
+        const key = ev.event_type === "trait" ? ev.trait_key : ev.mutation_key;
+        const left = Math.max(0, Number(ev.until) - now);
+        return '<div class="admin-event-item">' +
+            '<div>' +
+                '<div><b>' + typeRu + ':</b> ' + key + '</div>' +
+                '<div class="ev-meta">тик ' + ev.tick_seconds + 'с · шанс ' + ev.chance_percent + '% · осталось ' + left + 'с</div>' +
+                '<div class="ev-id">' + ev.event_id + '</div>' +
+            '</div>' +
+            '<button class="btn btn-red" style="width:auto;padding:6px 10px;font-size:12px;" onclick="adminStopEvent(\'' + ev.event_id + '\')">Стоп</button>' +
+        '</div>';
+    }).join("");
+}
+
+async function adminStartEvent(type) {
+    let payload = { admin_id: userId, event_type: type };
+    if (type === "trait") {
+        payload.trait_key = el("adm-event-trait").value;
+        payload.tick_seconds = parseInt(el("adm-event-trait-tick").value, 10) || 45;
+        payload.chance_percent = parseFloat(el("adm-event-trait-chance").value) || 5;
+        payload.duration_seconds = parseInt(el("adm-event-trait-dur").value, 10) || 600;
+    } else {
+        payload.mutation_key = el("adm-event-mut").value;
+        payload.tick_seconds = parseInt(el("adm-event-mut-tick").value, 10) || 60;
+        payload.chance_percent = parseFloat(el("adm-event-mut-chance").value) || 2.5;
+        payload.duration_seconds = parseInt(el("adm-event-mut-dur").value, 10) || 600;
+    }
+    try {
+        const data = await postJSON("/api/admin/event/start", payload);
+        showToast("Ивент запущен: " + data.event_id);
+        await loadState();
+    } catch (e) { showToast(e.message); }
+}
+
+async function adminStopEvent(eventId) {
+    try {
+        await postJSON("/api/admin/event/stop", { admin_id: userId, event_id: eventId });
+        showToast("Ивент остановлен");
+        await loadState();
+    } catch (e) { showToast(e.message); }
+}
+
+async function adminStartLuck() {
+    const mult = parseInt(el("adm-luck-mult").value, 10);
+    const dur = parseInt(el("adm-luck-dur").value, 10) || 600;
+    try {
+        await postJSON("/api/admin/luck/start", { admin_id: userId, multiplier: mult, duration_seconds: dur });
+        showToast("Удача ×" + mult + " запущена на " + dur + "с");
+        await loadState();
+    } catch (e) { showToast(e.message); }
+}
+
+async function adminStopLuck() {
+    try {
+        await postJSON("/api/admin/luck/stop", { admin_id: userId });
+        showToast("Удача остановлена");
+        await loadState();
+    } catch (e) { showToast(e.message); }
+}
+
+async function adminGlobalMessage() {
+    const text = (el("adm-global-text").value || "").trim();
+    const dur = parseInt(el("adm-global-dur").value, 10) || 60;
+    if (!text) return showToast("Введите текст");
+    try {
+        await postJSON("/api/admin/global_message", { admin_id: userId, text, duration_seconds: dur });
+        showToast("Глобалка отправлена");
+        el("adm-global-text").value = "";
+    } catch (e) { showToast(e.message); }
+}
+
 /* ---------- Запуск ---------- */
 renderInitialDiceBoard();
 renderMinesBoard(null, null);
 updateMinesStats();
+renderPlinkoMults();
+drawPlinkoBoard(null);
+renderTowerBoard();
+updateTowerStats();
 syncProfile().then(loadState);
 </script>
 </body>
