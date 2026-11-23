@@ -2036,12 +2036,17 @@ function updateTradeTotal() {
     state.inventory.forEach(i => { if (!i.locked && tradeSelectedInv.has(i.inv_id)) itemsValue += Number(i.price) || 0; });
     const coinsInput = el("trade-coins-input");
     const coins = coinsInput ? (parseFloat(coinsInput.value) || 0) : 0;
-    const commission = Math.round((itemsValue + coins) * state.trade_commission * 100) / 100;
-    el("trade-items-count").textContent = String(tradeSelectedInv.size);
-    el("trade-items-value").textContent = itemsValue.toFixed(2);
-    el("trade-commission-val").textContent = commission.toFixed(2);
-    el("trade-total-charge").textContent = (itemsValue + coins + commission).toFixed(2);
+    const commission = Math.round((itemsValue + coins) * (state.trade_commission || 0) * 100) / 100;
+    const countEl = el("trade-items-count");
+    const valEl = el("trade-items-value");
+    const commEl = el("trade-commission-val");
+    const chargeEl = el("trade-total-charge");
+    if (countEl) countEl.textContent = String(tradeSelectedInv.size);
+    if (valEl) valEl.textContent = itemsValue.toFixed(2);
+    if (commEl) commEl.textContent = commission.toFixed(2);
+    if (chargeEl) chargeEl.textContent = (itemsValue + coins + commission).toFixed(2);
 }
+
 async function tradeSend() {
     if (!tradeFoundUserId) return showToast("Сначала найдите получателя");
     const coins = parseFloat(el("trade-coins-input").value) || 0;
