@@ -695,15 +695,6 @@
     "until": 1795446107
   },
   "events": {
-    "17954464316886901": {
-      "event_type": "trait",
-      "trait_key": "crab",
-      "mutation_key": null,
-      "tick_seconds": 10,
-      "chance_percent": 100.0,
-      "until": 1795447031,
-      "started_at": 1795446431
-    },
     "17954465095045463": {
       "event_type": "mutation",
       "trait_key": null,
