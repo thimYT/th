@@ -58,7 +58,9 @@
           "inv_id": 267,
           "item_id": 36,
           "mutation": "normal",
-          "traits": []
+          "traits": [
+            "spider"
+          ]
         },
         {
           "inv_id": 268,
