@@ -45,19 +45,15 @@
       "balance": 3008.87,
       "inventory": [
         {
-          "inv_id": 265,
-          "item_id": 36,
-          "mutation": "hacker",
-          "traits": [
-            "spider",
-            "crab",
-            "taco"
-          ]
-        },
-        {
           "inv_id": 1252,
           "item_id": 1,
           "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1253,
+          "item_id": 84,
+          "mutation": "bloodroot",
           "traits": []
         }
       ],
@@ -179,7 +175,7 @@
       "photo_url": "https://t.me/i/userpic/320/n070dQV6aSk-Uji2mpBqleZeFEfoR88J_ozlC0v_fxHLdd5xEFPv1zgsgExUz2o-.svg"
     }
   },
-  "next_inv_id": 1253,
+  "next_inv_id": 1254,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -777,6 +773,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 5.0
+      },
+      {
+        "ts": 1795447211,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# на @FarmBrainrots_bot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "upgrade",
+        "item_id": 84,
+        "name": "La Casa Boo",
+        "rarity": "legendary",
+        "image": "/images/item84.png",
+        "fallback": "🐉",
+        "mutation": "bloodroot",
+        "mutation_icon": "/images/mutation3.png",
+        "mutation_mult": 2.0,
+        "price": 995.0
       }
     ]
   },
