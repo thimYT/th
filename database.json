@@ -42,7 +42,7 @@
       "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg"
     },
     "8450028899": {
-      "balance": 2753.87,
+      "balance": 2653.87,
       "inventory": [
         {
           "inv_id": 1254,
@@ -83,6 +83,12 @@
         {
           "inv_id": 1260,
           "item_id": 14,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1261,
+          "item_id": 35,
           "mutation": "normal",
           "traits": []
         }
@@ -205,7 +211,7 @@
       "photo_url": "https://t.me/i/userpic/320/n070dQV6aSk-Uji2mpBqleZeFEfoR88J_ozlC0v_fxHLdd5xEFPv1zgsgExUz2o-.svg"
     }
   },
-  "next_inv_id": 1261,
+  "next_inv_id": 1262,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -939,6 +945,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 29.0
+      },
+      {
+        "ts": 1795448072,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# на @FarmBrainrots_bot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "case",
+        "item_id": 35,
+        "name": "Rosetti",
+        "rarity": "epic",
+        "image": "/images/item35.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 53.0
       }
     ]
   },
