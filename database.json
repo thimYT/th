@@ -138,11 +138,16 @@
       "photo_url": ""
     },
     "7379573136": {
-      "balance": 3000.0,
+      "balance": 0.0,
       "inventory": [
         {
           "inv_id": 1241,
           "item_id": 85,
+          "mutation": "hacker"
+        },
+        {
+          "inv_id": 1242,
+          "item_id": 68,
           "mutation": "hacker"
         }
       ],
@@ -173,7 +178,7 @@
       "photo_url": "https://t.me/i/userpic/320/n070dQV6aSk-Uji2mpBqleZeFEfoR88J_ozlC0v_fxHLdd5xEFPv1zgsgExUz2o-.svg"
     }
   },
-  "next_inv_id": 1242,
+  "next_inv_id": 1243,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -533,6 +538,23 @@
         "mutation_icon": "/images/mutation16.png",
         "mutation_mult": 14.0,
         "price": 7000.0
+      },
+      {
+        "ts": 1795420088,
+        "user_id": "7379573136",
+        "username": "FantaxyXD",
+        "first_name": "Wowowo @BrainDropDropBot",
+        "photo_url": "https://t.me/i/userpic/320/1dZNKuPHZmKwNi7BdJJt3WHOxpQsDsz9W4cbud-2OgY_j3Q_r1l6ccTaPo8E7M6z.svg",
+        "source": "upgrade",
+        "item_id": 68,
+        "name": "Los Admins",
+        "rarity": "legendary",
+        "image": "/images/item68.png",
+        "fallback": "🐉",
+        "mutation": "hacker",
+        "mutation_icon": "/images/mutation16.png",
+        "mutation_mult": 14.0,
+        "price": 3850.0
       }
     ]
   },
