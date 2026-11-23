@@ -187,7 +187,8 @@
           "item_id": 60,
           "mutation": "hacker",
           "traits": [
-            "crab"
+            "crab",
+            "taco"
           ]
         }
       ],
