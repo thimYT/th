@@ -243,6 +243,12 @@
       "used_by": [
         "1789157813"
       ]
+    },
+    "YARIKISTHEBEST123": {
+      "stock": 1,
+      "type": "item",
+      "used_by": [],
+      "item_id": 56
     }
   },
   "withdraw_requests": {
