@@ -42,7 +42,7 @@
       "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg"
     },
     "8450028899": {
-      "balance": 759.09,
+      "balance": 810.52,
       "inventory": [
         {
           "inv_id": 265,
@@ -81,16 +81,6 @@
           "traits": [
             "spider",
             "Sombrero",
-            "crab",
-            "taco"
-          ]
-        },
-        {
-          "inv_id": 269,
-          "item_id": 36,
-          "mutation": "normal",
-          "traits": [
-            "spider",
             "crab",
             "taco"
           ]
