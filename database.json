@@ -658,17 +658,7 @@
     "text": "golda",
     "until": 1795446107
   },
-  "events": {
-    "17954463061098390": {
-      "event_type": "trait",
-      "trait_key": "spider",
-      "mutation_key": null,
-      "tick_seconds": 10,
-      "chance_percent": 100.0,
-      "until": 1795446906,
-      "started_at": 1795446306
-    }
-  },
+  "events": {},
   "luck_event": {
     "multiplier": 0,
     "until": 0
