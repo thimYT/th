@@ -232,9 +232,18 @@
       "moderator": "1789157813",
       "amount": 500.0,
       "created_at": 1795415918
+    },
+    "6": {
+      "user_id": "7379573136",
+      "username": "FantaxyXD",
+      "first_name": "Wowowo @BrainDropDropBot",
+      "status": "open",
+      "moderator": "",
+      "amount": null,
+      "created_at": 1795416012
     }
   },
-  "next_req_id": 6,
+  "next_req_id": 7,
   "daily_drops": {
     "date": "2026-11-23",
     "items": [
