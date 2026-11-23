@@ -138,7 +138,7 @@
       "photo_url": ""
     },
     "7379573136": {
-      "balance": 9500.0,
+      "balance": 9400.0,
       "inventory": [
         {
           "inv_id": 1234,
@@ -163,6 +163,11 @@
         {
           "inv_id": 1238,
           "item_id": 25,
+          "mutation": "normal"
+        },
+        {
+          "inv_id": 1239,
+          "item_id": 36,
           "mutation": "normal"
         }
       ],
@@ -193,7 +198,7 @@
       "photo_url": "https://t.me/i/userpic/320/n070dQV6aSk-Uji2mpBqleZeFEfoR88J_ozlC0v_fxHLdd5xEFPv1zgsgExUz2o-.svg"
     }
   },
-  "next_inv_id": 1239,
+  "next_inv_id": 1240,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -502,6 +507,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 43.0
+      },
+      {
+        "ts": 1795419998,
+        "user_id": "7379573136",
+        "username": "FantaxyXD",
+        "first_name": "Wowowo @BrainDropDropBot",
+        "photo_url": "https://t.me/i/userpic/320/1dZNKuPHZmKwNi7BdJJt3WHOxpQsDsz9W4cbud-2OgY_j3Q_r1l6ccTaPo8E7M6z.svg",
+        "source": "case",
+        "item_id": 36,
+        "name": "Garama",
+        "rarity": "legendary",
+        "image": "/images/item36.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 55.0
       }
     ]
   },
