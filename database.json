@@ -110,8 +110,39 @@
       "last_seen": 0
     },
     "8980661701": {
-      "balance": 4201.37,
-      "inventory": [],
+      "balance": 3701.37,
+      "inventory": [
+        {
+          "inv_id": 1313,
+          "item_id": 25,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1314,
+          "item_id": 25,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1315,
+          "item_id": 36,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1316,
+          "item_id": 25,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1317,
+          "item_id": 25,
+          "mutation": "normal",
+          "traits": []
+        }
+      ],
       "last_free_case": 0,
       "last_daily_bonus": 0,
       "nickname": "",
@@ -226,7 +257,7 @@
       "last_seen": 0
     }
   },
-  "next_inv_id": 1313,
+  "next_inv_id": 1318,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -1326,6 +1357,91 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 90.0
+      },
+      {
+        "ts": 1795548147,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс ебаный",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "case",
+        "item_id": 25,
+        "name": "Ketupat Kepat",
+        "rarity": "epic",
+        "image": "/images/item25.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 43.0
+      },
+      {
+        "ts": 1795548147,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс ебаный",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "case",
+        "item_id": 25,
+        "name": "Ketupat Kepat",
+        "rarity": "epic",
+        "image": "/images/item25.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 43.0
+      },
+      {
+        "ts": 1795548147,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс ебаный",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "case",
+        "item_id": 36,
+        "name": "Garama",
+        "rarity": "legendary",
+        "image": "/images/item36.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 55.0
+      },
+      {
+        "ts": 1795548147,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс ебаный",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "case",
+        "item_id": 25,
+        "name": "Ketupat Kepat",
+        "rarity": "epic",
+        "image": "/images/item25.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 43.0
+      },
+      {
+        "ts": 1795548147,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс ебаный",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "case",
+        "item_id": 25,
+        "name": "Ketupat Kepat",
+        "rarity": "epic",
+        "image": "/images/item25.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 43.0
       }
     ]
   },
