@@ -113,13 +113,10 @@
       "balance": 209.6,
       "inventory": [
         {
-          "inv_id": 1284,
-          "item_id": 36,
+          "inv_id": 1286,
+          "item_id": 70,
           "mutation": "normal",
-          "traits": [
-            "taco",
-            "crab"
-          ]
+          "traits": []
         }
       ],
       "last_free_case": 0,
@@ -236,7 +233,7 @@
       "last_seen": 0
     }
   },
-  "next_inv_id": 1286,
+  "next_inv_id": 1287,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -724,6 +721,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 55.0
+      },
+      {
+        "ts": 1795547417,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс ебаный",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "upgrade",
+        "item_id": 70,
+        "name": "Capitano Moby",
+        "rarity": "legendary",
+        "image": "/images/item70.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 325.0
       }
     ]
   },
