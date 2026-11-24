@@ -106,26 +106,7 @@
     },
     "8980661701": {
       "balance": 0.0,
-      "inventory": [
-        {
-          "inv_id": 1361,
-          "item_id": 25,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1362,
-          "item_id": 25,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1363,
-          "item_id": 35,
-          "mutation": "normal",
-          "traits": []
-        }
-      ],
+      "inventory": [],
       "last_free_case": 0,
       "last_daily_bonus": 0,
       "nickname": "",
