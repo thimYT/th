@@ -135,12 +135,6 @@
           "item_id": 35,
           "mutation": "normal",
           "traits": []
-        },
-        {
-          "inv_id": 1312,
-          "item_id": 25,
-          "mutation": "normal",
-          "traits": []
         }
       ],
       "last_free_case": 0,
