@@ -669,6 +669,23 @@ if BOT_TOKEN:
 
 
 # ---------- Модели ----------
+class LimboReq(BaseModel):
+    user_id: str
+    inv_ids: List[int]
+    coins_bet: float
+    target_multiplier: float
+
+class WheelReq(BaseModel):
+    user_id: str
+    inv_ids: List[int]
+    coins_bet: float
+    risk: str = "medium"   # low | medium | high
+
+class KenoReq(BaseModel):
+    user_id: str
+    inv_ids: List[int]
+    coins_bet: float
+    picked: List[int]      # номера 1..80
 class OpenCaseReq(BaseModel):
     user_id: str
     case_id: int
@@ -2016,6 +2033,281 @@ def tower_cashout(req: TowerCashoutReq):
 
 
 # ---------- ЭТАП 4: АДМИН ----------
+# =========================================================
+# LIMBO
+# =========================================================
+LIMBO_HOUSE_EDGE = 0.95  # 5% house edge
+LIMBO_MIN_TARGET = 1.01
+LIMBO_MAX_TARGET = 100.0
+
+
+def limbo_win_chance(target_multiplier: float) -> float:
+    """Шанс победы = (1 / target) * house_edge * 100, ограничен 1..99%."""
+    if target_multiplier <= 0:
+        return 0.0
+    chance = (1.0 / target_multiplier) * LIMBO_HOUSE_EDGE * 100.0
+    return max(1.0, min(99.0, round(chance, 2)))
+
+
+def limbo_roll() -> float:
+    """Возвращает сгенерированный множитель. Распределение: P(X >= t) = edge / t."""
+    u = random.random()
+    if u < 0.0001:
+        u = 0.0001
+    roll = LIMBO_HOUSE_EDGE / u
+    return round(max(1.0, min(1000.0, roll)), 2)
+
+
+@app.post("/api/limbo/play")
+def limbo_play(req: LimboReq):
+    if req.coins_bet < 0:
+        raise HTTPException(status_code=400, detail="Некорректная ставка монет")
+    target = float(req.target_multiplier or 0)
+    if target < LIMBO_MIN_TARGET or target > LIMBO_MAX_TARGET:
+        raise HTTPException(status_code=400, detail=f"Целевой множитель: от {LIMBO_MIN_TARGET} до {LIMBO_MAX_TARGET}")
+
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    user = ensure_user(db, req.user_id)
+
+    if req.coins_bet > user["balance"]:
+        raise HTTPException(status_code=400, detail="Недостаточно монет")
+
+    inv_map = {e["inv_id"]: e for e in user["inventory"] if not e.get("locked")}
+    bet_items = []
+    items_value = 0.0
+    for inv_id in req.inv_ids or []:
+        if inv_id not in inv_map or inv_map[inv_id]["item_id"] not in ITEMS_DB:
+            raise HTTPException(status_code=400, detail="Ошибка проверки предметов инвентаря")
+        e = inv_map[inv_id]
+        info = item_with_traits(e["item_id"], e.get("mutation", "normal"), e.get("traits", []))
+        items_value += info["price"]
+        bet_items.append({"inv_id": inv_id, "item_id": e["item_id"], "mutation": e.get("mutation", "normal"), "traits": e.get("traits", [])})
+
+    total_bet = round(items_value + req.coins_bet, 2)
+    if total_bet <= 0:
+        raise HTTPException(status_code=400, detail="Сделайте ставку монетами или вещами")
+
+    user["balance"] = round(user["balance"] - req.coins_bet, 2)
+    selected_set = set(req.inv_ids or [])
+    user["inventory"] = [e for e in user["inventory"] if e["inv_id"] not in selected_set]
+
+    roll = limbo_roll()
+    is_win = roll >= target
+    chance = limbo_win_chance(target)
+
+    total_win_value = 0.0
+    won_item = None
+    returned_items = []
+    coins_added = 0.0
+    recorded = []
+
+    if is_win:
+        total_win_value = round(total_bet * target, 2)
+        won_item, returned_items, coins_added, recorded = _payout_like_crash(
+            db, user, total_win_value, bet_items, items_value
+        )
+        if recorded:
+            record_daily_drop(db, req.user_id, recorded, "limbo")
+    else:
+        # предметы и монеты уже списаны — ставка сгорела
+        pass
+
+    github_save_db(db, sha)
+    return {
+        "roll": roll,
+        "target": target,
+        "chance": chance,
+        "win": is_win,
+        "total_bet": total_bet,
+        "total_win": total_win_value,
+        "won_item": won_item,
+        "returned_items": returned_items,
+        "coins_added": coins_added,
+    }
+
+
+# =========================================================
+# WHEEL (Колесо)
+# =========================================================
+# Каждый элемент — множитель сегмента. 0 = пустой сектор.
+WHEEL_SEGMENTS = {
+    "low":    [0, 1.2, 1.5, 1.2, 2.0, 1.2, 1.5, 1.2, 0, 1.5, 1.2, 3.0, 1.2, 1.5, 0, 1.2, 1.5, 1.2, 2.0, 1.2],
+    "medium": [0, 1.5, 2.0, 0, 3.0, 1.5, 0, 5.0, 2.0, 0, 1.5, 10.0, 0, 2.0, 1.5, 0, 3.0, 0, 1.5, 0],
+    "high":   [0, 0, 3.0, 0, 5.0, 0, 10.0, 0, 0, 20.0, 0, 50.0, 0, 10.0, 0, 5.0, 0, 3.0, 0, 0],
+}
+
+
+def wheel_multiplier(risk: str) -> float:
+    risk = (risk or "medium").lower()
+    segments = WHEEL_SEGMENTS.get(risk, WHEEL_SEGMENTS["medium"])
+    return float(random.choice(segments))
+
+
+@app.post("/api/wheel/spin")
+def wheel_spin(req: WheelReq):
+    if req.coins_bet < 0:
+        raise HTTPException(status_code=400, detail="Некорректная ставка монет")
+    risk = (req.risk or "medium").lower()
+    if risk not in WHEEL_SEGMENTS:
+        raise HTTPException(status_code=400, detail="risk: low | medium | high")
+
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    user = ensure_user(db, req.user_id)
+
+    if req.coins_bet > user["balance"]:
+        raise HTTPException(status_code=400, detail="Недостаточно монет")
+
+    inv_map = {e["inv_id"]: e for e in user["inventory"] if not e.get("locked")}
+    bet_items = []
+    items_value = 0.0
+    for inv_id in req.inv_ids or []:
+        if inv_id not in inv_map or inv_map[inv_id]["item_id"] not in ITEMS_DB:
+            raise HTTPException(status_code=400, detail="Ошибка проверки предметов инвентаря")
+        e = inv_map[inv_id]
+        info = item_with_traits(e["item_id"], e.get("mutation", "normal"), e.get("traits", []))
+        items_value += info["price"]
+        bet_items.append({"inv_id": inv_id, "item_id": e["item_id"], "mutation": e.get("mutation", "normal"), "traits": e.get("traits", [])})
+
+    total_bet = round(items_value + req.coins_bet, 2)
+    if total_bet <= 0:
+        raise HTTPException(status_code=400, detail="Сделайте ставку монетами или вещами")
+
+    user["balance"] = round(user["balance"] - req.coins_bet, 2)
+    selected_set = set(req.inv_ids or [])
+    user["inventory"] = [e for e in user["inventory"] if e["inv_id"] not in selected_set]
+
+    segments = WHEEL_SEGMENTS[risk]
+    seg_index = random.randrange(len(segments))
+    multiplier = float(segments[seg_index])
+
+    total_win_value = 0.0
+    won_item = None
+    returned_items = []
+    coins_added = 0.0
+    recorded = []
+
+    if multiplier > 0:
+        total_win_value = round(total_bet * multiplier, 2)
+        won_item, returned_items, coins_added, recorded = _payout_like_crash(
+            db, user, total_win_value, bet_items, items_value
+        )
+        if recorded:
+            record_daily_drop(db, req.user_id, recorded, "wheel")
+
+    github_save_db(db, sha)
+    return {
+        "risk": risk,
+        "segments": segments,
+        "segment_index": seg_index,
+        "multiplier": multiplier,
+        "win": multiplier > 0,
+        "total_bet": total_bet,
+        "total_win": total_win_value,
+        "won_item": won_item,
+        "returned_items": returned_items,
+        "coins_added": coins_added,
+    }
+
+
+# =========================================================
+# KENO
+# =========================================================
+KENO_MAX = 80
+KENO_DRAW = 20
+
+# Таблица выплат (множитель от ставки). Ключ — сколько чисел выбрано,
+# значение — словарь {кол-во совпадений: множитель}.
+# Значения подобраны так, чтобы house edge был ~5–10%. При желании можно менять.
+KENO_PAYOUTS = {
+    1:  {0: 0.0, 1: 3.0},
+    2:  {0: 0.0, 1: 1.5, 2: 5.0},
+    3:  {0: 0.0, 1: 1.0, 2: 3.0, 3: 15.0},
+    4:  {0: 0.0, 1: 0.5, 2: 2.0, 3: 8.0, 4: 50.0},
+    5:  {0: 0.0, 1: 0.5, 2: 1.5, 3: 5.0, 4: 20.0, 5: 150.0},
+    6:  {0: 0.0, 1: 0.5, 2: 1.2, 3: 3.0, 4: 10.0, 5: 50.0, 6: 500.0},
+    7:  {0: 0.0, 1: 0.5, 2: 1.0, 3: 2.5, 4: 6.0, 5: 20.0, 6: 80.0, 7: 800.0},
+    8:  {0: 0.0, 1: 0.5, 2: 1.0, 3: 2.0, 4: 5.0, 5: 15.0, 6: 50.0, 7: 200.0, 8: 1000.0},
+    9:  {0: 0.0, 1: 0.5, 2: 0.8, 3: 1.5, 4: 3.0, 5: 8.0, 6: 25.0, 7: 80.0, 8: 400.0, 9: 2000.0},
+    10: {0: 0.0, 1: 0.5, 2: 0.8, 3: 1.5, 4: 2.5, 5: 6.0, 6: 18.0, 7: 50.0, 8: 200.0, 9: 1000.0, 10: 5000.0},
+}
+
+
+def keno_payout(picked_count: int, matches: int) -> float:
+    table = KENO_PAYOUTS.get(picked_count)
+    if not table:
+        return 0.0
+    return float(table.get(matches, 0.0))
+
+
+@app.post("/api/keno/play")
+def keno_play(req: KenoReq):
+    if req.coins_bet < 0:
+        raise HTTPException(status_code=400, detail="Некорректная ставка монет")
+    picked = list(dict.fromkeys(int(x) for x in (req.picked or []) if 1 <= int(x) <= KENO_MAX))
+    if not (1 <= len(picked) <= 10):
+        raise HTTPException(status_code=400, detail="Выберите от 1 до 10 чисел (1..80)")
+
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    user = ensure_user(db, req.user_id)
+
+    if req.coins_bet > user["balance"]:
+        raise HTTPException(status_code=400, detail="Недостаточно монет")
+
+    inv_map = {e["inv_id"]: e for e in user["inventory"] if not e.get("locked")}
+    bet_items = []
+    items_value = 0.0
+    for inv_id in req.inv_ids or []:
+        if inv_id not in inv_map or inv_map[inv_id]["item_id"] not in ITEMS_DB:
+            raise HTTPException(status_code=400, detail="Ошибка проверки предметов инвентаря")
+        e = inv_map[inv_id]
+        info = item_with_traits(e["item_id"], e.get("mutation", "normal"), e.get("traits", []))
+        items_value += info["price"]
+        bet_items.append({"inv_id": inv_id, "item_id": e["item_id"], "mutation": e.get("mutation", "normal"), "traits": e.get("traits", [])})
+
+    total_bet = round(items_value + req.coins_bet, 2)
+    if total_bet <= 0:
+        raise HTTPException(status_code=400, detail="Сделайте ставку монетами или вещами")
+
+    user["balance"] = round(user["balance"] - req.coins_bet, 2)
+    selected_set = set(req.inv_ids or [])
+    user["inventory"] = [e for e in user["inventory"] if e["inv_id"] not in selected_set]
+
+    drawn = sorted(random.sample(range(1, KENO_MAX + 1), KENO_DRAW))
+    drawn_set = set(drawn)
+    matches = sum(1 for n in picked if n in drawn_set)
+    multiplier = keno_payout(len(picked), matches)
+
+    total_win_value = 0.0
+    won_item = None
+    returned_items = []
+    coins_added = 0.0
+    recorded = []
+
+    if multiplier > 0:
+        total_win_value = round(total_bet * multiplier, 2)
+        won_item, returned_items, coins_added, recorded = _payout_like_crash(
+            db, user, total_win_value, bet_items, items_value
+        )
+        if recorded:
+            record_daily_drop(db, req.user_id, recorded, "keno")
+
+    github_save_db(db, sha)
+    return {
+        "picked": sorted(picked),
+        "drawn": drawn,
+        "matches": matches,
+        "picked_count": len(picked),
+        "multiplier": multiplier,
+        "win": multiplier > 0,
+        "total_bet": total_bet,
+        "total_win": total_win_value,
+        "won_item": won_item,
+        "returned_items": returned_items,
+        "coins_added": coins_added,
+    }# ...
 @app.get("/api/admin/users")
 def admin_users(admin_id: str):
     if not _is_admin(admin_id):

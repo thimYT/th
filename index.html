@@ -458,6 +458,57 @@
     .global-msg.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
     /* АДМИНКА */
+        /* LIMBO */
+    .limbo-arena { background: radial-gradient(circle at top, rgba(255,123,0,.18) 0%, rgba(20,15,12,.95) 100%);
+        border: 1px solid var(--card-border); border-radius: 18px; padding: 16px 12px; margin-bottom: 14px;
+        display: flex; flex-direction: column; align-items: center; }
+    .limbo-mult-display { font-size: 48px; font-weight: 900; color: var(--orange);
+        text-shadow: 0 0 20px var(--orange-glow); margin-bottom: 6px; }
+    .limbo-target-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; max-width: 400px; margin-bottom: 10px; }
+    @media (max-width: 520px) { .limbo-target-row { grid-template-columns: 1fr; } }
+    .limbo-chance { color: var(--muted); font-size: 13px; font-weight: 700; margin-bottom: 12px; }
+    .limbo-chance b { color: #ffcc80; }
+    .limbo-status { margin-top: 10px; text-align: center; font-weight: 700; font-size: 13px; }
+
+    /* WHEEL */
+    .wheel-arena { background: radial-gradient(circle at top, rgba(41,121,255,.18) 0%, rgba(20,15,12,.95) 100%);
+        border: 1px solid var(--card-border); border-radius: 18px; padding: 16px 12px; margin-bottom: 14px;
+        display: flex; flex-direction: column; align-items: center; }
+    .wheel-svg-wrap { position: relative; width: 300px; height: 300px; margin-bottom: 14px; }
+    @media (max-width: 420px) { .wheel-svg-wrap { width: 260px; height: 260px; } }
+    .wheel-svg-wrap svg { width: 100%; height: 100%; display: block; transition: transform 4.5s cubic-bezier(0.15, 0.85, 0.25, 1); }
+    .wheel-pointer-top { position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
+        width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent;
+        border-top: 22px solid #ffffff; z-index: 5; filter: drop-shadow(0 2px 4px rgba(0,0,0,.7)); }
+    .wheel-risk-switch { display: flex; gap: 8px; width: 100%; max-width: 400px; margin-bottom: 12px; }
+    .wheel-risk-btn { flex: 1; padding: 8px; border-radius: 10px; border: 1px solid var(--card-border);
+        background: #1c130f; color: var(--muted); font-weight: 700; cursor: pointer; font-size: 13px; }
+    .wheel-risk-btn.active { background: linear-gradient(135deg, var(--blue), #1565c0);
+        color: #fff; border-color: #82b1ff; }
+    .wheel-status { margin-top: 10px; text-align: center; font-weight: 700; font-size: 13px; }
+
+    /* KENO */
+    .keno-arena { background: radial-gradient(circle at top, rgba(0,230,118,.14) 0%, rgba(20,15,12,.95) 100%);
+        border: 1px solid var(--card-border); border-radius: 18px; padding: 14px 10px; margin-bottom: 14px;
+        display: flex; flex-direction: column; align-items: center; }
+    .keno-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px;
+        width: 100%; max-width: 440px; margin-bottom: 10px; }
+    .keno-cell { aspect-ratio: 1/1; border-radius: 8px; border: 1px solid var(--card-border);
+        background: linear-gradient(180deg, #2b1e17 0%, #1a120e 100%);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 12px; font-weight: 800; color: var(--text); cursor: pointer;
+        user-select: none; transition: transform .1s ease, background .15s ease; }
+    .keno-cell:hover { transform: scale(1.05); }
+    .keno-cell.picked { background: linear-gradient(135deg, #2979ff, #1565c0); border-color: #82b1ff; color: #fff; }
+    .keno-cell.hit { background: linear-gradient(135deg, #00c853, #2e7d32); border-color: #66bb6a; color: #fff; }
+    .keno-cell.miss { opacity: .35; }
+    .keno-cell.disabled { pointer-events: none; }
+    .keno-summary { margin-top: 10px; text-align: center; font-weight: 700; font-size: 13px;
+        width: 100%; max-width: 440px; }
+    .keno-summary b { color: #ffcc80; }
+    .keno-presets { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-bottom: 10px; width: 100%; max-width: 440px; }
+    .keno-preset-btn { padding: 6px 10px; border-radius: 8px; border: 1px solid var(--card-border);
+        background: #1c130f; color: var(--muted); font-weight: 700; cursor: pointer; font-size: 12px; }
     .admin-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
     .admin-tab-btn { background: #1c130f; border: 1px solid var(--card-border); color: var(--muted);
         padding: 8px 12px; border-radius: 10px; font-weight: 700; font-size: 12px; cursor: pointer; }
@@ -556,6 +607,9 @@
     <button class="nav-btn" data-tab="mines" onclick="switchTab('mines')">💣 Мины 5×5</button>
     <button class="nav-btn" data-tab="plinko" onclick="switchTab('plinko')">🎯 Плинко</button>
     <button class="nav-btn" data-tab="tower" onclick="switchTab('tower')">🏰 Башня</button>
+    <button class="nav-btn" data-tab="limbo" onclick="switchTab('limbo')">🎲 Limbo</button>
+    <button class="nav-btn" data-tab="wheel" onclick="switchTab('wheel')">🎡 Колесо</button>
+    <button class="nav-btn" data-tab="keno" onclick="switchTab('keno')">🎯 Keno</button>
     <button class="nav-btn" data-tab="battles" onclick="switchTab('battles')">⚔️ Батлы</button>
     <button class="nav-btn" data-tab="trade" onclick="switchTab('trade')">🤝 Трейды</button>
     <button class="nav-btn" data-tab="bonuses" onclick="switchTab('bonuses')">🎁 Бонусы</button>
@@ -568,7 +622,86 @@
 
 <main class="container">
     <!-- БАШНЯ -->
+         <!-- LIMBO -->
+    <section class="tab-section" id="tab-limbo">
+        <h2>Limbo</h2>
+        <div class="limbo-arena">
+            <div class="limbo-mult-display" id="limbo-result">—</div>
+            <div class="limbo-target-row">
+                <input type="number" id="limbo-target-input" min="1.01" max="100" step="0.01" value="2.00" oninput="limboPreview()">
+                <button class="btn" id="limbo-play-btn" onclick="playLimbo()" style="width:auto;padding:10px 16px;">Играть</button>
+            </div>
+            <div class="limbo-chance">Шанс победы: <b id="limbo-chance-val">47.50%</b></div>
+            <div class="limbo-status" id="limbo-status">Задай целевой множитель и жми «Играть»</div>
+        </div>
+        <div class="panel-box">
+            <div class="input-group">
+                <input type="number" id="limbo-coins-input" min="0" step="1" placeholder="Ставка монетами" oninput="updateLimboTotal()">
+                <button class="btn" style="width:auto;padding:10px 16px;" onclick="setMaxLimboCoins()">Макс</button>
+            </div>
+            <div class="stat-line center" style="margin-bottom:12px;">Общая ставка: <b id="limbo-total-bet">0</b> 💰</div>
+        </div>
+        <div class="panel-box">
+            <div class="panel-title">Добавить вещи из инвентаря в ставку:</div>
+            <div class="grid scroll-grid" id="limbo-inv-grid"></div>
+        </div>
+    </section>
+
+    <!-- WHEEL -->
+    <section class="tab-section" id="tab-wheel">
+        <h2>Колесо</h2>
+        <div class="wheel-arena">
+            <div class="wheel-svg-wrap">
+                <div class="wheel-pointer-top"></div>
+                <svg id="wheel-svg" viewBox="0 0 100 100"></svg>
+            </div>
+            <div class="wheel-risk-switch">
+                <button class="wheel-risk-btn" id="wheel-risk-low" onclick="setWheelRisk('low', this)">Низкий</button>
+                <button class="wheel-risk-btn active" id="wheel-risk-medium" onclick="setWheelRisk('medium', this)">Средний</button>
+                <button class="wheel-risk-btn" id="wheel-risk-high" onclick="setWheelRisk('high', this)">Высокий</button>
+            </div>
+            <div class="wheel-status" id="wheel-status">Крути колесо!</div>
+        </div>
+        <div class="panel-box">
+            <div class="input-group">
+                <input type="number" id="wheel-coins-input" min="0" step="1" placeholder="Ставка монетами" oninput="updateWheelTotal()">
+                <button class="btn" style="width:auto;padding:10px 16px;" onclick="setMaxWheelCoins()">Макс</button>
+            </div>
+            <div class="stat-line center" style="margin-bottom:12px;">Общая ставка: <b id="wheel-total-bet">0</b> 💰</div>
+            <button class="btn" id="wheel-spin-btn" onclick="spinWheel()">🎡 Крутить</button>
+        </div>
+        <div class="panel-box">
+            <div class="panel-title">Добавить вещи из инвентаря в ставку:</div>
+            <div class="grid scroll-grid" id="wheel-inv-grid"></div>
+        </div>
+    </section>
+
+    <!-- KENO -->
+    <section class="tab-section" id="tab-keno">
+        <h2>Keno</h2>
+        <div class="keno-arena">
+            <div class="keno-presets">
+                <button class="keno-preset-btn" onclick="kenoRandomPreset()">🎲 Случайно</button>
+                <button class="keno-preset-btn" onclick="kenoClear()">✖ Очистить</button>
+            </div>
+            <div class="keno-grid" id="keno-grid"></div>
+            <div class="keno-summary" id="keno-summary">Выбери 1–10 чисел</div>
+        </div>
+        <div class="panel-box">
+            <div class="input-group">
+                <input type="number" id="keno-coins-input" min="0" step="1" placeholder="Ставка монетами" oninput="updateKenoTotal()">
+                <button class="btn" style="width:auto;padding:10px 16px;" onclick="setMaxKenoCoins()">Макс</button>
+            </div>
+            <div class="stat-line center" style="margin-bottom:12px;">Общая ставка: <b id="keno-total-bet">0</b> 💰</div>
+            <button class="btn" id="keno-play-btn" onclick="playKeno()">🎯 Играть</button>
+        </div>
+        <div class="panel-box">
+            <div class="panel-title">Добавить вещи из инвентаря в ставку:</div>
+            <div class="grid scroll-grid" id="keno-inv-grid"></div>
+        </div>
+    </section>
     <section class="tab-section" id="tab-tower">
+
         <h2>Башня</h2>
         <div class="tower-arena">
             <div class="tower-top">
@@ -1142,6 +1275,21 @@ let towerTotalBet = 0;
 let admGiveTraits = new Set();
 
 /* TRADE */
+/* LIMBO */
+let limboSelectedInv = new Set();
+let limboPlaying = false;
+
+/* WHEEL */
+let wheelSelectedInv = new Set();
+let wheelRisk = "medium";
+let wheelSpinning = false;
+let wheelCurrentDeg = 0;
+
+/* KENO */
+let kenoSelectedInv = new Set();
+let kenoPicked = new Set();
+let kenoPlaying = false;
+const KENO_MAX = 80;
 let tradeSelectedInv = new Set();
 let tradeFoundUserId = null;
 
@@ -1189,6 +1337,9 @@ function switchTab(tabName) {
     toggleDrawer(false);
     if (tabName === "admin") { renderAdminStaticOptions(); adminLoadUsers(); }
     if (tabName === "trade") { loadTradeHistory(); }
+        if (tabName === "limbo") { limboPreview(); updateLimboTotal(); }
+    if (tabName === "wheel") { drawWheel(); updateWheelTotal(); }
+    if (tabName === "keno") { renderKenoGrid(); updateKenoTotal(); }
     if (tabName === "battles") { loadBattles(); startBattlePolling(); }
     else { stopBattlePolling(); }
 }
@@ -1299,6 +1450,9 @@ function loadState() {
         minesSelectedInv = new Set([...minesSelectedInv].filter(id => validIds.has(id)));
         plinkoSelectedInv = new Set([...plinkoSelectedInv].filter(id => validIds.has(id)));
         towerSelectedInv = new Set([...towerSelectedInv].filter(id => validIds.has(id)));
+        limboSelectedInv = new Set([...limboSelectedInv].filter(id => validIds.has(id)));
+        wheelSelectedInv = new Set([...wheelSelectedInv].filter(id => validIds.has(id)));
+        kenoSelectedInv = new Set([...kenoSelectedInv].filter(id => validIds.has(id)));
         tradeSelectedInv = new Set([...tradeSelectedInv].filter(id => validIds.has(id)));
 
         renderProfile();
@@ -1314,6 +1468,10 @@ function loadState() {
         updateMinesTotal();
         updatePlinkoTotal();
         updateTowerTotal();
+        updateLimboTotal();
+        updateWheelTotal();
+        renderKenoGrid();
+        updateKenoTotal();
         updateTradeTotal();
         updateFreeTimer();
         updateDailyBonusTimer();
@@ -1502,6 +1660,9 @@ function renderInventories() {
         ["mines-inv-grid", minesSelectedInv, "toggleMinesItem"],
         ["plinko-inv-grid", plinkoSelectedInv, "togglePlinkoItem"],
         ["tower-inv-grid", towerSelectedInv, "toggleTowerItem"],
+        ["limbo-inv-grid", limboSelectedInv, "toggleLimboItem"],
+        ["wheel-inv-grid", wheelSelectedInv, "toggleWheelItem"],
+        ["keno-inv-grid", kenoSelectedInv, "toggleKenoItem"],
         ["trade-inv-grid", tradeSelectedInv, "toggleTradeItem"]
     ];
     grids.forEach(([gridId, selSet, fn]) => {
@@ -2459,7 +2620,7 @@ async function tradeFindUser() {
     if (!found) return showToast("Игрок не найден");
     tradeFoundUserId = found.user_id;
     const box = el("trade-target-found");
-    box.innerHTML = '<div class="trade-user-card">' +
+        box.innerHTML = '<div class="trade-user-card">' +
         '<div style="flex:1;min-width:0;">' +
             '<div style="font-weight:800;">@' + (found.username || found.user_id) + '</div>' +
             '<div style="color:var(--muted);font-size:11px;">ID: ' + found.user_id + '</div>' +
@@ -2886,13 +3047,318 @@ function renderBattleModal(data) {
             '</div>' +
         '</div>';
 }
+/* =========================================================
+   LIMBO
+   ========================================================= */
+function limboChanceFor(target) {
+    const t = parseFloat(target) || 0;
+    if (t < 1.01) return 0;
+    return Math.max(1, Math.min(99, Math.round((0.95 / t) * 10000) / 100));
+}
+function limboPreview() {
+    const input = el("limbo-target-input");
+    const out = el("limbo-chance-val");
+    if (!input || !out) return;
+    out.textContent = limboChanceFor(input.value).toFixed(2) + "%";
+}
+function toggleLimboItem(invId) {
+    if (limboPlaying) return;
+    if (limboSelectedInv.has(invId)) limboSelectedInv.delete(invId); else limboSelectedInv.add(invId);
+    renderInventories(); updateLimboTotal();
+}
+function setMaxLimboCoins() {
+    if (limboPlaying) return;
+    el("limbo-coins-input").value = state.balance;
+    updateLimboTotal();
+}
+function updateLimboTotal() {
+    const input = el("limbo-coins-input");
+    if (!input) return;
+    let sum = parseFloat(input.value) || 0;
+    state.inventory.forEach(i => { if (!i.locked && limboSelectedInv.has(i.inv_id)) sum += Number(i.price) || 0; });
+    el("limbo-total-bet").textContent = sum.toFixed(2);
+}
+async function playLimbo() {
+    if (limboPlaying) return;
+    const coins = parseFloat(el("limbo-coins-input").value) || 0;
+    const target = parseFloat(el("limbo-target-input").value) || 0;
+    if (target < 1.01 || target > 100) return showToast("Целевой множитель: от 1.01 до 100");
+    let data;
+    try {
+        data = await postJSON("/api/limbo/play", {
+            user_id: userId, inv_ids: [...limboSelectedInv], coins_bet: coins, target_multiplier: target
+        });
+    } catch (e) { return showToast(e.message); }
 
+    limboPlaying = true;
+    const btn = el("limbo-play-btn");
+    btn.disabled = true; btn.textContent = "Крутится...";
+    el("limbo-status").textContent = "Генерируем множитель...";
+
+    let roll = Number(data.roll) || 1.0;
+    let ticks = 0;
+    const resultEl = el("limbo-result");
+    const spin = setInterval(() => {
+        ticks++;
+        const fake = (Math.random() * 9 + 1).toFixed(2);
+        resultEl.textContent = fake + "x";
+        resultEl.style.color = "#ffcc80";
+        if (ticks >= 18) {
+            clearInterval(spin);
+            resultEl.textContent = roll.toFixed(2) + "x";
+            resultEl.style.color = data.win ? "#00e676" : "#ff3d00";
+            limboPlaying = false;
+            btn.disabled = false; btn.textContent = "Играть";
+            if (data.win) {
+                el("limbo-status").innerHTML = '<span style="color:#00e676;">Выпало ' + roll.toFixed(2) + 'x ≥ ' + target.toFixed(2) + 'x — победа ×' + target.toFixed(2) + '!</span>';
+                if (data.returned_items && data.returned_items.length) showToast("Вещи возвращены, +" + data.coins_added + " 💰");
+                else if (data.won_item) showToast("Выигрыш: " + data.won_item.name + " + " + data.coins_added + " 💰");
+                else showToast("Выигрыш: +" + data.coins_added + " 💰");
+            } else {
+                el("limbo-status").innerHTML = '<span style="color:#ff8a65;">Выпало ' + roll.toFixed(2) + 'x < ' + target.toFixed(2) + 'x — ставка сгорела.</span>';
+                showToast("Выпало " + roll.toFixed(2) + "x — проигрыш");
+            }
+            limboSelectedInv.clear();
+            el("limbo-coins-input").value = "";
+            loadState();
+        }
+    }, 55);
+}
+
+/* =========================================================
+   WHEEL
+   ========================================================= */
+const WHEEL_SEGMENTS_FRONT = {
+    low:    [0, 1.2, 1.5, 1.2, 2.0, 1.2, 1.5, 1.2, 0, 1.5, 1.2, 3.0, 1.2, 1.5, 0, 1.2, 1.5, 1.2, 2.0, 1.2],
+    medium: [0, 1.5, 2.0, 0, 3.0, 1.5, 0, 5.0, 2.0, 0, 1.5, 10.0, 0, 2.0, 1.5, 0, 3.0, 0, 1.5, 0],
+    high:   [0, 0, 3.0, 0, 5.0, 0, 10.0, 0, 0, 20.0, 0, 50.0, 0, 10.0, 0, 5.0, 0, 3.0, 0, 0]
+};
+function wheelColorFor(mult) {
+    if (mult <= 0) return "#3a2a20";
+    if (mult < 2) return "#2979ff";
+    if (mult < 5) return "#ff7b00";
+    if (mult < 20) return "#e040fb";
+    return "#ffd54f";
+}
+function drawWheel() {
+    const svg = el("wheel-svg");
+    if (!svg) return;
+    const segments = WHEEL_SEGMENTS_FRONT[wheelRisk] || WHEEL_SEGMENTS_FRONT.medium;
+    const n = segments.length;
+    const cx = 50, cy = 50, r = 48;
+    let html = "";
+    for (let i = 0; i < n; i++) {
+        const a0 = (i / n) * Math.PI * 2 - Math.PI / 2;
+        const a1 = ((i + 1) / n) * Math.PI * 2 - Math.PI / 2;
+        const x0 = cx + r * Math.cos(a0), y0 = cy + r * Math.sin(a0);
+        const x1 = cx + r * Math.cos(a1), y1 = cy + r * Math.sin(a1);
+        const largeArc = (a1 - a0) > Math.PI ? 1 : 0;
+        const color = wheelColorFor(segments[i]);
+        html += '<path d="M ' + cx + ' ' + cy + ' L ' + x0.toFixed(3) + ' ' + y0.toFixed(3) +
+            ' A ' + r + ' ' + r + ' 0 ' + largeArc + ' 1 ' + x1.toFixed(3) + ' ' + y1.toFixed(3) + ' Z" fill="' +
+            color + '" stroke="#130d0a" stroke-width="0.3"></path>';
+        const mid = (a0 + a1) / 2;
+        const tx = cx + (r * 0.68) * Math.cos(mid);
+        const ty = cy + (r * 0.68) * Math.sin(mid);
+        html += '<text x="' + tx.toFixed(2) + '" y="' + ty.toFixed(2) +
+            '" fill="#fff" font-size="3" font-weight="800" text-anchor="middle" dominant-baseline="middle" transform="rotate(' +
+            ((mid * 180 / Math.PI) + 90) + ' ' + tx.toFixed(2) + ' ' + ty.toFixed(2) + ')">' +
+            (segments[i] <= 0 ? "0" : "x" + segments[i]) + '</text>';
+    }
+    svg.innerHTML = html;
+    svg.style.transform = "rotate(" + wheelCurrentDeg + "deg)";
+}
+function setWheelRisk(risk, btnEl) {
+    if (wheelSpinning) return;
+    wheelRisk = risk;
+    document.querySelectorAll(".wheel-risk-btn").forEach(b => b.classList.remove("active"));
+    if (btnEl) btnEl.classList.add("active");
+    drawWheel();
+}
+function toggleWheelItem(invId) {
+    if (wheelSpinning) return;
+    if (wheelSelectedInv.has(invId)) wheelSelectedInv.delete(invId); else wheelSelectedInv.add(invId);
+    renderInventories(); updateWheelTotal();
+}
+function setMaxWheelCoins() {
+    if (wheelSpinning) return;
+    el("wheel-coins-input").value = state.balance;
+    updateWheelTotal();
+}
+function updateWheelTotal() {
+    const input = el("wheel-coins-input");
+    if (!input) return;
+    let sum = parseFloat(input.value) || 0;
+    state.inventory.forEach(i => { if (!i.locked && wheelSelectedInv.has(i.inv_id)) sum += Number(i.price) || 0; });
+    el("wheel-total-bet").textContent = sum.toFixed(2);
+}
+async function spinWheel() {
+    if (wheelSpinning) return;
+    const coins = parseFloat(el("wheel-coins-input").value) || 0;
+    let data;
+    try {
+        data = await postJSON("/api/wheel/spin", {
+            user_id: userId, inv_ids: [...wheelSelectedInv], coins_bet: coins, risk: wheelRisk
+        });
+    } catch (e) { return showToast(e.message); }
+
+    wheelSpinning = true;
+    const btn = el("wheel-spin-btn");
+    btn.disabled = true; btn.textContent = "Крутится...";
+    el("wheel-status").textContent = "Колесо крутится...";
+
+    const segments = data.segments || WHEEL_SEGMENTS_FRONT[wheelRisk];
+    const n = segments.length;
+    const idx = Number(data.segment_index) || 0;
+    const segAngle = 360 / n;
+    const targetAngle = 360 - (idx + 0.5) * segAngle;
+    const currentMod = ((wheelCurrentDeg % 360) + 360) % 360;
+    const delta = (targetAngle - currentMod + 360) % 360;
+    wheelCurrentDeg += 360 * 5 + delta;
+    const svg = el("wheel-svg");
+    if (svg) svg.style.transform = "rotate(" + wheelCurrentDeg + "deg)";
+
+    setTimeout(async () => {
+        wheelSpinning = false;
+        btn.disabled = false; btn.textContent = "🎡 Крутить";
+        const mult = Number(data.multiplier) || 0;
+        if (data.win) {
+            el("wheel-status").innerHTML = '<span style="color:#00e676;">Выпало ×' + mult + ' — победа!</span>';
+            if (data.returned_items && data.returned_items.length) showToast("Вещи возвращены, +" + data.coins_added + " 💰");
+            else if (data.won_item) showToast("Выигрыш: " + data.won_item.name + " + " + data.coins_added + " 💰");
+            else showToast("Выигрыш: +" + data.coins_added + " 💰");
+        } else {
+            el("wheel-status").innerHTML = '<span style="color:#ff8a65;">Пустой сектор — ставка сгорела.</span>';
+            showToast("Пустой сектор — проигрыш");
+        }
+        wheelSelectedInv.clear();
+        el("wheel-coins-input").value = "";
+        loadState();
+    }, 4600);
+}
+
+/* =========================================================
+   KENO
+   ========================================================= */
+function renderKenoGrid() {
+    const grid = el("keno-grid");
+    if (!grid) return;
+    const drawnSet = new Set(kenoDrawnCache);
+    let html = "";
+    for (let n = 1; n <= KENO_MAX; n++) {
+        let cls = "keno-cell";
+        if (kenoPicked.has(n)) {
+            if (kenoDrawnCache.length) {
+                cls += drawnSet.has(n) ? " hit" : " miss";
+            } else {
+                cls += " picked";
+            }
+        }
+        if (kenoPlaying) cls += " disabled";
+        html += '<div class="' + cls + '" onclick="toggleKenoCell(' + n + ')">' + n + '</div>';
+    }
+    grid.innerHTML = html;
+    const summary = el("keno-summary");
+    if (summary) {
+        if (kenoDrawnCache.length) {
+            const matches = [...kenoPicked].filter(x => drawnSet.has(x)).length;
+            summary.innerHTML = 'Совпадений: <b>' + matches + '</b> из <b>' + kenoPicked.size + '</b> (выпало: ' + kenoDrawnCache.join(", ") + ')';
+        } else {
+            summary.innerHTML = 'Выбрано: <b>' + kenoPicked.size + '</b> из 10 (макс). Нажми «Играть»';
+        }
+    }
+}
+let kenoDrawnCache = [];
+function toggleKenoCell(n) {
+    if (kenoPlaying) return;
+    if (kenoDrawnCache.length) { kenoDrawnCache = []; }
+    if (kenoPicked.has(n)) kenoPicked.delete(n);
+    else {
+        if (kenoPicked.size >= 10) return showToast("Максимум 10 чисел");
+        kenoPicked.add(n);
+    }
+    renderKenoGrid();
+}
+function kenoRandomPreset() {
+    if (kenoPlaying) return;
+    kenoDrawnCache = [];
+    kenoPicked = new Set();
+    const count = 5;
+    while (kenoPicked.size < count) kenoPicked.add(Math.floor(Math.random() * KENO_MAX) + 1);
+    renderKenoGrid();
+}
+function kenoClear() {
+    if (kenoPlaying) return;
+    kenoPicked = new Set();
+    kenoDrawnCache = [];
+    renderKenoGrid();
+}
+function toggleKenoItem(invId) {
+    if (kenoPlaying) return;
+    if (kenoSelectedInv.has(invId)) kenoSelectedInv.delete(invId); else kenoSelectedInv.add(invId);
+    renderInventories(); updateKenoTotal();
+}
+function setMaxKenoCoins() {
+    if (kenoPlaying) return;
+    el("keno-coins-input").value = state.balance;
+    updateKenoTotal();
+}
+function updateKenoTotal() {
+    const input = el("keno-coins-input");
+    if (!input) return;
+    let sum = parseFloat(input.value) || 0;
+    state.inventory.forEach(i => { if (!i.locked && kenoSelectedInv.has(i.inv_id)) sum += Number(i.price) || 0; });
+    el("keno-total-bet").textContent = sum.toFixed(2);
+}
+async function playKeno() {
+    if (kenoPlaying) return;
+    if (!kenoPicked.size) return showToast("Выбери хотя бы одно число");
+    const coins = parseFloat(el("keno-coins-input").value) || 0;
+    let data;
+    try {
+        data = await postJSON("/api/keno/play", {
+            user_id: userId, inv_ids: [...kenoSelectedInv], coins_bet: coins, picked: [...kenoPicked]
+        });
+    } catch (e) { return showToast(e.message); }
+
+    kenoPlaying = true;
+    el("keno-play-btn").disabled = true;
+    el("keno-play-btn").textContent = "Розыгрыш...";
+    kenoDrawnCache = [];
+    const drawn = data.drawn || [];
+    let i = 0;
+    const timer = setInterval(() => {
+        if (i < drawn.length) {
+            kenoDrawnCache.push(drawn[i]);
+            i++;
+            renderKenoGrid();
+        } else {
+            clearInterval(timer);
+            kenoPlaying = false;
+            el("keno-play-btn").disabled = false;
+            el("keno-play-btn").textContent = "🎯 Играть";
+            if (data.win) {
+                showToast("Совпадений: " + data.matches + ", ×" + data.multiplier);
+            } else {
+                showToast("Совпадений: " + data.matches + " — проигрыш");
+            }
+            kenoPicked = new Set();
+            kenoDrawnCache = [];
+            kenoSelectedInv.clear();
+            el("keno-coins-input").value = "";
+            loadState();
+        }
+    }, 80);
+}
 /* ---------- Запуск ---------- */
 renderPlinkoStatic();
 renderInitialDiceBoard();
 renderMinesBoard(null, null);
 updateMinesStats();
 renderTower();
+limboPreview();
+drawWheel();
+renderKenoGrid();
 updateTradeTotal();
 syncProfile().then(loadState).then(() => {
     renderPlinkoStatic();
