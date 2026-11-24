@@ -1300,6 +1300,225 @@ def do_upgrade(req: UpgradeReq):
 
     github_save_db(db, sha)
     return {"win": is_win, "chance": chance, "won_item": won_item_out}
+# ---------- ЭТАП 7: БАТЛЫ ----------
+class BattleCreateReq(BaseModel):
+    user_id: str
+    case_id: int
+    bet: float
+
+class BattleActionReq(BaseModel):
+    user_id: str
+    battle_id: str
+
+
+def _battle_public(b: dict) -> dict:
+    return {
+        "battle_id": b["battle_id"],
+        "case_id": b["case_id"],
+        "case_name": b.get("case_name", "Кейс"),
+        "case_image": b.get("case_image", ""),
+        "bet": round(float(b.get("bet", 0)), 2),
+        "status": b.get("status", "waiting"),
+        "creator_id": b["creator_id"],
+        "creator_username": b.get("creator_username", ""),
+        "joiner_id": b.get("joiner_id", ""),
+        "joiner_username": b.get("joiner_username", ""),
+        "creator_rolls": b.get("creator_rolls", []),
+        "joiner_rolls": b.get("joiner_rolls", []),
+        "creator_total": round(float(b.get("creator_total", 0)), 2),
+        "joiner_total": round(float(b.get("joiner_total", 0)), 2),
+        "winner_id": b.get("winner_id", ""),
+        "created_at": b.get("created_at", 0),
+    }
+
+
+def _roll_battle_case(case: dict) -> dict:
+    population = [d["item_id"] for d in case["drops"]]
+    weights = [d["weight"] for d in case["drops"]]
+    wid = random.choices(population, weights=weights, k=1)[0]
+    mut = roll_mutation(ITEMS_DB[wid]["rarity"])
+    return item_with_traits(wid, mut, [])
+
+
+@app.get("/api/battle/list")
+def battle_list():
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    battles = db.setdefault("battles", {})
+    ordered = sorted(battles.values(), key=lambda x: x.get("created_at", 0), reverse=True)
+    return {"battles": [_battle_public(b) for b in ordered[:30]]}
+
+
+@app.post("/api/battle/create")
+def battle_create(req: BattleCreateReq):
+    if req.case_id not in CASES_DB:
+        raise HTTPException(status_code=400, detail="Кейс не найден")
+    bet = round(float(req.bet or 0), 2)
+    if bet <= 0:
+        raise HTTPException(status_code=400, detail="Укажите ставку больше 0")
+
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    user = ensure_user(db, req.user_id)
+    case = CASES_DB[req.case_id]
+    total_cost = round(case["price"] + bet, 2)
+
+    if user["balance"] < total_cost:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Нужно {total_cost} 💰 (кейс {case['price']} + ставка {bet})"
+        )
+
+    user["balance"] = round(user["balance"] - total_cost, 2)
+    battles = db.setdefault("battles", {})
+    bid = str(int(time.time() * 1000))[-6:] + str(random.randint(10, 99))
+    battles[bid] = {
+        "battle_id": bid,
+        "case_id": req.case_id,
+        "case_name": case["name"],
+        "case_image": case.get("image", ""),
+        "bet": bet,
+        "status": "waiting",
+        "creator_id": req.user_id,
+        "creator_username": user.get("username") or user.get("first_name") or req.user_id,
+        "joiner_id": "",
+        "joiner_username": "",
+        "creator_rolls": [],
+        "joiner_rolls": [],
+        "creator_total": 0.0,
+        "joiner_total": 0.0,
+        "winner_id": "",
+        "created_at": int(time.time()),
+    }
+    github_save_db(db, sha)
+    return {"ok": True, "battle_id": bid}
+
+
+@app.post("/api/battle/join")
+def battle_join(req: BattleActionReq):
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    battles = db.setdefault("battles", {})
+    b = battles.get(req.battle_id)
+    if not b:
+        raise HTTPException(status_code=404, detail="Батл не найден")
+    if b["status"] != "waiting":
+        raise HTTPException(status_code=400, detail="Батл уже начался или завершён")
+    if b["creator_id"] == req.user_id:
+        raise HTTPException(status_code=400, detail="Нельзя войти в свой же батл")
+
+    case = CASES_DB.get(b["case_id"])
+    if not case:
+        raise HTTPException(status_code=400, detail="Кейс батла недоступен")
+
+    user = ensure_user(db, req.user_id)
+    total_cost = round(case["price"] + b["bet"], 2)
+    if user["balance"] < total_cost:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Нужно {total_cost} 💰 (кейс {case['price']} + ставка {b['bet']})"
+        )
+
+    user["balance"] = round(user["balance"] - total_cost, 2)
+    b["joiner_id"] = req.user_id
+    b["joiner_username"] = user.get("username") or user.get("first_name") or req.user_id
+    b["status"] = "running"
+    github_save_db(db, sha)
+    return {"ok": True, "battle": _battle_public(b)}
+
+
+@app.post("/api/battle/cancel")
+def battle_cancel(req: BattleActionReq):
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    battles = db.setdefault("battles", {})
+    b = battles.get(req.battle_id)
+    if not b:
+        raise HTTPException(status_code=404, detail="Батл не найден")
+    if b["creator_id"] != req.user_id:
+        raise HTTPException(status_code=403, detail="Отменить может только создатель")
+    if b["status"] != "waiting":
+        raise HTTPException(status_code=400, detail="Нельзя отменить уже начатый батл")
+
+    case = CASES_DB.get(b["case_id"], {"price": 0})
+    refund = round(case["price"] + b["bet"], 2)
+    creator = ensure_user(db, req.user_id)
+    creator["balance"] = round(creator["balance"] + refund, 2)
+    b["status"] = "cancelled"
+    github_save_db(db, sha)
+    return {"ok": True, "refund": refund}
+
+
+@app.post("/api/battle/open")
+def battle_open(req: BattleActionReq):
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    battles = db.setdefault("battles", {})
+    b = battles.get(req.battle_id)
+    if not b:
+        raise HTTPException(status_code=404, detail="Батл не найден")
+    if b["status"] != "running":
+        raise HTTPException(status_code=400, detail="Батл не в статусе открытия")
+    if req.user_id not in (b["creator_id"], b["joiner_id"]):
+        raise HTTPException(status_code=403, detail="Вы не участник этого батла")
+
+    case = CASES_DB.get(b["case_id"])
+    if not case:
+        raise HTTPException(status_code=400, detail="Кейс не найден")
+
+    if req.user_id == b["creator_id"]:
+        if b["creator_rolls"]:
+            raise HTTPException(status_code=400, detail="Вы уже открыли свой кейс")
+        item = _roll_battle_case(case)
+        b["creator_rolls"] = [item]
+        b["creator_total"] = item["price"]
+    else:
+        if b["joiner_rolls"]:
+            raise HTTPException(status_code=400, detail="Вы уже открыли свой кейс")
+        item = _roll_battle_case(case)
+        b["joiner_rolls"] = [item]
+        b["joiner_total"] = item["price"]
+
+    # Если оба открыли — определяем победителя и отдаём оба предмета + обе ставки
+    if b["creator_rolls"] and b["joiner_rolls"]:
+        c_tot = float(b["creator_total"])
+        j_tot = float(b["joiner_total"])
+        if c_tot > j_tot:
+            winner_id = b["creator_id"]
+        elif j_tot > c_tot:
+            winner_id = b["joiner_id"]
+        else:
+            winner_id = random.choice([b["creator_id"], b["joiner_id"]])
+
+        b["winner_id"] = winner_id
+        b["status"] = "finished"
+        winner = ensure_user(db, winner_id)
+        winner["balance"] = round(winner["balance"] + b["bet"] * 2, 2)
+
+        all_won = b["creator_rolls"] + b["joiner_rolls"]
+        for it in all_won:
+            inv_id = db["next_inv_id"]
+            db["next_inv_id"] += 1
+            winner["inventory"].append({
+                "inv_id": inv_id,
+                "item_id": it["id"],
+                "mutation": it.get("mutation", "normal"),
+                "traits": [t["key"] for t in it.get("traits", [])],
+            })
+        record_daily_drop(db, winner_id, all_won, "battle")
+
+    github_save_db(db, sha)
+    return {"ok": True, "battle": _battle_public(b)}
+
+
+@app.get("/api/battle/{battle_id}")
+def battle_detail(battle_id: str):
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    b = db.setdefault("battles", {}).get(battle_id)
+    if not b:
+        raise HTTPException(status_code=404, detail="Батл не найден")
+    return _battle_public(b)
 
 
 def generate_crash_point():
