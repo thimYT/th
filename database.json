@@ -34,7 +34,7 @@
       "last_seen": 0
     },
     "1789157813": {
-      "balance": 0.0,
+      "balance": 1386.0,
       "inventory": [
         {
           "inv_id": 1244,
@@ -43,15 +43,6 @@
           "traits": [
             "spider",
             "Sombrero",
-            "crab",
-            "taco"
-          ]
-        },
-        {
-          "inv_id": 1245,
-          "item_id": 60,
-          "mutation": "hacker",
-          "traits": [
             "crab",
             "taco"
           ]
