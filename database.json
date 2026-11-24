@@ -1053,9 +1053,24 @@
       "joiner_id": "1789157813",
       "joiner_username": "ThimYT",
       "creator_rolls": [],
-      "joiner_rolls": [],
+      "joiner_rolls": [
+        {
+          "id": 5,
+          "name": "Los 67",
+          "price": 14.0,
+          "rarity": "common",
+          "image": "/images/item5.png",
+          "fallback": "⚔️",
+          "base_price": 14,
+          "mutation": "normal",
+          "mutation_mult": 1.0,
+          "mutation_icon": "/images/mutation.png",
+          "traits": [],
+          "traits_percent": 0.0
+        }
+      ],
       "creator_total": 0.0,
-      "joiner_total": 0.0,
+      "joiner_total": 14.0,
       "winner_id": "",
       "created_at": 1795535970
     }
