@@ -65,12 +65,6 @@
           "item_id": 85,
           "mutation": "bloodroot",
           "traits": []
-        },
-        {
-          "inv_id": 1389,
-          "item_id": 1,
-          "mutation": "normal",
-          "traits": []
         }
       ],
       "last_free_case": 1795447111,
