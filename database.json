@@ -110,14 +110,8 @@
       "last_seen": 0
     },
     "8980661701": {
-      "balance": 316.37,
+      "balance": 867.37,
       "inventory": [
-        {
-          "inv_id": 1296,
-          "item_id": 14,
-          "mutation": "normal",
-          "traits": []
-        },
         {
           "inv_id": 1299,
           "item_id": 30,
@@ -127,6 +121,12 @@
         {
           "inv_id": 1300,
           "item_id": 23,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1296,
+          "item_id": 14,
           "mutation": "normal",
           "traits": []
         }
@@ -988,6 +988,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 40.0
+      },
+      {
+        "ts": 1795547769,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс ебаный",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "wheel",
+        "item_id": 14,
+        "name": "Mieteteira",
+        "rarity": "rare",
+        "image": "/images/item14.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 29.0
       }
     ]
   },
