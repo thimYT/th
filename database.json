@@ -132,8 +132,15 @@
       "last_seen": 0
     },
     "1741462977": {
-      "balance": 206.0,
-      "inventory": [],
+      "balance": 106.0,
+      "inventory": [
+        {
+          "inv_id": 1270,
+          "item_id": 36,
+          "mutation": "normal",
+          "traits": []
+        }
+      ],
       "last_free_case": 1795360483,
       "last_daily_bonus": 1795252235,
       "nickname": "",
@@ -207,7 +214,7 @@
       "last_seen": 1795465104
     }
   },
-  "next_inv_id": 1270,
+  "next_inv_id": 1271,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -423,6 +430,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 205.0
+      },
+      {
+        "ts": 1795536229,
+        "user_id": "1741462977",
+        "username": "paslkek",
+        "first_name": "sewrez @Brainrot_Battle",
+        "photo_url": "https://t.me/i/userpic/320/izWNPXRMLhEWDYrCF75kihGaB7rM4sxASucty8vX3CM.svg",
+        "source": "case",
+        "item_id": 36,
+        "name": "Garama",
+        "rarity": "legendary",
+        "image": "/images/item36.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 55.0
       }
     ]
   },
