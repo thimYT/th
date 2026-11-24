@@ -132,8 +132,15 @@
       "last_seen": 0
     },
     "1741462977": {
-      "balance": 10.0,
-      "inventory": [],
+      "balance": 0.0,
+      "inventory": [
+        {
+          "inv_id": 1360,
+          "item_id": 2,
+          "mutation": "normal",
+          "traits": []
+        }
+      ],
       "last_free_case": 1795360483,
       "last_daily_bonus": 1795252235,
       "nickname": "",
@@ -226,7 +233,7 @@
       "last_seen": 0
     }
   },
-  "next_inv_id": 1360,
+  "next_inv_id": 1361,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -2822,6 +2829,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 66.0
+      },
+      {
+        "ts": 1795548754,
+        "user_id": "1741462977",
+        "username": "paslkek",
+        "first_name": "sewrez @Brainrot_Battle",
+        "photo_url": "https://t.me/i/userpic/320/izWNPXRMLhEWDYrCF75kihGaB7rM4sxASucty8vX3CM.svg",
+        "source": "case",
+        "item_id": 2,
+        "name": "Sir Mangus",
+        "rarity": "common",
+        "image": "/images/item2.png",
+        "fallback": "🔫",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 7.0
       }
     ]
   },
