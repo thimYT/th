@@ -104,8 +104,39 @@
       "last_seen": 0
     },
     "8980661701": {
-      "balance": 309.6,
-      "inventory": [],
+      "balance": 209.6,
+      "inventory": [
+        {
+          "inv_id": 1279,
+          "item_id": 10,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1280,
+          "item_id": 10,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1281,
+          "item_id": 9,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1282,
+          "item_id": 5,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1283,
+          "item_id": 10,
+          "mutation": "normal",
+          "traits": []
+        }
+      ],
       "last_free_case": 0,
       "last_daily_bonus": 0,
       "nickname": "",
@@ -126,7 +157,7 @@
       "last_seen": 0
     },
     "1741462977": {
-      "balance": 0.0,
+      "balance": 10.0,
       "inventory": [],
       "last_free_case": 1795360483,
       "last_daily_bonus": 1795252235,
@@ -220,7 +251,7 @@
       "last_seen": 0
     }
   },
-  "next_inv_id": 1279,
+  "next_inv_id": 1284,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -589,6 +620,91 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 4.75
+      },
+      {
+        "ts": 1795547351,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс ебаный",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "case",
+        "item_id": 10,
+        "name": "Nuclearo",
+        "rarity": "rare",
+        "image": "/images/item10.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 23.0
+      },
+      {
+        "ts": 1795547351,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс ебаный",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "case",
+        "item_id": 10,
+        "name": "Nuclearo",
+        "rarity": "rare",
+        "image": "/images/item10.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 23.0
+      },
+      {
+        "ts": 1795547351,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс ебаный",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "case",
+        "item_id": 9,
+        "name": "Mariachi",
+        "rarity": "rare",
+        "image": "/images/item9.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 20.0
+      },
+      {
+        "ts": 1795547351,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс ебаный",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "case",
+        "item_id": 5,
+        "name": "Los 67",
+        "rarity": "common",
+        "image": "/images/item5.png",
+        "fallback": "⚔️",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 14.0
+      },
+      {
+        "ts": 1795547351,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс ебаный",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "case",
+        "item_id": 10,
+        "name": "Nuclearo",
+        "rarity": "rare",
+        "image": "/images/item10.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 23.0
       }
     ]
   },
