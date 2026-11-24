@@ -79,12 +79,6 @@
           "traits": []
         },
         {
-          "inv_id": 1379,
-          "item_id": 5,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
           "inv_id": 1381,
           "item_id": 41,
           "mutation": "normal",
@@ -93,6 +87,12 @@
         {
           "inv_id": 1382,
           "item_id": 2,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1383,
+          "item_id": 47,
           "mutation": "normal",
           "traits": []
         }
@@ -240,7 +240,7 @@
       "last_seen": 0
     }
   },
-  "next_inv_id": 1383,
+  "next_inv_id": 1384,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -3244,6 +3244,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 7.0
+      },
+      {
+        "ts": 1795549487,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# на @upbrainer",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "plinko",
+        "item_id": 47,
+        "name": "Panda Popanda",
+        "rarity": "legendary",
+        "image": "/images/item47.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 84.0
       }
     ]
   },
