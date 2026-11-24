@@ -119,14 +119,14 @@
           "traits": []
         },
         {
-          "inv_id": 1297,
-          "item_id": 9,
+          "inv_id": 1299,
+          "item_id": 30,
           "mutation": "normal",
           "traits": []
         },
         {
-          "inv_id": 1299,
-          "item_id": 30,
+          "inv_id": 1300,
+          "item_id": 23,
           "mutation": "normal",
           "traits": []
         }
@@ -245,7 +245,7 @@
       "last_seen": 0
     }
   },
-  "next_inv_id": 1300,
+  "next_inv_id": 1301,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -971,6 +971,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 48.0
+      },
+      {
+        "ts": 1795547754,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс ебаный",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "wheel",
+        "item_id": 23,
+        "name": "Tang Tang",
+        "rarity": "epic",
+        "image": "/images/item23.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 40.0
       }
     ]
   },
