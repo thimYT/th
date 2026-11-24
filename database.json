@@ -132,8 +132,15 @@
       "last_seen": 0
     },
     "1741462977": {
-      "balance": 101.0,
-      "inventory": [],
+      "balance": 1.0,
+      "inventory": [
+        {
+          "inv_id": 1267,
+          "item_id": 35,
+          "mutation": "normal",
+          "traits": []
+        }
+      ],
       "last_free_case": 1795360483,
       "last_daily_bonus": 1795252235,
       "nickname": "",
@@ -207,7 +214,7 @@
       "last_seen": 1795465104
     }
   },
-  "next_inv_id": 1267,
+  "next_inv_id": 1268,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -372,6 +379,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 30.0
+      },
+      {
+        "ts": 1795536147,
+        "user_id": "1741462977",
+        "username": "paslkek",
+        "first_name": "sewrez @Brainrot_Battle",
+        "photo_url": "https://t.me/i/userpic/320/izWNPXRMLhEWDYrCF75kihGaB7rM4sxASucty8vX3CM.svg",
+        "source": "case",
+        "item_id": 35,
+        "name": "Rosetti",
+        "rarity": "epic",
+        "image": "/images/item35.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 53.0
       }
     ]
   },
