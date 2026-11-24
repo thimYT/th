@@ -69,7 +69,7 @@
       "last_seen": 1795547365
     },
     "8450028899": {
-      "balance": 2663.17,
+      "balance": 2678.67,
       "inventory": [
         {
           "inv_id": 1254,
@@ -110,7 +110,7 @@
       "last_seen": 0
     },
     "8980661701": {
-      "balance": 2201.37,
+      "balance": 2046.37,
       "inventory": [
         {
           "inv_id": 1323,
@@ -169,6 +169,36 @@
         {
           "inv_id": 1332,
           "item_id": 25,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1333,
+          "item_id": 6,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1334,
+          "item_id": 9,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1335,
+          "item_id": 6,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1336,
+          "item_id": 35,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1337,
+          "item_id": 19,
           "mutation": "normal",
           "traits": []
         }
@@ -287,7 +317,7 @@
       "last_seen": 0
     }
   },
-  "next_inv_id": 1333,
+  "next_inv_id": 1338,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -1727,6 +1757,91 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 43.0
+      },
+      {
+        "ts": 1795548276,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс ебаный",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "case",
+        "item_id": 6,
+        "name": "Bacuru",
+        "rarity": "common",
+        "image": "/images/item6.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 16.0
+      },
+      {
+        "ts": 1795548276,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс ебаный",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "case",
+        "item_id": 9,
+        "name": "Mariachi",
+        "rarity": "rare",
+        "image": "/images/item9.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 20.0
+      },
+      {
+        "ts": 1795548276,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс ебаный",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "case",
+        "item_id": 6,
+        "name": "Bacuru",
+        "rarity": "common",
+        "image": "/images/item6.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 16.0
+      },
+      {
+        "ts": 1795548276,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс ебаный",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "case",
+        "item_id": 35,
+        "name": "Rosetti",
+        "rarity": "epic",
+        "image": "/images/item35.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 53.0
+      },
+      {
+        "ts": 1795548276,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс ебаный",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "case",
+        "item_id": 19,
+        "name": "Bat-In-The-Box",
+        "rarity": "rare",
+        "image": "/images/item19.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 35.0
       }
     ]
   },
