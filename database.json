@@ -34,7 +34,7 @@
       "last_seen": 0
     },
     "1789157813": {
-      "balance": 1386.0,
+      "balance": 1253.0,
       "inventory": [
         {
           "inv_id": 1244,
@@ -1047,11 +1047,11 @@
       "case_name": "Бомжак",
       "case_image": "/images/case1.png",
       "bet": 123.0,
-      "status": "waiting",
+      "status": "running",
       "creator_id": "7379573136",
       "creator_username": "FantaxyXD",
-      "joiner_id": "",
-      "joiner_username": "",
+      "joiner_id": "1789157813",
+      "joiner_username": "ThimYT",
       "creator_rolls": [],
       "joiner_rolls": [],
       "creator_total": 0.0,
