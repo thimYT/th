@@ -61,7 +61,7 @@
       "last_seen": 1795549087
     },
     "8450028899": {
-      "balance": 2678.67,
+      "balance": 2680.17,
       "inventory": [
         {
           "inv_id": 1254,
@@ -70,8 +70,8 @@
           "traits": []
         },
         {
-          "inv_id": 1263,
-          "item_id": 36,
+          "inv_id": 1369,
+          "item_id": 55,
           "mutation": "normal",
           "traits": []
         }
@@ -219,7 +219,7 @@
       "last_seen": 0
     }
   },
-  "next_inv_id": 1369,
+  "next_inv_id": 1370,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -2968,6 +2968,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 66.0
+      },
+      {
+        "ts": 1795549294,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# на @upbrainer",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "limbo",
+        "item_id": 55,
+        "name": "La Secret",
+        "rarity": "legendary",
+        "image": "/images/item55.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 92.0
       }
     ]
   },
