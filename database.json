@@ -110,7 +110,7 @@
       "last_seen": 0
     },
     "8980661701": {
-      "balance": 322.37,
+      "balance": 820.37,
       "inventory": [
         {
           "inv_id": 1308,
@@ -125,13 +125,13 @@
           "traits": []
         },
         {
-          "inv_id": 1310,
+          "inv_id": 1311,
           "item_id": 35,
           "mutation": "normal",
           "traits": []
         },
         {
-          "inv_id": 1311,
+          "inv_id": 1310,
           "item_id": 35,
           "mutation": "normal",
           "traits": []
@@ -1215,6 +1215,74 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 43.0
+      },
+      {
+        "ts": 1795548027,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс ебаный",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "wheel",
+        "item_id": 53,
+        "name": "Sammyni Fattini",
+        "rarity": "legendary",
+        "image": "/images/item53.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 90.0
+      },
+      {
+        "ts": 1795548027,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс ебаный",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "wheel",
+        "item_id": 35,
+        "name": "Rosetti",
+        "rarity": "epic",
+        "image": "/images/item35.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 53.0
+      },
+      {
+        "ts": 1795548027,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс ебаный",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "wheel",
+        "item_id": 35,
+        "name": "Rosetti",
+        "rarity": "epic",
+        "image": "/images/item35.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 53.0
+      },
+      {
+        "ts": 1795548027,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс ебаный",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "wheel",
+        "item_id": 35,
+        "name": "Rosetti",
+        "rarity": "epic",
+        "image": "/images/item35.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 53.0
       }
     ]
   },
