@@ -58,7 +58,7 @@
       "last_seen": 1795549087
     },
     "8450028899": {
-      "balance": 3055.77,
+      "balance": 3057.77,
       "inventory": [
         {
           "inv_id": 1254,
@@ -81,12 +81,6 @@
         {
           "inv_id": 1383,
           "item_id": 47,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1384,
-          "item_id": 1,
           "mutation": "normal",
           "traits": []
         }
