@@ -123,12 +123,6 @@
           "item_id": 23,
           "mutation": "normal",
           "traits": []
-        },
-        {
-          "inv_id": 1296,
-          "item_id": 14,
-          "mutation": "normal",
-          "traits": []
         }
       ],
       "last_free_case": 0,
