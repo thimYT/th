@@ -135,6 +135,15 @@
           "item_id": 10,
           "mutation": "normal",
           "traits": []
+        },
+        {
+          "inv_id": 1284,
+          "item_id": 36,
+          "mutation": "normal",
+          "traits": [
+            "taco",
+            "crab"
+          ]
         }
       ],
       "last_free_case": 0,
@@ -251,7 +260,7 @@
       "last_seen": 0
     }
   },
-  "next_inv_id": 1284,
+  "next_inv_id": 1285,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -705,6 +714,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 23.0
+      },
+      {
+        "ts": 1795547363,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс ебаный",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "admin_give",
+        "item_id": 36,
+        "name": "Garama",
+        "rarity": "legendary",
+        "image": "/images/item36.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 49.5
       }
     ]
   },
