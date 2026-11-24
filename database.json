@@ -58,7 +58,7 @@
       "last_seen": 1795549087
     },
     "8450028899": {
-      "balance": 3086.57,
+      "balance": 3096.57,
       "inventory": [
         {
           "inv_id": 1254,
@@ -79,8 +79,8 @@
           "traits": []
         },
         {
-          "inv_id": 1374,
-          "item_id": 25,
+          "inv_id": 1375,
+          "item_id": 65,
           "mutation": "normal",
           "traits": []
         }
@@ -228,7 +228,7 @@
       "last_seen": 0
     }
   },
-  "next_inv_id": 1375,
+  "next_inv_id": 1376,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -3096,6 +3096,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 43.0
+      },
+      {
+        "ts": 1795549367,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# на @upbrainer",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "wheel",
+        "item_id": 65,
+        "name": "Burguro And Fryuro",
+        "rarity": "legendary",
+        "image": "/images/item65.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 205.0
       }
     ]
   },
