@@ -132,8 +132,15 @@
       "last_seen": 0
     },
     "1741462977": {
-      "balance": 96.0,
-      "inventory": [],
+      "balance": 71.0,
+      "inventory": [
+        {
+          "inv_id": 1266,
+          "item_id": 15,
+          "mutation": "normal",
+          "traits": []
+        }
+      ],
       "last_free_case": 1795360483,
       "last_daily_bonus": 1795252235,
       "nickname": "",
@@ -207,7 +214,7 @@
       "last_seen": 1795465104
     }
   },
-  "next_inv_id": 1266,
+  "next_inv_id": 1267,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -355,6 +362,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 14.0
+      },
+      {
+        "ts": 1795536129,
+        "user_id": "1741462977",
+        "username": "paslkek",
+        "first_name": "sewrez @Brainrot_Battle",
+        "photo_url": "https://t.me/i/userpic/320/izWNPXRMLhEWDYrCF75kihGaB7rM4sxASucty8vX3CM.svg",
+        "source": "case",
+        "item_id": 15,
+        "name": "Money Puggy",
+        "rarity": "rare",
+        "image": "/images/item15.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 30.0
       }
     ]
   },
