@@ -113,32 +113,8 @@
       "balance": 3201.37,
       "inventory": [
         {
-          "inv_id": 1313,
-          "item_id": 25,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1314,
-          "item_id": 25,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
           "inv_id": 1315,
           "item_id": 36,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1316,
-          "item_id": 25,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1317,
-          "item_id": 25,
           "mutation": "normal",
           "traits": []
         },
@@ -151,18 +127,6 @@
         {
           "inv_id": 1319,
           "item_id": 53,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1320,
-          "item_id": 25,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1321,
-          "item_id": 25,
           "mutation": "normal",
           "traits": []
         },
