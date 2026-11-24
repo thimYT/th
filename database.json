@@ -34,7 +34,7 @@
       "last_seen": 0
     },
     "1789157813": {
-      "balance": 1501.0,
+      "balance": 1502.8,
       "inventory": [
         {
           "inv_id": 1244,
@@ -48,7 +48,7 @@
           ]
         },
         {
-          "inv_id": 1275,
+          "inv_id": 1276,
           "item_id": 3,
           "mutation": "normal",
           "traits": []
@@ -201,7 +201,7 @@
       "last_seen": 1795465104
     }
   },
-  "next_inv_id": 1276,
+  "next_inv_id": 1277,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -510,6 +510,23 @@
         "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
         "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
         "source": "limbo",
+        "item_id": 3,
+        "name": "Los Mobilis",
+        "rarity": "common",
+        "image": "/images/item3.png",
+        "fallback": "🪖",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 9.0
+      },
+      {
+        "ts": 1795547099,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "wheel",
         "item_id": 3,
         "name": "Los Mobilis",
         "rarity": "common",
