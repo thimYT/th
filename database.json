@@ -135,8 +135,8 @@
       "balance": 1.0,
       "inventory": [
         {
-          "inv_id": 1268,
-          "item_id": 57,
+          "inv_id": 1269,
+          "item_id": 65,
           "mutation": "normal",
           "traits": []
         }
@@ -214,7 +214,7 @@
       "last_seen": 1795465104
     }
   },
-  "next_inv_id": 1269,
+  "next_inv_id": 1270,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -413,6 +413,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 96.0
+      },
+      {
+        "ts": 1795536206,
+        "user_id": "1741462977",
+        "username": "paslkek",
+        "first_name": "sewrez @Brainrot_Battle",
+        "photo_url": "https://t.me/i/userpic/320/izWNPXRMLhEWDYrCF75kihGaB7rM4sxASucty8vX3CM.svg",
+        "source": "upgrade",
+        "item_id": 65,
+        "name": "Burguro And Fryuro",
+        "rarity": "legendary",
+        "image": "/images/item65.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 205.0
       }
     ]
   },
