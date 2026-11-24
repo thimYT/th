@@ -153,7 +153,7 @@
       "last_seen": 0
     },
     "7379573136": {
-      "balance": 11763.21,
+      "balance": 11630.21,
       "inventory": [],
       "last_free_case": 1795415756,
       "last_daily_bonus": 1795415866,
@@ -1039,5 +1039,25 @@
         }
       ]
     }
-  ]
+  ],
+  "battles": {
+    "97051061": {
+      "battle_id": "97051061",
+      "case_id": 1,
+      "case_name": "Бомжак",
+      "case_image": "/images/case1.png",
+      "bet": 123.0,
+      "status": "waiting",
+      "creator_id": "7379573136",
+      "creator_username": "FantaxyXD",
+      "joiner_id": "",
+      "joiner_username": "",
+      "creator_rolls": [],
+      "joiner_rolls": [],
+      "creator_total": 0.0,
+      "joiner_total": 0.0,
+      "winner_id": "",
+      "created_at": 1795535970
+    }
+  }
 }
