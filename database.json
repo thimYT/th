@@ -135,14 +135,14 @@
       "balance": 6.0,
       "inventory": [
         {
-          "inv_id": 1270,
-          "item_id": 36,
+          "inv_id": 1271,
+          "item_id": 25,
           "mutation": "normal",
           "traits": []
         },
         {
-          "inv_id": 1271,
-          "item_id": 25,
+          "inv_id": 1272,
+          "item_id": 53,
           "mutation": "normal",
           "traits": []
         }
@@ -220,7 +220,7 @@
       "last_seen": 1795465104
     }
   },
-  "next_inv_id": 1272,
+  "next_inv_id": 1273,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -470,6 +470,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 43.0
+      },
+      {
+        "ts": 1795536260,
+        "user_id": "1741462977",
+        "username": "paslkek",
+        "first_name": "sewrez @Brainrot_Battle",
+        "photo_url": "https://t.me/i/userpic/320/izWNPXRMLhEWDYrCF75kihGaB7rM4sxASucty8vX3CM.svg",
+        "source": "upgrade",
+        "item_id": 53,
+        "name": "Sammyni Fattini",
+        "rarity": "legendary",
+        "image": "/images/item53.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 90.0
       }
     ]
   },
