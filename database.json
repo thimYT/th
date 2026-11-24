@@ -61,7 +61,7 @@
       "last_seen": 1795549087
     },
     "8450028899": {
-      "balance": 2686.57,
+      "balance": 3386.57,
       "inventory": [
         {
           "inv_id": 1254,
@@ -2996,6 +2996,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 150.0
+      },
+      {
+        "ts": 1795549317,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# на @upbrainer",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "limbo",
+        "item_id": 85,
+        "name": "Flying Dutchman",
+        "rarity": "legendary",
+        "image": "/images/item85.png",
+        "fallback": "🐉",
+        "mutation": "bloodroot",
+        "mutation_icon": "/images/mutation3.png",
+        "mutation_mult": 2.0,
+        "price": 1000.0
       }
     ]
   },
