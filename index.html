@@ -567,8 +567,444 @@
 </aside>
 
 <main class="container">
-<!-- === ОСТАЛЬНАЯ РАЗМЕТКА MAIN ИДЁТ ИЗ ТВОЕГО ФАЙЛА: профиль, кейсы, апгрейдер, краш, дайс, мины, плинко, башня, трейды, бонусы, инвентарь, админка === -->
+    <!-- БАШНЯ -->
+    <section class="tab-section" id="tab-tower">
+        <h2>Башня</h2>
+        <div class="tower-arena">
+            <div class="tower-top">
+                <div class="tower-stat"><div class="v" id="tower-mult">1.00x</div><div class="l">Множитель</div></div>
+                <div class="tower-stat"><div class="v" id="tower-potential">0</div><div class="l">Заберёте</div></div>
+                <div class="tower-stat"><div class="v" id="tower-floor">0/5</div><div class="l">Этаж</div></div>
+            </div>
+            <div class="tower-floors" id="tower-floors"></div>
+            <div class="tower-status" id="tower-status-text">Сделайте ставку и начните подъём</div>
+        </div>
 
+        <div class="panel-box">
+            <div class="input-group">
+                <input type="number" id="tower-coins-input" min="0" step="1" placeholder="Ставка монетами" oninput="updateTowerTotal()">
+                <button class="btn" style="width:auto;padding:10px 16px;" onclick="setMaxTowerCoins()">Макс</button>
+            </div>
+            <div class="stat-line center" style="margin-bottom:12px;">Общая ставка: <b id="tower-total-bet">0</b> 💰</div>
+            <div class="case-win-actions">
+                <button class="btn" id="tower-start-btn" onclick="startTower()">Начать игру</button>
+                <button class="btn btn-blue" id="tower-cashout-btn" onclick="cashoutTower()" style="display:none;">Забрать</button>
+            </div>
+        </div>
+
+        <div class="panel-box">
+            <div class="panel-title">Добавить вещи из инвентаря в ставку:</div>
+            <div class="grid scroll-grid" id="tower-inv-grid"></div>
+        </div>
+    </section>
+
+    <!-- ТРЕЙДЫ -->
+    <section class="tab-section" id="tab-trade">
+        <h2>Трейды</h2>
+        <div class="panel-box">
+            <div class="panel-title">1. Найти получателя</div>
+            <div class="input-group">
+                <input type="text" id="trade-target-input" placeholder="@username или ID игрока">
+                <button class="btn btn-blue" style="width:auto;padding:10px 16px;" onclick="tradeFindUser()">Найти</button>
+            </div>
+            <div id="trade-target-found"></div>
+        </div>
+
+        <div class="panel-box">
+            <div class="panel-title">2. Выберите предметы и монеты</div>
+            <div class="trade-commission-note">Комиссия системы списывается с отправителя поверх суммы трейда.</div>
+            <div class="grid scroll-grid" id="trade-inv-grid" style="margin-bottom:12px;"></div>
+            <div class="input-group">
+                <input type="number" id="trade-coins-input" min="0" step="1" placeholder="Монеты к отправке" oninput="updateTradeTotal()">
+            </div>
+            <div class="stat-line" style="margin-bottom:4px;">Предметов: <b id="trade-items-count">0</b> (на <b id="trade-items-value">0.00</b> 💰)</div>
+            <div class="stat-line" style="margin-bottom:4px;">Комиссия: <b id="trade-commission-val">0.00</b> 💰</div>
+            <div class="stat-line" style="margin-bottom:12px;">Итого списание: <b id="trade-total-charge">0.00</b> 💰</div>
+            <button class="btn" onclick="tradeSend()">Отправить трейд</button>
+        </div>
+
+        <div class="panel-box">
+            <div class="panel-title">История трейдов</div>
+            <div id="trade-history-box"></div>
+        </div>
+    </section>
+
+    <!-- АДМИНКА -->
+    <section class="tab-section" id="tab-admin">
+        <h2>Админка</h2>
+        <div class="admin-tabs">
+            <button class="admin-tab-btn active" onclick="switchAdminPane('users', this)">👥 Игроки</button>
+            <button class="admin-tab-btn" onclick="switchAdminPane('give', this)">🎁 Выдача</button>
+            <button class="admin-tab-btn" onclick="switchAdminPane('promo', this)">🎟 Промокоды</button>
+            <button class="admin-tab-btn" onclick="switchAdminPane('events', this)">⚡ Ивенты и чат</button>
+        </div>
+
+        <div class="admin-pane active" id="admin-pane-users">
+            <div class="panel-box">
+                <button class="btn btn-blue" style="margin-bottom:10px;" onclick="adminLoadUsers()">Обновить список</button>
+                <div style="overflow-x:auto;" id="adm-users-box"></div>
+            </div>
+        </div>
+
+        <div class="admin-pane" id="admin-pane-give">
+            <div class="panel-box">
+                <div class="panel-title">Баланс игрока</div>
+                <div class="input-group">
+                    <input type="text" id="adm-bal-target" placeholder="user_id">
+                    <input type="number" id="adm-bal-amount" placeholder="Сумма">
+                </div>
+                <div class="case-win-actions">
+                    <button class="btn" onclick="adminBalance('add')">Начислить</button>
+                    <button class="btn btn-red" onclick="adminBalance('sub')">Списать</button>
+                </div>
+            </div>
+            <div class="panel-box">
+                <div class="panel-title">Выдать предмет</div>
+                <div class="input-group">
+                    <input type="text" id="adm-give-target" placeholder="user_id">
+                    <input type="number" id="adm-give-item" placeholder="item_id">
+                    <select id="adm-give-mut"></select>
+                </div>
+                <div class="trait-pick-grid" id="adm-give-traits" style="margin-bottom:10px;"></div>
+                <button class="btn" onclick="adminGiveItem()">Выдать предмет</button>
+            </div>
+        </div>
+
+        <div class="admin-pane" id="admin-pane-promo">
+            <div class="panel-box">
+                <div class="panel-title">Создать промокод</div>
+                <div class="input-group">
+                    <input type="text" id="adm-promo-code" placeholder="Код">
+                    <select id="adm-promo-type" onchange="onAdminPromoTypeChange()">
+                        <option value="coins">Монеты</option>
+                        <option value="item">Предмет</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="adm-promo-amount" placeholder="Сумма монет">
+                    <input type="number" id="adm-promo-item" placeholder="ID предмета" style="display:none;">
+                    <input type="number" id="adm-promo-stock" placeholder="Активаций" value="1">
+                </div>
+                <button class="btn" onclick="adminCreatePromo()">Создать</button>
+            </div>
+            <div class="panel-box">
+                <div class="panel-title">Удалить промокод</div>
+                <div class="input-group" style="margin-bottom:0;">
+                    <input type="text" id="adm-promo-del-code" placeholder="Код">
+                    <button class="btn btn-red" style="width:auto;padding:10px 16px;" onclick="adminDeletePromo()">Удалить</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-pane" id="admin-pane-events">
+            <div class="panel-box">
+                <div class="panel-title">Глобальное сообщение</div>
+                <div class="input-group">
+                    <input type="text" id="adm-global-text" placeholder="Текст баннера">
+                    <input type="number" id="adm-global-dur" placeholder="Сек" value="60">
+                </div>
+                <button class="btn" onclick="adminGlobalMessage()">Отправить</button>
+            </div>
+            <div class="panel-box">
+                <div class="panel-title">Ивент Удачи</div>
+                <div class="input-group">
+                    <input type="number" id="adm-luck-mult" placeholder="Множитель" value="2">
+                    <input type="number" id="adm-luck-dur" placeholder="Сек" value="600">
+                </div>
+                <div class="case-win-actions">
+                    <button class="btn" onclick="adminStartLuck()">Запустить</button>
+                    <button class="btn btn-red" onclick="adminStopLuck()">Стоп</button>
+                </div>
+            </div>
+            <div class="panel-box">
+                <div class="panel-title">Авто-ивент на Трейт</div>
+                <div class="input-group">
+                    <select id="adm-event-trait"></select>
+                    <input type="number" id="adm-event-trait-tick" placeholder="Тик (с)" value="45">
+                    <input type="number" id="adm-event-trait-chance" placeholder="Шанс %" value="5">
+                    <input type="number" id="adm-event-trait-dur" placeholder="Длит (с)" value="600">
+                </div>
+                <button class="btn" onclick="adminStartEvent('trait')">Запустить трейт-ивент</button>
+            </div>
+            <div class="panel-box">
+                <div class="panel-title">Авто-ивент на Мутацию</div>
+                <div class="input-group">
+                    <select id="adm-event-mut"></select>
+                    <input type="number" id="adm-event-mut-tick" placeholder="Тик (с)" value="60">
+                    <input type="number" id="adm-event-mut-chance" placeholder="Шанс %" value="2.5">
+                    <input type="number" id="adm-event-mut-dur" placeholder="Длит (с)" value="600">
+                </div>
+                <button class="btn" onclick="adminStartEvent('mutation')">Запустить мут-ивент</button>
+            </div>
+            <div class="panel-box">
+                <div class="panel-title">Активные ивенты</div>
+                <div class="admin-list-events" id="adm-events-list"></div>
+            </div>
+        </div>
+    </section>
+
+ <!-- ПРОФИЛЬ -->
+    <section class="tab-section" id="tab-profile">
+        <h2>Профиль</h2>
+        <div class="profile-card">
+            <div class="profile-avatar" id="profile-avatar">?</div>
+            <div class="profile-name" id="profile-name">Игрок</div>
+            <div class="profile-username" id="profile-username">@—</div>
+            <div class="profile-id" id="profile-id">ID: —</div>
+            <div class="profile-stats">
+                <div class="profile-stat"><div class="v" id="profile-balance">0</div><div class="l">Баланс</div></div>
+                <div class="profile-stat"><div class="v" id="profile-inv-count">0</div><div class="l">Предметов</div></div>
+                <div class="profile-stat"><div class="v" id="profile-inv-value">0</div><div class="l">Стоимость</div></div>
+            </div>
+        </div>
+        <div class="panel-box">
+            <div class="panel-title">Кейс награды</div>
+            <div class="daily-badge">🤖 Нужен @BrainDropDropBot в Telegram-нике</div>
+            <div style="color:var(--muted);font-size:13px;">
+                Проверка идёт по вашему нику в Telegram (username или имя). Если там есть <b>@BrainDropDropBot</b> — кейс награды доступен раз в 24 часа.
+            </div>
+        </div>
+    </section>
+
+    <!-- КЕЙСЫ -->
+    <section class="tab-section active" id="tab-cases">
+        <h2>Кейсы</h2>
+
+        <div class="daily-drops-strip" id="daily-drops-strip">
+            <div class="daily-drops-header">
+                <div class="daily-drops-title">🔥 Дроп дня</div>
+                <div class="daily-drops-count" id="daily-drops-count">0 дропов</div>
+            </div>
+            <div style="position:relative;">
+                <div class="daily-drop-arrow left" onclick="scrollDailyDrops(-1)">◀</div>
+                <div class="daily-drops-track" id="daily-drops-track"></div>
+                <div class="daily-drop-arrow right" onclick="scrollDailyDrops(1)">▶</div>
+            </div>
+        </div>
+
+        <div class="case-cats">
+            <button class="case-cat-btn active" onclick="setCaseCategory('all', this)">🔥 Все</button>
+            <button class="case-cat-btn" onclick="setCaseCategory('regular', this)">📦 Разные</button>
+            <button class="case-cat-btn" onclick="setCaseCategory('all_in', this)">💎 All-In</button>
+            <button class="case-cat-btn" onclick="setCaseCategory('partner', this)">🤝 Партнёрские</button>
+            <button class="case-cat-btn" onclick="setCaseCategory('limited', this)">⏳ Ограниченное время</button>
+        </div>
+        <div class="grid" id="cases-grid"></div>
+    </section>
+
+    <!-- АПГРЕЙДЕР -->
+    <section class="tab-section" id="tab-upgrade">
+        <h2>Апгрейдер</h2>
+        <div class="roulette-wrapper">
+            <div class="wheel-container">
+                <div class="wheel-pointer"></div>
+                <div class="wheel-circle" id="upg-wheel"></div>
+                <div class="wheel-center">
+                    <div class="wheel-chance" id="upg-chance">0%</div>
+                    <div class="wheel-label">ШАНС</div>
+                </div>
+            </div>
+            <div class="upg-split">
+                <div class="stat-line">Ставка: <b id="upg-bet-sum">0</b> 💰</div>
+                <div class="stat-line">Цель: <b id="upg-target-sum">0</b> 💰</div>
+            </div>
+            <button class="btn" id="upg-spin-btn" onclick="doUpgrade()" style="max-width:280px;margin-top:14px;">Крутить рулетку</button>
+        </div>
+
+        <div class="panel-box">
+            <div class="panel-title">1. Нажмите на вещи из инвентаря:</div>
+            <div class="grid scroll-grid" id="upg-inv-grid"></div>
+            <div class="input-group" style="margin-top:12px;margin-bottom:0;">
+                <input type="number" id="upg-coins-bet" min="0" step="1" placeholder="Монеты к ставке" oninput="calcUpgrade()">
+            </div>
+        </div>
+
+        <div class="panel-box">
+            <div class="panel-title">2. Выберите награду:</div>
+            <div class="mode-switch">
+                <button class="mode-btn active" id="mode-item-btn" onclick="setUpgradeTargetMode('item')">Предмет</button>
+                <button class="mode-btn" id="mode-coins-btn" onclick="setUpgradeTargetMode('coins')">Монеты</button>
+            </div>
+            <div id="upg-target-coins-box" style="display:none;">
+                <div class="stat-line" style="margin-bottom:8px;">Укажите желаемую сумму монет:</div>
+                <input type="number" id="upg-target-coins-input" min="0" step="1" placeholder="Например: 500" oninput="calcUpgrade()" style="width:100%;">
+            </div>
+            <div id="upg-target-mut-box" class="mut-panel" style="display:none;"></div>
+            <div class="grid scroll-grid" id="upg-target-items-box"></div>
+        </div>
+    </section>
+
+    <!-- КРАШ -->
+    <section class="tab-section" id="tab-crash">
+        <h2>Краш (Ракета)</h2>
+        <div class="crash-arena">
+            <div class="rocket" id="crash-rocket">🚀</div>
+            <div class="crash-multiplier" id="crash-mult">1.00x</div>
+            <div class="crash-status" id="crash-status">Сделайте ставку и запустите ракету</div>
+        </div>
+        <div class="panel-box">
+            <div class="input-group">
+                <input type="number" id="crash-coins-input" min="0" step="1" placeholder="Ставка монетами" oninput="updateCrashTotal()">
+                <button class="btn" style="width:auto;padding:10px 16px;" onclick="setMaxCrashCoins()">Макс</button>
+            </div>
+            <div class="stat-line center" style="margin-bottom:12px;">Общая ставка: <b id="crash-total-bet">0</b> монет</div>
+            <button class="btn" id="crash-action-btn" onclick="handleCrashAction()">Запустить ракету</button>
+        </div>
+        <div class="panel-box">
+            <div class="panel-title">Добавить вещи из инвентаря в ставку:</div>
+            <div class="grid scroll-grid" id="crash-inv-grid"></div>
+        </div>
+    </section>
+
+    <!-- COLOR DICE -->
+    <section class="tab-section" id="tab-dice">
+        <h2>Color Dice</h2>
+        <div class="dice-arena">
+            <div class="dice-board" id="dice-board"></div>
+            <div style="color:var(--muted);font-size:12px;text-align:center;margin-bottom:12px;">
+                1 выпавший цвет = Победа, 2 = Луз, 3 = Победа, 4 = Луз...
+            </div>
+            <div class="outcomes-strip" id="dice-outcomes-strip"></div>
+        </div>
+
+        <div class="panel-box">
+            <div class="panel-title">1. Выберите целевой цвет:</div>
+            <div class="dice-colors-grid">
+                <button class="color-pick-btn bg-c-red active" onclick="selectDiceColor('red', this)">Красный</button>
+                <button class="color-pick-btn bg-c-orange" onclick="selectDiceColor('orange', this)">Оранжевый</button>
+                <button class="color-pick-btn bg-c-yellow" onclick="selectDiceColor('yellow', this)">Жёлтый</button>
+                <button class="color-pick-btn bg-c-green" onclick="selectDiceColor('green', this)">Зелёный</button>
+                <button class="color-pick-btn bg-c-blue" onclick="selectDiceColor('blue', this)">Синий</button>
+                <button class="color-pick-btn bg-c-purple" onclick="selectDiceColor('purple', this)">Фиолетовый</button>
+            </div>
+
+            <div class="panel-title">2. Количество кубиков: <span id="dice-count-label">4</span> шт.</div>
+            <div class="dice-count-grid" id="dice-count-grid">
+                <button class="count-btn" onclick="setDiceCount(3, this)">3 🎲</button>
+                <button class="count-btn active" onclick="setDiceCount(4, this)">4 🎲</button>
+                <button class="count-btn" onclick="setDiceCount(5, this)">5 🎲</button>
+                <button class="count-btn" onclick="setDiceCount(6, this)">6 🎲</button>
+                <button class="count-btn" onclick="setDiceCount(7, this)">7 🎲</button>
+                <button class="count-btn" onclick="setDiceCount(8, this)">8 🎲</button>
+                <button class="count-btn" onclick="setDiceCount(9, this)">9 🎲</button>
+                <button class="count-btn" onclick="setDiceCount(10, this)">10 🎲</button>
+                <button class="count-btn" onclick="setDiceCount(11, this)">11 🎲</button>
+                <button class="count-btn" onclick="setDiceCount(12, this)">12 🎲</button>
+            </div>
+
+            <div class="input-group">
+                <input type="number" id="dice-coins-input" min="0" step="1" placeholder="Ставка монетами" oninput="updateDiceTotal()">
+                <button class="btn" style="width:auto;padding:10px 16px;" onclick="setMaxDiceCoins()">Макс</button>
+            </div>
+            <div class="stat-line center" style="margin-bottom:12px;">Общая ставка: <b id="dice-total-bet">0</b> 💰</div>
+            <button class="btn" id="dice-roll-btn" onclick="rollColorDice()">🎲 Бросить кубики</button>
+            <div id="dice-status-text" style="margin-top:10px;text-align:center;font-weight:700;font-size:13px;"></div>
+        </div>
+
+        <div class="panel-box">
+            <div class="panel-title">Добавить вещи из инвентаря в ставку:</div>
+            <div class="grid scroll-grid" id="dice-inv-grid"></div>
+        </div>
+    </section>
+
+    <!-- МИНЫ 5x5 -->
+    <section class="tab-section" id="tab-mines">
+        <h2>Мины 5×5</h2>
+        <div class="mines-arena">
+            <div class="mines-top">
+                <div class="mines-stat"><div class="v" id="mines-mult">1.00x</div><div class="l">Множитель</div></div>
+                <div class="mines-stat"><div class="v" id="mines-potential">0</div><div class="l">Заберёте</div></div>
+                <div class="mines-stat"><div class="v" id="mines-opened">0</div><div class="l">Открыто</div></div>
+            </div>
+            <div class="mines-board" id="mines-board"></div>
+        </div>
+
+        <div class="panel-box">
+            <div class="mines-slider-wrap">
+                <label>Количество мин: <span class="mines-count" id="mines-count-label">3</span></label>
+                <input type="range" id="mines-slider" min="1" max="24" value="3" oninput="onMinesSlider()">
+            </div>
+            <div class="input-group">
+                <input type="number" id="mines-coins-input" min="0" step="1" placeholder="Ставка монетами" oninput="updateMinesTotal()">
+                <button class="btn" style="width:auto;padding:10px 16px;" onclick="setMaxMinesCoins()">Макс</button>
+            </div>
+            <div class="stat-line center" style="margin-bottom:12px;">Общая ставка: <b id="mines-total-bet">0</b> 💰</div>
+            <div class="case-win-actions">
+                <button class="btn" id="mines-start-btn" onclick="startMines()">Начать игру</button>
+                <button class="btn btn-blue" id="mines-cashout-btn" onclick="cashoutMines()" style="display:none;">Забрать</button>
+            </div>
+            <div id="mines-status-text" style="margin-top:10px;text-align:center;font-weight:700;font-size:13px;"></div>
+        </div>
+
+        <div class="panel-box">
+            <div class="panel-title">Добавить вещи из инвентаря в ставку:</div>
+            <div class="grid scroll-grid" id="mines-inv-grid"></div>
+        </div>
+    </section>
+
+    <!-- ПЛИНКО -->
+    <section class="tab-section" id="tab-plinko">
+        <h2>Плинко</h2>
+        <div class="plinko-arena">
+            <div class="plinko-board-wrap">
+                <canvas id="plinko-canvas" width="360" height="420"></canvas>
+            </div>
+            <div class="plinko-mults" id="plinko-mults"></div>
+            <div class="plinko-status" id="plinko-status">Сделайте ставку и бросьте шарик</div>
+        </div>
+
+        <div class="panel-box">
+            <div class="input-group">
+                <input type="number" id="plinko-coins-input" min="0" step="1" placeholder="Ставка монетами" oninput="updatePlinkoTotal()">
+                <button class="btn" style="width:auto;padding:10px 16px;" onclick="setMaxPlinkoCoins()">Макс</button>
+            </div>
+            <div class="stat-line center" style="margin-bottom:12px;">Общая ставка: <b id="plinko-total-bet">0</b> 💰</div>
+            <button class="btn" id="plinko-drop-btn" onclick="playPlinko()">🎯 Бросить шарик</button>
+        </div>
+
+        <div class="panel-box">
+            <div class="panel-title">Добавить вещи из инвентаря в ставку:</div>
+            <div class="grid scroll-grid" id="plinko-inv-grid"></div>
+        </div>
+    </section>
+
+    <!-- БОНУСЫ -->
+    <section class="tab-section" id="tab-bonuses">
+        <h2>Бонусы</h2>
+        <div class="panel-box">
+            <div class="panel-title">Ежедневная награда</div>
+            <div style="color:var(--muted);font-size:13px;margin-bottom:12px;">Бесплатный кейс раз в 12 часов</div>
+            <button class="btn" id="free-case-btn" onclick="openFreeCase()">Открыть бесплатный кейс</button>
+            <div id="free-case-timer" class="center" style="color:var(--orange);font-size:13px;font-weight:700;margin-top:8px;"></div>
+        </div>
+        <div class="panel-box">
+            <div class="panel-title">Кейс награды (24 ч)</div>
+            <div class="daily-badge">🤖 Нужен @BrainDropDropBot в Telegram-нике</div>
+            <div style="color:var(--muted);font-size:13px;margin-bottom:12px;">
+                Раз в 24 часа: предмет (9–23) + монеты (9–23). Проверка по вашему Telegram-нику/имени.
+            </div>
+            <button class="btn btn-blue" id="daily-bonus-btn" onclick="openDailyBonusCase()">Забрать кейс награды</button>
+            <div id="daily-bonus-timer" class="center" style="color:var(--blue);font-size:13px;font-weight:700;margin-top:8px;"></div>
+        </div>
+        <div class="panel-box">
+            <div class="panel-title">Активация промокода</div>
+            <div class="input-group" style="margin-bottom:0;">
+                <input type="text" id="promo-input" placeholder="Введите промокод">
+                <button class="btn" style="width:auto;padding:10px 16px;" onclick="redeemPromo()">Активировать</button>
+            </div>
+        </div>
+        <div class="panel-box">
+            <div class="panel-title">Пополнение баланса</div>
+            <div style="color:var(--muted);font-size:13px;margin-bottom:12px;">Создайте заявку — модератор свяжется с вами в Telegram.</div>
+            <button class="btn btn-blue" onclick="requestTopup()">Пополнить баланс</button>
+        </div>
+    </section>
+
+    <!-- ИНВЕНТАРЬ -->
+    <section class="tab-section" id="tab-inventory">
+        <h2>Инвентарь</h2>
+        <div class="grid" id="main-inv-grid"></div>
+    </section>
 <!-- БАТЛЫ — НОВАЯ СЕКЦИЯ (вставить в <main>) -->
 <section class="tab-section" id="tab-battles">
     <h2>Батлы</h2>
