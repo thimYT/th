@@ -58,7 +58,7 @@
       "last_seen": 1795549087
     },
     "8450028899": {
-      "balance": 3096.57,
+      "balance": 3046.57,
       "inventory": [
         {
           "inv_id": 1254,
@@ -69,6 +69,36 @@
         {
           "inv_id": 1375,
           "item_id": 65,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1376,
+          "item_id": 6,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1377,
+          "item_id": 4,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1378,
+          "item_id": 3,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1379,
+          "item_id": 5,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1380,
+          "item_id": 1,
           "mutation": "normal",
           "traits": []
         }
@@ -216,7 +246,7 @@
       "last_seen": 0
     }
   },
-  "next_inv_id": 1376,
+  "next_inv_id": 1381,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -3101,6 +3131,91 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 205.0
+      },
+      {
+        "ts": 1795549437,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# на @upbrainer",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "case",
+        "item_id": 6,
+        "name": "Bacuru",
+        "rarity": "common",
+        "image": "/images/item6.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 16.0
+      },
+      {
+        "ts": 1795549437,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# на @upbrainer",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "case",
+        "item_id": 4,
+        "name": "La Grande",
+        "rarity": "common",
+        "image": "/images/item4.png",
+        "fallback": "🎯",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 12.0
+      },
+      {
+        "ts": 1795549437,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# на @upbrainer",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "case",
+        "item_id": 3,
+        "name": "Los Mobilis",
+        "rarity": "common",
+        "image": "/images/item3.png",
+        "fallback": "🪖",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 9.0
+      },
+      {
+        "ts": 1795549437,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# на @upbrainer",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "case",
+        "item_id": 5,
+        "name": "Los 67",
+        "rarity": "common",
+        "image": "/images/item5.png",
+        "fallback": "⚔️",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 14.0
+      },
+      {
+        "ts": 1795549437,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# на @upbrainer",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "case",
+        "item_id": 1,
+        "name": "Gub",
+        "rarity": "common",
+        "image": "/images/item1.png",
+        "fallback": "🗡️",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 5.0
       }
     ]
   },
