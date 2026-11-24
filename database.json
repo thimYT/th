@@ -35,7 +35,28 @@
     },
     "1789157813": {
       "balance": 0.0,
-      "inventory": [],
+      "inventory": [
+        {
+          "inv_id": 1244,
+          "item_id": 84,
+          "mutation": "hacker",
+          "traits": [
+            "spider",
+            "Sombrero",
+            "crab",
+            "taco"
+          ]
+        },
+        {
+          "inv_id": 1245,
+          "item_id": 60,
+          "mutation": "hacker",
+          "traits": [
+            "crab",
+            "taco"
+          ]
+        }
+      ],
       "last_free_case": 1795359003,
       "last_daily_bonus": 0,
       "nickname": "кабилджон",
@@ -141,36 +162,15 @@
       "last_seen": 0
     },
     "7379573136": {
-      "balance": 13000.19,
-      "inventory": [
-        {
-          "inv_id": 1244,
-          "item_id": 84,
-          "mutation": "hacker",
-          "traits": [
-            "spider",
-            "Sombrero",
-            "crab",
-            "taco"
-          ]
-        },
-        {
-          "inv_id": 1245,
-          "item_id": 60,
-          "mutation": "hacker",
-          "traits": [
-            "crab",
-            "taco"
-          ]
-        }
-      ],
+      "balance": 11763.21,
+      "inventory": [],
       "last_free_case": 1795415756,
       "last_daily_bonus": 1795415866,
       "nickname": "",
       "username": "FantaxyXD",
       "first_name": "Wowowo @BrainDropDropBot",
       "photo_url": "https://t.me/i/userpic/320/1dZNKuPHZmKwNi7BdJJt3WHOxpQsDsz9W4cbud-2OgY_j3Q_r1l6ccTaPo8E7M6z.svg",
-      "last_seen": 1795535131
+      "last_seen": 1795535155
     },
     "7245742367": {
       "balance": 0,
@@ -1010,5 +1010,43 @@
     "multiplier": 0,
     "until": 0
   },
-  "trades": []
+  "trades": [
+    {
+      "ts": 1795535155,
+      "from_user_id": "7379573136",
+      "from_username": "FantaxyXD",
+      "to_user_id": "1789157813",
+      "to_username": "ThimYT",
+      "coins_sent": 0.0,
+      "coins_received": 0.0,
+      "items_value": 8246.52,
+      "commission": 1236.98,
+      "items": [
+        {
+          "inv_id": 1244,
+          "item_id": 84,
+          "mutation": "hacker",
+          "traits": [
+            "spider",
+            "Sombrero",
+            "crab",
+            "taco"
+          ],
+          "price": 6860.52,
+          "name": "La Casa Boo"
+        },
+        {
+          "inv_id": 1245,
+          "item_id": 60,
+          "mutation": "hacker",
+          "traits": [
+            "crab",
+            "taco"
+          ],
+          "price": 1386.0,
+          "name": "Reinito Sleighito"
+        }
+      ]
+    }
+  ]
 }
