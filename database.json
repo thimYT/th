@@ -34,29 +34,11 @@
       "last_seen": 0
     },
     "1789157813": {
-      "balance": 8518.72,
+      "balance": 8525.15,
       "inventory": [
         {
-          "inv_id": 1410,
-          "item_id": 60,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1411,
-          "item_id": 6,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1412,
-          "item_id": 14,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1413,
-          "item_id": 9,
+          "inv_id": 1414,
+          "item_id": 67,
           "mutation": "normal",
           "traits": []
         }
@@ -240,7 +222,7 @@
       "last_seen": 0
     }
   },
-  "next_inv_id": 1414,
+  "next_inv_id": 1415,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -805,6 +787,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 20.0
+      },
+      {
+        "ts": 1795638244,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "fuse",
+        "item_id": 67,
+        "name": "Duggy Bros",
+        "rarity": "legendary",
+        "image": "/images/item67.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 240.0
       }
     ]
   },
