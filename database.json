@@ -43,8 +43,8 @@
           "traits": []
         },
         {
-          "inv_id": 1371,
-          "item_id": 67,
+          "inv_id": 1390,
+          "item_id": 80,
           "mutation": "normal",
           "traits": []
         }
@@ -210,7 +210,7 @@
       "last_seen": 0
     }
   },
-  "next_inv_id": 1390,
+  "next_inv_id": 1391,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -341,6 +341,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 240.0
+      },
+      {
+        "ts": 1795594093,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "wheel",
+        "item_id": 80,
+        "name": "Tosto Dino",
+        "rarity": "legendary",
+        "image": "/images/item80.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 480.0
       }
     ]
   },
