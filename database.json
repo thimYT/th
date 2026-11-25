@@ -34,7 +34,7 @@
       "last_seen": 0
     },
     "1789157813": {
-      "balance": 8700.0,
+      "balance": 8600.0,
       "inventory": [
         {
           "inv_id": 1406,
@@ -51,6 +51,12 @@
         {
           "inv_id": 1408,
           "item_id": 36,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1409,
+          "item_id": 70,
           "mutation": "normal",
           "traits": []
         }
@@ -234,7 +240,7 @@
       "last_seen": 0
     }
   },
-  "next_inv_id": 1409,
+  "next_inv_id": 1410,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -714,6 +720,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 55.0
+      },
+      {
+        "ts": 1795637865,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "case",
+        "item_id": 70,
+        "name": "Capitano Moby",
+        "rarity": "legendary",
+        "image": "/images/item70.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 325.0
       }
     ]
   },
