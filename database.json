@@ -34,11 +34,41 @@
       "last_seen": 0
     },
     "1789157813": {
-      "balance": 8525.15,
+      "balance": 8475.15,
       "inventory": [
         {
           "inv_id": 1414,
           "item_id": 67,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1415,
+          "item_id": 1,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1416,
+          "item_id": 1,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1417,
+          "item_id": 1,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1418,
+          "item_id": 1,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1419,
+          "item_id": 1,
           "mutation": "normal",
           "traits": []
         }
@@ -222,7 +252,7 @@
       "last_seen": 0
     }
   },
-  "next_inv_id": 1415,
+  "next_inv_id": 1420,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -804,6 +834,91 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 240.0
+      },
+      {
+        "ts": 1795638390,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "case",
+        "item_id": 1,
+        "name": "Gub",
+        "rarity": "common",
+        "image": "/images/item1.png",
+        "fallback": "🗡️",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 5.0
+      },
+      {
+        "ts": 1795638390,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "case",
+        "item_id": 1,
+        "name": "Gub",
+        "rarity": "common",
+        "image": "/images/item1.png",
+        "fallback": "🗡️",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 5.0
+      },
+      {
+        "ts": 1795638390,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "case",
+        "item_id": 1,
+        "name": "Gub",
+        "rarity": "common",
+        "image": "/images/item1.png",
+        "fallback": "🗡️",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 5.0
+      },
+      {
+        "ts": 1795638390,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "case",
+        "item_id": 1,
+        "name": "Gub",
+        "rarity": "common",
+        "image": "/images/item1.png",
+        "fallback": "🗡️",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 5.0
+      },
+      {
+        "ts": 1795638390,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "case",
+        "item_id": 1,
+        "name": "Gub",
+        "rarity": "common",
+        "image": "/images/item1.png",
+        "fallback": "🗡️",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 5.0
       }
     ]
   },
