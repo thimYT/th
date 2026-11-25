@@ -34,14 +34,8 @@
       "last_seen": 0
     },
     "1789157813": {
-      "balance": 8475.15,
+      "balance": 8771.85,
       "inventory": [
-        {
-          "inv_id": 1414,
-          "item_id": 67,
-          "mutation": "normal",
-          "traits": []
-        },
         {
           "inv_id": 1415,
           "item_id": 1,
@@ -55,20 +49,8 @@
           "traits": []
         },
         {
-          "inv_id": 1417,
-          "item_id": 1,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1418,
-          "item_id": 1,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1419,
-          "item_id": 1,
+          "inv_id": 1420,
+          "item_id": 85,
           "mutation": "normal",
           "traits": []
         }
@@ -252,7 +234,7 @@
       "last_seen": 0
     }
   },
-  "next_inv_id": 1420,
+  "next_inv_id": 1421,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -919,6 +901,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 5.0
+      },
+      {
+        "ts": 1795638407,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "fuse",
+        "item_id": 85,
+        "name": "Flying Dutchman",
+        "rarity": "legendary",
+        "image": "/images/item85.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 500.0
       }
     ]
   },
