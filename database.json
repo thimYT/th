@@ -34,8 +34,39 @@
       "last_seen": 0
     },
     "1789157813": {
-      "balance": 10000.0,
-      "inventory": [],
+      "balance": 9500.0,
+      "inventory": [
+        {
+          "inv_id": 1392,
+          "item_id": 36,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1393,
+          "item_id": 36,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1394,
+          "item_id": 36,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1395,
+          "item_id": 25,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1396,
+          "item_id": 35,
+          "mutation": "normal",
+          "traits": []
+        }
+      ],
       "last_free_case": 1795359003,
       "last_daily_bonus": 0,
       "nickname": "кабилджон",
@@ -197,7 +228,7 @@
       "last_seen": 0
     }
   },
-  "next_inv_id": 1392,
+  "next_inv_id": 1397,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -379,6 +410,91 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 9.0
+      },
+      {
+        "ts": 1795600114,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "case",
+        "item_id": 36,
+        "name": "Garama",
+        "rarity": "legendary",
+        "image": "/images/item36.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 55.0
+      },
+      {
+        "ts": 1795600114,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "case",
+        "item_id": 36,
+        "name": "Garama",
+        "rarity": "legendary",
+        "image": "/images/item36.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 55.0
+      },
+      {
+        "ts": 1795600114,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "case",
+        "item_id": 36,
+        "name": "Garama",
+        "rarity": "legendary",
+        "image": "/images/item36.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 55.0
+      },
+      {
+        "ts": 1795600114,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "case",
+        "item_id": 25,
+        "name": "Ketupat Kepat",
+        "rarity": "epic",
+        "image": "/images/item25.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 43.0
+      },
+      {
+        "ts": 1795600114,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "case",
+        "item_id": 35,
+        "name": "Rosetti",
+        "rarity": "epic",
+        "image": "/images/item35.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 53.0
       }
     ]
   },
