@@ -458,6 +458,30 @@
     .global-msg.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
     /* АДМИНКА */
+        /* ФЬЮЗ */
+    .fuse-arena { background: radial-gradient(circle at top, rgba(255,123,0,.18) 0%, rgba(20,15,12,.95) 100%);
+        border: 1px solid var(--card-border); border-radius: 18px; padding: 16px 12px; margin-bottom: 14px;
+        display: flex; flex-direction: column; align-items: center; }
+    .fuse-slots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+        width: 100%; max-width: 460px; margin-bottom: 12px; }
+    @media (max-width: 520px) { .fuse-slots { grid-template-columns: repeat(2, 1fr); } }
+    .fuse-slot { aspect-ratio: 1/1; border-radius: 12px; border: 2px dashed var(--card-border);
+        background: rgba(19, 13, 10, 0.6); display: flex; align-items: center; justify-content: center;
+        position: relative; overflow: hidden; }
+    .fuse-slot.filled { border-style: solid; border-color: var(--orange); background: rgba(255,123,0,0.10); }
+    .fuse-slot img { width: 60px; height: 60px; object-fit: contain; }
+    .fuse-slot .fallback-icon { font-size: 32px; height: 60px; margin: 0; }
+    .fuse-slot .fuse-remove { position: absolute; top: 4px; right: 4px; width: 20px; height: 20px;
+        border-radius: 50%; background: rgba(255,61,0,0.85); color: #fff; font-size: 13px; font-weight: 900;
+        display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 3; }
+    .fuse-slot .fuse-mut { position: absolute; top: 4px; left: 4px; width: 18px; height: 18px;
+        border-radius: 50%; background: rgba(19,13,10,0.85); border: 1px solid var(--card-border);
+        overflow: hidden; z-index: 3; }
+    .fuse-slot .fuse-mut img { width: 100%; height: 100%; object-fit: cover; }
+    .fuse-summary { width: 100%; max-width: 460px; margin-bottom: 12px; }
+    .fuse-summary .stat-line { margin-bottom: 4px; }
+    .fuse-status { margin-top: 10px; text-align: center; font-weight: 700; font-size: 13px;
+        width: 100%; max-width: 460px; }
         /* LIMBO */
     .limbo-arena { background: radial-gradient(circle at top, rgba(255,123,0,.18) 0%, rgba(20,15,12,.95) 100%);
         border: 1px solid var(--card-border); border-radius: 18px; padding: 16px 12px; margin-bottom: 14px;
@@ -610,6 +634,7 @@
     <button class="nav-btn" data-tab="limbo" onclick="switchTab('limbo')">🎲 Limbo</button>
     <button class="nav-btn" data-tab="wheel" onclick="switchTab('wheel')">🎡 Колесо</button>
     <button class="nav-btn" data-tab="keno" onclick="switchTab('keno')">🎯 Keno</button>
+    <button class="nav-btn" data-tab="fuse" onclick="switchTab('fuse')">🔮 Фьюз</button>
     <button class="nav-btn" data-tab="battles" onclick="switchTab('battles')">⚔️ Батлы</button>
     <button class="nav-btn" data-tab="trade" onclick="switchTab('trade')">🤝 Трейды</button>
     <button class="nav-btn" data-tab="bonuses" onclick="switchTab('bonuses')">🎁 Бонусы</button>
@@ -675,7 +700,27 @@
             <div class="grid scroll-grid" id="wheel-inv-grid"></div>
         </div>
     </section>
-
+        <!-- ФЬЮЗ -->
+    <section class="tab-section" id="tab-fuse">
+        <h2>Фьюз</h2>
+        <div class="fuse-arena">
+            <div class="fuse-slots" id="fuse-slots"></div>
+            <div class="fuse-summary">
+                <div class="stat-line">Сумма ставки: <b id="fuse-total-bet">0.00</b> 💰</div>
+                <div class="stat-line">Базовая редкость: <b id="fuse-base-rarity">—</b></div>
+                <div class="stat-line">Множитель: <b id="fuse-spread-val">—</b></div>
+            </div>
+            <div class="case-win-actions" style="max-width:460px;">
+                <button class="btn" id="fuse-play-btn" onclick="playFuse()" disabled>Фьюзить</button>
+                <button class="btn btn-red" onclick="fuseClear()">Очистить</button>
+            </div>
+            <div class="fuse-status" id="fuse-status">Выберите ровно 4 предмета</div>
+        </div>
+        <div class="panel-box">
+            <div class="panel-title">Инвентарь (только предметы):</div>
+            <div class="grid scroll-grid" id="fuse-inv-grid"></div>
+        </div>
+    </section>
     <!-- KENO -->
     <section class="tab-section" id="tab-keno">
         <h2>Keno</h2>
@@ -1284,7 +1329,14 @@ let wheelSelectedInv = new Set();
 let wheelRisk = "medium";
 let wheelSpinning = false;
 let wheelCurrentDeg = 0;
-
+/* FUSE */
+let fuseSelectedInv = new Set();
+let fusePlaying = false;
+const FUSE_SLOTS = 4;
+const FUSE_SPREAD = {
+    common: 2.0, rare: 3.0, epic: 4.0, legendary: 5.0, mythic: 5.0
+};
+const FUSE_RARITY_ORDER = ["common", "rare", "epic", "legendary", "mythic"];
 /* KENO */
 let kenoSelectedInv = new Set();
 let kenoPicked = new Set();
@@ -1340,6 +1392,7 @@ function switchTab(tabName) {
         if (tabName === "limbo") { limboPreview(); updateLimboTotal(); }
     if (tabName === "wheel") { drawWheel(); updateWheelTotal(); }
     if (tabName === "keno") { renderKenoGrid(); updateKenoTotal(); }
+        if (tabName === "fuse") { renderFuseSlots(); renderFuseInventory(); updateFuseSummary(); }
     if (tabName === "battles") { loadBattles(); startBattlePolling(); }
     else { stopBattlePolling(); }
 }
@@ -1453,6 +1506,7 @@ function loadState() {
         limboSelectedInv = new Set([...limboSelectedInv].filter(id => validIds.has(id)));
         wheelSelectedInv = new Set([...wheelSelectedInv].filter(id => validIds.has(id)));
         kenoSelectedInv = new Set([...kenoSelectedInv].filter(id => validIds.has(id)));
+                fuseSelectedInv = new Set([...fuseSelectedInv].filter(id => validIds.has(id)));
         tradeSelectedInv = new Set([...tradeSelectedInv].filter(id => validIds.has(id)));
 
         renderProfile();
@@ -1472,6 +1526,9 @@ function loadState() {
         updateWheelTotal();
         renderKenoGrid();
         updateKenoTotal();
+                renderFuseSlots();
+        renderFuseInventory();
+        updateFuseSummary();
         updateTradeTotal();
         updateFreeTimer();
         updateDailyBonusTimer();
@@ -1663,6 +1720,7 @@ function renderInventories() {
         ["limbo-inv-grid", limboSelectedInv, "toggleLimboItem"],
         ["wheel-inv-grid", wheelSelectedInv, "toggleWheelItem"],
         ["keno-inv-grid", kenoSelectedInv, "toggleKenoItem"],
+        ["fuse-inv-grid", fuseSelectedInv, "toggleFuseItem"],
         ["trade-inv-grid", tradeSelectedInv, "toggleTradeItem"]
     ];
     grids.forEach(([gridId, selSet, fn]) => {
@@ -3236,7 +3294,151 @@ async function spinWheel() {
         loadState();
     }, 4600);
 }
+/* =========================================================
+   FUSE (Фьюз)
+   ========================================================= */
+function fuseBaseRarity() {
+    let best = "common";
+    state.inventory.forEach(i => {
+        if (!fuseSelectedInv.has(i.inv_id)) return;
+        const r = (i.rarity || "").toLowerCase();
+        if (FUSE_RARITY_ORDER.includes(r) && FUSE_RARITY_ORDER.indexOf(r) > FUSE_RARITY_ORDER.indexOf(best)) {
+            best = r;
+        }
+    });
+    return best;
+}
 
+function renderFuseSlots() {
+    const box = el("fuse-slots");
+    if (!box) return;
+    const picked = state.inventory.filter(i => fuseSelectedInv.has(i.inv_id)).slice(0, FUSE_SLOTS);
+    let html = "";
+    for (let i = 0; i < FUSE_SLOTS; i++) {
+        const item = picked[i];
+        if (item) {
+            const mut = item.mutation_icon
+                ? '<div class="fuse-mut"><img src="' + item.mutation_icon + '" alt=""></div>'
+                : "";
+            html += '<div class="fuse-slot filled">' + mut +
+                renderItemImg(item) +
+                '<div class="fuse-remove" onclick="toggleFuseItem(' + item.inv_id + ')">×</div>' +
+            '</div>';
+        } else {
+            html += '<div class="fuse-slot"></div>';
+        }
+    }
+    box.innerHTML = html;
+}
+
+function renderFuseInventory() {
+    const grid = el("fuse-inv-grid");
+    if (!grid) return;
+    const bettable = state.inventory.filter(i => !i.locked);
+    if (!bettable.length) {
+        grid.innerHTML = '<p style="color:var(--muted); font-size:13px;">Нет предметов</p>';
+        return;
+    }
+    grid.innerHTML = bettable.map(item =>
+        '<div class="card rarity-' + item.rarity + (fuseSelectedInv.has(item.inv_id) ? ' selected' : '') +
+        '" style="cursor:pointer;" onclick="toggleFuseItem(' + item.inv_id + ')">' +
+            mutationBadge(item) + renderItemImg(item) + traitStrip(item) +
+            '<div class="card-title">' + item.name + '</div>' +
+            '<div class="card-price">' + item.price + ' 💰</div>' +
+        '</div>'
+    ).join("");
+}
+
+function toggleFuseItem(invId) {
+    if (fusePlaying) return;
+    if (fuseSelectedInv.has(invId)) {
+        fuseSelectedInv.delete(invId);
+    } else {
+        if (fuseSelectedInv.size >= FUSE_SLOTS) {
+            showToast("Максимум " + FUSE_SLOTS + " предмета");
+            return;
+        }
+        fuseSelectedInv.add(invId);
+    }
+    renderFuseSlots();
+    renderFuseInventory();
+    updateFuseSummary();
+}
+
+function fuseClear() {
+    if (fusePlaying) return;
+    fuseSelectedInv.clear();
+    renderFuseSlots();
+    renderFuseInventory();
+    updateFuseSummary();
+    el("fuse-status").textContent = "Выберите ровно 4 предмета";
+}
+
+function updateFuseSummary() {
+    let total = 0;
+    state.inventory.forEach(i => {
+        if (!i.locked && fuseSelectedInv.has(i.inv_id)) total += Number(i.price) || 0;
+    });
+    el("fuse-total-bet").textContent = total.toFixed(2);
+    const base = fuseBaseRarity();
+    el("fuse-base-rarity").textContent = base;
+    const spread = FUSE_SPREAD[base] || 2.0;
+    el("fuse-spread-val").textContent = "÷" + spread + " … ×" + spread;
+    const btn = el("fuse-play-btn");
+    if (btn) btn.disabled = (fuseSelectedInv.size !== FUSE_SLOTS || fusePlaying);
+}
+
+async function playFuse() {
+    if (fusePlaying) return;
+    if (fuseSelectedInv.size !== FUSE_SLOTS) {
+        return showToast("Выберите ровно " + FUSE_SLOTS + " предмета");
+    }
+    let data;
+    try {
+        data = await postJSON("/api/fuse/play", {
+            user_id: userId,
+            inv_ids: [...fuseSelectedInv]
+        });
+    } catch (e) { return showToast(e.message); }
+
+    fusePlaying = true;
+    const btn = el("fuse-play-btn");
+    btn.disabled = true;
+    btn.textContent = "Фьюзим...";
+    el("fuse-status").textContent = "Плавим предметы...";
+
+    const resultEl = el("fuse-status");
+    let ticks = 0;
+    const spin = setInterval(() => {
+        ticks++;
+        const fake = (Math.random() * 4 + 0.25).toFixed(2);
+        resultEl.innerHTML = '<span style="color:#ffcc80;">×' + fake + ' ...</span>';
+        if (ticks >= 18) {
+            clearInterval(spin);
+            fusePlaying = false;
+            btn.textContent = "Фьюзить";
+            fuseSelectedInv.clear();
+            renderFuseSlots();
+            renderFuseInventory();
+            updateFuseSummary();
+
+            const mult = Number(data.multiplier) || 1.0;
+            if (data.won_item) {
+                resultEl.innerHTML = '<span style="color:#00e676;">×' + mult.toFixed(2) +
+                    ' → ' + data.won_item.name + ' (' + data.target_value + ' 💰)</span>';
+                showToast("Фьюз: " + data.won_item.name +
+                    (data.coins_added > 0 ? " + " + data.coins_added + " 💰" : ""));
+            } else {
+                resultEl.innerHTML = '<span style="color:#ff8a65;">×' + mult.toFixed(2) +
+                    ' → +' + data.coins_added + ' 💰 на баланс</span>';
+                showToast("Фьюз: +" + data.coins_added + " 💰");
+            }
+            loadState();
+        }
+    }, 80);
+}
+
+/* ---------- Запуск ---------- */
 /* =========================================================
    KENO
    ========================================================= */
@@ -3359,6 +3561,9 @@ renderTower();
 limboPreview();
 drawWheel();
 renderKenoGrid();
+renderFuseSlots();
+renderFuseInventory();
+updateFuseSummary();
 updateTradeTotal();
 syncProfile().then(loadState).then(() => {
     renderPlinkoStatic();

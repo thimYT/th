@@ -686,6 +686,9 @@ class KenoReq(BaseModel):
     inv_ids: List[int]
     coins_bet: float
     picked: List[int]      # номера 1..80
+class FuseReq(BaseModel):
+    user_id: str
+    inv_ids: List[int]      # ровно 4 inv_id   
 class OpenCaseReq(BaseModel):
     user_id: str
     case_id: int
@@ -2240,7 +2243,141 @@ def keno_payout(picked_count: int, matches: int) -> float:
         return 0.0
     return float(table.get(matches, 0.0))
 
+# =========================================================
+# FUSE (Фьюз) — 4 предмета → 1 результат
+# =========================================================
+FUSE_SLOTS = 4
+FUSE_SPREAD = {
+    "common":    2.0,
+    "rare":      3.0,
+    "epic":      4.0,
+    "legendary": 5.0,
+    "mythic":    5.0,   # как у legendary
+}
+FUSE_RARITY_ORDER = ["common", "rare", "epic", "legendary", "mythic"]
 
+
+def fuse_base_rarity(rarities: list) -> str:
+    """Самая высокая редкость среди предметов."""
+    best = "common"
+    for r in rarities:
+        r = (r or "").lower()
+        if r in FUSE_RARITY_ORDER and FUSE_RARITY_ORDER.index(r) > FUSE_RARITY_ORDER.index(best):
+            best = r
+    return best
+
+
+def fuse_roll_multiplier(base_rarity: str) -> float:
+    """Случайный коэффициент от 1/spread до spread. Логарифмически равномерно,
+    чтобы 'остаться' (×1) был самым вероятным."""
+    spread = FUSE_SPREAD.get(base_rarity, 2.0)
+    # генерируем u в [0,1), коэффициент = spread^(2u-1) → от 1/spread до spread
+    u = random.random()
+    mult = spread ** (2.0 * u - 1.0)
+    return round(mult, 4)
+
+
+def fuse_pick_item_for_value(target_value: float, prefer_rarity: str = None) -> dict:
+    """Выбирает предмет, цена которого максимально близка к target_value,
+    но не превышает её. Если prefer_rarity задан — сначала ищем среди этой редкости.
+    Если ничего не подошло — возвращает None."""
+    if target_value <= 0:
+        return None
+    candidates = []
+    for item in ITEMS_DB.values():
+        info = item_with_traits(item["id"], "normal", [])
+        if info["price"] <= target_value + 1e-9:
+            candidates.append(info)
+    if not candidates:
+        return None
+    if prefer_rarity:
+        preferred = [c for c in candidates if (c.get("rarity") or "").lower() == prefer_rarity]
+        if preferred:
+            candidates = preferred
+    # максимально близкий к target_value
+    best = max(candidates, key=lambda c: c["price"])
+    return best
+
+
+@app.post("/api/fuse/play")
+def fuse_play(req: FuseReq):
+    inv_ids = list(dict.fromkeys(int(x) for x in (req.inv_ids or [])))
+    if len(inv_ids) != FUSE_SLOTS:
+        raise HTTPException(status_code=400, detail=f"Нужно ровно {FUSE_SLOTS} предмета для фьюза")
+
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    user = ensure_user(db, req.user_id)
+
+    inv_map = {e["inv_id"]: e for e in user["inventory"]}
+    picked = []
+    total_bet = 0.0
+    rarities = []
+
+    for iid in inv_ids:
+        e = inv_map.get(iid)
+        if not e:
+            raise HTTPException(status_code=400, detail=f"Предмет {iid} не найден")
+        if e.get("locked"):
+            raise HTTPException(status_code=400, detail=f"Предмет {iid} заблокирован (вывод)")
+        info = item_with_traits(e["item_id"], e.get("mutation", "normal"), e.get("traits", []))
+        total_bet += info["price"]
+        rarities.append(info["rarity"])
+        picked.append(e)
+
+    total_bet = round(total_bet, 2)
+    if total_bet <= 0:
+        raise HTTPException(status_code=400, detail="Сумма ставки должна быть больше 0")
+
+    # Забираем 4 предмета из инвентаря
+    selected_set = set(inv_ids)
+    user["inventory"] = [e for e in user["inventory"] if e["inv_id"] not in selected_set]
+
+    base_rarity = fuse_base_rarity(rarities)
+    multiplier = fuse_roll_multiplier(base_rarity)
+    target_value = round(total_bet * multiplier, 2)
+
+    # Ищем предмет под целевую сумму (сначала той же редкости, что и базовая, если получилось "остаться")
+    want_rarity = None
+    if abs(multiplier - 1.0) < 0.05:
+        want_rarity = base_rarity
+    chosen = fuse_pick_item_for_value(target_value, prefer_rarity=want_rarity)
+
+    won_item = None
+    coins_added = 0.0
+    returned_items = []
+    recorded = []
+
+    if chosen:
+        inv_id = db["next_inv_id"]
+        db["next_inv_id"] += 1
+        user["inventory"].append({
+            "inv_id": inv_id,
+            "item_id": chosen["id"],
+            "mutation": "normal",
+            "traits": [],
+        })
+        won_item = chosen
+        coins_added = round(target_value - chosen["price"], 2)
+        if coins_added > 0:
+            user["balance"] = round(user["balance"] + coins_added, 2)
+        recorded = [chosen]
+    else:
+        # предмета под сумму нет (слишком маленькая сумма) — всё монетами
+        user["balance"] = round(user["balance"] + target_value, 2)
+        coins_added = target_value
+
+    record_daily_drop(db, req.user_id, recorded, "fuse")
+    github_save_db(db, sha)
+
+    return {
+        "base_rarity": base_rarity,
+        "multiplier": multiplier,
+        "total_bet": total_bet,
+        "target_value": target_value,
+        "won_item": won_item,
+        "coins_added": coins_added,
+    }
 @app.post("/api/keno/play")
 def keno_play(req: KenoReq):
     if req.coins_bet < 0:
