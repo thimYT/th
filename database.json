@@ -151,7 +151,7 @@
       "last_seen": 0
     },
     "8484069322": {
-      "balance": 100.0,
+      "balance": 0.0,
       "inventory": [
         {
           "inv_id": 1402,
@@ -167,6 +167,12 @@
         },
         {
           "inv_id": 1404,
+          "item_id": 25,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1405,
           "item_id": 25,
           "mutation": "normal",
           "traits": []
@@ -209,7 +215,7 @@
       "last_seen": 0
     }
   },
-  "next_inv_id": 1405,
+  "next_inv_id": 1406,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -598,6 +604,23 @@
       },
       {
         "ts": 1795635973,
+        "user_id": "8484069322",
+        "username": "",
+        "first_name": "Temofey prime @Brainrot_Battle",
+        "photo_url": "https://t.me/i/userpic/320/n070dQV6aSk-Uji2mpBqleZeFEfoR88J_ozlC0v_fxHLdd5xEFPv1zgsgExUz2o-.svg",
+        "source": "case",
+        "item_id": 25,
+        "name": "Ketupat Kepat",
+        "rarity": "epic",
+        "image": "/images/item25.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 43.0
+      },
+      {
+        "ts": 1795635987,
         "user_id": "8484069322",
         "username": "",
         "first_name": "Temofey prime @Brainrot_Battle",
