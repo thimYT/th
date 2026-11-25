@@ -34,11 +34,29 @@
       "last_seen": 0
     },
     "1789157813": {
-      "balance": 8611.72,
+      "balance": 8518.72,
       "inventory": [
         {
           "inv_id": 1410,
           "item_id": 60,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1411,
+          "item_id": 6,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1412,
+          "item_id": 14,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1413,
+          "item_id": 9,
           "mutation": "normal",
           "traits": []
         }
@@ -52,7 +70,7 @@
       "last_seen": 1795637887
     },
     "8450028899": {
-      "balance": 3063.87,
+      "balance": 3073.17,
       "inventory": [
         {
           "inv_id": 1254,
@@ -222,7 +240,7 @@
       "last_seen": 0
     }
   },
-  "next_inv_id": 1411,
+  "next_inv_id": 1414,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -736,6 +754,57 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 110.0
+      },
+      {
+        "ts": 1795638229,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "case",
+        "item_id": 6,
+        "name": "Bacuru",
+        "rarity": "common",
+        "image": "/images/item6.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 16.0
+      },
+      {
+        "ts": 1795638229,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "case",
+        "item_id": 14,
+        "name": "Mieteteira",
+        "rarity": "rare",
+        "image": "/images/item14.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 29.0
+      },
+      {
+        "ts": 1795638229,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "case",
+        "item_id": 9,
+        "name": "Mariachi",
+        "rarity": "rare",
+        "image": "/images/item9.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 20.0
       }
     ]
   },
