@@ -55,24 +55,6 @@
           "traits": []
         },
         {
-          "inv_id": 1395,
-          "item_id": 25,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1396,
-          "item_id": 35,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1397,
-          "item_id": 35,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
           "inv_id": 1398,
           "item_id": 36,
           "mutation": "normal",
@@ -81,12 +63,6 @@
         {
           "inv_id": 1399,
           "item_id": 36,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1400,
-          "item_id": 25,
           "mutation": "normal",
           "traits": []
         },
