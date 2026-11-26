@@ -34,29 +34,11 @@
       "last_seen": 0
     },
     "1789157813": {
-      "balance": 8671.85,
+      "balance": 8671.88,
       "inventory": [
-        {
-          "inv_id": 1415,
-          "item_id": 1,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1416,
-          "item_id": 1,
-          "mutation": "normal",
-          "traits": []
-        },
         {
           "inv_id": 1420,
           "item_id": 85,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1421,
-          "item_id": 18,
           "mutation": "normal",
           "traits": []
         },
@@ -73,13 +55,13 @@
           "traits": []
         },
         {
-          "inv_id": 1424,
-          "item_id": 5,
+          "inv_id": 1425,
+          "item_id": 10,
           "mutation": "normal",
           "traits": []
         },
         {
-          "inv_id": 1425,
+          "inv_id": 1426,
           "item_id": 10,
           "mutation": "normal",
           "traits": []
@@ -264,7 +246,7 @@
       "last_seen": 0
     }
   },
-  "next_inv_id": 1426,
+  "next_inv_id": 1427,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -463,6 +445,23 @@
         "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
         "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
         "source": "case",
+        "item_id": 10,
+        "name": "Nuclearo",
+        "rarity": "rare",
+        "image": "/images/item10.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 23.0
+      },
+      {
+        "ts": 1795676006,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta @Brainrot_battle@FarmBrainrots_bot@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "fuse",
         "item_id": 10,
         "name": "Nuclearo",
         "rarity": "rare",
