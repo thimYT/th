@@ -229,9 +229,15 @@
           "item_id": 23,
           "mutation": "normal",
           "traits": []
+        },
+        {
+          "inv_id": 1434,
+          "item_id": 1,
+          "mutation": "normal",
+          "traits": []
         }
       ],
-      "last_free_case": 0,
+      "last_free_case": 1795686959,
       "last_daily_bonus": 1795686946,
       "username": "fantaxy_lt3",
       "first_name": "ᅠᅠ 11:11 #fantaxy @brainrot_battle @BrainDropDropBot",
@@ -239,7 +245,7 @@
       "last_seen": 1795686952
     }
   },
-  "next_inv_id": 1434,
+  "next_inv_id": 1435,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -592,6 +598,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 40.0
+      },
+      {
+        "ts": 1795686959,
+        "user_id": "7580045960",
+        "username": "fantaxy_lt3",
+        "first_name": "ᅠᅠ 11:11 #fantaxy @brainrot_battle @BrainDropDropBot",
+        "photo_url": "https://t.me/i/userpic/320/KSeq1V4cQwxTYfdUUcxZ3gxwPiY4QWI21FfO-8tZJtUyT_MiDG9M7ARaZBwz62B-.svg",
+        "source": "free_case",
+        "item_id": 1,
+        "name": "Gub",
+        "rarity": "common",
+        "image": "/images/item1.png",
+        "fallback": "🗡️",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 5.0
       }
     ]
   },
