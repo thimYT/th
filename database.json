@@ -222,17 +222,24 @@
       "last_seen": 0
     },
     "7580045960": {
-      "balance": 0,
-      "inventory": [],
+      "balance": 15,
+      "inventory": [
+        {
+          "inv_id": 1433,
+          "item_id": 23,
+          "mutation": "normal",
+          "traits": []
+        }
+      ],
       "last_free_case": 0,
-      "last_daily_bonus": 0,
+      "last_daily_bonus": 1795686946,
       "username": "fantaxy_lt3",
       "first_name": "ᅠᅠ 11:11 #fantaxy @brainrot_battle @BrainDropDropBot",
       "photo_url": "https://t.me/i/userpic/320/KSeq1V4cQwxTYfdUUcxZ3gxwPiY4QWI21FfO-8tZJtUyT_MiDG9M7ARaZBwz62B-.svg",
       "last_seen": 1795686917
     }
   },
-  "next_inv_id": 1433,
+  "next_inv_id": 1434,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -568,6 +575,23 @@
         "mutation_icon": "/images/mutation16.png",
         "mutation_mult": 14.0,
         "price": 7000.0
+      },
+      {
+        "ts": 1795686946,
+        "user_id": "7580045960",
+        "username": "fantaxy_lt3",
+        "first_name": "ᅠᅠ 11:11 #fantaxy @brainrot_battle @BrainDropDropBot",
+        "photo_url": "https://t.me/i/userpic/320/KSeq1V4cQwxTYfdUUcxZ3gxwPiY4QWI21FfO-8tZJtUyT_MiDG9M7ARaZBwz62B-.svg",
+        "source": "daily_bonus",
+        "item_id": 23,
+        "name": "Tang Tang",
+        "rarity": "epic",
+        "image": "/images/item23.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 40.0
       }
     ]
   },
