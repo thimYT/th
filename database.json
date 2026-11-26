@@ -350,9 +350,18 @@
       "moderator": "",
       "amount": null,
       "created_at": 1795636088
+    },
+    "11": {
+      "user_id": "7580045960",
+      "username": "fantaxy_lt3",
+      "first_name": "ᅠᅠ 11:11 #fantaxy @brainrot_battle",
+      "status": "open",
+      "moderator": "",
+      "amount": null,
+      "created_at": 1795686864
     }
   },
-  "next_req_id": 11,
+  "next_req_id": 12,
   "daily_drops": {
     "date": "2026-11-26",
     "items": [
