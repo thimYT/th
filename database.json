@@ -34,30 +34,12 @@
       "last_seen": 0
     },
     "1789157813": {
-      "balance": 88948.5,
+      "balance": 80000.0,
       "inventory": [
         {
           "inv_id": 1547,
           "item_id": 109,
           "mutation": "hacker",
-          "traits": []
-        },
-        {
-          "inv_id": 1548,
-          "item_id": 109,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1549,
-          "item_id": 47,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1550,
-          "item_id": 26,
-          "mutation": "normal",
           "traits": []
         }
       ],
