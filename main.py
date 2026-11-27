@@ -19,6 +19,15 @@ app = FastAPI()
 if os.path.exists("images"):
     app.mount("/images", StaticFiles(directory="images"), name="images")
 
+# Абсолютный путь к папке images рядом с main.py
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+IMAGES_DIR = os.path.join(BASE_DIR, "images")
+
+if os.path.exists(IMAGES_DIR):
+    app.mount("/images", StaticFiles(directory=IMAGES_DIR), name="images")
+    print(f"✅ Папка images подключена: {IMAGES_DIR}")
+else:
+    print(f"❌ ВНИМАНИЕ: Папка images не найдена по пути {IMAGES_DIR}")
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", "").strip()
 GITHUB_REPO = os.getenv("GITHUB_REPO", "").strip()
 BOT_TOKEN = os.getenv("BOT_TOKEN", "").strip()
@@ -123,6 +132,30 @@ ITEMS_DB = {
     83: {"id": 83, "name": "Foxini", "price": 495, "rarity": "legendary", "image": "/images/item83.png", "fallback": "🐉"},
     84: {"id": 84, "name": "La Casa Boo", "price": 497.5, "rarity": "legendary", "image": "/images/item84.png", "fallback": "🐉"},
     85: {"id": 85, "name": "Flying Dutchman", "price": 500, "rarity": "legendary", "image": "/images/item85.png", "fallback": "🐉"},
+    86: {"id": 86, "name": "Sammyni Spookyni", "price": 520, "rarity": "legendary", "image": "/images/item86.png", "fallback": "🐉"},
+    87: {"id": 87, "name": "La Breakfest", "price": 550, "rarity": "legendary", "image": "/images/item87.png", "fallback": "🐉"},
+    88: {"id": 88, "name": "Spooketti Tualetti", "price": 575, "rarity": "legendary", "image": "/images/item88.png", "fallback": "🐉"},
+    89: {"id": 89, "name": "Skelly And Coffy", "price": 600, "rarity": "legendary", "image": "/images/item89.png", "fallback": "🐉"},
+    90: {"id": 90, "name": "Los Secret", "price": 615, "rarity": "legendary", "image": "/images/item90.png", "fallback": "🐉"},
+    91: {"id": 91, "name": "Ketupat Bros", "price": 635, "rarity": "legendary", "image": "/images/item91.png", "fallback": "🐉"},
+    92: {"id": 92, "name": "Rosey And Teddy", "price": 665, "rarity": "legendary", "image": "/images/item92.png", "fallback": "🐉"},
+    93: {"id": 93, "name": "Hydra Serpent", "price": 690, "rarity": "legendary", "image": "/images/item93.png", "fallback": "🐉"},
+    94: {"id": 94, "name": "Puppetmaster", "price": 695, "rarity": "legendary", "image": "/images/item94.png", "fallback": "🐉"},
+    95: {"id": 95, "name": "Bumbatron", "price": 700, "rarity": "mythic", "image": "/images/item95.png", "fallback": "🐉"},
+    96: {"id": 96, "name": "Bunny And Eggy", "price": 730, "rarity": "legendary", "image": "/images/item96.png", "fallback": "🐉"},
+    97: {"id": 97, "name": "Venuspino", "price": 760, "rarity": "legendary", "image": "/images/item97.png", "fallback": "🐉"},
+    98: {"id": 98, "name": "Gold And Diamond", "price": 780, "rarity": "legendary", "image": "/images/item98.png", "fallback": "🐉"},
+    99: {"id": 99, "name": "Bearito Cabinito", "price": 790, "rarity": "legendary", "image": "/images/item99.png", "fallback": "🐉"},
+    100: {"id": 100, "name": "Sammyni Cakini", "price": 800, "rarity": "legendary", "image": "/images/item100.png", "fallback": "🐉"},
+    101: {"id": 101, "name": "Jelly Moby", "price": 810, "rarity": "legendary", "image": "/images/item101.png", "fallback": "🐉"},
+    102: {"id": 102, "name": "Scarino Crownino", "price": 840, "rarity": "legendary", "image": "/images/item102.png", "fallback": "🐉"},
+    103: {"id": 103, "name": "Fishino Clownino", "price": 890, "rarity": "legendary", "image": "/images/item103.png", "fallback": "🐉"},
+    104: {"id": 104, "name": "Gorillo Subwoofero", "price": 900, "rarity": "legendary", "image": "/images/item104.png", "fallback": "🐉"},
+    105: {"id": 105, "name": "Tirilikalika", "price": 920, "rarity": "legendary", "image": "/images/item105.png", "fallback": "🐉"},
+    106: {"id": 106, "name": "Digi Narwhal", "price": 950, "rarity": "mythic", "image": "/images/item106.png", "fallback": "🐉"},
+    107: {"id": 107, "name": "Moby Bros", "price": 1000, "rarity": "legendary", "image": "/images/item107.png", "fallback": "🐉"},
+    108: {"id": 108, "name": "Love Love Bear", "price": 1050, "rarity": "legendary", "image": "/images/item108.png", "fallback": "🐉"},
+    109: {"id": 109, "name": "Dragon Canelloni", "price": 1100, "rarity": "legendary", "image": "/images/item109.png", "fallback": "🐉"},
 }
 
 MUTABLE_RARITIES = {"legendary", "mythic"}
@@ -191,19 +224,19 @@ TRAITS_DB = {
 TRAIT_KEYS = list(TRAITS_DB.keys())
 # ---------- ПАДАЮЩАЯ КИРКА ----------
 PICKAXES = {
-    "wooden":  {"name": "wooden", "hp": 100, "damage": 1, "cost": 50,   "icon": "/images/pick_wood.png",    "fallback": "⛏️"},
-    "stone":   {"name": "stone",   "hp": 150, "damage": 2, "cost": 150,  "icon": "/images/pick_stone.png",   "fallback": "⛏️"},
-    "iron":    {"name": "iron",   "hp": 200, "damage": 3, "cost": 400,  "icon": "/images/pick_iron.png",    "fallback": "⛏️"},
-    "diamond": {"name": "diamond",   "hp": 300, "damage": 5, "cost": 1000, "icon": "/images/pick_diamond.png", "fallback": "⛏️"},
+    "wooden":  {"name": "wooden", "hp": 25, "damage": 1, "cost": 50,   "icon": "/images/pick_wood.png",    "fallback": "⛏️"},
+    "stone":   {"name": "stone",   "hp": 50, "damage": 2, "cost": 150,  "icon": "/images/pick_stone.png",   "fallback": "⛏️"},
+    "iron":    {"name": "iron",   "hp": 100, "damage": 3, "cost": 400,  "icon": "/images/pick_iron.png",    "fallback": "⛏️"},
+    "diamond": {"name": "diamond",   "hp": 175, "damage": 5, "cost": 1000, "icon": "/images/pick_diamond.png", "fallback": "⛏️"},
 }
 
 ORES = {
-    "coal":    {"name": "coal",    "value": 1,  "weight": 40, "icon": "/images/ore_coal.png",    "fallback": "⚫"},
-    "copper":  {"name": "copper",     "value": 3,  "weight": 25, "icon": "/images/ore_copper.png",  "fallback": "🟠"},
-    "iron":    {"name": "iron",   "value": 6,  "weight": 15, "icon": "/images/ore_iron.png",    "fallback": "⚙️"},
-    "gold":    {"name": "gold",   "value": 12, "weight": 10, "icon": "/images/ore_gold.png",    "fallback": "🟡"},
-    "diamond": {"name": "diamond",    "value": 25, "weight": 7,  "icon": "/images/ore_diamond.png", "fallback": "💎"},
-    "emerald": {"name": "emerald",  "value": 50, "weight": 3,  "icon": "/images/ore_emerald.png", "fallback": "🟢"},
+    "coal":    {"name": "coal",    "value": 1,  "weight": 62, "icon": "/images/ore_coal.png",    "fallback": "⚫"},
+    "copper":  {"name": "copper",     "value": 3,  "weight": 20, "icon": "/images/ore_copper.png",  "fallback": "🟠"},
+    "iron":    {"name": "iron",   "value": 6,  "weight": 10, "icon": "/images/ore_iron.png",    "fallback": "⚙️"},
+    "gold":    {"name": "gold",   "value": 12, "weight": 5, "icon": "/images/ore_gold.png",    "fallback": "🟡"},
+    "diamond": {"name": "diamond",    "value": 25, "weight": 2,  "icon": "/images/ore_diamond.png", "fallback": "💎"},
+    "emerald": {"name": "emerald",  "value": 50, "weight": 1,  "icon": "/images/ore_emerald.png", "fallback": "🟢"},
 }
 
 SPECIAL_CELLS = {
@@ -218,7 +251,7 @@ PICKAXE_ORE_WEIGHTS = [ORES[k]["weight"] for k in PICKAXE_ORE_POOL]
 PICKAXE_SPECIAL_POOL = [k for k in SPECIAL_CELLS.keys()]
 PICKAXE_SPECIAL_WEIGHTS = [SPECIAL_CELLS[k]["weight"] for k in PICKAXE_SPECIAL_POOL]
 
-PICKAXE_MAX_DEPTH = 60  # максимум блоков, которые может пройти кирка
+PICKAXE_MAX_DEPTH = 30  # максимум блоков, которые может пройти кирка
 
 
 def pickaxe_roll_cell() -> dict:
@@ -230,7 +263,7 @@ def pickaxe_roll_cell() -> dict:
         sp = random.choices(PICKAXE_SPECIAL_POOL, weights=PICKAXE_SPECIAL_WEIGHTS, k=1)[0]
         return {"type": "special", "key": sp}
     # 40% пустой блок
-    if r < 0.50:
+    if r < 0.80:
         return {"type": "empty"}
     # остальное — руда
     ore = random.choices(PICKAXE_ORE_POOL, weights=PICKAXE_ORE_WEIGHTS, k=1)[0]
