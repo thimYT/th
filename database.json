@@ -79,12 +79,6 @@
           "traits": []
         },
         {
-          "inv_id": 1443,
-          "item_id": 3,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
           "inv_id": 1444,
           "item_id": 9,
           "mutation": "normal",
@@ -93,6 +87,12 @@
         {
           "inv_id": 1447,
           "item_id": 78,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1448,
+          "item_id": 12,
           "mutation": "normal",
           "traits": []
         }
@@ -286,7 +286,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1448,
+  "next_inv_id": 1449,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -639,6 +639,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 450.0
+      },
+      {
+        "ts": 1795765002,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "wheel",
+        "item_id": 12,
+        "name": "Dj Panda",
+        "rarity": "rare",
+        "image": "/images/item12.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 27.0
       }
     ]
   },
