@@ -34,7 +34,7 @@
       "last_seen": 0
     },
     "1789157813": {
-      "balance": 701.09,
+      "balance": 701.89,
       "inventory": [
         {
           "inv_id": 1447,
@@ -51,6 +51,12 @@
         {
           "inv_id": 1450,
           "item_id": 62,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1451,
+          "item_id": 17,
           "mutation": "normal",
           "traits": []
         }
@@ -244,7 +250,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1451,
+  "next_inv_id": 1452,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -648,6 +654,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 150.0
+      },
+      {
+        "ts": 1795765071,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "mines",
+        "item_id": 17,
+        "name": "Oni Panda",
+        "rarity": "rare",
+        "image": "/images/item17.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 32.0
       }
     ]
   },
