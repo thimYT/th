@@ -35,14 +35,7 @@
     },
     "1789157813": {
       "balance": 0.0,
-      "inventory": [
-        {
-          "inv_id": 1432,
-          "item_id": 85,
-          "mutation": "hacker",
-          "traits": []
-        }
-      ],
+      "inventory": [],
       "last_free_case": 1795359003,
       "last_daily_bonus": 0,
       "nickname": "кабилджон",
