@@ -76,7 +76,7 @@
       "last_seen": 1795813281
     },
     "8450028899": {
-      "balance": 13641.17,
+      "balance": 13596.17,
       "inventory": [
         {
           "inv_id": 1466,
@@ -87,12 +87,6 @@
         {
           "inv_id": 1468,
           "item_id": 85,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1469,
-          "item_id": 3,
           "mutation": "normal",
           "traits": []
         },
@@ -117,6 +111,12 @@
         {
           "inv_id": 1477,
           "item_id": 62,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1478,
+          "item_id": 70,
           "mutation": "normal",
           "traits": []
         }
@@ -292,7 +292,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1478,
+  "next_inv_id": 1479,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -730,6 +730,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 150.0
+      },
+      {
+        "ts": 1795814544,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @FarmBrainrots_bot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "pickaxe",
+        "item_id": 70,
+        "name": "Capitano Moby",
+        "rarity": "legendary",
+        "image": "/images/item70.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 325.0
       }
     ]
   },
