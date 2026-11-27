@@ -34,7 +34,7 @@
       "last_seen": 0
     },
     "1789157813": {
-      "balance": 102042.0,
+      "balance": 101981.0,
       "inventory": [
         {
           "inv_id": 1456,
@@ -51,6 +51,12 @@
         {
           "inv_id": 1458,
           "item_id": 68,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1459,
+          "item_id": 66,
           "mutation": "normal",
           "traits": []
         }
@@ -244,7 +250,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1459,
+  "next_inv_id": 1460,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -784,6 +790,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 275.0
+      },
+      {
+        "ts": 1795813124,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "pickaxe",
+        "item_id": 66,
+        "name": "Los Chillis",
+        "rarity": "legendary",
+        "image": "/images/item66.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 220.0
       }
     ]
   },
