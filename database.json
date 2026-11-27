@@ -34,36 +34,12 @@
       "last_seen": 0
     },
     "1789157813": {
-      "balance": 101934.0,
+      "balance": 90000.0,
       "inventory": [
         {
-          "inv_id": 1456,
-          "item_id": 85,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1457,
-          "item_id": 85,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1458,
-          "item_id": 68,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1459,
-          "item_id": 66,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1460,
-          "item_id": 67,
-          "mutation": "normal",
+          "inv_id": 1547,
+          "item_id": 109,
+          "mutation": "hacker",
           "traits": []
         }
       ],
@@ -370,7 +346,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1547,
+  "next_inv_id": 1548,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -1981,6 +1957,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 55.0
+      },
+      {
+        "ts": 1795819376,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "upgrade",
+        "item_id": 109,
+        "name": "Dragon Canelloni",
+        "rarity": "legendary",
+        "image": "/images/item109.png",
+        "fallback": "🐉",
+        "mutation": "hacker",
+        "mutation_icon": "/images/mutation16.png",
+        "mutation_mult": 14.0,
+        "price": 15400.0
       }
     ]
   },
