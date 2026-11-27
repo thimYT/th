@@ -76,7 +76,7 @@
       "last_seen": 1795813281
     },
     "8450028899": {
-      "balance": 13709.17,
+      "balance": 13667.17,
       "inventory": [
         {
           "inv_id": 1466,
@@ -103,12 +103,6 @@
           "traits": []
         },
         {
-          "inv_id": 1471,
-          "item_id": 1,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
           "inv_id": 1474,
           "item_id": 70,
           "mutation": "normal",
@@ -117,6 +111,12 @@
         {
           "inv_id": 1475,
           "item_id": 67,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1476,
+          "item_id": 62,
           "mutation": "normal",
           "traits": []
         }
@@ -292,7 +292,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1476,
+  "next_inv_id": 1477,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -696,6 +696,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 240.0
+      },
+      {
+        "ts": 1795814357,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @FarmBrainrots_bot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "pickaxe",
+        "item_id": 62,
+        "name": "Pizza And Ranch",
+        "rarity": "legendary",
+        "image": "/images/item62.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 150.0
       }
     ]
   },
