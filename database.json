@@ -34,17 +34,11 @@
       "last_seen": 0
     },
     "1789157813": {
-      "balance": 401.89,
+      "balance": 403.03,
       "inventory": [
         {
           "inv_id": 1447,
           "item_id": 78,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1448,
-          "item_id": 12,
           "mutation": "normal",
           "traits": []
         },
@@ -55,26 +49,14 @@
           "traits": []
         },
         {
-          "inv_id": 1451,
-          "item_id": 17,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1452,
-          "item_id": 25,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
           "inv_id": 1453,
           "item_id": 36,
           "mutation": "normal",
           "traits": []
         },
         {
-          "inv_id": 1454,
-          "item_id": 25,
+          "inv_id": 1455,
+          "item_id": 57,
           "mutation": "normal",
           "traits": []
         }
@@ -268,7 +250,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1455,
+  "next_inv_id": 1456,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -740,6 +722,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 43.0
+      },
+      {
+        "ts": 1795765125,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "fuse",
+        "item_id": 57,
+        "name": "Los Hackers",
+        "rarity": "legendary",
+        "image": "/images/item57.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 96.0
       }
     ]
   },
