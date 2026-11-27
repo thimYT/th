@@ -91,8 +91,8 @@
           "traits": []
         },
         {
-          "inv_id": 1445,
-          "item_id": 3,
+          "inv_id": 1447,
+          "item_id": 78,
           "mutation": "normal",
           "traits": []
         }
@@ -286,7 +286,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1447,
+  "next_inv_id": 1448,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -622,6 +622,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 9.0
+      },
+      {
+        "ts": 1795764984,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "wheel",
+        "item_id": 78,
+        "name": "Fortunu",
+        "rarity": "legendary",
+        "image": "/images/item78.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 450.0
       }
     ]
   },
