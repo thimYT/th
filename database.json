@@ -34,7 +34,7 @@
       "last_seen": 0
     },
     "1789157813": {
-      "balance": 89358.5,
+      "balance": 88948.5,
       "inventory": [
         {
           "inv_id": 1547,
@@ -51,6 +51,12 @@
         {
           "inv_id": 1549,
           "item_id": 47,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1550,
+          "item_id": 26,
           "mutation": "normal",
           "traits": []
         }
@@ -358,7 +364,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1550,
+  "next_inv_id": 1551,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -2020,6 +2026,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 84.0
+      },
+      {
+        "ts": 1795819446,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "pickaxe",
+        "item_id": 26,
+        "name": "La Taco",
+        "rarity": "epic",
+        "image": "/images/item26.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 44.0
       }
     ]
   },
