@@ -1406,6 +1406,7 @@ let wheelCurrentDeg = 0;
 /* FUSE */
 let fuseSelectedInv = new Set();
 let fusePlaying = false;
+
 const FUSE_SLOTS = 4;
 const FUSE_SPREAD = {
     common: 2.0, rare: 3.0, epic: 4.0, legendary: 5.0, mythic: 5.0
@@ -1416,10 +1417,10 @@ let pickaxeSelectedInv = new Set();
 let pickaxeTier = "wooden";
 let pickaxePlaying = false;
 const PICKAXE_TIERS_FRONT = {
-    wooden:  {name: "Деревянная", cost: 50,   hp: 100, fallback: "⛏️"},
-    stone:   {name: "Каменная",   cost: 150,  hp: 150, fallback: "⛏️"},
-    iron:    {name: "Железная",   cost: 400,  hp: 200, fallback: "⛏️"},
-    diamond: {name: "Алмазная",   cost: 1000, hp: 300, fallback: "⛏️"},
+    wooden:  {name: "Wooden", cost: 50,   hp: 100, fallback: "⛏️"},
+    stone:   {name: "Stone",   cost: 150,  hp: 150, fallback: "⛏️"},
+    iron:    {name: "Iron",   cost: 400,  hp: 200, fallback: "⛏️"},
+    diamond: {name: "Diamond",   cost: 1000, hp: 300, fallback: "⛏️"},
 };
 const ORES_FALLBACK = {
     coal: "⚫", copper: "🟠", iron: "⚙️", gold: "🟡", diamond: "💎", emerald: "🟢"
@@ -1595,7 +1596,7 @@ function loadState() {
         wheelSelectedInv = new Set([...wheelSelectedInv].filter(id => validIds.has(id)));
         kenoSelectedInv = new Set([...kenoSelectedInv].filter(id => validIds.has(id)));
                 fuseSelectedInv = new Set([...fuseSelectedInv].filter(id => validIds.has(id)));
-                        pickaxeSelectedInv = new Set([...pickaxeSelectedInv].filter(id => validIds.has(id)));
+pickaxeSelectedInv = new Set([...pickaxeSelectedInv].filter(id => validIds.has(id)));
         tradeSelectedInv = new Set([...tradeSelectedInv].filter(id => validIds.has(id)));
 
         renderProfile();
@@ -1614,6 +1615,9 @@ function loadState() {
         updateLimboTotal();
         updateWheelTotal();
         renderKenoGrid();
+         renderPickaxeTiers();
+        renderPickaxeInventory();
+        updatePickaxeTotal();
         updateKenoTotal();
                 renderFuseSlots();
         renderFuseInventory();
@@ -1622,9 +1626,7 @@ function loadState() {
         updateFreeTimer();
         updateDailyBonusTimer();
         renderActiveEvents();
-                renderPickaxeTiers();
-        renderPickaxeInventory();
-        updatePickaxeTotal();
+       
     })();
 }
 
@@ -1813,8 +1815,9 @@ function renderInventories() {
         ["wheel-inv-grid", wheelSelectedInv, "toggleWheelItem"],
         ["keno-inv-grid", kenoSelectedInv, "toggleKenoItem"],
         ["fuse-inv-grid", fuseSelectedInv, "toggleFuseItem"],
-        ["trade-inv-grid", tradeSelectedInv, "toggleTradeItem"]
         ["pickaxe-inv-grid", pickaxeSelectedInv, "togglePickaxeItem"],
+        ["trade-inv-grid", tradeSelectedInv, "toggleTradeItem"]
+        
     ];
     grids.forEach(([gridId, selSet, fn]) => {
         const g = el(gridId);
@@ -3860,6 +3863,9 @@ renderPlinkoStatic();
 renderInitialDiceBoard();
 renderMinesBoard(null, null);
 updateMinesStats();
+renderPickaxeTiers();
+renderPickaxeInventory();
+updatePickaxeTotal();
 renderTower();
 limboPreview();
 drawWheel();
@@ -3868,9 +3874,7 @@ renderFuseSlots();
 renderFuseInventory();
 updateFuseSummary();
 updateTradeTotal();
-renderPickaxeTiers();
-renderPickaxeInventory();
-updatePickaxeTotal();
+
 syncProfile().then(loadState).then(() => {
     renderPlinkoStatic();
 });
