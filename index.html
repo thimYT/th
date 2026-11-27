@@ -1417,11 +1417,15 @@ let pickaxeSelectedInv = new Set();
 let pickaxeTier = "wooden";
 let pickaxePlaying = false;
 const PICKAXE_TIERS_FRONT = {
-    wooden:  {name: "Wooden", cost: 50,   hp: 100, "icon": "/images/pick_wood.png", fallback: "⛏️"},
-    stone:   {name: "Stone",   cost: 150,  hp: 150, "icon": "/images/pick_stone.png", fallback: "⛏️"},
-    iron:    {name: "Iron",   cost: 400,  hp: 200, "icon": "/images/pick_iron.png", fallback: "⛏️"},
-    diamond: {name: "Diamond",   cost: 1000, hp: 300, "icon": "/images/pick_diamond.png",  fallback: "⛏️"},
+    wooden:  {name: "Wooden",  cost: 50,   hp: 100, image: "/images/pick_wood.png",    fallback: "⛏️"},
+    stone:   {name: "Stone",   cost: 150,  hp: 150, image: "/images/pick_stone.png",   fallback: "⛏️"},
+    iron:    {name: "Iron",    cost: 400,  hp: 200, image: "/images/pick_iron.png",    fallback: "⛏️"},
+    diamond: {name: "Diamond", cost: 1000, hp: 300, image: "/images/pick_diamond.png", fallback: "⛏️"},
 };
+const ORES_FALLBACK = {
+    coal: "⚫", copper: "🟠", iron: "⚙️", gold: "🟡", diamond: "💎", emerald: "🟢"
+};
+
 
 /* KENO */
 let kenoSelectedInv = new Set();
@@ -3536,16 +3540,31 @@ async function playFuse() {
 /* =========================================================
    ПАДАЮЩАЯ КИРКА
    ========================================================= */
+function renderPickaxeImg(imgUrl, fallback) {
+    if (!imgUrl) return '<span>' + fallback + '</span>';
+    return '<img src="' + imgUrl + '" alt="" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'inline\';">' +
+           '<span style="display:none;">' + fallback + '</span>';
+}
+
 function renderPickaxeTiers() {
     const box = el("pickaxe-tiers");
     if (!box) return;
     box.innerHTML = Object.entries(PICKAXE_TIERS_FRONT).map(([key, cfg]) => {
         const active = key === pickaxeTier ? " active" : "";
         return '<button class="pickaxe-tier-btn' + active + '" onclick="selectPickaxeTier(\'' + key + '\')">' +
-            '<span class="pt-name">' + cfg.fallback + ' ' + cfg.name + '</span>' +
+            renderPickaxeImg(cfg.image, cfg.fallback) +
+            '<span class="pt-name">' + cfg.name + '</span>' +
             '<span class="pt-cost">' + cfg.cost + ' 💰</span>' +
         '</button>';
     }).join("");
+    
+    // Обновляем иконку самой падающей кирки в шахте при выборе
+    const pickEl = el("pickaxe-pick");
+    if (pickEl && !pickaxePlaying) {
+        const currentCfg = PICKAXE_TIERS_FRONT[pickaxeTier];
+        pickEl.innerHTML = renderPickaxeImg(currentCfg.image, currentCfg.fallback);
+    }
+
     const hpText = el("pickaxe-hp-text");
     if (hpText) hpText.textContent = PICKAXE_TIERS_FRONT[pickaxeTier].hp;
     const hpFill = el("pickaxe-hp-fill");
@@ -3663,7 +3682,8 @@ async function dropPickaxe() {
     }
     const pickEl = el("pickaxe-pick");
     if (pickEl) {
-        pickEl.textContent = cfg.fallback;
+        pickEl.innerHTML = renderPickaxeImg(cfg.image, cfg.fallback);
+
         pickEl.style.top = "10px";
     }
 
