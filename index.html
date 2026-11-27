@@ -1417,14 +1417,12 @@ let pickaxeSelectedInv = new Set();
 let pickaxeTier = "wooden";
 let pickaxePlaying = false;
 const PICKAXE_TIERS_FRONT = {
-    wooden:  {name: "Wooden", cost: 50,   hp: 100, fallback: "⛏️"},
-    stone:   {name: "Stone",   cost: 150,  hp: 150, fallback: "⛏️"},
-    iron:    {name: "Iron",   cost: 400,  hp: 200, fallback: "⛏️"},
-    diamond: {name: "Diamond",   cost: 1000, hp: 300, fallback: "⛏️"},
+    wooden:  {name: "Wooden", cost: 50,   hp: 100, "icon": "/images/pick_wood.png", fallback: "⛏️"},
+    stone:   {name: "Stone",   cost: 150,  hp: 150, "icon": "/images/pick_stone.png", fallback: "⛏️"},
+    iron:    {name: "Iron",   cost: 400,  hp: 200, "icon": "/images/pick_iron.png", fallback: "⛏️"},
+    diamond: {name: "Diamond",   cost: 1000, hp: 300, "icon": "/images/pick_diamond.png",  fallback: "⛏️"},
 };
-const ORES_FALLBACK = {
-    coal: "⚫", copper: "🟠", iron: "⚙️", gold: "🟡", diamond: "💎", emerald: "🟢"
-};
+
 /* KENO */
 let kenoSelectedInv = new Set();
 let kenoPicked = new Set();
