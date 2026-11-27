@@ -34,7 +34,7 @@
       "last_seen": 0
     },
     "1789157813": {
-      "balance": 89418.0,
+      "balance": 89358.5,
       "inventory": [
         {
           "inv_id": 1547,
@@ -45,6 +45,12 @@
         {
           "inv_id": 1548,
           "item_id": 109,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1549,
+          "item_id": 47,
           "mutation": "normal",
           "traits": []
         }
@@ -352,7 +358,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1549,
+  "next_inv_id": 1550,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -1997,6 +2003,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 1100.0
+      },
+      {
+        "ts": 1795819423,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "pickaxe",
+        "item_id": 47,
+        "name": "Panda Popanda",
+        "rarity": "legendary",
+        "image": "/images/item47.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 84.0
       }
     ]
   },
