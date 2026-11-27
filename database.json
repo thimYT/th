@@ -76,7 +76,7 @@
       "last_seen": 1795813281
     },
     "8450028899": {
-      "balance": 17537.69,
+      "balance": 17541.0,
       "inventory": [
         {
           "inv_id": 1466,
@@ -121,18 +121,6 @@
           "traits": []
         },
         {
-          "inv_id": 1502,
-          "item_id": 18,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1503,
-          "item_id": 41,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
           "inv_id": 1504,
           "item_id": 4,
           "mutation": "normal",
@@ -145,14 +133,8 @@
           "traits": []
         },
         {
-          "inv_id": 1514,
-          "item_id": 24,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1515,
-          "item_id": 28,
+          "inv_id": 1516,
+          "item_id": 40,
           "mutation": "normal",
           "traits": []
         }
@@ -328,7 +310,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1516,
+  "next_inv_id": 1517,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -1412,6 +1394,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 46.0
+      },
+      {
+        "ts": 1795815432,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @FarmBrainrots_bot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "fuse",
+        "item_id": 40,
+        "name": "Orbi Mochi",
+        "rarity": "legendary",
+        "image": "/images/item40.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 66.0
       }
     ]
   },
