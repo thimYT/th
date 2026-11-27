@@ -34,8 +34,39 @@
       "last_seen": 0
     },
     "1789157813": {
-      "balance": 950.0,
-      "inventory": [],
+      "balance": 825.0,
+      "inventory": [
+        {
+          "inv_id": 1436,
+          "item_id": 15,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1437,
+          "item_id": 8,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1438,
+          "item_id": 8,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1439,
+          "item_id": 8,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1440,
+          "item_id": 15,
+          "mutation": "normal",
+          "traits": []
+        }
+      ],
       "last_free_case": 1795359003,
       "last_daily_bonus": 0,
       "nickname": "кабилджон",
@@ -225,7 +256,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1436,
+  "next_inv_id": 1441,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -374,6 +405,91 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 4.5
+      },
+      {
+        "ts": 1795764927,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "case",
+        "item_id": 15,
+        "name": "Money Puggy",
+        "rarity": "rare",
+        "image": "/images/item15.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 30.0
+      },
+      {
+        "ts": 1795764927,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "case",
+        "item_id": 8,
+        "name": "Money Cat",
+        "rarity": "common",
+        "image": "/images/item8.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 19.0
+      },
+      {
+        "ts": 1795764927,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "case",
+        "item_id": 8,
+        "name": "Money Cat",
+        "rarity": "common",
+        "image": "/images/item8.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 19.0
+      },
+      {
+        "ts": 1795764927,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "case",
+        "item_id": 8,
+        "name": "Money Cat",
+        "rarity": "common",
+        "image": "/images/item8.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 19.0
+      },
+      {
+        "ts": 1795764927,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "case",
+        "item_id": 15,
+        "name": "Money Puggy",
+        "rarity": "rare",
+        "image": "/images/item15.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 30.0
       }
     ]
   },
