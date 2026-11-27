@@ -76,7 +76,7 @@
       "last_seen": 1795813281
     },
     "8450028899": {
-      "balance": 15760.17,
+      "balance": 16660.17,
       "inventory": [
         {
           "inv_id": 1466,
@@ -87,12 +87,6 @@
         {
           "inv_id": 1468,
           "item_id": 85,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1474,
-          "item_id": 70,
           "mutation": "normal",
           "traits": []
         },
@@ -116,6 +110,12 @@
         },
         {
           "inv_id": 1482,
+          "item_id": 85,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1483,
           "item_id": 85,
           "mutation": "normal",
           "traits": []
@@ -292,7 +292,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1483,
+  "next_inv_id": 1484,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -801,6 +801,23 @@
       },
       {
         "ts": 1795814619,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @FarmBrainrots_bot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "pickaxe",
+        "item_id": 85,
+        "name": "Flying Dutchman",
+        "rarity": "legendary",
+        "image": "/images/item85.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 500.0
+      },
+      {
+        "ts": 1795814630,
         "user_id": "8450028899",
         "username": "Fortolol",
         "first_name": "#Fort# @FarmBrainrots_bot",
