@@ -76,7 +76,7 @@
       "last_seen": 1795813281
     },
     "8450028899": {
-      "balance": 3042.17,
+      "balance": 3009.17,
       "inventory": [
         {
           "inv_id": 1254,
@@ -85,8 +85,8 @@
           "traits": []
         },
         {
-          "inv_id": 1461,
-          "item_id": 9,
+          "inv_id": 1462,
+          "item_id": 66,
           "mutation": "normal",
           "traits": []
         }
@@ -262,7 +262,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1462,
+  "next_inv_id": 1463,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -428,6 +428,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 20.0
+      },
+      {
+        "ts": 1795814200,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @FarmBrainrots_bot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "pickaxe",
+        "item_id": 66,
+        "name": "Los Chillis",
+        "rarity": "legendary",
+        "image": "/images/item66.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 220.0
       }
     ]
   },
