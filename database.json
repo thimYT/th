@@ -34,33 +34,8 @@
       "last_seen": 0
     },
     "1789157813": {
-      "balance": 403.03,
-      "inventory": [
-        {
-          "inv_id": 1447,
-          "item_id": 78,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1450,
-          "item_id": 62,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1453,
-          "item_id": 36,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1455,
-          "item_id": 57,
-          "mutation": "normal",
-          "traits": []
-        }
-      ],
+      "balance": 0.0,
+      "inventory": [],
       "last_free_case": 1795359003,
       "last_daily_bonus": 0,
       "nickname": "кабилджон",
