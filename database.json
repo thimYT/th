@@ -34,18 +34,8 @@
       "last_seen": 0
     },
     "1789157813": {
-      "balance": 1000.0,
-      "inventory": [
-        {
-          "inv_id": 1435,
-          "item_id": 1,
-          "mutation": "normal",
-          "traits": [
-            "taco",
-            "crab"
-          ]
-        }
-      ],
+      "balance": 950.0,
+      "inventory": [],
       "last_free_case": 1795359003,
       "last_daily_bonus": 0,
       "nickname": "кабилджон",
