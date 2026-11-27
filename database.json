@@ -34,7 +34,7 @@
       "last_seen": 0
     },
     "1789157813": {
-      "balance": 102099.0,
+      "balance": 102042.0,
       "inventory": [
         {
           "inv_id": 1456,
@@ -45,6 +45,12 @@
         {
           "inv_id": 1457,
           "item_id": 85,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1458,
+          "item_id": 68,
           "mutation": "normal",
           "traits": []
         }
@@ -238,7 +244,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1458,
+  "next_inv_id": 1459,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -761,6 +767,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 500.0
+      },
+      {
+        "ts": 1795813082,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "pickaxe",
+        "item_id": 68,
+        "name": "Los Admins",
+        "rarity": "legendary",
+        "image": "/images/item68.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 275.0
       }
     ]
   },
