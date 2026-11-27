@@ -76,7 +76,7 @@
       "last_seen": 1795813281
     },
     "8450028899": {
-      "balance": 16399.84,
+      "balance": 16351.84,
       "inventory": [
         {
           "inv_id": 1466,
@@ -121,12 +121,6 @@
           "traits": []
         },
         {
-          "inv_id": 1519,
-          "item_id": 1,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
           "inv_id": 1523,
           "item_id": 67,
           "mutation": "normal",
@@ -147,6 +141,12 @@
         {
           "inv_id": 1526,
           "item_id": 70,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1527,
+          "item_id": 67,
           "mutation": "normal",
           "traits": []
         }
@@ -322,7 +322,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1527,
+  "next_inv_id": 1528,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -1593,6 +1593,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 325.0
+      },
+      {
+        "ts": 1795815678,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @FarmBrainrots_bot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "pickaxe",
+        "item_id": 67,
+        "name": "Duggy Bros",
+        "rarity": "legendary",
+        "image": "/images/item67.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 240.0
       }
     ]
   },
