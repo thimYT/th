@@ -189,6 +189,52 @@ TRAITS_DB = {
 
 }
 TRAIT_KEYS = list(TRAITS_DB.keys())
+# ---------- ПАДАЮЩАЯ КИРКА ----------
+PICKAXES = {
+    "wooden":  {"name": "wooden", "hp": 100, "damage": 1, "cost": 50,   "icon": "/images/pick_wood.png",    "fallback": "⛏️"},
+    "stone":   {"name": "stone",   "hp": 150, "damage": 2, "cost": 150,  "icon": "/images/pick_stone.png",   "fallback": "⛏️"},
+    "iron":    {"name": "iron",   "hp": 200, "damage": 3, "cost": 400,  "icon": "/images/pick_iron.png",    "fallback": "⛏️"},
+    "diamond": {"name": "diamond",   "hp": 300, "damage": 5, "cost": 1000, "icon": "/images/pick_diamond.png", "fallback": "⛏️"},
+}
+
+ORES = {
+    "coal":    {"name": "coal",    "value": 1,  "weight": 40, "icon": "/images/ore_coal.png",    "fallback": "⚫"},
+    "copper":  {"name": "copper",     "value": 3,  "weight": 25, "icon": "/images/ore_copper.png",  "fallback": "🟠"},
+    "iron":    {"name": "iron",   "value": 6,  "weight": 15, "icon": "/images/ore_iron.png",    "fallback": "⚙️"},
+    "gold":    {"name": "gold",   "value": 12, "weight": 10, "icon": "/images/ore_gold.png",    "fallback": "🟡"},
+    "diamond": {"name": "diamond",    "value": 25, "weight": 7,  "icon": "/images/ore_diamond.png", "fallback": "💎"},
+    "emerald": {"name": "emerald",  "value": 50, "weight": 3,  "icon": "/images/ore_emerald.png", "fallback": "🟢"},
+}
+
+SPECIAL_CELLS = {
+    "tnt":       {"name": "TNT",      "weight": 6,  "icon": "/images/tnt.png",       "fallback": "🧨"},
+    "workbench": {"name": "workbench",  "weight": 4,  "icon": "/images/workbench.png", "fallback": "🛠️"},
+    "arrow":     {"name": "arrow",  "weight": 4,  "icon": "/images/arrow.png",     "fallback": "⬆️"},
+}
+
+PICKAXE_ORE_POOL = [k for k in ORES.keys()]
+PICKAXE_ORE_WEIGHTS = [ORES[k]["weight"] for k in PICKAXE_ORE_POOL]
+
+PICKAXE_SPECIAL_POOL = [k for k in SPECIAL_CELLS.keys()]
+PICKAXE_SPECIAL_WEIGHTS = [SPECIAL_CELLS[k]["weight"] for k in PICKAXE_SPECIAL_POOL]
+
+PICKAXE_MAX_DEPTH = 60  # максимум блоков, которые может пройти кирка
+
+
+def pickaxe_roll_cell() -> dict:
+    """Возвращает один блок шахты: пустой, руда или спец-клетка."""
+    r = random.random()
+    total_special = sum(PICKAXE_SPECIAL_WEIGHTS)
+    # 10% на спец-клетку
+    if r < 0.10:
+        sp = random.choices(PICKAXE_SPECIAL_POOL, weights=PICKAXE_SPECIAL_WEIGHTS, k=1)[0]
+        return {"type": "special", "key": sp}
+    # 40% пустой блок
+    if r < 0.50:
+        return {"type": "empty"}
+    # остальное — руда
+    ore = random.choices(PICKAXE_ORE_POOL, weights=PICKAXE_ORE_WEIGHTS, k=1)[0]
+    return {"type": "ore", "key": ore}
 
 
 def trait_percent_sum(trait_keys: list) -> float:
@@ -689,6 +735,11 @@ class KenoReq(BaseModel):
 class FuseReq(BaseModel):
     user_id: str
     inv_ids: List[int]      # ровно 4 inv_id   
+class PickaxeDropReq(BaseModel):
+    user_id: str
+    pickaxe_tier: str = "wooden"   # wooden | stone | iron | diamond
+    coins_bet: float = 0
+    inv_ids: List[int] = []
 class OpenCaseReq(BaseModel):
     user_id: str
     case_id: int
@@ -2377,6 +2428,163 @@ def fuse_play(req: FuseReq):
         "target_value": target_value,
         "won_item": won_item,
         "coins_added": coins_added,
+    }
+# =========================================================
+# ПАДАЮЩАЯ КИРКА
+# =========================================================
+@app.post("/api/pickaxe/drop")
+def pickaxe_drop(req: PickaxeDropReq):
+    tier = (req.pickaxe_tier or "wooden").lower()
+    if tier not in PICKAXES:
+        raise HTTPException(status_code=400, detail="Неизвестный тир кирки")
+    if req.coins_bet < 0:
+        raise HTTPException(status_code=400, detail="Некорректная ставка монет")
+
+    pick_cfg = PICKAXES[tier]
+    pick_cost = float(pick_cfg["cost"])
+
+    db, sha = github_load_db()
+    db = normalize_db(db)
+    user = ensure_user(db, req.user_id)
+
+    # Проверка монет: стоимость кирки + ставка монетами
+    need_coins = round(pick_cost + req.coins_bet, 2)
+    if user["balance"] < need_coins:
+        raise HTTPException(status_code=400, detail=f"Нужно {need_coins} 💰 (кирка {pick_cost} + ставка {req.coins_bet})")
+
+    # Собираем вещи в ставку
+    inv_map = {e["inv_id"]: e for e in user["inventory"] if not e.get("locked")}
+    bet_items = []
+    items_value = 0.0
+    for inv_id in req.inv_ids or []:
+        if inv_id not in inv_map or inv_map[inv_id]["item_id"] not in ITEMS_DB:
+            raise HTTPException(status_code=400, detail="Ошибка проверки предметов инвентаря")
+        e = inv_map[inv_id]
+        info = item_with_traits(e["item_id"], e.get("mutation", "normal"), e.get("traits", []))
+        items_value += info["price"]
+        bet_items.append(e)
+
+    total_bet = round(items_value + req.coins_bet, 2)
+    if total_bet <= 0:
+        raise HTTPException(status_code=400, detail="Сделайте ставку монетами или вещами")
+
+    # Списываем: кирка (невозвратно) + ставка монетами + вещи из инвентаря
+    user["balance"] = round(user["balance"] - need_coins, 2)
+    selected_set = set(req.inv_ids or [])
+    user["inventory"] = [e for e in user["inventory"] if e["inv_id"] not in selected_set]
+
+    # Симуляция падения
+    hp = int(pick_cfg["hp"])
+    damage = int(pick_cfg["damage"])
+    depth = 0
+    ores_collected = {}   # key -> count
+    events_log = []
+    tnt_pending = 0
+    arrow_pending = 0
+
+    while hp > 0 and depth < PICKAXE_MAX_DEPTH:
+        cell = pickaxe_roll_cell()
+        depth += 1
+
+        if cell["type"] == "empty":
+            hp -= 1  # лёгкий удар
+            events_log.append({"depth": depth, "type": "empty"})
+            continue
+
+        if cell["type"] == "ore":
+            ores_collected[cell["key"]] = ores_collected.get(cell["key"], 0) + 1
+            hp -= 2
+            events_log.append({"depth": depth, "type": "ore", "key": cell["key"]})
+            continue
+
+        # special
+        sp = cell["key"]
+        if sp == "tnt":
+            # взрыв: пролетаем 3 блока без траты HP
+            hp -= 0
+            tnt_pending += 3
+            events_log.append({"depth": depth, "type": "tnt"})
+            # проматываем tnt_pending блоков (собираем руды без HP)
+            while tnt_pending > 0 and depth < PICKAXE_MAX_DEPTH:
+                depth += 1
+                tnt_pending -= 1
+                inner = pickaxe_roll_cell()
+                if inner["type"] == "ore":
+                    ores_collected[inner["key"]] = ores_collected.get(inner["key"], 0) + 1
+                events_log.append({"depth": depth, "type": "tnt_pass", "inner": inner})
+            continue
+        if sp == "workbench":
+            # верстак: +50 HP
+            hp = min(int(pick_cfg["hp"]), hp + 50)
+            events_log.append({"depth": depth, "type": "workbench"})
+            continue
+        if sp == "arrow":
+            # стрелка: +1 урон на 5 блоков
+            damage += 1
+            arrow_pending = 5
+            events_log.append({"depth": depth, "type": "arrow"})
+            continue
+
+    # Сумма руд
+    ores_total_value = 0.0
+    ores_summary = []
+    for key, cnt in ores_collected.items():
+        cfg = ORES[key]
+        val = cfg["value"] * cnt
+        ores_total_value += val
+        ores_summary.append({"key": key, "name": cfg["name"], "count": cnt, "value": val, "icon": cfg["icon"], "fallback": cfg["fallback"]})
+
+    # Множитель глубины
+    mult = round(1.0 + depth * 0.05, 4)
+    total_win_value = round(total_bet * mult + ores_total_value, 2)
+
+    won_item = None
+    returned_items = []
+    coins_added = 0.0
+    recorded = []
+
+    if total_win_value > 0:
+        # ищем предмет под сумму (без учёта редкости — просто ближайший по цене)
+        affordable = [it for it in ITEMS_DB.values() if it["price"] <= total_win_value]
+        if affordable:
+            best_item = max(affordable, key=lambda x: x["price"])
+            mut = roll_mutation(best_item["rarity"])
+            info = item_with_traits(best_item["id"], mut, [])
+            while info["price"] > total_win_value and mut != "normal":
+                mut = "normal"
+                info = item_with_traits(best_item["id"], mut, [])
+            inv_id = db["next_inv_id"]
+            db["next_inv_id"] += 1
+            user["inventory"].append({"inv_id": inv_id, "item_id": best_item["id"], "mutation": mut, "traits": []})
+            won_item = info
+            recorded.append(info)
+            remainder = round(total_win_value - info["price"], 2)
+            if remainder > 0:
+                user["balance"] = round(user["balance"] + remainder, 2)
+                coins_added = remainder
+        else:
+            user["balance"] = round(user["balance"] + total_win_value, 2)
+            coins_added = total_win_value
+
+    if recorded:
+        record_daily_drop(db, req.user_id, recorded, "pickaxe")
+
+    github_save_db(db, sha)
+
+    return {
+        "tier": tier,
+        "tier_name": pick_cfg["name"],
+        "pickaxe_cost": pick_cost,
+        "depth": depth,
+        "multiplier": mult,
+        "total_bet": total_bet,
+        "ores_total_value": round(ores_total_value, 2),
+        "ores": ores_summary,
+        "events": events_log,
+        "total_win": total_win_value,
+        "won_item": won_item,
+        "coins_added": coins_added,
+        "returned_items": returned_items,
     }
 @app.post("/api/keno/play")
 def keno_play(req: KenoReq):
