@@ -638,6 +638,9 @@
     .battle-winner-line { text-align: center; font-weight: 900; padding: 8px; border-radius: 10px; margin-bottom: 10px; }
     .battle-winner-line.win { background: rgba(0,230,118,.15); border: 1px solid var(--green); color: #00e676; }
     .battle-winner-line.lose { background: rgba(255,61,0,.15); border: 1px solid var(--red); color: #ff8a65; }
+    .pickaxe-tier-btn img { width: 32px; height: 32px; object-fit: contain; margin-bottom: 2px; }
+.pickaxe-pick img { width: 42px; height: 42px; object-fit: contain; }
+
 </style>
 </head>
 <body>
@@ -1422,9 +1425,21 @@ const PICKAXE_TIERS_FRONT = {
     iron:    {name: "Iron",    cost: 400,  hp: 200, image: "/images/pick_iron.png",    fallback: "⛏️"},
     diamond: {name: "Diamond", cost: 1000, hp: 300, image: "/images/pick_diamond.png", fallback: "⛏️"},
 };
-const ORES_FALLBACK = {
-    coal: "⚫", copper: "🟠", iron: "⚙️", gold: "🟡", diamond: "💎", emerald: "🟢"
+const ORES_CONFIG = {
+    coal:    { image: "/images/ore_coal.png",    fallback: "⚫" },
+    copper:  { image: "/images/ore_copper.png",  fallback: "🟠" },
+    iron:    { image: "/images/ore_iron.png",    fallback: "⚙️" },
+    gold:    { image: "/images/ore_gold.png",    fallback: "🟡" },
+    diamond: { image: "/images/ore_diamond.png", fallback: "💎" },
+    emerald: { image: "/images/ore_emerald.png", fallback: "🟢" }
 };
+
+const SPECIAL_BLOCKS_CONFIG = {
+    tnt:       { image: "/images/tnt.png",       fallback: "🧨" },
+    workbench: { image: "/images/workbench.png", fallback: "🛠️" },
+    arrow:     { image: "/images/arrow.png",     fallback: "⬆️" }
+};
+
 
 
 /* KENO */
@@ -3629,28 +3644,26 @@ function pickaxePlaceBlock(depth, cell, shaftH) {
     const block = document.createElement("div");
     block.className = "pickaxe-block";
     block.dataset.depth = depth;
-    // позиция сверху вниз: чем больше depth, тем ниже
     const top = 10 + ((depth - 1) * 36) % (shaftH - 50);
     const left = 10 + ((depth * 53) % (Math.max(1, shaft.clientWidth - 62)));
     block.style.top = top + "px";
     block.style.left = left + "px";
 
-    let content = "";
     if (cell.type === "ore") {
         block.classList.add("ore");
-        const oreFallback = cell.fallback || "💎";
-        content = oreFallback;
+        const cfg = ORES_CONFIG[cell.key] || { image: cell.image, fallback: cell.fallback || "💎" };
+        block.innerHTML = renderPickaxeImg(cfg.image, cfg.fallback);
     } else if (cell.type === "special") {
-        if (cell.key === "tnt") { block.classList.add("tnt"); content = "🧨"; }
-        else if (cell.key === "workbench") { block.classList.add("workbench"); content = "🛠️"; }
-        else if (cell.key === "arrow") { block.classList.add("arrow"); content = "⬆️"; }
+        block.classList.add(cell.key);
+        const cfg = SPECIAL_BLOCKS_CONFIG[cell.key] || { image: cell.image, fallback: "❓" };
+        block.innerHTML = renderPickaxeImg(cfg.image, cfg.fallback);
     } else {
-        content = "▫";
+        block.textContent = "▫";
     }
-    block.textContent = content;
     shaft.appendChild(block);
     setTimeout(() => { block.style.opacity = "0.35"; }, 800);
 }
+
 
 async function dropPickaxe() {
     if (pickaxePlaying) return;
@@ -3718,12 +3731,14 @@ async function dropPickaxe() {
             }
 
             // оставляем собранные руды в виде плашек
-            const strip = el("pickaxe-ores-strip");
+                        const strip = el("pickaxe-ores-strip");
             if (strip) {
-                strip.innerHTML = (data.ores || []).map(o =>
-                    '<div class="pickaxe-ore-pill">' + (o.fallback || "💎") + ' ' + o.name + ' ×' + o.count + '</div>'
-                ).join("");
+                strip.innerHTML = (data.ores || []).map(o => {
+                    const cfg = ORES_CONFIG[o.key] || { image: o.image, fallback: o.fallback || "💎" };
+                    return '<div class="pickaxe-ore-pill">' + renderPickaxeImg(cfg.image, cfg.fallback) + ' ' + o.name + ' ×' + o.count + '</div>';
+                }).join("");
             }
+
 
             pickaxeSelectedInv.clear();
             el("pickaxe-coins-input").value = "";
@@ -3735,17 +3750,14 @@ async function dropPickaxe() {
         const ev = events[idx];
         idx++;
 
-        if (ev.type === "ore") {
-            pickaxePlaceBlock(ev.depth, {type: "ore", fallback: ORES_FALLBACK[ev.key] || "💎"}, shaftH);
+                if (ev.type === "ore") {
+            pickaxePlaceBlock(ev.depth, { type: "ore", key: ev.key, image: ev.image }, shaftH);
         } else if (ev.type === "special") {
             pickaxePlaceBlock(ev.depth, ev, shaftH);
-        } else if (ev.type === "tnt") {
-            pickaxePlaceBlock(ev.depth, {type: "special", key: "tnt"}, shaftH);
-        } else if (ev.type === "workbench") {
-            pickaxePlaceBlock(ev.depth, {type: "special", key: "workbench"}, shaftH);
-        } else if (ev.type === "arrow") {
-            pickaxePlaceBlock(ev.depth, {type: "special", key: "arrow"}, shaftH);
+        } else if (ev.type === "tnt" || ev.type === "workbench" || ev.type === "arrow") {
+            pickaxePlaceBlock(ev.depth, { type: "special", key: ev.type }, shaftH);
         }
+
 
         // HP
         hpLeft = Math.max(0, hpLeft - (ev.type === "empty" ? 1 : 2));
