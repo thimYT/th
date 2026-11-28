@@ -177,8 +177,15 @@
       "last_seen": 1795610427
     },
     "8007781318": {
-      "balance": 1658.6,
-      "inventory": [],
+      "balance": 1648.6,
+      "inventory": [
+        {
+          "inv_id": 1611,
+          "item_id": 41,
+          "mutation": "normal",
+          "traits": []
+        }
+      ],
       "last_free_case": 0,
       "last_daily_bonus": 0,
       "nickname": "",
@@ -295,7 +302,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1611,
+  "next_inv_id": 1612,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -2994,6 +3001,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 1100.0
+      },
+      {
+        "ts": 1795857727,
+        "user_id": "8007781318",
+        "username": "Mr_PodPivasnik",
+        "first_name": ".",
+        "photo_url": "https://t.me/i/userpic/320/2DXq-FOOplSEEFLeuVhoru1EYUjfEhNRjmxHr9OnMtzmUNvDW5xN4UwgMTgnq_ro.svg",
+        "source": "case",
+        "item_id": 41,
+        "name": "Pretzo Robo",
+        "rarity": "mythic",
+        "image": "/images/item41.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 70.0
       }
     ]
   },
