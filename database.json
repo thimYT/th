@@ -144,7 +144,7 @@
       "last_seen": 0
     },
     "8980661701": {
-      "balance": 11.0,
+      "balance": 1.0,
       "inventory": [
         {
           "inv_id": 1651,
@@ -167,6 +167,12 @@
         {
           "inv_id": 1654,
           "item_id": 15,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1655,
+          "item_id": 1,
           "mutation": "normal",
           "traits": []
         }
@@ -424,7 +430,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1655,
+  "next_inv_id": 1656,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -3871,6 +3877,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 30.0
+      },
+      {
+        "ts": 1795859077,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс @F",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "case",
+        "item_id": 1,
+        "name": "Gub",
+        "rarity": "common",
+        "image": "/images/item1.png",
+        "fallback": "🗡️",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 5.0
       }
     ]
   },
