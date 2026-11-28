@@ -61,7 +61,7 @@
       "last_seen": 1795819538
     },
     "8450028899": {
-      "balance": 64333.03,
+      "balance": 64283.03,
       "inventory": [
         {
           "inv_id": 1673,
@@ -82,8 +82,8 @@
           "traits": []
         },
         {
-          "inv_id": 1680,
-          "item_id": 62,
+          "inv_id": 1681,
+          "item_id": 75,
           "mutation": "normal",
           "traits": []
         }
@@ -411,7 +411,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1681,
+  "next_inv_id": 1682,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -4300,6 +4300,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 150.0
+      },
+      {
+        "ts": 1795860803,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @@FarmBrainrots_bot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "pickaxe",
+        "item_id": 75,
+        "name": "Sammyni Truckini",
+        "rarity": "legendary",
+        "image": "/images/item75.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 400.0
       }
     ]
   },
