@@ -64,12 +64,6 @@
       "balance": 64385.09,
       "inventory": [
         {
-          "inv_id": 1672,
-          "item_id": 109,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
           "inv_id": 1673,
           "item_id": 25,
           "mutation": "normal",
