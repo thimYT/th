@@ -144,8 +144,27 @@
       "last_seen": 0
     },
     "8980661701": {
-      "balance": 96.0,
-      "inventory": [],
+      "balance": 36.0,
+      "inventory": [
+        {
+          "inv_id": 1651,
+          "item_id": 3,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1652,
+          "item_id": 3,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1653,
+          "item_id": 9,
+          "mutation": "normal",
+          "traits": []
+        }
+      ],
       "last_free_case": 0,
       "last_daily_bonus": 0,
       "nickname": "",
@@ -166,7 +185,7 @@
       "last_seen": 1795548979
     },
     "1741462977": {
-      "balance": 0.0,
+      "balance": 6.0,
       "inventory": [
         {
           "inv_id": 1639,
@@ -399,7 +418,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1651,
+  "next_inv_id": 1654,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -3778,6 +3797,57 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 1100.0
+      },
+      {
+        "ts": 1795859048,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс @F",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "case",
+        "item_id": 3,
+        "name": "Los Mobilis",
+        "rarity": "common",
+        "image": "/images/item3.png",
+        "fallback": "🪖",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 9.0
+      },
+      {
+        "ts": 1795859048,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс @F",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "case",
+        "item_id": 3,
+        "name": "Los Mobilis",
+        "rarity": "common",
+        "image": "/images/item3.png",
+        "fallback": "🪖",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 9.0
+      },
+      {
+        "ts": 1795859048,
+        "user_id": "8980661701",
+        "username": "",
+        "first_name": "Зевс @F",
+        "photo_url": "https://t.me/i/userpic/320/C5qFk-T7F5cH71QqVXrSu2UTxKSmrN8EyoDW0TopA60qlchfH6LwptseII4IdDMG.svg",
+        "source": "case",
+        "item_id": 9,
+        "name": "Mariachi",
+        "rarity": "rare",
+        "image": "/images/item9.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 20.0
       }
     ]
   },
