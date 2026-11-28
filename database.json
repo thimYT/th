@@ -34,14 +34,8 @@
       "last_seen": 0
     },
     "1789157813": {
-      "balance": 80000.0,
+      "balance": 116407.0,
       "inventory": [
-        {
-          "inv_id": 1547,
-          "item_id": 109,
-          "mutation": "hacker",
-          "traits": []
-        },
         {
           "inv_id": 1551,
           "item_id": 109,
@@ -50,6 +44,12 @@
             "Sombrero",
             "spider"
           ]
+        },
+        {
+          "inv_id": 1697,
+          "item_id": 109,
+          "mutation": "normal",
+          "traits": []
         }
       ],
       "last_free_case": 1795359003,
@@ -411,7 +411,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1697,
+  "next_inv_id": 1698,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -4562,6 +4562,23 @@
         "username": "Fortolol",
         "first_name": "#Fort# @@FarmBrainrots_bot",
         "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "pickaxe",
+        "item_id": 109,
+        "name": "Dragon Canelloni",
+        "rarity": "legendary",
+        "image": "/images/item109.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 1100.0
+      },
+      {
+        "ts": 1795861621,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
         "source": "pickaxe",
         "item_id": 109,
         "name": "Dragon Canelloni",
