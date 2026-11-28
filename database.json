@@ -1,15 +1,8 @@
 {
   "users": {
     "1789157813": {
-      "balance": 81.0,
-      "inventory": [
-        {
-          "inv_id": 3,
-          "item_id": 2,
-          "mutation": "normal",
-          "traits": []
-        }
-      ],
+      "balance": 84.5,
+      "inventory": [],
       "last_free_case": 1795885269,
       "last_daily_bonus": 0,
       "username": "ThimYT",
