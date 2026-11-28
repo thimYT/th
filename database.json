@@ -61,7 +61,7 @@
       "last_seen": 1795819538
     },
     "8450028899": {
-      "balance": 21914.09,
+      "balance": 21414.09,
       "inventory": [
         {
           "inv_id": 1534,
@@ -139,6 +139,36 @@
           "inv_id": 1567,
           "item_id": 109,
           "mutation": "bloodroot",
+          "traits": []
+        },
+        {
+          "inv_id": 1568,
+          "item_id": 53,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1569,
+          "item_id": 35,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1570,
+          "item_id": 35,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1571,
+          "item_id": 36,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1572,
+          "item_id": 36,
+          "mutation": "normal",
           "traits": []
         }
       ],
@@ -313,7 +343,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1568,
+  "next_inv_id": 1573,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -2281,6 +2311,91 @@
         "mutation_icon": "/images/mutation3.png",
         "mutation_mult": 2.0,
         "price": 2200.0
+      },
+      {
+        "ts": 1795841896,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "case",
+        "item_id": 53,
+        "name": "Sammyni Fattini",
+        "rarity": "legendary",
+        "image": "/images/item53.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 90.0
+      },
+      {
+        "ts": 1795841896,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "case",
+        "item_id": 35,
+        "name": "Rosetti",
+        "rarity": "epic",
+        "image": "/images/item35.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 53.0
+      },
+      {
+        "ts": 1795841896,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "case",
+        "item_id": 35,
+        "name": "Rosetti",
+        "rarity": "epic",
+        "image": "/images/item35.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 53.0
+      },
+      {
+        "ts": 1795841896,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "case",
+        "item_id": 36,
+        "name": "Garama",
+        "rarity": "legendary",
+        "image": "/images/item36.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 55.0
+      },
+      {
+        "ts": 1795841896,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "case",
+        "item_id": 36,
+        "name": "Garama",
+        "rarity": "legendary",
+        "image": "/images/item36.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 55.0
       }
     ]
   },
