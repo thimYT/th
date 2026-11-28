@@ -1,12 +1,18 @@
 {
   "users": {
     "1789157813": {
-      "balance": 80.62,
+      "balance": 0.0,
       "inventory": [
         {
           "inv_id": 7,
           "item_id": 17,
           "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 8,
+          "item_id": 36,
+          "mutation": "bloodroot",
           "traits": []
         }
       ],
@@ -28,7 +34,7 @@
       "last_seen": 1795885523
     }
   },
-  "next_inv_id": 8,
+  "next_inv_id": 9,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -161,6 +167,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 32.0
+      },
+      {
+        "ts": 1795885581,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "upgrade",
+        "item_id": 36,
+        "name": "Garama",
+        "rarity": "legendary",
+        "image": "/images/item36.png",
+        "fallback": "🐉",
+        "mutation": "bloodroot",
+        "mutation_icon": "/images/mutation3.png",
+        "mutation_mult": 2.0,
+        "price": 110.0
       }
     ]
   },
