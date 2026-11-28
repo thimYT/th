@@ -61,7 +61,7 @@
       "last_seen": 1795819538
     },
     "8450028899": {
-      "balance": 20814.09,
+      "balance": 20314.09,
       "inventory": [
         {
           "inv_id": 1556,
@@ -138,6 +138,36 @@
         {
           "inv_id": 1579,
           "item_id": 35,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1580,
+          "item_id": 25,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1581,
+          "item_id": 35,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1582,
+          "item_id": 25,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1583,
+          "item_id": 36,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1584,
+          "item_id": 36,
           "mutation": "normal",
           "traits": []
         }
@@ -313,7 +343,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1580,
+  "next_inv_id": 1585,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -2485,6 +2515,91 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 53.0
+      },
+      {
+        "ts": 1795842185,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "case",
+        "item_id": 25,
+        "name": "Ketupat Kepat",
+        "rarity": "epic",
+        "image": "/images/item25.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 43.0
+      },
+      {
+        "ts": 1795842185,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "case",
+        "item_id": 35,
+        "name": "Rosetti",
+        "rarity": "epic",
+        "image": "/images/item35.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 53.0
+      },
+      {
+        "ts": 1795842185,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "case",
+        "item_id": 25,
+        "name": "Ketupat Kepat",
+        "rarity": "epic",
+        "image": "/images/item25.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 43.0
+      },
+      {
+        "ts": 1795842185,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "case",
+        "item_id": 36,
+        "name": "Garama",
+        "rarity": "legendary",
+        "image": "/images/item36.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 55.0
+      },
+      {
+        "ts": 1795842185,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "case",
+        "item_id": 36,
+        "name": "Garama",
+        "rarity": "legendary",
+        "image": "/images/item36.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 55.0
       }
     ]
   },
