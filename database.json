@@ -61,7 +61,7 @@
       "last_seen": 1795819538
     },
     "8450028899": {
-      "balance": 20438.09,
+      "balance": 20556.09,
       "inventory": [
         {
           "inv_id": 1468,
@@ -77,12 +77,6 @@
         },
         {
           "inv_id": 1482,
-          "item_id": 85,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1528,
           "item_id": 85,
           "mutation": "normal",
           "traits": []
@@ -161,6 +155,12 @@
         },
         {
           "inv_id": 1563,
+          "item_id": 109,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1564,
           "item_id": 109,
           "mutation": "normal",
           "traits": []
@@ -337,7 +337,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1564,
+  "next_inv_id": 1565,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -2223,6 +2223,23 @@
       },
       {
         "ts": 1795841636,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "pickaxe",
+        "item_id": 109,
+        "name": "Dragon Canelloni",
+        "rarity": "legendary",
+        "image": "/images/item109.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 1100.0
+      },
+      {
+        "ts": 1795841646,
         "user_id": "8450028899",
         "username": "Fortolol",
         "first_name": "#Fort# @@Brainrotgraderbot",
