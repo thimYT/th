@@ -61,7 +61,7 @@
       "last_seen": 1795819538
     },
     "8450028899": {
-      "balance": 19891.09,
+      "balance": 19857.09,
       "inventory": [
         {
           "inv_id": 1466,
@@ -160,8 +160,8 @@
           "traits": []
         },
         {
-          "inv_id": 1558,
-          "item_id": 69,
+          "inv_id": 1559,
+          "item_id": 97,
           "mutation": "normal",
           "traits": []
         }
@@ -337,7 +337,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1559,
+  "next_inv_id": 1560,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -2152,6 +2152,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 300.0
+      },
+      {
+        "ts": 1795841577,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "pickaxe",
+        "item_id": 97,
+        "name": "Venuspino",
+        "rarity": "legendary",
+        "image": "/images/item97.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 760.0
       }
     ]
   },
