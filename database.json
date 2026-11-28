@@ -61,64 +61,10 @@
       "last_seen": 1795819538
     },
     "8450028899": {
-      "balance": 31232.09,
+      "balance": 59733.09,
       "inventory": [
         {
-          "inv_id": 1556,
-          "item_id": 109,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1560,
-          "item_id": 109,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1562,
-          "item_id": 109,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1563,
-          "item_id": 109,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1564,
-          "item_id": 109,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1567,
-          "item_id": 109,
-          "mutation": "bloodroot",
-          "traits": []
-        },
-        {
-          "inv_id": 1595,
-          "item_id": 109,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1609,
-          "item_id": 109,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1666,
-          "item_id": 109,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1667,
+          "inv_id": 1668,
           "item_id": 109,
           "mutation": "normal",
           "traits": []
@@ -447,7 +393,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1668,
+  "next_inv_id": 1669,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -4101,6 +4047,23 @@
       },
       {
         "ts": 1795860628,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @@FarmBrainrots_bot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "pickaxe",
+        "item_id": 109,
+        "name": "Dragon Canelloni",
+        "rarity": "legendary",
+        "image": "/images/item109.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 1100.0
+      },
+      {
+        "ts": 1795860650,
         "user_id": "8450028899",
         "username": "Fortolol",
         "first_name": "#Fort# @@FarmBrainrots_bot",
