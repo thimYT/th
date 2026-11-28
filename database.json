@@ -177,11 +177,11 @@
       "last_seen": 1795610427
     },
     "8007781318": {
-      "balance": 654.6,
+      "balance": 606.6,
       "inventory": [
         {
-          "inv_id": 1612,
-          "item_id": 63,
+          "inv_id": 1613,
+          "item_id": 82,
           "mutation": "normal",
           "traits": []
         }
@@ -302,7 +302,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1613,
+  "next_inv_id": 1614,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -3035,6 +3035,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 180.0
+      },
+      {
+        "ts": 1795857768,
+        "user_id": "8007781318",
+        "username": "Mr_PodPivasnik",
+        "first_name": ".",
+        "photo_url": "https://t.me/i/userpic/320/2DXq-FOOplSEEFLeuVhoru1EYUjfEhNRjmxHr9OnMtzmUNvDW5xN4UwgMTgnq_ro.svg",
+        "source": "pickaxe",
+        "item_id": 82,
+        "name": "Pancake And Syrup",
+        "rarity": "legendary",
+        "image": "/images/item82.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 490.0
       }
     ]
   },
