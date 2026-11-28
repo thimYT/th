@@ -231,12 +231,13 @@ PICKAXES = {
 }
 
 ORES = {
-    "coal":    {"name": "coal",    "value": 1,  "weight": 62, "icon": "/images/ore_coal.png",    "fallback": "⚫"},
-    "copper":  {"name": "copper",     "value": 3,  "weight": 20, "icon": "/images/ore_copper.png",  "fallback": "🟠"},
-    "iron":    {"name": "iron",   "value": 6,  "weight": 10, "icon": "/images/ore_iron.png",    "fallback": "⚙️"},
-    "gold":    {"name": "gold",   "value": 12, "weight": 5, "icon": "/images/ore_gold.png",    "fallback": "🟡"},
-    "diamond": {"name": "diamond",    "value": 25, "weight": 2,  "icon": "/images/ore_diamond.png", "fallback": "💎"},
-    "emerald": {"name": "emerald",  "value": 50, "weight": 1,  "icon": "/images/ore_emerald.png", "fallback": "🟢"},
+    "stone":    {"name": "stone",    "value": -5,  "weight": 60, "icon": "/images/ore_stone.png",    "fallback": "⚫"},
+    "coal":    {"name": "coal",    "value": 1,  "weight": 30, "icon": "/images/ore_coal.png",    "fallback": "⚫"},
+    "copper":  {"name": "copper",     "value": 3,  "weight": 10, "icon": "/images/ore_copper.png",  "fallback": "🟠"},
+    "iron":    {"name": "iron",   "value": 6,  "weight": 5, "icon": "/images/ore_iron.png",    "fallback": "⚙️"},
+    "gold":    {"name": "gold",   "value": 12, "weight": 3.5, "icon": "/images/ore_gold.png",    "fallback": "🟡"},
+    "diamond": {"name": "diamond",    "value": 25, "weight": 1.25,  "icon": "/images/ore_diamond.png", "fallback": "💎"},
+    "emerald": {"name": "emerald",  "value": 50, "weight": 0.25,  "icon": "/images/ore_emerald.png", "fallback": "🟢"},
 }
 
 SPECIAL_CELLS = {
