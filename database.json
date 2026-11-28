@@ -61,7 +61,7 @@
       "last_seen": 1795819538
     },
     "8450028899": {
-      "balance": 19213.34,
+      "balance": 19166.34,
       "inventory": [
         {
           "inv_id": 1466,
@@ -160,8 +160,8 @@
           "traits": []
         },
         {
-          "inv_id": 1553,
-          "item_id": 66,
+          "inv_id": 1554,
+          "item_id": 77,
           "mutation": "normal",
           "traits": []
         }
@@ -337,7 +337,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1554,
+  "next_inv_id": 1555,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -2067,6 +2067,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 220.0
+      },
+      {
+        "ts": 1795841534,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "pickaxe",
+        "item_id": 77,
+        "name": "Ginger Gerat",
+        "rarity": "legendary",
+        "image": "/images/item77.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 430.0
       }
     ]
   },
