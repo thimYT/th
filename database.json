@@ -1,17 +1,11 @@
 {
   "users": {
     "1789157813": {
-      "balance": 2.7,
+      "balance": 0.0,
       "inventory": [
         {
           "inv_id": 17,
           "item_id": 70,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 18,
-          "item_id": 1,
           "mutation": "normal",
           "traits": []
         }
