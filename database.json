@@ -130,62 +130,8 @@
           "traits": []
         },
         {
-          "inv_id": 1585,
-          "item_id": 53,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1586,
-          "item_id": 36,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1587,
-          "item_id": 35,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1588,
-          "item_id": 35,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1589,
-          "item_id": 35,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1590,
-          "item_id": 36,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1591,
-          "item_id": 35,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1592,
-          "item_id": 36,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1593,
-          "item_id": 70,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1594,
-          "item_id": 25,
+          "inv_id": 1595,
+          "item_id": 109,
           "mutation": "normal",
           "traits": []
         }
@@ -361,7 +307,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1595,
+  "next_inv_id": 1596,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -2788,6 +2734,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 43.0
+      },
+      {
+        "ts": 1795842329,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "upgrade",
+        "item_id": 109,
+        "name": "Dragon Canelloni",
+        "rarity": "legendary",
+        "image": "/images/item109.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 1100.0
       }
     ]
   },
