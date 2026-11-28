@@ -38,11 +38,11 @@
       "last_seen": 1795887233
     },
     "8450028899": {
-      "balance": 0,
+      "balance": 0.0,
       "inventory": [
         {
-          "inv_id": 22,
-          "item_id": 2,
+          "inv_id": 23,
+          "item_id": 3,
           "mutation": "normal",
           "traits": []
         }
@@ -55,7 +55,7 @@
       "last_seen": 1795889794
     }
   },
-  "next_inv_id": 23,
+  "next_inv_id": 24,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -443,6 +443,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 7.0
+      },
+      {
+        "ts": 1795889813,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @@FarmBrainrots_bot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "upgrade",
+        "item_id": 3,
+        "name": "Los Mobilis",
+        "rarity": "common",
+        "image": "/images/item3.png",
+        "fallback": "🪖",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 9.0
       }
     ]
   },
