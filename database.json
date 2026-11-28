@@ -112,49 +112,13 @@
           "traits": []
         },
         {
-          "inv_id": 1596,
-          "item_id": 35,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1597,
-          "item_id": 35,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1598,
-          "item_id": 53,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1599,
-          "item_id": 25,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1600,
-          "item_id": 25,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1601,
-          "item_id": 25,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1602,
-          "item_id": 53,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
           "inv_id": 1609,
+          "item_id": 109,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1610,
           "item_id": 109,
           "mutation": "normal",
           "traits": []
@@ -331,7 +295,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1610,
+  "next_inv_id": 1611,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -2999,6 +2963,23 @@
       },
       {
         "ts": 1795842416,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "upgrade",
+        "item_id": 109,
+        "name": "Dragon Canelloni",
+        "rarity": "legendary",
+        "image": "/images/item109.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 1100.0
+      },
+      {
+        "ts": 1795842437,
         "user_id": "8450028899",
         "username": "Fortolol",
         "first_name": "#Fort# @@Brainrotgraderbot",
