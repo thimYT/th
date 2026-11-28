@@ -82,12 +82,6 @@
           "traits": []
         },
         {
-          "inv_id": 1675,
-          "item_id": 53,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
           "inv_id": 1676,
           "item_id": 36,
           "mutation": "normal",
@@ -97,6 +91,12 @@
           "inv_id": 1677,
           "item_id": 36,
           "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1678,
+          "item_id": 68,
+          "mutation": "gold",
           "traits": []
         }
       ],
@@ -423,7 +423,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1678,
+  "next_inv_id": 1679,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -4261,6 +4261,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 55.0
+      },
+      {
+        "ts": 1795860721,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @@FarmBrainrots_bot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "upgrade",
+        "item_id": 68,
+        "name": "Los Admins",
+        "rarity": "legendary",
+        "image": "/images/item68.png",
+        "fallback": "🐉",
+        "mutation": "gold",
+        "mutation_icon": "/images/mutation1.png",
+        "mutation_mult": 1.25,
+        "price": 343.75
       }
     ]
   },
