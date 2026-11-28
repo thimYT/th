@@ -4,14 +4,8 @@
       "balance": 0.0,
       "inventory": [
         {
-          "inv_id": 7,
-          "item_id": 17,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 8,
-          "item_id": 36,
+          "inv_id": 9,
+          "item_id": 42,
           "mutation": "bloodroot",
           "traits": []
         }
@@ -34,7 +28,7 @@
       "last_seen": 1795885523
     }
   },
-  "next_inv_id": 9,
+  "next_inv_id": 10,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -184,6 +178,23 @@
         "mutation_icon": "/images/mutation3.png",
         "mutation_mult": 2.0,
         "price": 110.0
+      },
+      {
+        "ts": 1795885651,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "upgrade",
+        "item_id": 42,
+        "name": "Los Spagettis",
+        "rarity": "legendary",
+        "image": "/images/item42.png",
+        "fallback": "🐉",
+        "mutation": "bloodroot",
+        "mutation_icon": "/images/mutation3.png",
+        "mutation_mult": 2.0,
+        "price": 150.0
       }
     ]
   },
