@@ -2,8 +2,15 @@
   "users": {
     "1789157813": {
       "balance": 0,
-      "inventory": [],
-      "last_free_case": 0,
+      "inventory": [
+        {
+          "inv_id": 1,
+          "item_id": 1,
+          "mutation": "normal",
+          "traits": []
+        }
+      ],
+      "last_free_case": 1795885269,
       "last_daily_bonus": 0,
       "username": "ThimYT",
       "first_name": "Yarik epta",
@@ -11,7 +18,7 @@
       "last_seen": 1795885263
     }
   },
-  "next_inv_id": 1,
+  "next_inv_id": 2,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -25,7 +32,25 @@
   "next_req_id": 1,
   "daily_drops": {
     "date": "2026-11-28",
-    "items": []
+    "items": [
+      {
+        "ts": 1795885269,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "free_case",
+        "item_id": 1,
+        "name": "Gub",
+        "rarity": "common",
+        "image": "/images/item1.png",
+        "fallback": "🗡️",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 5.0
+      }
+    ]
   },
   "global_message": {
     "text": "",
