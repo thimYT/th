@@ -1,17 +1,11 @@
 {
   "users": {
     "1789157813": {
-      "balance": 2.85,
+      "balance": 10.08,
       "inventory": [
         {
-          "inv_id": 13,
+          "inv_id": 16,
           "item_id": 61,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 15,
-          "item_id": 24,
           "mutation": "normal",
           "traits": []
         }
@@ -34,7 +28,7 @@
       "last_seen": 1795885523
     }
   },
-  "next_inv_id": 16,
+  "next_inv_id": 17,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -303,6 +297,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 41.0
+      },
+      {
+        "ts": 1795885831,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "keno",
+        "item_id": 61,
+        "name": "Rico Dinero",
+        "rarity": "legendary",
+        "image": "/images/item61.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 125.0
       }
     ]
   },
