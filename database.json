@@ -423,11 +423,11 @@
       "last_seen": 1795635993
     },
     "demo_user_1": {
-      "balance": 1.1,
+      "balance": 2.6,
       "inventory": [
         {
-          "inv_id": 1712,
-          "item_id": 3,
+          "inv_id": 1713,
+          "item_id": 4,
           "mutation": "normal",
           "traits": []
         }
@@ -469,7 +469,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1713,
+  "next_inv_id": 1714,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -4902,6 +4902,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 9.0
+      },
+      {
+        "ts": 1795873511,
+        "user_id": "demo_user_1",
+        "username": "",
+        "first_name": "",
+        "photo_url": "",
+        "source": "keno",
+        "item_id": 4,
+        "name": "La Grande",
+        "rarity": "common",
+        "image": "/images/item4.png",
+        "fallback": "🎯",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 12.0
       }
     ]
   },
