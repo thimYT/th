@@ -423,11 +423,11 @@
       "last_seen": 1795635993
     },
     "demo_user_1": {
-      "balance": 0.5,
+      "balance": 1.1,
       "inventory": [
         {
-          "inv_id": 1711,
-          "item_id": 4,
+          "inv_id": 1712,
+          "item_id": 3,
           "mutation": "normal",
           "traits": []
         }
@@ -469,7 +469,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1712,
+  "next_inv_id": 1713,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -4885,6 +4885,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 12.0
+      },
+      {
+        "ts": 1795873493,
+        "user_id": "demo_user_1",
+        "username": "",
+        "first_name": "",
+        "photo_url": "",
+        "source": "keno",
+        "item_id": 3,
+        "name": "Los Mobilis",
+        "rarity": "common",
+        "image": "/images/item3.png",
+        "fallback": "🪖",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 9.0
       }
     ]
   },
