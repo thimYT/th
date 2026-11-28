@@ -177,32 +177,8 @@
       "last_seen": 1795858550
     },
     "8007781318": {
-      "balance": 118218798.88,
+      "balance": 118226512.52,
       "inventory": [
-        {
-          "inv_id": 1628,
-          "item_id": 109,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1629,
-          "item_id": 109,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1630,
-          "item_id": 109,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1631,
-          "item_id": 109,
-          "mutation": "normal",
-          "traits": []
-        },
         {
           "inv_id": 1632,
           "item_id": 109,
@@ -211,6 +187,12 @@
         },
         {
           "inv_id": 1633,
+          "item_id": 109,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1634,
           "item_id": 109,
           "mutation": "normal",
           "traits": []
@@ -332,7 +314,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1634,
+  "next_inv_id": 1635,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -3413,6 +3395,23 @@
         "first_name": ".",
         "photo_url": "https://t.me/i/userpic/320/2DXq-FOOplSEEFLeuVhoru1EYUjfEhNRjmxHr9OnMtzmUNvDW5xN4UwgMTgnq_ro.svg",
         "source": "pickaxe",
+        "item_id": 109,
+        "name": "Dragon Canelloni",
+        "rarity": "legendary",
+        "image": "/images/item109.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 1100.0
+      },
+      {
+        "ts": 1795858571,
+        "user_id": "8007781318",
+        "username": "Mr_PodPivasnik",
+        "first_name": ".",
+        "photo_url": "https://t.me/i/userpic/320/2DXq-FOOplSEEFLeuVhoru1EYUjfEhNRjmxHr9OnMtzmUNvDW5xN4UwgMTgnq_ro.svg",
+        "source": "fuse",
         "item_id": 109,
         "name": "Dragon Canelloni",
         "rarity": "legendary",
