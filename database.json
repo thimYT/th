@@ -94,15 +94,15 @@
           "traits": []
         },
         {
-          "inv_id": 1565,
-          "item_id": 109,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
           "inv_id": 1567,
           "item_id": 109,
           "mutation": "bloodroot",
+          "traits": []
+        },
+        {
+          "inv_id": 1573,
+          "item_id": 109,
+          "mutation": "candy",
           "traits": []
         }
       ],
@@ -277,7 +277,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1573,
+  "next_inv_id": 1574,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -2330,6 +2330,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 55.0
+      },
+      {
+        "ts": 1795842104,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "upgrade",
+        "item_id": 109,
+        "name": "Dragon Canelloni",
+        "rarity": "legendary",
+        "image": "/images/item109.png",
+        "fallback": "🐉",
+        "mutation": "candy",
+        "mutation_icon": "/images/mutation4.png",
+        "mutation_mult": 4.0,
+        "price": 4400.0
       }
     ]
   },
