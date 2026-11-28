@@ -39,14 +39,7 @@
     },
     "8450028899": {
       "balance": 0.0,
-      "inventory": [
-        {
-          "inv_id": 23,
-          "item_id": 3,
-          "mutation": "normal",
-          "traits": []
-        }
-      ],
+      "inventory": [],
       "last_free_case": 1795889787,
       "last_daily_bonus": 0,
       "username": "Fortolol",
