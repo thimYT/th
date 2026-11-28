@@ -147,18 +147,6 @@
       "balance": 1.0,
       "inventory": [
         {
-          "inv_id": 1651,
-          "item_id": 3,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1652,
-          "item_id": 3,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
           "inv_id": 1653,
           "item_id": 9,
           "mutation": "normal",
@@ -167,12 +155,6 @@
         {
           "inv_id": 1654,
           "item_id": 15,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
-          "inv_id": 1655,
-          "item_id": 1,
           "mutation": "normal",
           "traits": []
         }
