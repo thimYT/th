@@ -2,7 +2,14 @@
   "users": {
     "1789157813": {
       "balance": 0.0,
-      "inventory": [],
+      "inventory": [
+        {
+          "inv_id": 12,
+          "item_id": 60,
+          "mutation": "normal",
+          "traits": []
+        }
+      ],
       "last_free_case": 1795885269,
       "last_daily_bonus": 0,
       "username": "ThimYT",
@@ -21,7 +28,7 @@
       "last_seen": 1795885523
     }
   },
-  "next_inv_id": 12,
+  "next_inv_id": 13,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -222,6 +229,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 275.0
+      },
+      {
+        "ts": 1795885752,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "admin_give",
+        "item_id": 60,
+        "name": "Reinito Sleighito",
+        "rarity": "legendary",
+        "image": "/images/item60.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 110.0
       }
     ]
   },
