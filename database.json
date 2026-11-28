@@ -76,12 +76,6 @@
           "traits": []
         },
         {
-          "inv_id": 1482,
-          "item_id": 85,
-          "mutation": "normal",
-          "traits": []
-        },
-        {
           "inv_id": 1529,
           "item_id": 85,
           "mutation": "normal",
@@ -161,6 +155,12 @@
         },
         {
           "inv_id": 1565,
+          "item_id": 109,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1566,
           "item_id": 109,
           "mutation": "normal",
           "traits": []
@@ -337,7 +337,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1566,
+  "next_inv_id": 1567,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -2262,6 +2262,23 @@
         "first_name": "#Fort# @@Brainrotgraderbot",
         "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
         "source": "pickaxe",
+        "item_id": 109,
+        "name": "Dragon Canelloni",
+        "rarity": "legendary",
+        "image": "/images/item109.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 1100.0
+      },
+      {
+        "ts": 1795841760,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "upgrade",
         "item_id": 109,
         "name": "Dragon Canelloni",
         "rarity": "legendary",
