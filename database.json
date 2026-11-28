@@ -423,10 +423,10 @@
       "last_seen": 1795635993
     },
     "demo_user_1": {
-      "balance": 3.1,
+      "balance": 1.48,
       "inventory": [
         {
-          "inv_id": 1714,
+          "inv_id": 1715,
           "item_id": 1,
           "mutation": "normal",
           "traits": []
@@ -469,7 +469,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1715,
+  "next_inv_id": 1716,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -4922,6 +4922,23 @@
       },
       {
         "ts": 1795873531,
+        "user_id": "demo_user_1",
+        "username": "",
+        "first_name": "",
+        "photo_url": "",
+        "source": "keno",
+        "item_id": 1,
+        "name": "Gub",
+        "rarity": "common",
+        "image": "/images/item1.png",
+        "fallback": "🗡️",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 5.0
+      },
+      {
+        "ts": 1795873552,
         "user_id": "demo_user_1",
         "username": "",
         "first_name": "",
