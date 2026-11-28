@@ -4,8 +4,8 @@
       "balance": 71.75,
       "inventory": [
         {
-          "inv_id": 4,
-          "item_id": 9,
+          "inv_id": 5,
+          "item_id": 15,
           "mutation": "normal",
           "traits": []
         }
@@ -28,7 +28,7 @@
       "last_seen": 1795885294
     }
   },
-  "next_inv_id": 5,
+  "next_inv_id": 6,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -110,6 +110,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 20.0
+      },
+      {
+        "ts": 1795885443,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "keno",
+        "item_id": 15,
+        "name": "Money Puggy",
+        "rarity": "rare",
+        "image": "/images/item15.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 30.0
       }
     ]
   },
