@@ -61,7 +61,7 @@
       "last_seen": 1795819538
     },
     "8450028899": {
-      "balance": 19358.84,
+      "balance": 19258.84,
       "inventory": [
         {
           "inv_id": 1466,
@@ -156,6 +156,12 @@
         {
           "inv_id": 1546,
           "item_id": 36,
+          "mutation": "normal",
+          "traits": []
+        },
+        {
+          "inv_id": 1552,
+          "item_id": 53,
           "mutation": "normal",
           "traits": []
         }
@@ -331,7 +337,7 @@
       "last_seen": 1795687003
     }
   },
-  "next_inv_id": 1552,
+  "next_inv_id": 1553,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -2027,6 +2033,23 @@
         "mutation_icon": "/images/mutation16.png",
         "mutation_mult": 14.0,
         "price": 16709.0
+      },
+      {
+        "ts": 1795841485,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @@Brainrotgraderbot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "case",
+        "item_id": 53,
+        "name": "Sammyni Fattini",
+        "rarity": "legendary",
+        "image": "/images/item53.png",
+        "fallback": "🐉",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 90.0
       }
     ]
   },
