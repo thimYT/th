@@ -722,9 +722,18 @@
       "moderator": "",
       "amount": null,
       "created_at": 1795686864
+    },
+    "12": {
+      "user_id": "8007781318",
+      "username": "Mr_PodPivasnik",
+      "first_name": ".",
+      "status": "open",
+      "moderator": "",
+      "amount": null,
+      "created_at": 1795884734
     }
   },
-  "next_req_id": 12,
+  "next_req_id": 13,
   "daily_drops": {
     "date": "2026-11-28",
     "items": [
