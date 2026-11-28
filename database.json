@@ -1,8 +1,15 @@
 {
   "users": {
     "1789157813": {
-      "balance": 90.0,
-      "inventory": [],
+      "balance": 81.0,
+      "inventory": [
+        {
+          "inv_id": 3,
+          "item_id": 2,
+          "mutation": "normal",
+          "traits": []
+        }
+      ],
       "last_free_case": 1795885269,
       "last_daily_bonus": 0,
       "username": "ThimYT",
@@ -21,7 +28,7 @@
       "last_seen": 1795885294
     }
   },
-  "next_inv_id": 3,
+  "next_inv_id": 4,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -69,6 +76,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 90.0
+      },
+      {
+        "ts": 1795885372,
+        "user_id": "1789157813",
+        "username": "ThimYT",
+        "first_name": "Yarik epta",
+        "photo_url": "https://t.me/i/userpic/320/7ArWuedVspXFF-WYI59Sh2ZVDr1oulqv8gJmF0XqAQU.svg",
+        "source": "keno",
+        "item_id": 2,
+        "name": "Sir Mangus",
+        "rarity": "common",
+        "image": "/images/item2.png",
+        "fallback": "🔫",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 7.0
       }
     ]
   },
