@@ -39,8 +39,15 @@
     },
     "8450028899": {
       "balance": 0,
-      "inventory": [],
-      "last_free_case": 0,
+      "inventory": [
+        {
+          "inv_id": 22,
+          "item_id": 2,
+          "mutation": "normal",
+          "traits": []
+        }
+      ],
+      "last_free_case": 1795889787,
       "last_daily_bonus": 0,
       "username": "Fortolol",
       "first_name": "#Fort# @@FarmBrainrots_bot",
@@ -48,7 +55,7 @@
       "last_seen": 1795889758
     }
   },
-  "next_inv_id": 22,
+  "next_inv_id": 23,
   "promocodes": {
     "BRAINDROP": {
       "stock": 1,
@@ -419,6 +426,23 @@
         "mutation_icon": "/images/mutation.png",
         "mutation_mult": 1.0,
         "price": 31.0
+      },
+      {
+        "ts": 1795889787,
+        "user_id": "8450028899",
+        "username": "Fortolol",
+        "first_name": "#Fort# @@FarmBrainrots_bot",
+        "photo_url": "https://t.me/i/userpic/320/dkrk_H0eJczkPWKw5ZyyRJyezUMqxesWOtRpq8DkJkpyDiHZgLNlA_ecl6aulW52.svg",
+        "source": "free_case",
+        "item_id": 2,
+        "name": "Sir Mangus",
+        "rarity": "common",
+        "image": "/images/item2.png",
+        "fallback": "🔫",
+        "mutation": "normal",
+        "mutation_icon": "/images/mutation.png",
+        "mutation_mult": 1.0,
+        "price": 7.0
       }
     ]
   },
